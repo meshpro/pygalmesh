@@ -59,10 +59,13 @@ typedef Mesh_criteria::Cell_criteria     Cell_criteria;
 
 
 void
-generate_mesh(const double alpha, const bool lloyd)
+generate_mesh(
+    const bool lloyd,
+    const bool odt,
+    const bool perturb,
+    const bool exude
+    )
 {
-  std::cout << alpha << std::endl;
-
   // Define functions
   Function f1(&torus_function);
   Function f2(&sphere_function<3>);
@@ -88,18 +91,22 @@ generate_mesh(const double alpha, const bool lloyd)
 
   const auto lloyd_param =
     lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd();
-
-  std::cout << "lloyd? " << lloyd << std::endl;
+  const auto odt_param =
+    odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt();
+  const auto perturb_param =
+    perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb();
+  const auto exude_param =
+    exude ? CGAL::parameters::exude() : CGAL::parameters::no_exude();
 
   // Mesh generation
   C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
       domain,
       criteria,
-      lloyd_param
+      lloyd_param,
+      odt_param,
+      perturb_param,
+      exude_param
       );
-      // CGAL::parameters::odt(),
-      // CGAL::parameters::perturb(),
-      // CGAL::parameters::exude()
 
   // // Output
   // std::ofstream medit_file("out.mesh");

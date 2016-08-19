@@ -1,4 +1,6 @@
 void generate_mesh(
-    const double alpha,
-    const bool lloyd = false
+    const bool lloyd = false,
+    const bool odt = false,
+    const bool perturb = true,
+    const bool exude = true
     );
