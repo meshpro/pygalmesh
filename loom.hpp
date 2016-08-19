@@ -1,1 +1,4 @@
-void loom(const double alpha);
+void generate_mesh(
+    const double alpha,
+    const bool lloyd = false
+    );

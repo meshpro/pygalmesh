@@ -59,7 +59,7 @@ typedef Mesh_criteria::Cell_criteria     Cell_criteria;
 
 
 void
-loom(const double alpha)
+generate_mesh(const double alpha, const bool lloyd)
 {
   std::cout << alpha << std::endl;
 
@@ -72,30 +72,38 @@ loom(const double alpha)
   v.push_back(f2);
 
   std::vector<std::string> vps;
-  vps.push_back("-+");
+  vps.push_back("+-");
 
   // Domain (Warning: Sphere_3 constructor uses square radius !)
-  Mesh_domain domain(Function_wrapper(v, vps), K::Sphere_3(CGAL::ORIGIN, 5.*5.), 1e-6);
-  // Mesh_domain domain(v, K::Sphere_3(CGAL::ORIGIN, 5.*5.), 1e-6);
+  Mesh_domain domain(
+      Function_wrapper(v, vps),
+      K::Sphere_3(CGAL::ORIGIN, 5.*5.),
+      1.0e-4
+      );
 
   // Set mesh criteria
   Facet_criteria facet_criteria(30, 0.2, 0.02); // angle, size, approximation
   Cell_criteria cell_criteria(2., 0.4); // radius-edge ratio, size
   Mesh_criteria criteria(facet_criteria, cell_criteria);
 
+  const auto lloyd_param =
+    lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd();
+
+  std::cout << "lloyd? " << lloyd << std::endl;
+
   // Mesh generation
   C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
       domain,
-      criteria
+      criteria,
+      lloyd_param
       );
-      // CGAL::parameters::lloyd(),
       // CGAL::parameters::odt(),
       // CGAL::parameters::perturb(),
       // CGAL::parameters::exude()
 
-  // Output
-  std::ofstream medit_file("out.mesh");
-  c3t3.output_to_medit(medit_file);
+  // // Output
+  // std::ofstream medit_file("out.mesh");
+  // c3t3.output_to_medit(medit_file);
 
   return;
 }
