@@ -57,9 +57,6 @@ generate_mesh(
       v.push_back(Function(primitive));
   }
 
-  //std::vector<std::string> vps;
-  //vps.push_back("-");
-
   // Domain (Warning: Sphere_3 constructor uses square radius !)
   Mesh_domain domain(
       Function_wrapper(v, in->get_signs()),

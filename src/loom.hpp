@@ -91,6 +91,32 @@ class Ellipsoid: public DomainBase
 };
 
 
+class Cylinder: public DomainBase
+{
+  public:
+    Cylinder(
+        const double z0,
+        const double z1,
+        const double radius
+        ):
+      c_(std::make_shared<loom::CylinderPrimitive>(z0, z1, radius))
+    {
+    }
+
+    virtual std::vector<std::shared_ptr<loom::PrimitiveBase>> get_primitives() const
+    {
+      return {c_};
+    }
+
+    virtual std::vector<std::vector<CGAL::Sign>> get_signs() const {
+      return {{c_->get_inside_sign()}};
+    }
+
+  private:
+    const std::shared_ptr<loom::CylinderPrimitive> c_;
+};
+
+
 void generate_mesh(
     const std::shared_ptr<DomainBase> & in,
     const bool lloyd = false,

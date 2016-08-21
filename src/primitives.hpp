@@ -112,4 +112,38 @@ class EllipsoidPrimitive: public PrimitiveBase
     const double a2_2_;
 };
 
+
+class CylinderPrimitive: public PrimitiveBase
+{
+  public:
+    CylinderPrimitive(
+        const double z0,
+        const double z1,
+        const double radius
+        ):
+      z0_(z0),
+      z1_(z1),
+      radius2_(radius*radius)
+    {
+    }
+
+    virtual K::FT operator()(K::Point_3 p) const
+    {
+      const K::FT xx0 = p.x();
+      const K::FT yy0 = p.y();
+      return (z0_ < p.z() && p.z() < z1_) ?
+        p.x()*p.x() + p.y()*p.y() - radius2_ :
+        1.0;
+    }
+
+    virtual CGAL::Sign get_inside_sign() const {
+      return CGAL::NEGATIVE;
+    }
+
+  private:
+    const double z0_;
+    const double z1_;
+    const double radius2_;
+};
+
 } // namespace loom
