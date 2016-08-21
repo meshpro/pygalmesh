@@ -8,6 +8,7 @@
 %include <std_shared_ptr.i>
 
 %shared_ptr(DomainBase);
-%shared_ptr(Sphere);
+%shared_ptr(Ball);
+%shared_ptr(Cuboid);
 
 %include "loom.hpp"
