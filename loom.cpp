@@ -10,39 +10,47 @@
 
 #include <sstream>
 
+#include <loom.hpp>
+
 using namespace CGAL::parameters;
 
 // Domain
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 typedef K::FT FT;
 
-template <int Sq_radius>
-double sphere_function (double x, double y, double z) // (c=(0,0,0), r=Sq_radius)
+class MyFunction: public std::unary_function<K::Point_3, K::FT>
 {
-  double x2=x*x, y2=y*y, z2=z*z;
-  return (x2+y2+z2)/Sq_radius - 1;
-}
-
-template <typename FT, typename P>
-class FT_to_point_function_wrapper : public std::unary_function<P, FT>
-{
-  typedef FT (*Implicit_function)(FT, FT, FT);
-  Implicit_function function;
-public:
-  typedef P Point;
-  explicit FT_to_point_function_wrapper(Implicit_function f) : function(f) {}
-  FT operator()(Point p) const { return function(p.x(), p.y(), p.z()); }
+  public:
+  virtual K::FT operator()(K::Point_3 p) const = 0;
 };
 
-double torus_function (double x, double y, double z) {
-  double x2=x*x, y2=y*y, z2=z*z;
-  double x4=x2*x2, y4=y2*y2, z4=z2*z2;
+class MySphere: public MyFunction
+{
+public:
+  virtual K::FT operator()(K::Point_3 p) const
+  {
+    return p.x()*p.x() + p.y()*p.y() + p.z()*p.z() - 1.0;
+  }
+};
 
-  return x4  + y4  + z4  + 2 *x2*  y2  + 2*
-    x2*z2  + 2*y2*  z2  - 5 *x2  + 4* y2  - 5*z2+4;
-}
+class Function: public std::unary_function<K::Point_3, K::FT>
+{
+  public:
+  typedef K::Point_3 Point;
 
-typedef FT_to_point_function_wrapper<K::FT, K::Point_3> Function;
+  explicit Function(std::shared_ptr<MyFunction> fun):
+    fun_(fun)
+  {
+  }
+
+  virtual K::FT operator()(K::Point_3 p) const {
+    return (*fun_)(p);
+  }
+
+  private:
+  std::shared_ptr<MyFunction> fun_;
+};
+
 typedef CGAL::Implicit_multi_domain_to_labeling_function_wrapper<Function>
                                                         Function_wrapper;
 typedef Function_wrapper::Function_vector Function_vector;
@@ -60,6 +68,7 @@ typedef Mesh_criteria::Cell_criteria     Cell_criteria;
 
 void
 generate_mesh(
+    const std::shared_ptr<DomainBase> & in,
     const bool lloyd,
     const bool odt,
     const bool perturb,
@@ -67,15 +76,13 @@ generate_mesh(
     )
 {
   // Define functions
-  Function f1(&torus_function);
-  Function f2(&sphere_function<3>);
+  auto f1 = std::make_shared<MySphere>();
 
   Function_vector v;
-  v.push_back(f1);
-  v.push_back(f2);
+  v.push_back(Function(f1));
 
   std::vector<std::string> vps;
-  vps.push_back("+-");
+  vps.push_back("+");
 
   // Domain (Warning: Sphere_3 constructor uses square radius !)
   Mesh_domain domain(
@@ -108,9 +115,9 @@ generate_mesh(
       exude_param
       );
 
-  // // Output
-  // std::ofstream medit_file("out.mesh");
-  // c3t3.output_to_medit(medit_file);
+  // Output
+  std::ofstream medit_file("out.mesh");
+  c3t3.output_to_medit(medit_file);
 
   return;
 }
