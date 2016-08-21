@@ -1,3 +1,6 @@
+#ifndef PRIMITIVES_HPP
+#define PRIMITIVES_HPP
+
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 
 #include <memory>
@@ -147,3 +150,5 @@ class CylinderPrimitive: public PrimitiveBase
 };
 
 } // namespace loom
+
+#endif // PRIMITIVES_HPP

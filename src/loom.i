@@ -3,6 +3,7 @@
 %{
 #define SWIG_FILE_WITH_INIT
 #include "loom.hpp"
+#include "domain.hpp"
 %}
 
 
@@ -20,3 +21,4 @@ namespace std {
 %shared_ptr(Ellipsoid);
 
 %include "loom.hpp"
+%include "domain.hpp"
