@@ -5,7 +5,13 @@
 #include "loom.hpp"
 %}
 
+
 %include <std_shared_ptr.i>
+
+%include <std_vector.i>
+namespace std {
+%template(Line) vector <double>;
+}
 
 %shared_ptr(DomainBase);
 %shared_ptr(Ball);
