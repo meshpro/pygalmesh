@@ -1,12 +1,13 @@
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+
 #include <memory>
 
-class DomainBase {
+typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
+
+class DomainBase: public std::unary_function<K::Point_3, K::FT>
+{
   public:
-    virtual double eval(
-        const double x,
-        const double y,
-        const double z
-        ) const = 0;
+  virtual K::FT operator()(K::Point_3 p) const = 0;
 };
 
 class Sphere: public DomainBase
@@ -25,23 +26,19 @@ class Sphere: public DomainBase
     {
     }
 
-    virtual double eval(
-        const double x,
-        const double y,
-        const double z
-        ) const
+    virtual K::FT operator()(K::Point_3 p) const
     {
-      const double xx0 = x - x0_;
-      const double yy0 = y - y0_;
-      const double zz0 = z - z0_;
+      const K::FT xx0 = p.x() - x0_;
+      const K::FT yy0 = p.y() - y0_;
+      const K::FT zz0 = p.z() - z0_;
       return xx0*xx0 + yy0*yy0 + zz0*zz0 - radius_*radius_;
     }
 
   private:
-    const double x0_;
-    const double y0_;
-    const double z0_;
-    const double radius_;
+    const K::FT x0_;
+    const K::FT y0_;
+    const K::FT z0_;
+    const K::FT radius_;
 };
 
 

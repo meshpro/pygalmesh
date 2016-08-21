@@ -8,37 +8,14 @@
 #include <CGAL/Labeled_mesh_domain_3.h>
 #include <CGAL/make_mesh_3.h>
 
-#include <sstream>
-
 #include <loom.hpp>
-
-using namespace CGAL::parameters;
-
-// Domain
-typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
-typedef K::FT FT;
-
-class MyFunction: public std::unary_function<K::Point_3, K::FT>
-{
-  public:
-  virtual K::FT operator()(K::Point_3 p) const = 0;
-};
-
-class MySphere: public MyFunction
-{
-public:
-  virtual K::FT operator()(K::Point_3 p) const
-  {
-    return p.x()*p.x() + p.y()*p.y() + p.z()*p.z() - 1.0;
-  }
-};
 
 class Function: public std::unary_function<K::Point_3, K::FT>
 {
   public:
   typedef K::Point_3 Point;
 
-  explicit Function(std::shared_ptr<MyFunction> fun):
+  explicit Function(std::shared_ptr<DomainBase> fun):
     fun_(fun)
   {
   }
@@ -48,7 +25,7 @@ class Function: public std::unary_function<K::Point_3, K::FT>
   }
 
   private:
-  std::shared_ptr<MyFunction> fun_;
+  std::shared_ptr<DomainBase> fun_;
 };
 
 typedef CGAL::Implicit_multi_domain_to_labeling_function_wrapper<Function>
@@ -75,11 +52,8 @@ generate_mesh(
     const bool exude
     )
 {
-  // Define functions
-  auto f1 = std::make_shared<MySphere>();
-
   Function_vector v;
-  v.push_back(Function(f1));
+  v.push_back(Function(in));
 
   std::vector<std::string> vps;
   vps.push_back("-");
