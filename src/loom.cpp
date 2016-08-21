@@ -15,7 +15,7 @@ class Function: public std::unary_function<K::Point_3, K::FT>
   public:
   typedef K::Point_3 Point;
 
-  explicit Function(std::shared_ptr<loom::PrimitiveBase> fun):
+  explicit Function(std::shared_ptr<const loom::PrimitiveBase> fun):
     fun_(fun)
   {
   }
@@ -25,7 +25,7 @@ class Function: public std::unary_function<K::Point_3, K::FT>
   }
 
   private:
-  std::shared_ptr<loom::PrimitiveBase> fun_;
+  std::shared_ptr<const loom::PrimitiveBase> fun_;
 };
 
 typedef CGAL::Implicit_multi_domain_to_labeling_function_wrapper<Function>

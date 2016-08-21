@@ -10,18 +10,35 @@ typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 
 namespace loom {
 
-class PrimitiveBase
+// forward declarations
+class DomainBase;
+class PrimitiveBase;
+
+class DomainBase
+{
+  public:
+  virtual std::vector<std::shared_ptr<const loom::PrimitiveBase>> get_primitives() const = 0;
+  virtual std::vector<std::vector<CGAL::Sign>> get_signs() const = 0;
+};
+
+class PrimitiveBase:
+  public DomainBase,
+  public std::enable_shared_from_this<PrimitiveBase>
 {
   public:
   virtual K::FT operator()(K::Point_3 p) const = 0;
-  virtual CGAL::Sign get_inside_sign() const = 0;
+
+  virtual std::vector<std::shared_ptr<const loom::PrimitiveBase>> get_primitives() const
+  {
+    return {shared_from_this()};
+  }
 };
 
-class BallPrimitive: public PrimitiveBase
+class Ball: public PrimitiveBase
 {
   public:
     // argument are double (not K::FT) for Python compatibility
-    BallPrimitive(
+    Ball(
         const std::vector<double> & x0,
         const double radius
         ):
@@ -39,8 +56,9 @@ class BallPrimitive: public PrimitiveBase
       return xx0*xx0 + yy0*yy0 + zz0*zz0 - radius_*radius_;
     }
 
-    virtual CGAL::Sign get_inside_sign() const {
-      return CGAL::NEGATIVE;
+    virtual std::vector<std::vector<CGAL::Sign>> get_signs() const
+    {
+      return {{CGAL::NEGATIVE}};
     }
 
   private:
@@ -49,10 +67,10 @@ class BallPrimitive: public PrimitiveBase
 };
 
 
-class CuboidPrimitive: public PrimitiveBase
+class Cuboid: public PrimitiveBase
 {
   public:
-    CuboidPrimitive(
+    Cuboid(
         const std::vector<double> & x0,
         const std::vector<double> & x1
         ):
@@ -70,8 +88,9 @@ class CuboidPrimitive: public PrimitiveBase
           ) ? -1.0 : 1.0;
     }
 
-    virtual CGAL::Sign get_inside_sign() const {
-      return CGAL::NEGATIVE;
+    virtual std::vector<std::vector<CGAL::Sign>> get_signs() const
+    {
+      return {{CGAL::NEGATIVE}};
     }
 
   private:
@@ -80,10 +99,10 @@ class CuboidPrimitive: public PrimitiveBase
 };
 
 
-class EllipsoidPrimitive: public PrimitiveBase
+class Ellipsoid: public PrimitiveBase
 {
   public:
-    EllipsoidPrimitive(
+    Ellipsoid(
         const std::vector<double> & x0,
         const double a0,
         const double a1,
@@ -104,8 +123,9 @@ class EllipsoidPrimitive: public PrimitiveBase
       return xx0*xx0/a0_2_ + yy0*yy0/a1_2_ + zz0*zz0/a2_2_ - 1.0;
     }
 
-    virtual CGAL::Sign get_inside_sign() const {
-      return CGAL::NEGATIVE;
+    virtual std::vector<std::vector<CGAL::Sign>> get_signs() const
+    {
+      return {{CGAL::NEGATIVE}};
     }
 
   private:
@@ -116,10 +136,10 @@ class EllipsoidPrimitive: public PrimitiveBase
 };
 
 
-class CylinderPrimitive: public PrimitiveBase
+class Cylinder: public PrimitiveBase
 {
   public:
-    CylinderPrimitive(
+    Cylinder(
         const double z0,
         const double z1,
         const double radius
@@ -139,8 +159,9 @@ class CylinderPrimitive: public PrimitiveBase
         1.0;
     }
 
-    virtual CGAL::Sign get_inside_sign() const {
-      return CGAL::NEGATIVE;
+    virtual std::vector<std::vector<CGAL::Sign>> get_signs() const
+    {
+      return {{CGAL::NEGATIVE}};
     }
 
   private:
