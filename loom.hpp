@@ -4,7 +4,7 @@
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 
-class DomainBase: public std::unary_function<K::Point_3, K::FT>
+class DomainBase
 {
   public:
   virtual K::FT operator()(K::Point_3 p) const = 0;
@@ -13,6 +13,7 @@ class DomainBase: public std::unary_function<K::Point_3, K::FT>
 class Sphere: public DomainBase
 {
   public:
+    // argument are double (not K::FT) for Python compatibility
     Sphere(
         const double x0,
         const double y0,
@@ -35,10 +36,10 @@ class Sphere: public DomainBase
     }
 
   private:
-    const K::FT x0_;
-    const K::FT y0_;
-    const K::FT z0_;
-    const K::FT radius_;
+    const double x0_;
+    const double y0_;
+    const double z0_;
+    const double radius_;
 };
 
 
