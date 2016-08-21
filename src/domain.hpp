@@ -6,6 +6,8 @@
 
 #include "primitives.hpp"
 
+namespace loom {
+
 class DomainBase
 {
   public:
@@ -115,4 +117,5 @@ class Cylinder: public DomainBase
     const std::shared_ptr<loom::CylinderPrimitive> c_;
 };
 
+} // namespace loom
 #endif // DOMAIN_HPP

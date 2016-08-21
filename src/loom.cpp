@@ -45,7 +45,7 @@ typedef Mesh_criteria::Cell_criteria     Cell_criteria;
 
 void
 generate_mesh(
-    const std::shared_ptr<DomainBase> & in,
+    const std::shared_ptr<loom::DomainBase> & in,
     const bool lloyd,
     const bool odt,
     const bool perturb,

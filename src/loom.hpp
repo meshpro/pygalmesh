@@ -6,7 +6,7 @@
 #include "domain.hpp"
 
 void generate_mesh(
-    const std::shared_ptr<DomainBase> & in,
+    const std::shared_ptr<loom::DomainBase> & in,
     const bool lloyd = false,
     const bool odt = false,
     const bool perturb = true,

@@ -6,19 +6,17 @@
 #include "domain.hpp"
 %}
 
-
-%include <std_shared_ptr.i>
-
 %include <std_vector.i>
 namespace std {
 %template(Line) vector <double>;
 }
 
-%shared_ptr(DomainBase);
-%shared_ptr(Ball);
-%shared_ptr(Cuboid);
-%shared_ptr(Cylinder);
-%shared_ptr(Ellipsoid);
+%include <std_shared_ptr.i>
+%shared_ptr(loom::DomainBase);
+%shared_ptr(loom::Ball);
+%shared_ptr(loom::Cuboid);
+%shared_ptr(loom::Cylinder);
+%shared_ptr(loom::Ellipsoid);
 
 %include "loom.hpp"
 %include "domain.hpp"
