@@ -15,7 +15,7 @@ class Function: public std::unary_function<K::Point_3, K::FT>
   public:
   typedef K::Point_3 Point;
 
-  explicit Function(std::shared_ptr<DomainBase> fun):
+  explicit Function(std::shared_ptr<loom::PrimitiveBase> fun):
     fun_(fun)
   {
   }
@@ -25,7 +25,7 @@ class Function: public std::unary_function<K::Point_3, K::FT>
   }
 
   private:
-  std::shared_ptr<DomainBase> fun_;
+  std::shared_ptr<loom::PrimitiveBase> fun_;
 };
 
 typedef CGAL::Implicit_multi_domain_to_labeling_function_wrapper<Function>
@@ -53,14 +53,16 @@ generate_mesh(
     )
 {
   Function_vector v;
-  v.push_back(Function(in));
+  for (const auto & primitive: in->get_primitives()) {
+      v.push_back(Function(primitive));
+  }
 
-  std::vector<std::string> vps;
-  vps.push_back("-");
+  //std::vector<std::string> vps;
+  //vps.push_back("-");
 
   // Domain (Warning: Sphere_3 constructor uses square radius !)
   Mesh_domain domain(
-      Function_wrapper(v, vps),
+      Function_wrapper(v, in->get_signs()),
       K::Sphere_3(CGAL::ORIGIN, 5.*5.),
       1.0e-4
       );

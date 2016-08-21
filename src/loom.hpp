@@ -3,39 +3,39 @@
 #include <memory>
 #include <vector>
 
+#include "primitives.hpp"
+
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 
 class DomainBase
 {
   public:
-  virtual K::FT operator()(K::Point_3 p) const = 0;
+  virtual std::vector<std::shared_ptr<loom::PrimitiveBase>> get_primitives() const = 0;
+  virtual std::vector<std::vector<CGAL::Sign>> get_signs() const = 0;
 };
 
 class Ball: public DomainBase
 {
   public:
-    // argument are double (not K::FT) for Python compatibility
     Ball(
         const std::vector<double> & x0,
         const double radius
         ):
-      x0_(x0),
-      radius_(radius)
+      b_(std::make_shared<loom::BallPrimitive>(x0, radius))
     {
-      assert(x0_.size() == 3);
     }
 
-    virtual K::FT operator()(K::Point_3 p) const
+    virtual std::vector<std::shared_ptr<loom::PrimitiveBase>> get_primitives() const
     {
-      const K::FT xx0 = p.x() - x0_[0];
-      const K::FT yy0 = p.y() - x0_[1];
-      const K::FT zz0 = p.z() - x0_[2];
-      return xx0*xx0 + yy0*yy0 + zz0*zz0 - radius_*radius_;
+      return {b_};
+    }
+
+    virtual std::vector<std::vector<CGAL::Sign>> get_signs() const {
+      return {{b_->get_inside_sign()}};
     }
 
   private:
-    const std::vector<double> x0_;
-    const double radius_;
+    const std::shared_ptr<loom::BallPrimitive> b_;
 };
 
 
@@ -46,23 +46,21 @@ class Cuboid: public DomainBase
         const std::vector<double> & x0,
         const std::vector<double> & x1
         ):
-      x0_(x0),
-      x1_(x1)
+      c_(std::make_shared<loom::CuboidPrimitive>(x0, x1))
     {
     }
 
-    virtual K::FT operator()(K::Point_3 p) const
+    virtual std::vector<std::shared_ptr<loom::PrimitiveBase>> get_primitives() const
     {
-      return (
-          x0_[0] < p.x() && p.x() < x1_[0] &&
-          x0_[1] < p.y() && p.y() < x1_[1] &&
-          x0_[2] < p.z() && p.z() < x1_[2]
-          ) ? -1.0 : 1.0;
+      return {c_};
+    }
+
+    virtual std::vector<std::vector<CGAL::Sign>> get_signs() const {
+      return {{c_->get_inside_sign()}};
     }
 
   private:
-    const std::vector<double> x0_;
-    const std::vector<double> x1_;
+    const std::shared_ptr<loom::CuboidPrimitive> c_;
 };
 
 
@@ -75,26 +73,21 @@ class Ellipsoid: public DomainBase
         const double a1,
         const double a2
         ):
-      x0_(x0),
-      a0_2_(a0*a0),
-      a1_2_(a1*a1),
-      a2_2_(a2*a1)
+      e_(std::make_shared<loom::EllipsoidPrimitive>(x0, a0, a1, a2))
     {
     }
 
-    virtual K::FT operator()(K::Point_3 p) const
+    virtual std::vector<std::shared_ptr<loom::PrimitiveBase>> get_primitives() const
     {
-      const K::FT xx0 = p.x() - x0_[0];
-      const K::FT yy0 = p.y() - x0_[1];
-      const K::FT zz0 = p.z() - x0_[2];
-      return xx0*xx0/a0_2_ + yy0*yy0/a1_2_ + zz0*zz0/a2_2_ - 1.0;
+      return {e_};
+    }
+
+    virtual std::vector<std::vector<CGAL::Sign>> get_signs() const {
+      return {{e_->get_inside_sign()}};
     }
 
   private:
-    const std::vector<double> x0_;
-    const double a0_2_;
-    const double a1_2_;
-    const double a2_2_;
+    const std::shared_ptr<loom::EllipsoidPrimitive> e_;
 };
 
 
