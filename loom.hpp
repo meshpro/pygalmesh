@@ -82,6 +82,44 @@ class Cuboid: public DomainBase
 };
 
 
+class Ellipsoid: public DomainBase
+{
+  public:
+    Ellipsoid(
+        const double x0,
+        const double y0,
+        const double z0,
+        const double a0,
+        const double a1,
+        const double a2
+        ):
+      x0_(x0),
+      y0_(y0),
+      z0_(z0),
+      a0_2_(a0*a0),
+      a1_2_(a1*a1),
+      a2_2_(a2*a1)
+    {
+    }
+
+    virtual K::FT operator()(K::Point_3 p) const
+    {
+      const K::FT xx0 = p.x() - x0_;
+      const K::FT yy0 = p.y() - y0_;
+      const K::FT zz0 = p.z() - z0_;
+      return xx0*xx0/a0_2_ + yy0*yy0/a1_2_ + zz0*zz0/a2_2_ - 1.0;
+    }
+
+  private:
+    const double x0_;
+    const double y0_;
+    const double z0_;
+    const double a0_2_;
+    const double a1_2_;
+    const double a2_2_;
+};
+
+
 void generate_mesh(
     const std::shared_ptr<DomainBase> & in,
     const bool lloyd = false,

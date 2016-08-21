@@ -10,5 +10,6 @@
 %shared_ptr(DomainBase);
 %shared_ptr(Ball);
 %shared_ptr(Cuboid);
+%shared_ptr(Ellipsoid);
 
 %include "loom.hpp"
