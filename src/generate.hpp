@@ -1,9 +1,11 @@
-#ifndef LOOM_HPP
-#define LOOM_HPP
+#ifndef GENERATE_HPP
+#define GENERATE_HPP
+
+#include "domain.hpp"
 
 #include <memory>
 
-#include "domain.hpp"
+namespace loom {
 
 void generate_mesh(
     const std::shared_ptr<loom::DomainBase> & in,
@@ -13,4 +15,6 @@ void generate_mesh(
     const bool exude = true
     );
 
-#endif // LOOM_HPP
+} // namespace loom
+
+#endif // GENERATE_HPP

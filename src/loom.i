@@ -2,7 +2,7 @@
 
 %{
 #define SWIG_FILE_WITH_INIT
-#include "loom.hpp"
+#include "generate.hpp"
 #include "primitives.hpp"
 #include "domain.hpp"
 %}
@@ -27,6 +27,6 @@ namespace std {
 %shared_ptr(loom::Intersection);
 %shared_ptr(loom::Union);
 
-%include "loom.hpp"
+%include "generate.hpp"
 %include "primitives.hpp"
 %include "domain.hpp"
