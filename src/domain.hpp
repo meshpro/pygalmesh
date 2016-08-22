@@ -191,7 +191,7 @@ class Union: public loom::DomainBase
   }
 
   std::vector<std::vector<CGAL::Sign>>
-  append_plus_minus(std::vector<std::vector<CGAL::Sign>> in)
+  append_plus_minus(const std::vector<std::vector<CGAL::Sign>> & in)
   {
     auto out = in;
     out.insert(out.end(), in.begin(), in.end());
