@@ -20,6 +20,7 @@ before_install:
   - sudo apt update -qq
   - sudo apt-get -y install cmake libcgal-dev libeigen3-dev swig
   - sudo apt-get -y install libcgal-qt5-11  # bug in cgal, should be installed automatically
+  - sudo pip install meshio
 
 install:
   - cmake .
