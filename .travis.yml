@@ -13,7 +13,7 @@ virtualenv:
 
 # install dependencies
 before_install:
-  - sudo apt-get -y install libcgal-dev
+  - sudo apt-get -y install libcgal-dev libeigen3-dev
 
 install:
   - cmake .
