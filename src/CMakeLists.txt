@@ -27,3 +27,14 @@ SWIG_LINK_LIBRARIES(
   ${MPFR_LIBRARIES}
   ${Boost_LIBRARIES}
   )
+
+execute_process(
+  COMMAND python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"
+  OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+install(TARGETS _loom DESTINATION ${PYTHON_SITE_PACKAGES})
+install(
+  FILES ${CMAKE_BINARY_DIR}/src/loom.py
+  DESTINATION ${PYTHON_SITE_PACKAGES}
+  )
