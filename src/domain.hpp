@@ -108,5 +108,65 @@ class Rotate: public loom::DomainBase
     std::vector<std::vector<CGAL::Sign>> signs_;
 };
 
+class Intersection: public loom::DomainBase
+{
+  public:
+  Intersection(
+      std::shared_ptr<const loom::DomainBase> & domain0,
+      std::shared_ptr<const loom::DomainBase> & domain1
+      ):
+    // change in the signs
+    primitives_(merge(domain0->get_primitives(), domain1->get_primitives())),
+    signs_(intersection_signs(domain0->get_signs(), domain1->get_signs()))
+  {
+  }
+
+  std::vector<std::shared_ptr<const loom::PrimitiveBase>>
+  merge(
+      const std::vector<std::shared_ptr<const loom::PrimitiveBase>> & a,
+      const std::vector<std::shared_ptr<const loom::PrimitiveBase>> & b
+    )
+  {
+    std::vector<std::shared_ptr<const loom::PrimitiveBase>> out = a;
+    out.insert(out.end(), b.begin(), b.end());
+    return out;
+  }
+
+  std::vector<std::vector<CGAL::Sign>>
+  intersection_signs(
+      const std::vector<std::vector<CGAL::Sign>> & a,
+      const std::vector<std::vector<CGAL::Sign>> & b
+    )
+  {
+    std::vector<std::vector<CGAL::Sign>> out = {};
+    for (size_t i=0; i < a.size(); i++) {
+      for (size_t j=0; j < b.size(); j++) {
+        auto c = a[i];
+        c.insert(c.end(), b[j].begin(), b[j].end());
+        out.push_back(c);
+      }
+    }
+    return out;
+  }
+
+  virtual
+  std::vector<std::shared_ptr<const loom::PrimitiveBase>>
+  get_primitives() const
+  {
+    return primitives_;
+  }
+
+  virtual
+  std::vector<std::vector<CGAL::Sign>>
+  get_signs() const
+  {
+    return signs_;
+  }
+
+  private:
+    std::vector<std::shared_ptr<const loom::PrimitiveBase>> primitives_;
+    std::vector<std::vector<CGAL::Sign>> signs_;
+};
+
 } // namespace loom
 #endif // DOMAIN_HPP
