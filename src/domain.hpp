@@ -7,11 +7,11 @@
 
 namespace loom {
 
-class RotatedPrimitive: public PrimitiveBase
+class RotatedPrimitive: public loom::PrimitiveBase
 {
   public:
   RotatedPrimitive(
-      const std::shared_ptr<const PrimitiveBase> & primitive,
+      const std::shared_ptr<const loom::PrimitiveBase> & primitive,
       const std::vector<double> & axis,
       const double angle
       ):
@@ -51,17 +51,17 @@ class RotatedPrimitive: public PrimitiveBase
   }
 
   private:
-    const std::shared_ptr<const PrimitiveBase> primitive_;
+    const std::shared_ptr<const loom::PrimitiveBase> primitive_;
     const Eigen::Vector3d normalized_axis_;
     const double sinAngle_;
     const double cosAngle_;
 };
 
-class Rotate: public DomainBase
+class Rotate: public loom::DomainBase
 {
   public:
   Rotate(
-      std::shared_ptr<const DomainBase> & domain,
+      std::shared_ptr<const loom::DomainBase> & domain,
       const std::vector<double> & axis,
       const double angle
       ):
