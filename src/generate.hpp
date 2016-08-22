@@ -14,7 +14,12 @@ void generate_mesh(
     const bool odt = false,
     const bool perturb = true,
     const bool exude = true,
-    const double boundary_precision = 1.0e-4
+    const double boundary_precision = 1.0e-4,
+    const double facet_angle = 30,
+    const double facet_size = 0.2,
+    const double facet_distance = 0.02,
+    const double cell_radius_edge_ratio = 2.0,
+    const double cell_size = 0.4
     );
 
 } // namespace loom

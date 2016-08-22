@@ -53,12 +53,17 @@ generate_mesh(
     const bool odt,
     const bool perturb,
     const bool exude,
-    const double boundary_precision
+    const double boundary_precision,
+    const double facet_angle,
+    const double facet_size,
+    const double facet_distance,
+    const double cell_radius_edge_ratio,
+    const double cell_size
     )
 {
   Function_vector v;
   for (const auto & primitive: in->get_primitives()) {
-      v.push_back(Function(primitive));
+    v.push_back(Function(primitive));
   }
 
   Mesh_domain domain(
@@ -69,8 +74,8 @@ generate_mesh(
       );
 
   // Set mesh criteria
-  Facet_criteria facet_criteria(30, 0.2, 0.02); // angle, size, approximation
-  Cell_criteria cell_criteria(2., 0.4); // radius-edge ratio, size
+  Facet_criteria facet_criteria(facet_angle, facet_size, facet_distance);
+  Cell_criteria cell_criteria(cell_radius_edge_ratio, cell_size);
   Mesh_criteria criteria(facet_criteria, cell_criteria);
 
   // Mesh generation
