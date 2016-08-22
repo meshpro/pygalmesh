@@ -12,6 +12,8 @@ namespace std {
 %template(Line) vector <double>;
 }
 
+%include "std_string.i"
+
 %include <std_shared_ptr.i>
 %shared_ptr(loom::DomainBase);
 %shared_ptr(loom::PrimitiveBase);

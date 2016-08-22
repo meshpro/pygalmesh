@@ -48,6 +48,7 @@ void
 generate_mesh(
     const std::shared_ptr<loom::DomainBase> & in,
     const double bounding_sphere_radius,
+    const std::string & outfile,
     const bool lloyd,
     const bool odt,
     const bool perturb,
@@ -88,7 +89,7 @@ generate_mesh(
       );
 
   // Output
-  std::ofstream medit_file("out.mesh");
+  std::ofstream medit_file(outfile);
   c3t3.output_to_medit(medit_file);
 
   return;

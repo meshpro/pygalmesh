@@ -4,12 +4,14 @@
 #include "domain.hpp"
 
 #include <memory>
+#include <string>
 
 namespace loom {
 
 void generate_mesh(
     const std::shared_ptr<loom::DomainBase> & in,
     const double bounding_sphere_radius,
+    const std::string & outfile,
     const bool lloyd = false,
     const bool odt = false,
     const bool perturb = true,
