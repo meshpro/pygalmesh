@@ -51,7 +51,8 @@ generate_mesh(
     const bool lloyd,
     const bool odt,
     const bool perturb,
-    const bool exude
+    const bool exude,
+    const double boundary_precision
     )
 {
   Function_vector v;
@@ -63,7 +64,7 @@ generate_mesh(
   Mesh_domain domain(
       Function_wrapper(v, in->get_signs()),
       K::Sphere_3(CGAL::ORIGIN, 5.*5.),
-      1.0e-4
+      boundary_precision
       );
 
   // Set mesh criteria

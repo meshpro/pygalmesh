@@ -12,7 +12,8 @@ void generate_mesh(
     const bool lloyd = false,
     const bool odt = false,
     const bool perturb = true,
-    const bool exude = true
+    const bool exude = true,
+    const double boundary_precision = 1.0e-4
     );
 
 } // namespace loom
