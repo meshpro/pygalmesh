@@ -115,7 +115,6 @@ class Intersection: public loom::DomainBase
       std::shared_ptr<const loom::DomainBase> & domain0,
       std::shared_ptr<const loom::DomainBase> & domain1
       ):
-    // change in the signs
     primitives_(merge(domain0->get_primitives(), domain1->get_primitives())),
     signs_(intersection_signs(domain0->get_signs(), domain1->get_signs()))
   {
@@ -175,7 +174,6 @@ class Union: public loom::DomainBase
       std::shared_ptr<const loom::DomainBase> & domain0,
       std::shared_ptr<const loom::DomainBase> & domain1
       ):
-    // change in the signs
     primitives_(merge(domain0->get_primitives(), domain1->get_primitives())),
     signs_(union_signs(domain0->get_signs(), domain1->get_signs()))
   {
@@ -242,6 +240,75 @@ class Union: public loom::DomainBase
       }
     }
 
+    return out;
+  }
+
+  virtual
+  std::vector<std::shared_ptr<const loom::PrimitiveBase>>
+  get_primitives() const
+  {
+    return primitives_;
+  }
+
+  virtual
+  std::vector<std::vector<CGAL::Sign>>
+  get_signs() const
+  {
+    return signs_;
+  }
+
+  private:
+    std::vector<std::shared_ptr<const loom::PrimitiveBase>> primitives_;
+    std::vector<std::vector<CGAL::Sign>> signs_;
+};
+
+class Difference: public loom::DomainBase
+{
+  public:
+  Difference(
+      std::shared_ptr<const loom::DomainBase> & domain0,
+      std::shared_ptr<const loom::DomainBase> & domain1
+      ):
+    primitives_(merge(domain0->get_primitives(), domain1->get_primitives())),
+    signs_(difference_signs(domain0->get_signs(), domain1->get_signs()))
+  {
+  }
+
+  std::vector<std::shared_ptr<const loom::PrimitiveBase>>
+  merge(
+      const std::vector<std::shared_ptr<const loom::PrimitiveBase>> & a,
+      const std::vector<std::shared_ptr<const loom::PrimitiveBase>> & b
+    )
+  {
+    std::vector<std::shared_ptr<const loom::PrimitiveBase>> out = a;
+    out.insert(out.end(), b.begin(), b.end());
+    return out;
+  }
+
+  std::vector<std::vector<CGAL::Sign>>
+  difference_signs(
+      const std::vector<std::vector<CGAL::Sign>> & a,
+      const std::vector<std::vector<CGAL::Sign>> & b
+    )
+  {
+    // difference = intersection with the complement
+    auto b_inv = b;
+    for (size_t i=0; i < b_inv.size(); i++) {
+      for (size_t j=0; j < b_inv[i].size(); j++) {
+        b_inv[i][j] = (b[i][j] == CGAL::NEGATIVE) ?
+          CGAL::POSITIVE :
+          CGAL::NEGATIVE;
+      }
+    }
+
+    std::vector<std::vector<CGAL::Sign>> out = {};
+    for (size_t i=0; i < a.size(); i++) {
+      for (size_t j=0; j < b_inv.size(); j++) {
+        auto c = a[i];
+        c.insert(c.end(), b_inv[j].begin(), b_inv[j].end());
+        out.push_back(c);
+      }
+    }
     return out;
   }
 

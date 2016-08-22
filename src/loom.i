@@ -23,6 +23,7 @@ namespace std {
 %shared_ptr(loom::RotatedPrimitive);
 %shared_ptr(loom::Rotate);
 
+%shared_ptr(loom::Difference);
 %shared_ptr(loom::Intersection);
 %shared_ptr(loom::Union);
 
