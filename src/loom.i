@@ -24,6 +24,7 @@ namespace std {
 %shared_ptr(loom::Rotate);
 
 %shared_ptr(loom::Intersection);
+%shared_ptr(loom::Union);
 
 %include "loom.hpp"
 %include "primitives.hpp"

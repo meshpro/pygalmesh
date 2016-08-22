@@ -168,5 +168,101 @@ class Intersection: public loom::DomainBase
     std::vector<std::vector<CGAL::Sign>> signs_;
 };
 
+class Union: public loom::DomainBase
+{
+  public:
+  Union(
+      std::shared_ptr<const loom::DomainBase> & domain0,
+      std::shared_ptr<const loom::DomainBase> & domain1
+      ):
+    // change in the signs
+    primitives_(merge(domain0->get_primitives(), domain1->get_primitives())),
+    signs_(union_signs(domain0->get_signs(), domain1->get_signs()))
+  {
+  }
+
+  std::vector<std::shared_ptr<const loom::PrimitiveBase>>
+  merge(
+      const std::vector<std::shared_ptr<const loom::PrimitiveBase>> & a,
+      const std::vector<std::shared_ptr<const loom::PrimitiveBase>> & b
+    )
+  {
+    std::vector<std::shared_ptr<const loom::PrimitiveBase>> out = a;
+    out.insert(out.end(), b.begin(), b.end());
+    return out;
+  }
+
+  std::vector<std::vector<CGAL::Sign>>
+  append_plus_minus(std::vector<std::vector<CGAL::Sign>> in)
+  {
+    auto out = in;
+    out.insert(out.end(), in.begin(), in.end());
+    for (size_t i=0; i < in.size(); i++) {
+      out[2*i].push_back(CGAL::POSITIVE);
+      out[2*i+1].push_back(CGAL::NEGATIVE);
+    }
+    return out;
+  }
+
+  std::vector<std::vector<CGAL::Sign>>
+  union_signs(
+      const std::vector<std::vector<CGAL::Sign>> & a,
+      const std::vector<std::vector<CGAL::Sign>> & b
+    )
+  {
+    std::vector<std::vector<CGAL::Sign>> out = {};
+
+    // create all combinations of +- in b
+    std::vector<std::vector<CGAL::Sign>> b_combinations = {{}};
+    for (size_t i=0; i < b.size(); i++) {
+      b_combinations = append_plus_minus(b_combinations);
+    }
+
+    // a fixed, all combinations in b
+    for (size_t i=0; i < a.size(); i++) {
+      for (size_t j=0; j < b_combinations.size(); j++) {
+        auto c = a[i];
+        c.insert(c.end(), b_combinations[j].begin(), b_combinations[j].end());
+        out.push_back(c);
+      }
+    }
+
+    // create all combinations of +- in a
+    std::vector<std::vector<CGAL::Sign>> a_combinations = {{}};
+    for (size_t i=0; i < a.size(); i++) {
+      a_combinations = append_plus_minus(a_combinations);
+    }
+
+    // all combinations in a, b fixed
+    for (size_t i=0; i < a_combinations.size(); i++) {
+      for (size_t j=0; j < b.size(); j++) {
+        auto c = a_combinations[i];
+        c.insert(c.end(), b[j].begin(), b[j].end());
+        out.push_back(c);
+      }
+    }
+
+    return out;
+  }
+
+  virtual
+  std::vector<std::shared_ptr<const loom::PrimitiveBase>>
+  get_primitives() const
+  {
+    return primitives_;
+  }
+
+  virtual
+  std::vector<std::vector<CGAL::Sign>>
+  get_signs() const
+  {
+    return signs_;
+  }
+
+  private:
+    std::vector<std::shared_ptr<const loom::PrimitiveBase>> primitives_;
+    std::vector<std::vector<CGAL::Sign>> signs_;
+};
+
 } // namespace loom
 #endif // DOMAIN_HPP
