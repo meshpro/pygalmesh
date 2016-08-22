@@ -72,23 +72,14 @@ generate_mesh(
   Cell_criteria cell_criteria(2., 0.4); // radius-edge ratio, size
   Mesh_criteria criteria(facet_criteria, cell_criteria);
 
-  const auto lloyd_param =
-    lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd();
-  const auto odt_param =
-    odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt();
-  const auto perturb_param =
-    perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb();
-  const auto exude_param =
-    exude ? CGAL::parameters::exude() : CGAL::parameters::no_exude();
-
   // Mesh generation
   C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
       domain,
       criteria,
-      lloyd_param,
-      odt_param,
-      perturb_param,
-      exude_param
+      lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
+      odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
+      perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
+      exude ? CGAL::parameters::exude() : CGAL::parameters::no_exude()
       );
 
   // Output
