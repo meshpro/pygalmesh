@@ -196,8 +196,8 @@ class Union: public loom::DomainBase
     auto out = in;
     out.insert(out.end(), in.begin(), in.end());
     for (size_t i=0; i < in.size(); i++) {
-      out[2*i].push_back(CGAL::POSITIVE);
-      out[2*i+1].push_back(CGAL::NEGATIVE);
+      out[i].push_back(CGAL::POSITIVE);
+      out[i+in.size()].push_back(CGAL::NEGATIVE);
     }
     return out;
   }
