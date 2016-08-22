@@ -48,6 +48,7 @@ typedef Mesh_criteria::Cell_criteria     Cell_criteria;
 void
 generate_mesh(
     const std::shared_ptr<loom::DomainBase> & in,
+    const double bounding_sphere_radius,
     const bool lloyd,
     const bool odt,
     const bool perturb,
@@ -60,10 +61,10 @@ generate_mesh(
       v.push_back(Function(primitive));
   }
 
-  // Domain (Warning: Sphere_3 constructor uses square radius !)
   Mesh_domain domain(
       Function_wrapper(v, in->get_signs()),
-      K::Sphere_3(CGAL::ORIGIN, 5.*5.),
+      // Sphere_3 constructor uses square radius
+      K::Sphere_3(CGAL::ORIGIN, bounding_sphere_radius*bounding_sphere_radius),
       boundary_precision
       );
 
