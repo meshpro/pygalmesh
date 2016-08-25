@@ -30,6 +30,14 @@ class Ball: public loom::DomainBase
       return xx0*xx0 + yy0*yy0 + zz0*zz0 - radius_*radius_;
     }
 
+    virtual
+    double
+    get_bounding_sphere_squared_radius() const
+    {
+      const double x0_nrm = sqrt(x0_[0]*x0_[0] + x0_[1]*x0_[1] + x0_[2]*x0_[2]);
+      return (x0_nrm + radius_) * (x0_nrm + radius_);
+    }
+
   private:
     const std::vector<double> x0_;
     const double radius_;
@@ -55,6 +63,15 @@ class Cuboid: public loom::DomainBase
           x0_[1] < p.y() && p.y() < x1_[1] &&
           x0_[2] < p.z() && p.z() < x1_[2]
           ) ? -1.0 : 1.0;
+    }
+
+    virtual
+    double
+    get_bounding_sphere_squared_radius() const
+    {
+      const double x0_nrm2 = x0_[0]*x0_[0] + x0_[1]*x0_[1] + x0_[2]*x0_[2];
+      const double x1_nrm2 = x1_[0]*x1_[0] + x1_[1]*x1_[1] + x1_[2]*x1_[2];
+      return std::max({x0_nrm2, x1_nrm2});
     }
 
     virtual
@@ -117,6 +134,13 @@ class Ellipsoid: public loom::DomainBase
       return xx0*xx0/a0_2_ + yy0*yy0/a1_2_ + zz0*zz0/a2_2_ - 1.0;
     }
 
+    virtual
+    double
+    get_bounding_sphere_squared_radius() const
+    {
+      return std::max({a0_2_, a1_2_, a2_2_});
+    }
+
   private:
     const std::vector<double> x0_;
     const double a0_2_;
@@ -137,6 +161,7 @@ class Cylinder: public loom::DomainBase
       z1_(z1),
       radius2_(radius*radius)
     {
+      assert(z1_ > z0_);
     }
 
     virtual K::FT operator()(K::Point_3 p) const
@@ -146,6 +171,13 @@ class Cylinder: public loom::DomainBase
       return (z0_ < p.z() && p.z() < z1_) ?
         p.x()*p.x() + p.y()*p.y() - radius2_ :
         1.0;
+    }
+
+    virtual
+    double
+    get_bounding_sphere_squared_radius() const
+    {
+      return (z1_ - z0_)*(z1_ - z0_) + radius2_;
     }
 
   private:

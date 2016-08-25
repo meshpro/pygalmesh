@@ -10,9 +10,9 @@ namespace loom {
 
 void generate_mesh(
     const std::shared_ptr<loom::DomainBase> & domain,
-    const double bounding_sphere_radius,
     const std::string & outfile,
     const std::vector<std::vector<std::vector<double>>> & feature_edges = {},
+    const double bounding_sphere_radius = 0.0,
     const bool lloyd = false,
     const bool odt = false,
     const bool perturb = true,

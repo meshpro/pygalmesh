@@ -16,6 +16,10 @@ class DomainBase
   operator()(K::Point_3 p) const = 0;
 
   virtual
+  double
+  get_bounding_sphere_squared_radius() const = 0;
+
+  virtual
   std::list<std::vector<K::Point_3>>
   get_features() const
   {
@@ -61,6 +65,13 @@ class Rotate: public loom::DomainBase
     return domain_->operator()(pt2);
   }
 
+  virtual
+  double
+  get_bounding_sphere_squared_radius() const
+  {
+    return domain_->get_bounding_sphere_squared_radius();
+  }
+
   private:
     const std::shared_ptr<const loom::DomainBase> domain_;
     const Eigen::Vector3d normalized_axis_;
@@ -89,6 +100,16 @@ class Intersection: public loom::DomainBase
         1.0;
   }
 
+  virtual
+  double
+  get_bounding_sphere_squared_radius() const
+  {
+    return std::min({
+        domain0_->get_bounding_sphere_squared_radius(),
+        domain1_->get_bounding_sphere_squared_radius()
+        });
+  }
+
   private:
     std::shared_ptr<const loom::DomainBase> domain0_;
     std::shared_ptr<const loom::DomainBase> domain1_;
@@ -115,6 +136,16 @@ class Union: public loom::DomainBase
         1.0;
   }
 
+  virtual
+  double
+  get_bounding_sphere_squared_radius() const
+  {
+    return std::max({
+        domain0_->get_bounding_sphere_squared_radius(),
+        domain1_->get_bounding_sphere_squared_radius()
+        });
+  }
+
   private:
     std::shared_ptr<const loom::DomainBase> domain0_;
     std::shared_ptr<const loom::DomainBase> domain1_;
@@ -139,6 +170,13 @@ class Difference: public loom::DomainBase
     return ((*domain0_)(p) < 0.0 || (*domain1_)(p) >= 0.0) ?
         -1.0 :
         1.0;
+  }
+
+  virtual
+  double
+  get_bounding_sphere_squared_radius() const
+  {
+    return domain0_->get_bounding_sphere_squared_radius();
   }
 
   private:

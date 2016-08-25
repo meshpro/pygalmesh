@@ -46,9 +46,9 @@ translate_feature_edges(
 void
 generate_mesh(
     const std::shared_ptr<loom::DomainBase> & domain,
-    const double bounding_sphere_radius,
     const std::string & outfile,
     const std::vector<std::vector<std::vector<double>>> & feature_edges,
+    const double bounding_sphere_radius,
     const bool lloyd,
     const bool odt,
     const bool perturb,
@@ -61,9 +61,13 @@ generate_mesh(
     const double cell_size
     )
 {
+  const double bounding_sphere_radius2 = bounding_sphere_radius > 0 ?
+    bounding_sphere_radius*bounding_sphere_radius :
+    domain->get_bounding_sphere_squared_radius();
+
   Mesh_domain cgal_domain(
       *domain,
-      K::Sphere_3(CGAL::ORIGIN, bounding_sphere_radius*bounding_sphere_radius),
+      K::Sphere_3(CGAL::ORIGIN, bounding_sphere_radius2),
       boundary_precision
       );
 
