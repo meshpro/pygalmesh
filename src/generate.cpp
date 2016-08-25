@@ -26,21 +26,6 @@ typedef CGAL::Mesh_criteria_3<Tr> Mesh_criteria;
 typedef Mesh_criteria::Facet_criteria Facet_criteria;
 typedef Mesh_criteria::Cell_criteria Cell_criteria;
 
-// Function
-K::FT sphere_function1 (const K::Point_3& p) {
-  return CGAL::squared_distance(p, K::Point_3(CGAL::ORIGIN))-2;
-}
-K::FT sphere_function2 (const K::Point_3& p) {
-  return CGAL::squared_distance(p, K::Point_3(2, 0, 0))-2;
-}
-K::FT sphere_function (const K::Point_3& p)
-{
-  if(sphere_function1(p) < 0 || sphere_function2(p) < 0)
-    return -1;
-  else
-    return 1;
-}
-
 void
 generate_mesh(
     const std::shared_ptr<loom::DomainBase> & domain,
@@ -65,27 +50,16 @@ generate_mesh(
       boundary_precision
       );
 
-  if (feature_edges.size() > 0) {
-    // translate to list of vectors of Point_3
-    std::list<std::vector<K::Point_3>> polylines;
-    for (const auto & feature_edge: feature_edges) {
-      std::vector<K::Point_3> polyline;
-      for (const auto & point: feature_edge) {
-          polyline.push_back(K::Point_3(point[0], point[1], point[2]));
-      }
-      polylines.push_back(polyline);
+  // translate to list of vectors of Point_3
+  std::list<std::vector<K::Point_3>> polylines;
+  for (const auto & feature_edge: feature_edges) {
+    std::vector<K::Point_3> polyline;
+    for (const auto & point: feature_edge) {
+        polyline.push_back(K::Point_3(point[0], point[1], point[2]));
     }
-    cgal_domain.add_features(polylines.begin(), polylines.end());
+    polylines.push_back(polyline);
   }
-
-  // Polylines polylines (1);
-  // Polyline_3& polyline = polylines.front();
-  // for(int i = 0; i < 360; ++i) {
-  //   K::Point_3 p(1, std::cos(i*CGAL_PI/180), std::sin(i*CGAL_PI/180));
-  //   polyline.push_back(p);
-  // }
-  // polyline.push_back(polyline.front());
-  // cgal_domain.add_features(polylines.begin(), polylines.end());
+  cgal_domain.add_features(polylines.begin(), polylines.end());
 
   // Facet_criteria facet_criteria(facet_angle, facet_size, facet_distance);
   // Cell_criteria cell_criteria(cell_radius_edge_ratio, cell_size);
