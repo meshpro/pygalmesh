@@ -26,6 +26,23 @@ typedef CGAL::Mesh_criteria_3<Tr> Mesh_criteria;
 typedef Mesh_criteria::Facet_criteria Facet_criteria;
 typedef Mesh_criteria::Cell_criteria Cell_criteria;
 
+// translate vector<vector<vector<double>> to list<vector<Point_3>>
+std::list<std::vector<K::Point_3>>
+translate_feature_edges(
+    const std::vector<std::vector<std::vector<double>>> & feature_edges
+    )
+{
+  std::list<std::vector<K::Point_3>> polylines;
+  for (const auto & feature_edge: feature_edges) {
+    std::vector<K::Point_3> polyline;
+    for (const auto & point: feature_edge) {
+      polyline.push_back(K::Point_3(point[0], point[1], point[2]));
+    }
+    polylines.push_back(polyline);
+  }
+  return polylines;
+}
+
 void
 generate_mesh(
     const std::shared_ptr<loom::DomainBase> & domain,
@@ -50,15 +67,10 @@ generate_mesh(
       boundary_precision
       );
 
-  // translate to list of vectors of Point_3
-  std::list<std::vector<K::Point_3>> polylines;
-  for (const auto & feature_edge: feature_edges) {
-    std::vector<K::Point_3> polyline;
-    for (const auto & point: feature_edge) {
-        polyline.push_back(K::Point_3(point[0], point[1], point[2]));
-    }
-    polylines.push_back(polyline);
-  }
+  const auto native_features = domain->get_features();
+  cgal_domain.add_features(native_features.begin(), native_features.end());
+
+  const auto polylines = translate_feature_edges(feature_edges);
   cgal_domain.add_features(polylines.begin(), polylines.end());
 
   // Facet_criteria facet_criteria(facet_angle, facet_size, facet_distance);

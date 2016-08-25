@@ -91,7 +91,7 @@ def test_cuboid():
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
-    tol = 1.0e-10
+    tol = 1.0e-3
     assert abs(max(vertices[:, 0]) - 1.0) < tol
     assert abs(min(vertices[:, 0]) + 0.0) < tol
     assert abs(max(vertices[:, 1]) - 2.0) < tol
