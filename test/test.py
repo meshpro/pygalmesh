@@ -46,7 +46,23 @@ def test_balls():
     s0 = loom.Ball([displacement, 0, 0], radius)
     s1 = loom.Ball([-displacement, 0, 0], radius)
     u = loom.Union(s0, s1)
-    loom.generate_mesh(u, 5.0, 'out.mesh')
+
+    a = numpy.sqrt(radius**2 - displacement**2)
+    circ = [
+        [
+            0.0,
+            a * numpy.cos(i * numpy.pi/180.0),
+            a * numpy.sin(i * numpy.pi/180.0)
+        ] for i in range(360)
+        ]
+
+    loom.generate_mesh(
+            u,
+            5.0,
+            'out.mesh',
+            cell_size=0.15
+            )
+            # feature_edges=[circ],
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -58,7 +74,6 @@ def test_balls():
     assert abs(min(vertices[:, 2]) + radius) < 0.02
 
     vol = sum(compute_volumes(vertices, cells['tetra']))
-    a = numpy.sqrt(radius**2 - displacement**2)
     h = radius - displacement
     ref_vol = 2 * (
         4.0/3.0 * numpy.pi * radius**3
@@ -91,4 +106,4 @@ def test_cuboid():
 
 
 if __name__ == '__main__':
-    test_ball()
+    test_balls()

@@ -12,29 +12,6 @@
 
 namespace loom {
 
-// class Function_W
-// {
-//   public:
-//   // typedef K::Point_3 Point;
-//   typedef K::Point_3 Point_3;
-//
-//   explicit Function_W(std::shared_ptr<const loom::DomainBase> domain):
-//     domain_(domain)
-//   {
-//   }
-//
-//   K::FT operator()(K::Point_3 p) const {
-//     return (*domain_)(p);
-//   }
-//
-//   private:
-//   std::shared_ptr<const loom::DomainBase> domain_;
-// };
-
-typedef K::FT (Function)(const K::Point_3&);
-
-// typedef std::unary_function<K::Point_3, K::FT> Function;
-
 typedef CGAL::Mesh_domain_with_polyline_features_3<
   CGAL::Implicit_mesh_domain_3<DomainBase,K>
   >
@@ -64,13 +41,11 @@ K::FT sphere_function (const K::Point_3& p)
     return 1;
 }
 
-
 void
 generate_mesh(
-    const std::shared_ptr<loom::DomainBase> & in,
+    const std::shared_ptr<loom::DomainBase> & domain,
     const double bounding_sphere_radius,
     const std::string & outfile,
-    const std::vector<std::vector<std::vector<double>>> & feature_edges,
     const bool lloyd,
     const bool odt,
     const bool perturb,
@@ -82,39 +57,53 @@ generate_mesh(
     const double cell_radius_edge_ratio,
     const double cell_size
     )
+//    const std::vector<std::vector<std::vector<double>>> & feature_edges,
 {
-  Mesh_domain domain(
-      *in,
+  const std::vector<std::vector<std::vector<double>>> feature_edges = {};
+
+  Mesh_domain cgal_domain(
+      *domain,
       K::Sphere_3(CGAL::ORIGIN, bounding_sphere_radius*bounding_sphere_radius),
       boundary_precision
       );
 
-  // // Create edge that we want to preserve
-  // const auto features = in->get_features();
-  // const size_t num_features = features.size();
-  // if (num_features > 0) {
-  //   // Polylines polylines(num_features);
-  //   // for (const auto & feature: features) {
-  //   //   std::cout << "feature ja" << std::endl;
-  //   //   // Polyline_3& polyline = polylines.front();
-  //   //   // for(int i = 0; i < 360; ++i) {
-  //   //   //   Point p (1, std::cos(i*CGAL_PI/180), std::sin(i*CGAL_PI/180));
-  //   //   //   polyline.push_back(p);
-  //   //   // }
-  //   //   // polyline.push_back(polyline.front()); // close the line
-  //   //   // // Insert edge in domain
-  //   // }
-  //   domain.add_features(features.begin(), features.end());
-  // }
+  if (feature_edges.size() > 0) {
+    // translate to list of vectors of Point_3
+    std::list<std::vector<K::Point_3>> polylines;
+    for (const auto & feature_edge: feature_edges) {
+      std::vector<K::Point_3> polyline;
+      for (const auto & point: feature_edge) {
+          polyline.push_back(K::Point_3(point[0], point[1], point[2]));
+      }
+      polylines.push_back(polyline);
+    }
+    cgal_domain.add_features(polylines.begin(), polylines.end());
+  }
 
-  // Set mesh criteria
-  Facet_criteria facet_criteria(facet_angle, facet_size, facet_distance);
-  Cell_criteria cell_criteria(cell_radius_edge_ratio, cell_size);
-  Mesh_criteria criteria(facet_criteria, cell_criteria);
+  // Polylines polylines (1);
+  // Polyline_3& polyline = polylines.front();
+  // for(int i = 0; i < 360; ++i) {
+  //   K::Point_3 p(1, std::cos(i*CGAL_PI/180), std::sin(i*CGAL_PI/180));
+  //   polyline.push_back(p);
+  // }
+  // polyline.push_back(polyline.front());
+  // cgal_domain.add_features(polylines.begin(), polylines.end());
+
+  // Facet_criteria facet_criteria(facet_angle, facet_size, facet_distance);
+  // Cell_criteria cell_criteria(cell_radius_edge_ratio, cell_size);
+  // Mesh_criteria criteria(facet_criteria, cell_criteria);
+
+  Mesh_criteria criteria(
+      CGAL::parameters::edge_size=0.15,
+      CGAL::parameters::facet_angle=25,
+      CGAL::parameters::facet_size=0.15,
+      CGAL::parameters::cell_radius_edge_ratio=2,
+      CGAL::parameters::cell_size=0.15
+      );
 
   // Mesh generation
   C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
-      domain,
+      cgal_domain,
       criteria,
       lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
       odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
@@ -125,6 +114,7 @@ generate_mesh(
   // Output
   std::ofstream medit_file(outfile);
   c3t3.output_to_medit(medit_file);
+  medit_file.close();
 
   return;
 }
