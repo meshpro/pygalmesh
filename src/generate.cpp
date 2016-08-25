@@ -46,6 +46,7 @@ generate_mesh(
     const std::shared_ptr<loom::DomainBase> & domain,
     const double bounding_sphere_radius,
     const std::string & outfile,
+    const std::vector<std::vector<std::vector<double>>> & feature_edges,
     const bool lloyd,
     const bool odt,
     const bool perturb,
@@ -57,10 +58,7 @@ generate_mesh(
     const double cell_radius_edge_ratio,
     const double cell_size
     )
-//    const std::vector<std::vector<std::vector<double>>> & feature_edges,
 {
-  const std::vector<std::vector<std::vector<double>>> feature_edges = {};
-
   Mesh_domain cgal_domain(
       *domain,
       K::Sphere_3(CGAL::ORIGIN, bounding_sphere_radius*bounding_sphere_radius),

@@ -10,6 +10,7 @@
 %include <std_vector.i>
 namespace std {
 %template(Line) vector <double>;
+%template(ListOfListsOfLists) vector<vector<vector<double>>>;
 }
 
 %include "std_string.i"

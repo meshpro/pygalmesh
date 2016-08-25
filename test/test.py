@@ -48,21 +48,21 @@ def test_balls():
     u = loom.Union(s0, s1)
 
     a = numpy.sqrt(radius**2 - displacement**2)
+    n = 20
     circ = [
         [
             0.0,
-            a * numpy.cos(i * numpy.pi/180.0),
-            a * numpy.sin(i * numpy.pi/180.0)
-        ] for i in range(360)
+            a * numpy.cos(i * 2*numpy.pi / n),
+            a * numpy.sin(i * 2*numpy.pi / n)
+        ] for i in range(n)
         ]
 
     loom.generate_mesh(
             u,
             5.0,
             'out.mesh',
-            cell_size=0.15
+            feature_edges=[circ],
             )
-            # feature_edges=[circ],
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -80,7 +80,7 @@ def test_balls():
         - h * numpy.pi / 6.0 * (3*a**2 + h**2)
         )
 
-    assert abs(vol - ref_vol) < 0.05
+    assert abs(vol - ref_vol) < 0.1
 
     return
 
