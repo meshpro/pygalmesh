@@ -6,34 +6,39 @@
 #include <CGAL/Mesh_complex_3_in_triangulation_3.h>
 #include <CGAL/Mesh_criteria_3.h>
 
-#include <CGAL/Implicit_to_labeling_function_wrapper.h>
-#include <CGAL/Labeled_mesh_domain_3.h>
+#include <CGAL/Implicit_mesh_domain_3.h>
+#include <CGAL/Mesh_domain_with_polyline_features_3.h>
 #include <CGAL/make_mesh_3.h>
 
 namespace loom {
 
-class Function: public std::unary_function<K::Point_3, K::FT>
-{
-  public:
-  typedef K::Point_3 Point;
+// class Function_W
+// {
+//   public:
+//   // typedef K::Point_3 Point;
+//   typedef K::Point_3 Point_3;
+//
+//   explicit Function_W(std::shared_ptr<const loom::DomainBase> domain):
+//     domain_(domain)
+//   {
+//   }
+//
+//   K::FT operator()(K::Point_3 p) const {
+//     return (*domain_)(p);
+//   }
+//
+//   private:
+//   std::shared_ptr<const loom::DomainBase> domain_;
+// };
 
-  explicit Function(std::shared_ptr<const loom::PrimitiveBase> fun):
-    fun_(fun)
-  {
-  }
+typedef K::FT (Function)(const K::Point_3&);
 
-  virtual K::FT operator()(K::Point_3 p) const {
-    return (*fun_)(p);
-  }
+// typedef std::unary_function<K::Point_3, K::FT> Function;
 
-  private:
-  std::shared_ptr<const loom::PrimitiveBase> fun_;
-};
-
-typedef CGAL::Implicit_multi_domain_to_labeling_function_wrapper<Function>
-                                                        Function_wrapper;
-typedef Function_wrapper::Function_vector Function_vector;
-typedef CGAL::Labeled_mesh_domain_3<Function_wrapper, K> Mesh_domain;
+typedef CGAL::Mesh_domain_with_polyline_features_3<
+  CGAL::Implicit_mesh_domain_3<DomainBase,K>
+  >
+  Mesh_domain;
 
 // Triangulation
 typedef CGAL::Mesh_triangulation_3<Mesh_domain>::type Tr;
@@ -44,11 +49,28 @@ typedef CGAL::Mesh_criteria_3<Tr> Mesh_criteria;
 typedef Mesh_criteria::Facet_criteria Facet_criteria;
 typedef Mesh_criteria::Cell_criteria Cell_criteria;
 
+// Function
+K::FT sphere_function1 (const K::Point_3& p) {
+  return CGAL::squared_distance(p, K::Point_3(CGAL::ORIGIN))-2;
+}
+K::FT sphere_function2 (const K::Point_3& p) {
+  return CGAL::squared_distance(p, K::Point_3(2, 0, 0))-2;
+}
+K::FT sphere_function (const K::Point_3& p)
+{
+  if(sphere_function1(p) < 0 || sphere_function2(p) < 0)
+    return -1;
+  else
+    return 1;
+}
+
+
 void
 generate_mesh(
     const std::shared_ptr<loom::DomainBase> & in,
     const double bounding_sphere_radius,
     const std::string & outfile,
+    const std::vector<std::vector<std::vector<double>>> & feature_edges,
     const bool lloyd,
     const bool odt,
     const bool perturb,
@@ -61,17 +83,29 @@ generate_mesh(
     const double cell_size
     )
 {
-  Function_vector v;
-  for (const auto & primitive: in->get_primitives()) {
-    v.push_back(Function(primitive));
-  }
-
   Mesh_domain domain(
-      Function_wrapper(v, in->get_signs()),
-      // Sphere_3 constructor uses square radius
+      *in,
       K::Sphere_3(CGAL::ORIGIN, bounding_sphere_radius*bounding_sphere_radius),
       boundary_precision
       );
+
+  // // Create edge that we want to preserve
+  // const auto features = in->get_features();
+  // const size_t num_features = features.size();
+  // if (num_features > 0) {
+  //   // Polylines polylines(num_features);
+  //   // for (const auto & feature: features) {
+  //   //   std::cout << "feature ja" << std::endl;
+  //   //   // Polyline_3& polyline = polylines.front();
+  //   //   // for(int i = 0; i < 360; ++i) {
+  //   //   //   Point p (1, std::cos(i*CGAL_PI/180), std::sin(i*CGAL_PI/180));
+  //   //   //   polyline.push_back(p);
+  //   //   // }
+  //   //   // polyline.push_back(polyline.front()); // close the line
+  //   //   // // Insert edge in domain
+  //   // }
+  //   domain.add_features(features.begin(), features.end());
+  // }
 
   // Set mesh criteria
   Facet_criteria facet_criteria(facet_angle, facet_size, facet_distance);

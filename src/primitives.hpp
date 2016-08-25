@@ -1,40 +1,14 @@
 #ifndef PRIMITIVES_HPP
 #define PRIMITIVES_HPP
 
-#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include "domain.hpp"
 
 #include <memory>
 #include <vector>
 
-typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
-
 namespace loom {
 
-// forward declarations
-class DomainBase;
-class PrimitiveBase;
-
-class DomainBase
-{
-  public:
-  virtual std::vector<std::shared_ptr<const loom::PrimitiveBase>> get_primitives() const = 0;
-  virtual std::vector<std::vector<CGAL::Sign>> get_signs() const = 0;
-};
-
-class PrimitiveBase:
-  public DomainBase,
-  public std::enable_shared_from_this<PrimitiveBase>
-{
-  public:
-  virtual K::FT operator()(K::Point_3 p) const = 0;
-
-  virtual std::vector<std::shared_ptr<const loom::PrimitiveBase>> get_primitives() const
-  {
-    return {shared_from_this()};
-  }
-};
-
-class Ball: public PrimitiveBase
+class Ball: public loom::DomainBase
 {
   public:
     // argument are double (not K::FT) for Python compatibility
@@ -56,18 +30,13 @@ class Ball: public PrimitiveBase
       return xx0*xx0 + yy0*yy0 + zz0*zz0 - radius_*radius_;
     }
 
-    virtual std::vector<std::vector<CGAL::Sign>> get_signs() const
-    {
-      return {{CGAL::NEGATIVE}};
-    }
-
   private:
     const std::vector<double> x0_;
     const double radius_;
 };
 
 
-class Cuboid: public PrimitiveBase
+class Cuboid: public loom::DomainBase
 {
   public:
     Cuboid(
@@ -88,10 +57,35 @@ class Cuboid: public PrimitiveBase
           ) ? -1.0 : 1.0;
     }
 
-    virtual std::vector<std::vector<CGAL::Sign>> get_signs() const
+    virtual
+    std::list<std::vector<K::Point_3>>
+    get_features() const
     {
-      return {{CGAL::NEGATIVE}};
-    }
+      std::vector<K::Point_3> corners = {
+        K::Point_3(x0_[0], x0_[1], x0_[2]),
+        K::Point_3(x1_[0], x0_[1], x0_[2]),
+        K::Point_3(x0_[0], x1_[1], x0_[2]),
+        K::Point_3(x0_[0], x0_[1], x1_[2]),
+        K::Point_3(x1_[0], x1_[1], x0_[2]),
+        K::Point_3(x1_[0], x0_[1], x1_[2]),
+        K::Point_3(x0_[0], x1_[1], x1_[2]),
+        K::Point_3(x1_[0], x1_[1], x1_[2])
+      };
+      return {
+          {corners[0], corners[1]},
+          {corners[0], corners[2]},
+          {corners[0], corners[3]},
+          {corners[1], corners[4]},
+          {corners[1], corners[5]},
+          {corners[2], corners[4]},
+          {corners[2], corners[6]},
+          {corners[3], corners[5]},
+          {corners[3], corners[6]},
+          {corners[4], corners[7]},
+          {corners[5], corners[7]},
+          {corners[6], corners[7]}
+        };
+    };
 
   private:
     const std::vector<double> x0_;
@@ -99,7 +93,7 @@ class Cuboid: public PrimitiveBase
 };
 
 
-class Ellipsoid: public PrimitiveBase
+class Ellipsoid: public loom::DomainBase
 {
   public:
     Ellipsoid(
@@ -123,11 +117,6 @@ class Ellipsoid: public PrimitiveBase
       return xx0*xx0/a0_2_ + yy0*yy0/a1_2_ + zz0*zz0/a2_2_ - 1.0;
     }
 
-    virtual std::vector<std::vector<CGAL::Sign>> get_signs() const
-    {
-      return {{CGAL::NEGATIVE}};
-    }
-
   private:
     const std::vector<double> x0_;
     const double a0_2_;
@@ -136,7 +125,7 @@ class Ellipsoid: public PrimitiveBase
 };
 
 
-class Cylinder: public PrimitiveBase
+class Cylinder: public loom::DomainBase
 {
   public:
     Cylinder(
@@ -157,11 +146,6 @@ class Cylinder: public PrimitiveBase
       return (z0_ < p.z() && p.z() < z1_) ?
         p.x()*p.x() + p.y()*p.y() - radius2_ :
         1.0;
-    }
-
-    virtual std::vector<std::vector<CGAL::Sign>> get_signs() const
-    {
-      return {{CGAL::NEGATIVE}};
     }
 
   private:

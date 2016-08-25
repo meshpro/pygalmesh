@@ -62,5 +62,25 @@ def test_balls():
     return
 
 
+def test_cuboid():
+    s0 = loom.Cuboid([0, 0, 0], [1, 2, 3])
+    loom.generate_mesh(s0, 5.0, 'out.mesh')
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    tol = 1.0e-10
+    assert abs(max(vertices[:, 0]) - 1.0) < tol
+    assert abs(min(vertices[:, 0]) + 0.0) < tol
+    assert abs(max(vertices[:, 1]) - 2.0) < tol
+    assert abs(min(vertices[:, 1]) + 0.0) < tol
+    assert abs(max(vertices[:, 2]) - 3.0) < tol
+    assert abs(min(vertices[:, 2]) + 0.0) < tol
+
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    assert abs(vol - 6.0) < tol
+
+    return
+
+
 if __name__ == '__main__':
-    test_balls()
+    test_ball()

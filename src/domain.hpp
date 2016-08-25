@@ -1,21 +1,37 @@
 #ifndef DOMAIN_HPP
 #define DOMAIN_HPP
 
-#include "primitives.hpp"
-
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <Eigen/Dense>
+
+typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 
 namespace loom {
 
-class RotatedPrimitive: public loom::PrimitiveBase
+class DomainBase
 {
   public:
-  RotatedPrimitive(
-      const std::shared_ptr<const loom::PrimitiveBase> & primitive,
+  virtual
+  K::FT
+  operator()(K::Point_3 p) const = 0;
+
+  virtual
+  std::list<std::vector<K::Point_3>>
+  get_features() const
+  {
+    return {};
+  };
+};
+
+class Rotate: public loom::DomainBase
+{
+  public:
+  Rotate(
+      const std::shared_ptr<const loom::DomainBase> & domain,
       const std::vector<double> & axis,
       const double angle
       ):
-    primitive_(primitive),
+    domain_(domain),
     normalized_axis_(Eigen::Vector3d(axis.data()).normalized()),
     sinAngle_(sin(angle)),
     cosAngle_(cos(angle))
@@ -42,70 +58,14 @@ class RotatedPrimitive: public loom::PrimitiveBase
 
     const auto pt2 = K::Point_3(p2[0], p2[1], p2[2]);
 
-    return primitive_->operator()(pt2);
-  }
-
-  virtual std::vector<std::vector<CGAL::Sign>> get_signs() const
-  {
-    return primitive_->get_signs();
+    return domain_->operator()(pt2);
   }
 
   private:
-    const std::shared_ptr<const loom::PrimitiveBase> primitive_;
+    const std::shared_ptr<const loom::DomainBase> domain_;
     const Eigen::Vector3d normalized_axis_;
     const double sinAngle_;
     const double cosAngle_;
-};
-
-class Rotate: public loom::DomainBase
-{
-  public:
-  Rotate(
-      std::shared_ptr<const loom::DomainBase> & domain,
-      const std::vector<double> & axis,
-      const double angle
-      ):
-    rotated_primitives_(
-        create_rotated_primitives_(domain->get_primitives(), axis, angle)
-        ),
-    // change in the signs
-    signs_(domain->get_signs())
-  {
-  }
-
-  std::vector<std::shared_ptr<const loom::PrimitiveBase>>
-  create_rotated_primitives_(
-      std::vector<std::shared_ptr<const loom::PrimitiveBase>> primitives,
-      const std::vector<double> & axis,
-      const double angle
-      )
-  {
-    std::vector<std::shared_ptr<const loom::PrimitiveBase>> rotated_primitives = {};
-    for (const auto & primitive: primitives) {
-      rotated_primitives.push_back(
-          std::make_shared<RotatedPrimitive>(primitive, axis, angle)
-          );
-    }
-    return rotated_primitives;
-  }
-
-  virtual
-  std::vector<std::shared_ptr<const loom::PrimitiveBase>>
-  get_primitives() const
-  {
-    return rotated_primitives_;
-  }
-
-  virtual
-  std::vector<std::vector<CGAL::Sign>>
-  get_signs() const
-  {
-    return signs_;
-  }
-
-  private:
-    std::vector<std::shared_ptr<const loom::PrimitiveBase>> rotated_primitives_;
-    std::vector<std::vector<CGAL::Sign>> signs_;
 };
 
 class Intersection: public loom::DomainBase
@@ -115,56 +75,23 @@ class Intersection: public loom::DomainBase
       std::shared_ptr<const loom::DomainBase> & domain0,
       std::shared_ptr<const loom::DomainBase> & domain1
       ):
-    primitives_(merge(domain0->get_primitives(), domain1->get_primitives())),
-    signs_(intersection_signs(domain0->get_signs(), domain1->get_signs()))
+    domain0_(domain0),
+    domain1_(domain1)
   {
-  }
-
-  std::vector<std::shared_ptr<const loom::PrimitiveBase>>
-  merge(
-      const std::vector<std::shared_ptr<const loom::PrimitiveBase>> & a,
-      const std::vector<std::shared_ptr<const loom::PrimitiveBase>> & b
-    )
-  {
-    std::vector<std::shared_ptr<const loom::PrimitiveBase>> out = a;
-    out.insert(out.end(), b.begin(), b.end());
-    return out;
-  }
-
-  std::vector<std::vector<CGAL::Sign>>
-  intersection_signs(
-      const std::vector<std::vector<CGAL::Sign>> & a,
-      const std::vector<std::vector<CGAL::Sign>> & b
-    )
-  {
-    std::vector<std::vector<CGAL::Sign>> out = {};
-    for (size_t i=0; i < a.size(); i++) {
-      for (size_t j=0; j < b.size(); j++) {
-        auto c = a[i];
-        c.insert(c.end(), b[j].begin(), b[j].end());
-        out.push_back(c);
-      }
-    }
-    return out;
   }
 
   virtual
-  std::vector<std::shared_ptr<const loom::PrimitiveBase>>
-  get_primitives() const
+  K::FT
+  operator()(K::Point_3 p) const
   {
-    return primitives_;
-  }
-
-  virtual
-  std::vector<std::vector<CGAL::Sign>>
-  get_signs() const
-  {
-    return signs_;
+    return ((*domain0_)(p) < 0.0 && (*domain1_)(p) < 0.0) ?
+        -1.0 :
+        1.0;
   }
 
   private:
-    std::vector<std::shared_ptr<const loom::PrimitiveBase>> primitives_;
-    std::vector<std::vector<CGAL::Sign>> signs_;
+    std::shared_ptr<const loom::DomainBase> domain0_;
+    std::shared_ptr<const loom::DomainBase> domain1_;
 };
 
 class Union: public loom::DomainBase
@@ -174,92 +101,23 @@ class Union: public loom::DomainBase
       std::shared_ptr<const loom::DomainBase> & domain0,
       std::shared_ptr<const loom::DomainBase> & domain1
       ):
-    primitives_(merge(domain0->get_primitives(), domain1->get_primitives())),
-    signs_(union_signs(domain0->get_signs(), domain1->get_signs()))
+    domain0_(domain0),
+    domain1_(domain1)
   {
-  }
-
-  std::vector<std::shared_ptr<const loom::PrimitiveBase>>
-  merge(
-      const std::vector<std::shared_ptr<const loom::PrimitiveBase>> & a,
-      const std::vector<std::shared_ptr<const loom::PrimitiveBase>> & b
-    )
-  {
-    std::vector<std::shared_ptr<const loom::PrimitiveBase>> out = a;
-    out.insert(out.end(), b.begin(), b.end());
-    return out;
-  }
-
-  std::vector<std::vector<CGAL::Sign>>
-  append_plus_minus(const std::vector<std::vector<CGAL::Sign>> & in)
-  {
-    auto out = in;
-    out.insert(out.end(), in.begin(), in.end());
-    for (size_t i=0; i < in.size(); i++) {
-      out[i].push_back(CGAL::POSITIVE);
-      out[i+in.size()].push_back(CGAL::NEGATIVE);
-    }
-    return out;
-  }
-
-  std::vector<std::vector<CGAL::Sign>>
-  union_signs(
-      const std::vector<std::vector<CGAL::Sign>> & a,
-      const std::vector<std::vector<CGAL::Sign>> & b
-    )
-  {
-    std::vector<std::vector<CGAL::Sign>> out = {};
-
-    // create all combinations of +- in b
-    std::vector<std::vector<CGAL::Sign>> b_combinations = {{}};
-    for (size_t i=0; i < b.size(); i++) {
-      b_combinations = append_plus_minus(b_combinations);
-    }
-
-    // a fixed, all combinations in b
-    for (size_t i=0; i < a.size(); i++) {
-      for (size_t j=0; j < b_combinations.size(); j++) {
-        auto c = a[i];
-        c.insert(c.end(), b_combinations[j].begin(), b_combinations[j].end());
-        out.push_back(c);
-      }
-    }
-
-    // create all combinations of +- in a
-    std::vector<std::vector<CGAL::Sign>> a_combinations = {{}};
-    for (size_t i=0; i < a.size(); i++) {
-      a_combinations = append_plus_minus(a_combinations);
-    }
-
-    // all combinations in a, b fixed
-    for (size_t i=0; i < a_combinations.size(); i++) {
-      for (size_t j=0; j < b.size(); j++) {
-        auto c = a_combinations[i];
-        c.insert(c.end(), b[j].begin(), b[j].end());
-        out.push_back(c);
-      }
-    }
-
-    return out;
   }
 
   virtual
-  std::vector<std::shared_ptr<const loom::PrimitiveBase>>
-  get_primitives() const
+  K::FT
+  operator()(K::Point_3 p) const
   {
-    return primitives_;
-  }
-
-  virtual
-  std::vector<std::vector<CGAL::Sign>>
-  get_signs() const
-  {
-    return signs_;
+    return ((*domain0_)(p) < 0.0 || (*domain1_)(p) < 0.0) ?
+        -1.0 :
+        1.0;
   }
 
   private:
-    std::vector<std::shared_ptr<const loom::PrimitiveBase>> primitives_;
-    std::vector<std::vector<CGAL::Sign>> signs_;
+    std::shared_ptr<const loom::DomainBase> domain0_;
+    std::shared_ptr<const loom::DomainBase> domain1_;
 };
 
 class Difference: public loom::DomainBase
@@ -269,66 +127,23 @@ class Difference: public loom::DomainBase
       std::shared_ptr<const loom::DomainBase> & domain0,
       std::shared_ptr<const loom::DomainBase> & domain1
       ):
-    primitives_(merge(domain0->get_primitives(), domain1->get_primitives())),
-    signs_(difference_signs(domain0->get_signs(), domain1->get_signs()))
+    domain0_(domain0),
+    domain1_(domain1)
   {
-  }
-
-  std::vector<std::shared_ptr<const loom::PrimitiveBase>>
-  merge(
-      const std::vector<std::shared_ptr<const loom::PrimitiveBase>> & a,
-      const std::vector<std::shared_ptr<const loom::PrimitiveBase>> & b
-    )
-  {
-    std::vector<std::shared_ptr<const loom::PrimitiveBase>> out = a;
-    out.insert(out.end(), b.begin(), b.end());
-    return out;
-  }
-
-  std::vector<std::vector<CGAL::Sign>>
-  difference_signs(
-      const std::vector<std::vector<CGAL::Sign>> & a,
-      const std::vector<std::vector<CGAL::Sign>> & b
-    )
-  {
-    // difference = intersection with the complement
-    auto b_inv = b;
-    for (size_t i=0; i < b_inv.size(); i++) {
-      for (size_t j=0; j < b_inv[i].size(); j++) {
-        b_inv[i][j] = (b[i][j] == CGAL::NEGATIVE) ?
-          CGAL::POSITIVE :
-          CGAL::NEGATIVE;
-      }
-    }
-
-    std::vector<std::vector<CGAL::Sign>> out = {};
-    for (size_t i=0; i < a.size(); i++) {
-      for (size_t j=0; j < b_inv.size(); j++) {
-        auto c = a[i];
-        c.insert(c.end(), b_inv[j].begin(), b_inv[j].end());
-        out.push_back(c);
-      }
-    }
-    return out;
   }
 
   virtual
-  std::vector<std::shared_ptr<const loom::PrimitiveBase>>
-  get_primitives() const
+  K::FT
+  operator()(K::Point_3 p) const
   {
-    return primitives_;
-  }
-
-  virtual
-  std::vector<std::vector<CGAL::Sign>>
-  get_signs() const
-  {
-    return signs_;
+    return ((*domain0_)(p) < 0.0 || (*domain1_)(p) >= 0.0) ?
+        -1.0 :
+        1.0;
   }
 
   private:
-    std::vector<std::shared_ptr<const loom::PrimitiveBase>> primitives_;
-    std::vector<std::vector<CGAL::Sign>> signs_;
+    std::shared_ptr<const loom::DomainBase> domain0_;
+    std::shared_ptr<const loom::DomainBase> domain1_;
 };
 
 } // namespace loom

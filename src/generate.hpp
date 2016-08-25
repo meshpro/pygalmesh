@@ -12,6 +12,7 @@ void generate_mesh(
     const std::shared_ptr<loom::DomainBase> & in,
     const double bounding_sphere_radius,
     const std::string & outfile,
+    const std::vector<std::vector<std::vector<double>>> & feature_edges = {},
     const bool lloyd = false,
     const bool odt = false,
     const bool perturb = true,
