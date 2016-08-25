@@ -41,23 +41,31 @@ def test_ball():
 
 
 def test_balls():
-    s0 = loom.Ball([0.5, 0, 0], 1.0)
-    s1 = loom.Ball([-0.5, 0, 0], 1.0)
+    radius = 1.0
+    displacement = 0.5
+    s0 = loom.Ball([displacement, 0, 0], radius)
+    s1 = loom.Ball([-displacement, 0, 0], radius)
     u = loom.Union(s0, s1)
     loom.generate_mesh(u, 5.0, 'out.mesh')
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
-    assert abs(max(vertices[:, 0]) - 1.5) < 0.02
-    assert abs(min(vertices[:, 0]) + 1.5) < 0.02
-    assert abs(max(vertices[:, 1]) - 1.0) < 0.02
-    assert abs(min(vertices[:, 1]) + 1.0) < 0.02
-    assert abs(max(vertices[:, 2]) - 1.0) < 0.02
-    assert abs(min(vertices[:, 2]) + 1.0) < 0.02
+    assert abs(max(vertices[:, 0]) - (radius + displacement)) < 0.02
+    assert abs(min(vertices[:, 0]) + (radius + displacement)) < 0.02
+    assert abs(max(vertices[:, 1]) - radius) < 0.02
+    assert abs(min(vertices[:, 1]) + radius) < 0.02
+    assert abs(max(vertices[:, 2]) - radius) < 0.02
+    assert abs(min(vertices[:, 2]) + radius) < 0.02
 
     vol = sum(compute_volumes(vertices, cells['tetra']))
-    ref_vol = 6.92614543632
-    assert abs(vol - ref_vol) < 0.1
+    a = numpy.sqrt(radius**2 - displacement**2)
+    h = radius - displacement
+    ref_vol = 2 * (
+        4.0/3.0 * numpy.pi * radius**3
+        - h * numpy.pi / 6.0 * (3*a**2 + h**2)
+        )
+
+    assert abs(vol - ref_vol) < 0.05
 
     return
 
