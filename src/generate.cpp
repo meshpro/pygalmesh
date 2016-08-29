@@ -54,6 +54,7 @@ generate_mesh(
     const bool perturb,
     const bool exude,
     const double boundary_precision,
+    const double edge_size,
     const double facet_angle,
     const double facet_size,
     const double facet_distance,
@@ -77,16 +78,13 @@ generate_mesh(
   const auto polylines = translate_feature_edges(feature_edges);
   cgal_domain.add_features(polylines.begin(), polylines.end());
 
-  // Facet_criteria facet_criteria(facet_angle, facet_size, facet_distance);
-  // Cell_criteria cell_criteria(cell_radius_edge_ratio, cell_size);
-  // Mesh_criteria criteria(facet_criteria, cell_criteria);
-
   Mesh_criteria criteria(
-      CGAL::parameters::edge_size=0.15,
-      CGAL::parameters::facet_angle=25,
-      CGAL::parameters::facet_size=0.15,
-      CGAL::parameters::cell_radius_edge_ratio=2,
-      CGAL::parameters::cell_size=0.15
+      CGAL::parameters::edge_size=edge_size,
+      CGAL::parameters::facet_angle=facet_angle,
+      CGAL::parameters::facet_size=facet_size,
+      CGAL::parameters::facet_distance=facet_distance,
+      CGAL::parameters::cell_radius_edge_ratio=cell_radius_edge_ratio,
+      CGAL::parameters::cell_size=cell_size
       );
 
   // Mesh generation

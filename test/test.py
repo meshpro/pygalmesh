@@ -22,7 +22,7 @@ def compute_volumes(vertices, tets):
 
 def test_ball():
     s = loom.Ball([0, 0, 0], 1.0)
-    loom.generate_mesh(s, 'out.mesh')
+    loom.generate_mesh(s, 'out.mesh', cell_size=0.2)
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -60,6 +60,7 @@ def test_balls():
             u,
             'out.mesh',
             feature_edges=[circ],
+            cell_size=0.15
             )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
@@ -104,4 +105,4 @@ def test_cuboid():
 
 
 if __name__ == '__main__':
-    test_balls()
+    test_cuboid()
