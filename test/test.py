@@ -44,7 +44,10 @@ def test_balls():
     displacement = 0.5
     s0 = loom.Ball([displacement, 0, 0], radius)
     s1 = loom.Ball([-displacement, 0, 0], radius)
-    u = loom.Union(s0, s1)
+    uni = loom.ListOfDomains()
+    uni.append(s0)
+    uni.append(s1)
+    u = loom.Union(uni)
 
     a = numpy.sqrt(radius**2 - displacement**2)
     n = 20
@@ -60,7 +63,8 @@ def test_balls():
             u,
             'out.mesh',
             feature_edges=[circ],
-            cell_size=0.15
+            cell_size=0.15,
+            edge_size=0.1
             )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
@@ -86,7 +90,7 @@ def test_balls():
 
 def test_cuboid():
     s0 = loom.Cuboid([0, 0, 0], [1, 2, 3])
-    loom.generate_mesh(s0, 'out.mesh')
+    loom.generate_mesh(s0, 'out.mesh', edge_size=0.1)
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -105,4 +109,4 @@ def test_cuboid():
 
 
 if __name__ == '__main__':
-    test_cuboid()
+    test_balls()

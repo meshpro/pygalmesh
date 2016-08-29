@@ -7,12 +7,6 @@
 #include "primitives.hpp"
 %}
 
-%include <std_vector.i>
-namespace std {
-%template(Line) vector <double>;
-%template(ListOfListsOfLists) vector<vector<vector<double>>>;
-}
-
 %include "std_string.i"
 
 %include <std_shared_ptr.i>
@@ -28,6 +22,13 @@ namespace std {
 %shared_ptr(loom::Cuboid);
 %shared_ptr(loom::Cylinder);
 %shared_ptr(loom::Ellipsoid);
+
+%include <std_vector.i>
+namespace std {
+%template(Line) vector <double>;
+%template(ListOfListsOfLists) vector<vector<vector<double>>>;
+%template(ListOfDomains) vector<shared_ptr<const loom::DomainBase>>;
+}
 
 %include "generate.hpp"
 %include "domain.hpp"
