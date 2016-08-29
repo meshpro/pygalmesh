@@ -39,7 +39,7 @@ def test_ball():
     return
 
 
-def test_balls():
+def test_balls_union():
     radius = 1.0
     displacement = 0.5
     s0 = loom.Ball([displacement, 0, 0], radius)
@@ -88,6 +88,54 @@ def test_balls():
     return
 
 
+def test_balls_intersection():
+    radius = 1.0
+    displacement = 0.5
+    s0 = loom.Ball([displacement, 0, 0], radius)
+    s1 = loom.Ball([-displacement, 0, 0], radius)
+    inter = loom.ListOfDomains()
+    inter.append(s0)
+    inter.append(s1)
+    u = loom.Intersection(inter)
+
+    a = numpy.sqrt(radius**2 - displacement**2)
+    n = 20
+    circ = [
+        [
+            0.0,
+            a * numpy.cos(i * 2*numpy.pi / n),
+            a * numpy.sin(i * 2*numpy.pi / n)
+        ] for i in range(n)
+        ]
+
+    loom.generate_mesh(
+            u,
+            'out.mesh',
+            feature_edges=[circ],
+            cell_size=0.15,
+            edge_size=0.1
+            )
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    assert abs(max(vertices[:, 0]) - (radius - displacement)) < 0.02
+    assert abs(min(vertices[:, 0]) + (radius - displacement)) < 0.02
+    assert abs(max(vertices[:, 1]) - a) < 0.02
+    assert abs(min(vertices[:, 1]) + a) < 0.02
+    assert abs(max(vertices[:, 2]) - a) < 0.02
+    assert abs(min(vertices[:, 2]) + a) < 0.02
+
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    h = radius - displacement
+    ref_vol = 2 * (
+        h * numpy.pi / 6.0 * (3*a**2 + h**2)
+        )
+
+    assert abs(vol - ref_vol) < 0.1
+
+    return
+
+
 def test_cuboid():
     s0 = loom.Cuboid([0, 0, 0], [1, 2, 3])
     loom.generate_mesh(s0, 'out.mesh', edge_size=0.1)
@@ -109,4 +157,4 @@ def test_cuboid():
 
 
 if __name__ == '__main__':
-    test_balls()
+    test_balls_intersection()

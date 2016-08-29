@@ -82,12 +82,10 @@ class Rotate: public loom::DomainBase
 class Intersection: public loom::DomainBase
 {
   public:
-  Intersection(
-      std::shared_ptr<const loom::DomainBase> & domain0,
-      std::shared_ptr<const loom::DomainBase> & domain1
+  explicit Intersection(
+      std::vector<std::shared_ptr<const loom::DomainBase>> & domains
       ):
-    domain0_(domain0),
-    domain1_(domain1)
+    domains_(domains)
   {
   }
 
@@ -95,24 +93,27 @@ class Intersection: public loom::DomainBase
   K::FT
   operator()(K::Point_3 p) const
   {
-    return ((*domain0_)(p) < 0.0 && (*domain1_)(p) < 0.0) ?
-        -1.0 :
-        1.0;
+    for (const auto & domain: domains_) {
+      if ((*domain)(p) > 0.0) {
+        return 1.0;
+      }
+    }
+    return -1.0;
   }
 
   virtual
   double
   get_bounding_sphere_squared_radius() const
   {
-    return std::min({
-        domain0_->get_bounding_sphere_squared_radius(),
-        domain1_->get_bounding_sphere_squared_radius()
-        });
+    double min = std::numeric_limits<double>::max();
+    for (const auto & domain: domains_) {
+      min = std::min(min, domain->get_bounding_sphere_squared_radius());
+    }
+    return min;
   }
 
   private:
-    std::shared_ptr<const loom::DomainBase> domain0_;
-    std::shared_ptr<const loom::DomainBase> domain1_;
+    std::vector<std::shared_ptr<const loom::DomainBase>> domains_;
 };
 
 class Union: public loom::DomainBase
