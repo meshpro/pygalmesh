@@ -24,6 +24,7 @@
 %shared_ptr(loom::Cylinder);
 %shared_ptr(loom::Ellipsoid);
 %shared_ptr(loom::Tetrahedron);
+%shared_ptr(loom::Torus);
 
 %include <std_vector.i>
 namespace std {

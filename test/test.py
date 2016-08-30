@@ -230,5 +230,30 @@ def test_tetrahedron():
     return
 
 
+def test_torus():
+    major_radius = 1.0
+    minor_radius = 0.5
+    s0 = loom.Torus(major_radius, minor_radius)
+    loom.generate_mesh(s0, 'out.mesh', cell_size=0.1)
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    tol = 1.0e-2
+    radii_sum = major_radius + minor_radius
+    assert abs(max(vertices[:, 0]) - radii_sum) < tol
+    assert abs(min(vertices[:, 0]) + radii_sum) < tol
+    assert abs(max(vertices[:, 1]) - radii_sum) < tol
+    assert abs(min(vertices[:, 1]) + radii_sum) < tol
+    assert abs(max(vertices[:, 2]) - minor_radius) < tol
+    assert abs(min(vertices[:, 2]) + minor_radius) < tol
+
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    ref_vol = (numpy.pi * minor_radius * minor_radius) * \
+        (2 * numpy.pi * major_radius)
+    assert abs(vol - ref_vol) < 1.0e-1
+
+    return
+
+
 if __name__ == '__main__':
-    test_tetrahedron()
+    test_torus()

@@ -348,6 +348,39 @@ class Tetrahedron: public loom::DomainBase
 };
 
 
+class Torus: public loom::DomainBase
+{
+  public:
+    Torus(
+        const double major_radius,
+        const double minor_radius
+        ):
+      major_radius_(major_radius),
+      minor_radius_(minor_radius)
+    {
+    }
+
+    virtual K::FT operator()(K::Point_3 p) const
+    {
+      const double r = sqrt(p.x()*p.x() + p.y()*p.y());
+      return (r - major_radius_)*(r - major_radius_) + p.z()*p.z() <
+        minor_radius_*minor_radius_ ?
+        -1.0 :
+        1.0;
+    }
+
+    virtual
+    double
+    get_bounding_sphere_squared_radius() const
+    {
+      return (major_radius_ + minor_radius_)*(major_radius_ + minor_radius_);
+    }
+
+  private:
+    const double major_radius_;
+    const double minor_radius_;
+};
+
 } // namespace loom
 
 #endif // PRIMITIVES_HPP
