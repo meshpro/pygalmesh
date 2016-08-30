@@ -19,6 +19,7 @@
 %shared_ptr(loom::Union);
 
 %shared_ptr(loom::Ball);
+%shared_ptr(loom::Cone);
 %shared_ptr(loom::Cuboid);
 %shared_ptr(loom::Cylinder);
 %shared_ptr(loom::Ellipsoid);

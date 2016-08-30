@@ -156,5 +156,28 @@ def test_cuboid():
     return
 
 
+def test_cone():
+    base_radius = 1.0
+    height = 2.0
+    s0 = loom.Cone(base_radius, height)
+    loom.generate_mesh(s0, 'out.mesh', cell_size=0.1)
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    tol = 2.0e-1
+    assert abs(max(vertices[:, 0]) - base_radius) < tol
+    assert abs(min(vertices[:, 0]) + base_radius) < tol
+    assert abs(max(vertices[:, 1]) - base_radius) < tol
+    assert abs(min(vertices[:, 1]) + base_radius) < tol
+    assert abs(max(vertices[:, 2]) - height) < tol
+    assert abs(min(vertices[:, 2]) + 0.0) < tol
+
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    ref_vol = numpy.pi*base_radius*base_radius / 3.0 * height
+    assert abs(vol - ref_vol) < tol
+
+    return
+
+
 if __name__ == '__main__':
-    test_balls_intersection()
+    test_cone()

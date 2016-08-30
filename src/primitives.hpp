@@ -166,8 +166,6 @@ class Cylinder: public loom::DomainBase
 
     virtual K::FT operator()(K::Point_3 p) const
     {
-      const K::FT xx0 = p.x();
-      const K::FT yy0 = p.y();
       return (z0_ < p.z() && p.z() < z1_) ?
         p.x()*p.x() + p.y()*p.y() - radius2_ :
         1.0;
@@ -184,6 +182,43 @@ class Cylinder: public loom::DomainBase
     const double z0_;
     const double z1_;
     const double radius2_;
+};
+
+
+class Cone: public loom::DomainBase
+{
+  public:
+    Cone(
+        const double radius,
+        const double height
+        ):
+      radius_(radius),
+      height_(height)
+    {
+      assert(radius_ > 0.0);
+      assert(height_ > 0.0);
+    }
+
+    virtual K::FT operator()(K::Point_3 p) const
+    {
+      const K::FT rad = radius_ * (1.0 - p.z() / height_);
+
+      return (0.0 < p.z() && p.z() < height_) ?
+        p.x()*p.x() + p.y()*p.y() - rad*rad :
+        1.0;
+    }
+
+    virtual
+    double
+    get_bounding_sphere_squared_radius() const
+    {
+      const double max = std::max({radius_, height_});
+      return max*max;
+    }
+
+  private:
+    const double radius_;
+    const double height_;
 };
 
 } // namespace loom
