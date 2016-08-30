@@ -214,10 +214,12 @@ class Cone: public loom::DomainBase
   public:
     Cone(
         const double radius,
-        const double height
+        const double height,
+        const double feature_edge_length
         ):
       radius_(radius),
-      height_(height)
+      height_(height),
+      feature_edge_length_(feature_edge_length)
     {
       assert(radius_ > 0.0);
       assert(height_ > 0.0);
@@ -240,9 +242,26 @@ class Cone: public loom::DomainBase
       return max*max;
     }
 
+    virtual
+    std::list<std::vector<K::Point_3>>
+    get_features() const
+    {
+      const double pi = 3.1415926535897932384;
+      const size_t n = 2 * pi * radius_ / feature_edge_length_;
+      std::vector<K::Point_3> circ0(n+1);
+      for (size_t i=0; i < n; i++) {
+        const double c = radius_ * cos((2*pi * i) / n);
+        const double s = radius_ * sin((2*pi * i) / n);
+        circ0[i] = K::Point_3(c, s, 0.0);
+      }
+      circ0[n] = circ0[0];
+      return {circ0};
+    };
+
   private:
     const double radius_;
     const double height_;
+    const double feature_edge_length_;
 };
 
 } // namespace loom

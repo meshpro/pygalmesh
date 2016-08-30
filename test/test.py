@@ -159,8 +159,9 @@ def test_cuboid():
 def test_cone():
     base_radius = 1.0
     height = 2.0
-    s0 = loom.Cone(base_radius, height)
-    loom.generate_mesh(s0, 'out.mesh', cell_size=0.1)
+    edge_size = 0.1
+    s0 = loom.Cone(base_radius, height, edge_size)
+    loom.generate_mesh(s0, 'out.mesh', cell_size=0.1, edge_size=edge_size)
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -205,4 +206,4 @@ def test_cylinder():
 
 
 if __name__ == '__main__':
-    test_cylinder()
+    test_cone()
