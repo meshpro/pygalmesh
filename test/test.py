@@ -179,5 +179,30 @@ def test_cone():
     return
 
 
+def test_cylinder():
+    radius = 1.0
+    z0 = 0.0
+    z1 = 1.0
+    edge_length = 0.1
+    s0 = loom.Cylinder(z0, z1, radius, edge_length)
+    loom.generate_mesh(s0, 'out.mesh', cell_size=0.1, edge_size=edge_length)
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    tol = 1.0e-1
+    assert abs(max(vertices[:, 0]) - radius) < tol
+    assert abs(min(vertices[:, 0]) + radius) < tol
+    assert abs(max(vertices[:, 1]) - radius) < tol
+    assert abs(min(vertices[:, 1]) + radius) < tol
+    assert abs(max(vertices[:, 2]) - z1) < tol
+    assert abs(min(vertices[:, 2]) + z0) < tol
+
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    ref_vol = numpy.pi*radius*radius * (z1 - z0)
+    assert abs(vol - ref_vol) < tol
+
+    return
+
+
 if __name__ == '__main__':
-    test_cone()
+    test_cylinder()

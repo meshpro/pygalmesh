@@ -155,11 +155,13 @@ class Cylinder: public loom::DomainBase
     Cylinder(
         const double z0,
         const double z1,
-        const double radius
+        const double radius,
+        const double feature_edge_length
         ):
       z0_(z0),
       z1_(z1),
-      radius2_(radius*radius)
+      radius_(radius),
+      feature_edge_length_(feature_edge_length)
     {
       assert(z1_ > z0_);
     }
@@ -167,7 +169,7 @@ class Cylinder: public loom::DomainBase
     virtual K::FT operator()(K::Point_3 p) const
     {
       return (z0_ < p.z() && p.z() < z1_) ?
-        p.x()*p.x() + p.y()*p.y() - radius2_ :
+        p.x()*p.x() + p.y()*p.y() - radius_*radius_ :
         1.0;
     }
 
@@ -175,13 +177,35 @@ class Cylinder: public loom::DomainBase
     double
     get_bounding_sphere_squared_radius() const
     {
-      return (z1_ - z0_)*(z1_ - z0_) + radius2_;
+      const double zmax = std::max({abs(z0_), abs(z1_)});
+      return zmax*zmax + radius_*radius_;
     }
+
+    virtual
+    std::list<std::vector<K::Point_3>>
+    get_features() const
+    {
+      const double pi = 3.1415926535897932384;
+      const size_t n = 2 * pi * radius_ / feature_edge_length_;
+      std::vector<K::Point_3> circ0(n+1);
+      std::vector<K::Point_3> circ1(n+1);
+      for (size_t i=0; i < n; i++) {
+        const double c = radius_ * cos((2*pi * i) / n);
+        const double s = radius_ * sin((2*pi * i) / n);
+        circ0[i] = K::Point_3(c, s, z0_);
+        circ1[i] = K::Point_3(c, s, z1_);
+      }
+      // close the circles
+      circ0[n] = circ0[0];
+      circ1[n] = circ1[0];
+      return {circ0, circ1};
+    };
 
   private:
     const double z0_;
     const double z1_;
-    const double radius2_;
+    const double radius_;
+    const double feature_edge_length_;
 };
 
 
