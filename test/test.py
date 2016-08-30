@@ -205,5 +205,30 @@ def test_cylinder():
     return
 
 
+def test_tetrahedron():
+    s0 = loom.Tetrahedron(
+            [0.0, 0.0, 0.0],
+            [1.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [0.0, 0.0, 1.0]
+            )
+    loom.generate_mesh(s0, 'out.mesh', cell_size=0.1, edge_size=0.1)
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    tol = 1.0e-4
+    assert abs(max(vertices[:, 0]) - 1.0) < tol
+    assert abs(min(vertices[:, 0]) + 0.0) < tol
+    assert abs(max(vertices[:, 1]) - 1.0) < tol
+    assert abs(min(vertices[:, 1]) + 0.0) < tol
+    assert abs(max(vertices[:, 2]) - 1.0) < tol
+    assert abs(min(vertices[:, 2]) + 0.0) < tol
+
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    assert abs(vol - 1.0/6.0) < tol
+
+    return
+
+
 if __name__ == '__main__':
-    test_cone()
+    test_tetrahedron()
