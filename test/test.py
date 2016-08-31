@@ -50,7 +50,8 @@ def test_balls_union():
     u = loom.Union(uni)
 
     a = numpy.sqrt(radius**2 - displacement**2)
-    n = 20
+    edge_size = 0.1
+    n = int(2*numpy.pi*a / edge_size)
     circ = [
         [
             0.0,
@@ -58,13 +59,14 @@ def test_balls_union():
             a * numpy.sin(i * 2*numpy.pi / n)
         ] for i in range(n)
         ]
+    circ.append(circ[0])
 
     loom.generate_mesh(
             u,
             'out.mesh',
             feature_edges=[circ],
             cell_size=0.15,
-            edge_size=0.1
+            edge_size=edge_size
             )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
@@ -99,7 +101,8 @@ def test_balls_intersection():
     u = loom.Intersection(inter)
 
     a = numpy.sqrt(radius**2 - displacement**2)
-    n = 20
+    edge_size = 0.1
+    n = int(2*numpy.pi*a / edge_size)
     circ = [
         [
             0.0,
@@ -107,13 +110,14 @@ def test_balls_intersection():
             a * numpy.sin(i * 2*numpy.pi / n)
         ] for i in range(n)
         ]
+    circ.append(circ[0])
 
     loom.generate_mesh(
             u,
             'out.mesh',
             feature_edges=[circ],
             cell_size=0.15,
-            edge_size=0.1
+            edge_size=edge_size
             )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
@@ -132,6 +136,56 @@ def test_balls_intersection():
         )
 
     assert abs(vol - ref_vol) < 0.1
+
+    return
+
+
+def test_balls_difference():
+    radius = 1.0
+    displacement = 0.5
+    s0 = loom.Ball([displacement, 0, 0], radius)
+    s1 = loom.Ball([-displacement, 0, 0], radius)
+    u = loom.Difference(s0, s1)
+
+    a = numpy.sqrt(radius**2 - displacement**2)
+    edge_size = 0.15
+    n = int(2*numpy.pi*a / edge_size)
+    circ = [
+        [
+            0.0,
+            a * numpy.cos(i * 2*numpy.pi / n),
+            a * numpy.sin(i * 2*numpy.pi / n)
+        ] for i in range(n)
+        ]
+    circ.append(circ[0])
+
+    loom.generate_mesh(
+            u,
+            'out.mesh',
+            feature_edges=[circ],
+            cell_size=0.15,
+            edge_size=edge_size,
+            facet_angle=25,
+            facet_size=0.15,
+            cell_radius_edge_ratio=2.0
+            )
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    tol = 0.02
+    assert abs(max(vertices[:, 0]) - (radius + displacement)) < tol
+    assert abs(min(vertices[:, 0]) - 0.0) < tol
+    assert abs(max(vertices[:, 1]) - radius) < tol
+    assert abs(min(vertices[:, 1]) + radius) < tol
+    assert abs(max(vertices[:, 2]) - radius) < tol
+    assert abs(min(vertices[:, 2]) + radius) < tol
+
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    h = radius - displacement
+    ref_vol = 4.0/3.0 * numpy.pi * radius**3 \
+        - 2 * h * numpy.pi / 6.0 * (3*a**2 + h**2)
+
+    assert abs(vol - ref_vol) < 0.05
 
     return
 
@@ -256,4 +310,4 @@ def test_torus():
 
 
 if __name__ == '__main__':
-    test_torus()
+    test_balls_difference()

@@ -169,7 +169,7 @@ class Difference: public loom::DomainBase
   K::FT
   operator()(K::Point_3 p) const
   {
-    return ((*domain0_)(p) < 0.0 || (*domain1_)(p) >= 0.0) ?
+    return ((*domain0_)(p) < 0.0 && (*domain1_)(p) >= 0.0) ?
         -1.0 :
         1.0;
   }
