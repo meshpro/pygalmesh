@@ -1,3 +1,5 @@
+#define CGAL_MESH_3_VERBOSE 1
+
 #include "generate.hpp"
 
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
@@ -59,7 +61,8 @@ generate_mesh(
     const double facet_size,
     const double facet_distance,
     const double cell_radius_edge_ratio,
-    const double cell_size
+    const double cell_size,
+    const bool verbose
     )
 {
   const double bounding_sphere_radius2 = bounding_sphere_radius > 0 ?
@@ -88,6 +91,10 @@ generate_mesh(
       );
 
   // Mesh generation
+  if (!verbose) {
+    // suppress output
+    std::cerr.setstate(std::ios_base::failbit);
+  }
   C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
       cgal_domain,
       criteria,
@@ -96,6 +103,9 @@ generate_mesh(
       perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
       exude ? CGAL::parameters::exude() : CGAL::parameters::no_exude()
       );
+  if (!verbose) {
+    std::cerr.clear();
+  }
 
   // Output
   std::ofstream medit_file(outfile);

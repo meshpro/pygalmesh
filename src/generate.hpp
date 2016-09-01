@@ -23,7 +23,8 @@ void generate_mesh(
     const double facet_size = 0.0,
     const double facet_distance = 0.0,
     const double cell_radius_edge_ratio = 0.0,
-    const double cell_size = 0.0
+    const double cell_size = 0.0,
+    const bool verbose = true
     );
 
 } // namespace loom

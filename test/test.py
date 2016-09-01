@@ -22,7 +22,7 @@ def compute_volumes(vertices, tets):
 
 def test_ball():
     s = loom.Ball([0, 0, 0], 1.0)
-    loom.generate_mesh(s, 'out.mesh', cell_size=0.2)
+    loom.generate_mesh(s, 'out.mesh', cell_size=0.2, verbose=False)
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -66,7 +66,8 @@ def test_balls_union():
             'out.mesh',
             feature_edges=[circ],
             cell_size=0.15,
-            edge_size=edge_size
+            edge_size=edge_size,
+            verbose=False
             )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
@@ -117,7 +118,8 @@ def test_balls_intersection():
             'out.mesh',
             feature_edges=[circ],
             cell_size=0.15,
-            edge_size=edge_size
+            edge_size=edge_size,
+            verbose=False
             )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
@@ -167,7 +169,8 @@ def test_balls_difference():
             edge_size=edge_size,
             facet_angle=25,
             facet_size=0.15,
-            cell_radius_edge_ratio=2.0
+            cell_radius_edge_ratio=2.0,
+            verbose=False
             )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
@@ -192,7 +195,7 @@ def test_balls_difference():
 
 def test_cuboid():
     s0 = loom.Cuboid([0, 0, 0], [1, 2, 3])
-    loom.generate_mesh(s0, 'out.mesh', edge_size=0.1)
+    loom.generate_mesh(s0, 'out.mesh', edge_size=0.1, verbose=False)
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -215,7 +218,10 @@ def test_cone():
     height = 2.0
     edge_size = 0.1
     s0 = loom.Cone(base_radius, height, edge_size)
-    loom.generate_mesh(s0, 'out.mesh', cell_size=0.1, edge_size=edge_size)
+    loom.generate_mesh(
+            s0, 'out.mesh', cell_size=0.1, edge_size=edge_size,
+            verbose=False
+            )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -240,7 +246,10 @@ def test_cylinder():
     z1 = 1.0
     edge_length = 0.1
     s0 = loom.Cylinder(z0, z1, radius, edge_length)
-    loom.generate_mesh(s0, 'out.mesh', cell_size=0.1, edge_size=edge_length)
+    loom.generate_mesh(
+            s0, 'out.mesh', cell_size=0.1, edge_size=edge_length,
+            verbose=False
+            )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -266,7 +275,10 @@ def test_tetrahedron():
             [0.0, 1.0, 0.0],
             [0.0, 0.0, 1.0]
             )
-    loom.generate_mesh(s0, 'out.mesh', cell_size=0.1, edge_size=0.1)
+    loom.generate_mesh(
+            s0, 'out.mesh', cell_size=0.1, edge_size=0.1,
+            verbose=False
+            )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -288,7 +300,7 @@ def test_torus():
     major_radius = 1.0
     minor_radius = 0.5
     s0 = loom.Torus(major_radius, minor_radius)
-    loom.generate_mesh(s0, 'out.mesh', cell_size=0.1)
+    loom.generate_mesh(s0, 'out.mesh', cell_size=0.1, verbose=False)
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -360,7 +372,13 @@ def test_custom_function():
     edge_size = 0.1
     d = Hyperboloid(edge_size)
 
-    loom.generate_mesh(d, 'out.mesh', cell_size=0.1, edge_size=edge_size)
+    loom.generate_mesh(
+            d,
+            'out.mesh',
+            cell_size=0.1,
+            edge_size=edge_size,
+            verbose=False
+            )
 
     return
 
