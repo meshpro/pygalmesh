@@ -447,5 +447,27 @@ def test_rotation():
     return
 
 
+def test_translation():
+    s0 = loom.Translate(
+            loom.Cuboid([0, 0, 0], [1, 2, 3]),
+            [1.0, 0.0, 0.0]
+            )
+    loom.generate_mesh(
+            s0,
+            'out.mesh',
+            cell_size=0.1,
+            edge_size=0.1,
+            verbose=False
+            )
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    tol = 1.0e-1
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    assert abs(vol - 6.0) < tol
+
+    return
+
+
 if __name__ == '__main__':
-    test_rotation()
+    test_translation()

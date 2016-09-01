@@ -37,6 +37,44 @@ class DomainBase
   };
 };
 
+class Translate: public loom::DomainBase
+{
+  public:
+  Translate(
+      const std::shared_ptr<const loom::DomainBase> & domain,
+      const std::vector<double> & direction
+      ):
+    domain_(domain),
+    direction_(Eigen::Vector3d(direction.data()))
+  {
+  }
+
+  virtual ~Translate() = default;
+
+  virtual
+  double
+  eval(const double x, const double y, const double z) const
+  {
+    const Eigen::Vector3d p_vec(x, y, z);
+    const Eigen::Vector3d p2 = p_vec - direction_;
+    const auto pt2 = K::Point_3(p2[0], p2[1], p2[2]);
+    return domain_->operator()(pt2);
+  }
+
+  virtual
+  double
+  get_bounding_sphere_squared_radius() const
+  {
+    const double radius = sqrt(domain_->get_bounding_sphere_squared_radius());
+    const double dir_norm = direction_.norm();
+    return (radius + dir_norm)*(radius + dir_norm);
+  }
+
+  private:
+    const std::shared_ptr<const loom::DomainBase> domain_;
+    const Eigen::Vector3d direction_;
+};
+
 class Rotate: public loom::DomainBase
 {
   public:
