@@ -424,6 +424,28 @@ def test_stretch():
     return
 
 
+def test_rotation():
+    s0 = loom.Rotate(
+            loom.Cuboid([0, 0, 0], [1, 2, 3]),
+            [1.0, 0.0, 0.0],
+            numpy.pi / 12.0
+            )
+    loom.generate_mesh(
+            s0,
+            'out.mesh',
+            cell_size=0.1,
+            edge_size=0.1,
+            verbose=False
+            )
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    tol = 1.0e-1
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    assert abs(vol - 6.0) < tol
+
+    return
+
+
 if __name__ == '__main__':
-    # test_balls_difference()
-    test_stretch()
+    test_rotation()
