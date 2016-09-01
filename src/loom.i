@@ -13,6 +13,7 @@
 %shared_ptr(loom::DomainBase);
 
 %shared_ptr(loom::Rotate);
+%shared_ptr(loom::Scale);
 
 %shared_ptr(loom::Difference);
 %shared_ptr(loom::Intersection);

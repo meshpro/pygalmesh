@@ -91,6 +91,40 @@ class Rotate: public loom::DomainBase
     const double cosAngle_;
 };
 
+class Scale: public loom::DomainBase
+{
+  public:
+  Scale(
+      std::shared_ptr<const loom::DomainBase> & domain,
+      const double alpha
+      ):
+    domain_(domain),
+    alpha_(alpha)
+  {
+    assert(alpha_ > 0.0);
+  }
+
+  virtual ~Scale() = default;
+
+  virtual
+  double
+  eval(const double x, const double y, const double z) const
+  {
+    return domain_->eval(x/alpha_, y/alpha_, z/alpha_);
+  }
+
+  virtual
+  double
+  get_bounding_sphere_squared_radius() const
+  {
+    return alpha_*alpha_ * domain_->get_bounding_sphere_squared_radius();
+  }
+
+  private:
+    std::shared_ptr<const loom::DomainBase> domain_;
+    const double alpha_;
+};
+
 class Intersection: public loom::DomainBase
 {
   public:

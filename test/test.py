@@ -383,6 +383,26 @@ def test_custom_function():
     return
 
 
+def test_scaling():
+    alpha = 2.0
+    s = loom.Scale(loom.Ball([0, 0, 0], 1.0), alpha)
+    loom.generate_mesh(s, 'out.mesh', cell_size=0.2, verbose=False)
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    assert abs(max(vertices[:, 0]) - alpha) < 0.02
+    assert abs(min(vertices[:, 0]) + alpha) < 0.02
+    assert abs(max(vertices[:, 1]) - alpha) < 0.02
+    assert abs(min(vertices[:, 1]) + alpha) < 0.02
+    assert abs(max(vertices[:, 2]) - alpha) < 0.02
+    assert abs(min(vertices[:, 2]) + alpha) < 0.02
+
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    assert abs(vol - 4.0/3.0 * numpy.pi * alpha**3) < 0.3
+
+    return
+
+
 if __name__ == '__main__':
     # test_balls_difference()
-    test_custom_function()
+    test_scaling()
