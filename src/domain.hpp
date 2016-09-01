@@ -11,9 +11,19 @@ namespace loom {
 class DomainBase
 {
   public:
+
+  virtual ~DomainBase() = default;
+
+  virtual
+  double
+  eval(const double x, const double y, const double z) const = 0;
+
   virtual
   K::FT
-  operator()(K::Point_3 p) const = 0;
+  operator()(K::Point_3 p) const
+  {
+    return this->eval(p.x(), p.y(), p.z());
+  }
 
   virtual
   double
@@ -43,14 +53,14 @@ class Rotate: public loom::DomainBase
   }
 
   virtual
-  K::FT
-  operator()(K::Point_3 p) const
+  double
+  eval(const double x, const double y, const double z) const
   {
     // Rotate a vector `v` by the angle `theta` in the plane perpendicular
     // to the axis given by `u`.
     // Refer to
     // http://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle
-    const Eigen::Vector3d p_vec(p.x(), p.y(), p.z());
+    const Eigen::Vector3d p_vec(x, y, z);
 
     // cos(-theta) * I * v
     // + sin(-theta) u\cross v
@@ -90,11 +100,11 @@ class Intersection: public loom::DomainBase
   }
 
   virtual
-  K::FT
-  operator()(K::Point_3 p) const
+  double
+  eval(const double x, const double y, const double z) const
   {
     for (const auto & domain: domains_) {
-      if ((*domain)(p) > 0.0) {
+      if (domain->eval(x, y, z) > 0.0) {
         return 1.0;
       }
     }
@@ -127,11 +137,11 @@ class Union: public loom::DomainBase
   }
 
   virtual
-  K::FT
-  operator()(K::Point_3 p) const
+  double
+  eval(const double x, const double y, const double z) const
   {
     for (const auto & domain: domains_) {
-      if ((*domain)(p) < 0.0) {
+      if (domain->eval(x, y, z) < 0.0) {
         return -1.0;
       }
     }
@@ -166,10 +176,10 @@ class Difference: public loom::DomainBase
   }
 
   virtual
-  K::FT
-  operator()(K::Point_3 p) const
+  double
+  eval(const double x, const double y, const double z) const
   {
-    return ((*domain0_)(p) < 0.0 && (*domain1_)(p) >= 0.0) ?
+    return (domain0_->eval(x, y, z) < 0.0 && domain1_->eval(x, y, z) >= 0.0) ?
         -1.0 :
         1.0;
   }

@@ -22,11 +22,13 @@ class Ball: public loom::DomainBase
       assert(x0_.size() == 3);
     }
 
-    virtual K::FT operator()(K::Point_3 p) const
+    virtual
+    double
+    eval(const double x, const double y, const double z) const
     {
-      const K::FT xx0 = p.x() - x0_[0];
-      const K::FT yy0 = p.y() - x0_[1];
-      const K::FT zz0 = p.z() - x0_[2];
+      const K::FT xx0 = x - x0_[0];
+      const K::FT yy0 = y - x0_[1];
+      const K::FT zz0 = z - x0_[2];
       return xx0*xx0 + yy0*yy0 + zz0*zz0 - radius_*radius_;
     }
 
@@ -56,12 +58,14 @@ class Cuboid: public loom::DomainBase
     {
     }
 
-    virtual K::FT operator()(K::Point_3 p) const
+    virtual
+    double
+    eval(const double x, const double y, const double z) const
     {
       return (
-          x0_[0] < p.x() && p.x() < x1_[0] &&
-          x0_[1] < p.y() && p.y() < x1_[1] &&
-          x0_[2] < p.z() && p.z() < x1_[2]
+          x0_[0] < x && x < x1_[0] &&
+          x0_[1] < y && y < x1_[1] &&
+          x0_[2] < z && z < x1_[2]
           ) ? -1.0 : 1.0;
     }
 
@@ -126,11 +130,13 @@ class Ellipsoid: public loom::DomainBase
     {
     }
 
-    virtual K::FT operator()(K::Point_3 p) const
+    virtual
+    double
+    eval(const double x, const double y, const double z) const
     {
-      const K::FT xx0 = p.x() - x0_[0];
-      const K::FT yy0 = p.y() - x0_[1];
-      const K::FT zz0 = p.z() - x0_[2];
+      const K::FT xx0 = x - x0_[0];
+      const K::FT yy0 = y - x0_[1];
+      const K::FT zz0 = z - x0_[2];
       return xx0*xx0/a0_2_ + yy0*yy0/a1_2_ + zz0*zz0/a2_2_ - 1.0;
     }
 
@@ -166,10 +172,12 @@ class Cylinder: public loom::DomainBase
       assert(z1_ > z0_);
     }
 
-    virtual K::FT operator()(K::Point_3 p) const
+    virtual
+    double
+    eval(const double x, const double y, const double z) const
     {
-      return (z0_ < p.z() && p.z() < z1_) ?
-        p.x()*p.x() + p.y()*p.y() - radius_*radius_ :
+      return (z0_ < z && z < z1_) ?
+        x*x + y*y - radius_*radius_ :
         1.0;
     }
 
@@ -225,12 +233,14 @@ class Cone: public loom::DomainBase
       assert(height_ > 0.0);
     }
 
-    virtual K::FT operator()(K::Point_3 p) const
+    virtual
+    double
+    eval(const double x, const double y, const double z) const
     {
-      const K::FT rad = radius_ * (1.0 - p.z() / height_);
+      const K::FT rad = radius_ * (1.0 - z / height_);
 
-      return (0.0 < p.z() && p.z() < height_) ?
-        p.x()*p.x() + p.y()*p.y() - rad*rad :
+      return (0.0 < z && z < height_) ?
+        x*x + y*y - rad*rad :
         1.0;
     }
 
@@ -297,9 +307,11 @@ class Tetrahedron: public loom::DomainBase
           );
     }
 
-    virtual K::FT operator()(K::Point_3 p) const
+    virtual
+    double
+    eval(const double x, const double y, const double z) const
     {
-      Eigen::Vector3d pvec(p.x(), p.y(), p.z());
+      Eigen::Vector3d pvec(x, y, z);
       const bool a =
         isOnSameSide(x0_, x1_, x2_, x3_, pvec) &&
         isOnSameSide(x1_, x2_, x3_, x0_, pvec) &&
@@ -360,10 +372,12 @@ class Torus: public loom::DomainBase
     {
     }
 
-    virtual K::FT operator()(K::Point_3 p) const
+    virtual
+    double
+    eval(const double x, const double y, const double z) const
     {
-      const double r = sqrt(p.x()*p.x() + p.y()*p.y());
-      return (r - major_radius_)*(r - major_radius_) + p.z()*p.z() <
+      const double r = sqrt(x*x + y*y);
+      return (r - major_radius_)*(r - major_radius_) + z*z <
         minor_radius_*minor_radius_ ?
         -1.0 :
         1.0;

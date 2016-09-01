@@ -1,4 +1,4 @@
-%module loom
+%module(directors="1") loom
 
 %{
 #define SWIG_FILE_WITH_INIT
@@ -25,6 +25,9 @@
 %shared_ptr(loom::Ellipsoid);
 %shared_ptr(loom::Tetrahedron);
 %shared_ptr(loom::Torus);
+
+// http://stackoverflow.com/a/39273055/353337
+%feature("director") loom::DomainBase;
 
 %include <std_vector.i>
 namespace std {

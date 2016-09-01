@@ -309,5 +309,33 @@ def test_torus():
     return
 
 
+def test_custom_function():
+    class Hyperboloid(loom.DomainBase):
+        def __init__(self):
+            super(Hyperboloid, self).__init__()
+            self.z0 = -1.0
+            self.z1 = 1.0
+            self.waist_radius = 0.5
+            return
+
+        def eval(self, x, y, z):
+            if self.z0 < z and z < self.z1:
+                r = numpy.sqrt(x*x + y*y)
+                return r - z*z - self.waist_radius*self.waist_radius
+            else:
+                return 1.0
+
+        def get_bounding_sphere_squared_radius(self):
+            z_max = max(abs(self.z0), abs(self.z1))
+            r_max = z_max*z_max + self.waist_radius*self.waist_radius
+            return r_max*r_max + z_max*z_max
+
+    d = Hyperboloid()
+
+    loom.generate_mesh(d, 'out.mesh', cell_size=0.1)
+
+    return
+
+
 if __name__ == '__main__':
-    test_balls_difference()
+    test_custom_function()
