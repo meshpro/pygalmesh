@@ -403,6 +403,27 @@ def test_scaling():
     return
 
 
+def test_stretch():
+    alpha = 2.0
+    s = loom.Stretch(loom.Ball([0, 0, 0], 1.0), [alpha, 0.0, 0.0])
+    loom.generate_mesh(s, 'out.mesh', cell_size=0.2, verbose=False)
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    assert abs(max(vertices[:, 0]) - alpha) < 0.02
+    assert abs(min(vertices[:, 0]) + alpha) < 0.02
+    assert abs(max(vertices[:, 1]) - 1.0) < 0.02
+    assert abs(min(vertices[:, 1]) + 1.0) < 0.02
+    assert abs(max(vertices[:, 2]) - 1.0) < 0.02
+    assert abs(min(vertices[:, 2]) + 1.0) < 0.02
+
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    ref_vol = 8.22855460687
+    assert abs(vol - ref_vol) < 0.1
+
+    return
+
+
 if __name__ == '__main__':
     # test_balls_difference()
-    test_scaling()
+    test_stretch()

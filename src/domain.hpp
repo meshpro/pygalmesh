@@ -125,6 +125,47 @@ class Scale: public loom::DomainBase
     const double alpha_;
 };
 
+class Stretch: public loom::DomainBase
+{
+  public:
+  Stretch(
+      std::shared_ptr<const loom::DomainBase> & domain,
+      const std::vector<double> & direction
+      ):
+    domain_(domain),
+    normalized_direction_(Eigen::Vector3d(direction.data()).normalized()),
+    alpha_(Eigen::Vector3d(direction.data()).norm())
+  {
+    assert(alpha_ > 0.0);
+  }
+
+  virtual ~Stretch() = default;
+
+  virtual
+  double
+  eval(const double x, const double y, const double z) const
+  {
+    const Eigen::Vector3d v(x, y, z);
+    const double beta = normalized_direction_.dot(v);
+    // scale the component of normalized_direction_ by 1/alpha_
+    const auto v2 = beta/alpha_ * normalized_direction_
+       + (v - beta * normalized_direction_);
+    return domain_->eval(v2[0], v2[1], v2[2]);
+  }
+
+  virtual
+  double
+  get_bounding_sphere_squared_radius() const
+  {
+    return alpha_*alpha_ * domain_->get_bounding_sphere_squared_radius();
+  }
+
+  private:
+    std::shared_ptr<const loom::DomainBase> domain_;
+    const Eigen::Vector3d normalized_direction_;
+    const double alpha_;
+};
+
 class Intersection: public loom::DomainBase
 {
   public:
