@@ -321,66 +321,66 @@ def test_torus():
     return
 
 
-def test_custom_function():
-    class Hyperboloid(loom.DomainBase):
-        def __init__(self, edge_size):
-            super(Hyperboloid, self).__init__()
-            self.z0 = -1.0
-            self.z1 = 1.0
-            self.waist_radius = 0.5
-            self.edge_size = edge_size
-            return
-
-        def eval(self, x, y, z):
-            if self.z0 < z and z < self.z1:
-                r2 = x*x + y*y
-                return r2 - z*z - self.waist_radius*self.waist_radius
-            else:
-                return 1.0
-
-        def get_bounding_sphere_squared_radius(self):
-            z_max = max(abs(self.z0), abs(self.z1))
-            r_max = z_max*z_max + self.waist_radius*self.waist_radius
-            return r_max*r_max + z_max*z_max
-
-        def get_features(self):
-            radius0 = numpy.sqrt(
-                self.z0*self.z0 + self.waist_radius*self.waist_radius
-                )
-            n0 = int(2*numpy.pi*radius0 / self.edge_size)
-            circ0 = [[
-                    radius0 * numpy.cos((2*numpy.pi * k) / n0),
-                    radius0 * numpy.sin((2*numpy.pi * k) / n0),
-                    self.z0
-                    ] for k in range(n0)
-                    ]
-            circ0.append(circ0[0])
-
-            radius1 = numpy.sqrt(
-                self.z1*self.z1 + self.waist_radius*self.waist_radius
-                )
-            n1 = int(2*numpy.pi*radius1 / self.edge_size)
-            circ1 = [[
-                    radius1 * numpy.cos((2*numpy.pi * k) / n1),
-                    radius1 * numpy.sin((2*numpy.pi * k) / n1),
-                    self.z1
-                    ] for k in range(n1)
-                    ]
-            circ1.append(circ1[0])
-            return [circ0, circ1]
-
-    edge_size = 0.1
-    d = Hyperboloid(edge_size)
-
-    loom.generate_mesh(
-            d,
-            'out.mesh',
-            cell_size=0.1,
-            edge_size=edge_size,
-            verbose=False
-            )
-
-    return
+# def test_custom_function():
+#     class Hyperboloid(loom.DomainBase):
+#         def __init__(self, edge_size):
+#             super(Hyperboloid, self).__init__()
+#             self.z0 = -1.0
+#             self.z1 = 1.0
+#             self.waist_radius = 0.5
+#             self.edge_size = edge_size
+#             return
+#
+#         def eval(self, x, y, z):
+#             if self.z0 < z and z < self.z1:
+#                 r2 = x*x + y*y
+#                 return r2 - z*z - self.waist_radius*self.waist_radius
+#             else:
+#                 return 1.0
+#
+#         def get_bounding_sphere_squared_radius(self):
+#             z_max = max(abs(self.z0), abs(self.z1))
+#             r_max = z_max*z_max + self.waist_radius*self.waist_radius
+#             return r_max*r_max + z_max*z_max
+#
+#         def get_features(self):
+#             radius0 = numpy.sqrt(
+#                 self.z0*self.z0 + self.waist_radius*self.waist_radius
+#                 )
+#             n0 = int(2*numpy.pi*radius0 / self.edge_size)
+#             circ0 = [[
+#                     radius0 * numpy.cos((2*numpy.pi * k) / n0),
+#                     radius0 * numpy.sin((2*numpy.pi * k) / n0),
+#                     self.z0
+#                     ] for k in range(n0)
+#                     ]
+#             circ0.append(circ0[0])
+#
+#             radius1 = numpy.sqrt(
+#                 self.z1*self.z1 + self.waist_radius*self.waist_radius
+#                 )
+#             n1 = int(2*numpy.pi*radius1 / self.edge_size)
+#             circ1 = [[
+#                     radius1 * numpy.cos((2*numpy.pi * k) / n1),
+#                     radius1 * numpy.sin((2*numpy.pi * k) / n1),
+#                     self.z1
+#                     ] for k in range(n1)
+#                     ]
+#             circ1.append(circ1[0])
+#             return [circ0, circ1]
+#
+#     edge_size = 0.1
+#     d = Hyperboloid(edge_size)
+#
+#     loom.generate_mesh(
+#             d,
+#             'out.mesh',
+#             cell_size=0.1,
+#             edge_size=edge_size,
+#             verbose=False
+#             )
+#
+#     return
 
 
 def test_scaling():
