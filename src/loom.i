@@ -32,7 +32,7 @@
 %include <std_vector.i>
 namespace std {
 %template(Line) vector <double>;
-%template(ListOfListsOfLists) vector<vector<vector<double>>>;
+%template(ListOfPolylines) vector<vector<vector<double>>>;
 %template(ListOfDomains) vector<shared_ptr<const loom::DomainBase>>;
 }
 

@@ -83,18 +83,18 @@ class Cuboid: public loom::DomainBase
     }
 
     virtual
-    std::list<std::vector<K::Point_3>>
+    std::vector<std::vector<std::vector<double>>>
     get_features() const
     {
-      std::vector<K::Point_3> corners = {
-        K::Point_3(x0_[0], x0_[1], x0_[2]),
-        K::Point_3(x1_[0], x0_[1], x0_[2]),
-        K::Point_3(x0_[0], x1_[1], x0_[2]),
-        K::Point_3(x0_[0], x0_[1], x1_[2]),
-        K::Point_3(x1_[0], x1_[1], x0_[2]),
-        K::Point_3(x1_[0], x0_[1], x1_[2]),
-        K::Point_3(x0_[0], x1_[1], x1_[2]),
-        K::Point_3(x1_[0], x1_[1], x1_[2])
+      std::vector<std::vector<double>> corners = {
+        {x0_[0], x0_[1], x0_[2]},
+        {x1_[0], x0_[1], x0_[2]},
+        {x0_[0], x1_[1], x0_[2]},
+        {x0_[0], x0_[1], x1_[2]},
+        {x1_[0], x1_[1], x0_[2]},
+        {x1_[0], x0_[1], x1_[2]},
+        {x0_[0], x1_[1], x1_[2]},
+        {x1_[0], x1_[1], x1_[2]}
       };
       return {
           {corners[0], corners[1]},
@@ -198,18 +198,18 @@ class Cylinder: public loom::DomainBase
     }
 
     virtual
-    std::list<std::vector<K::Point_3>>
+    std::vector<std::vector<std::vector<double>>>
     get_features() const
     {
       const double pi = 3.1415926535897932384;
       const size_t n = 2 * pi * radius_ / feature_edge_length_;
-      std::vector<K::Point_3> circ0(n+1);
-      std::vector<K::Point_3> circ1(n+1);
+      std::vector<std::vector<double>> circ0(n+1);
+      std::vector<std::vector<double>> circ1(n+1);
       for (size_t i=0; i < n; i++) {
         const double c = radius_ * cos((2*pi * i) / n);
         const double s = radius_ * sin((2*pi * i) / n);
-        circ0[i] = K::Point_3(c, s, z0_);
-        circ1[i] = K::Point_3(c, s, z1_);
+        circ0[i] = {c, s, z0_};
+        circ1[i] = {c, s, z1_};
       }
       // close the circles
       circ0[n] = circ0[0];
@@ -263,16 +263,16 @@ class Cone: public loom::DomainBase
     }
 
     virtual
-    std::list<std::vector<K::Point_3>>
+    std::vector<std::vector<std::vector<double>>>
     get_features() const
     {
       const double pi = 3.1415926535897932384;
       const size_t n = 2 * pi * radius_ / feature_edge_length_;
-      std::vector<K::Point_3> circ0(n+1);
+      std::vector<std::vector<double>> circ0(n+1);
       for (size_t i=0; i < n; i++) {
         const double c = radius_ * cos((2*pi * i) / n);
         const double s = radius_ * sin((2*pi * i) / n);
-        circ0[i] = K::Point_3(c, s, 0.0);
+        circ0[i] = {c, s, 0.0};
       }
       circ0[n] = circ0[0];
       return {circ0};
@@ -345,14 +345,14 @@ class Tetrahedron: public loom::DomainBase
     }
 
     virtual
-    std::list<std::vector<K::Point_3>>
+    std::vector<std::vector<std::vector<double>>>
     get_features() const
     {
-      std::vector<K::Point_3> pts = {
-        K::Point_3(x0_[0], x0_[1], x0_[2]),
-        K::Point_3(x1_[0], x1_[1], x1_[2]),
-        K::Point_3(x2_[0], x2_[1], x2_[2]),
-        K::Point_3(x3_[0], x3_[1], x3_[2]),
+      std::vector<std::vector<double>> pts = {
+        {x0_[0], x0_[1], x0_[2]},
+        {x1_[0], x1_[1], x1_[2]},
+        {x2_[0], x2_[1], x2_[2]},
+        {x3_[0], x3_[1], x3_[2]}
       };
       return {
           {pts[0], pts[1]},

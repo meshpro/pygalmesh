@@ -72,7 +72,7 @@ generate_mesh(
       boundary_precision
       );
 
-  const auto native_features = domain->get_features();
+  const auto native_features = translate_feature_edges(domain->get_features());
   cgal_domain.add_features(native_features.begin(), native_features.end());
 
   const auto polylines = translate_feature_edges(feature_edges);

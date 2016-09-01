@@ -30,7 +30,7 @@ class DomainBase
   get_bounding_sphere_squared_radius() const = 0;
 
   virtual
-  std::list<std::vector<K::Point_3>>
+  std::vector<std::vector<std::vector<double>>>
   get_features() const
   {
     return {};
