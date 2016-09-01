@@ -52,6 +52,8 @@ class Rotate: public loom::DomainBase
   {
   }
 
+  virtual ~Rotate() = default;
+
   virtual
   double
   eval(const double x, const double y, const double z) const
@@ -99,6 +101,8 @@ class Intersection: public loom::DomainBase
   {
   }
 
+  virtual ~Intersection() = default;
+
   virtual
   double
   eval(const double x, const double y, const double z) const
@@ -135,6 +139,8 @@ class Union: public loom::DomainBase
     domains_(domains)
   {
   }
+
+  virtual ~Union() = default;
 
   virtual
   double
@@ -174,6 +180,8 @@ class Difference: public loom::DomainBase
     domain1_(domain1)
   {
   }
+
+  virtual ~Difference() = default;
 
   virtual
   double

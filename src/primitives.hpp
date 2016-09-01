@@ -22,6 +22,8 @@ class Ball: public loom::DomainBase
       assert(x0_.size() == 3);
     }
 
+    virtual ~Ball() = default;
+
     virtual
     double
     eval(const double x, const double y, const double z) const
@@ -57,6 +59,8 @@ class Cuboid: public loom::DomainBase
       x1_(x1)
     {
     }
+
+    virtual ~Cuboid() = default;
 
     virtual
     double
@@ -130,6 +134,8 @@ class Ellipsoid: public loom::DomainBase
     {
     }
 
+    virtual ~Ellipsoid() = default;
+
     virtual
     double
     eval(const double x, const double y, const double z) const
@@ -171,6 +177,8 @@ class Cylinder: public loom::DomainBase
     {
       assert(z1_ > z0_);
     }
+
+    virtual ~Cylinder() = default;
 
     virtual
     double
@@ -233,6 +241,8 @@ class Cone: public loom::DomainBase
       assert(height_ > 0.0);
     }
 
+    virtual ~Cone() = default;
+
     virtual
     double
     eval(const double x, const double y, const double z) const
@@ -290,6 +300,8 @@ class Tetrahedron: public loom::DomainBase
       x3_(Eigen::Vector3d(x3[0], x3[1], x3[2]))
     {
     }
+
+    virtual ~Tetrahedron() = default;
 
     bool isOnSameSide(
         const Eigen::Vector3d & v0,
@@ -371,6 +383,8 @@ class Torus: public loom::DomainBase
       minor_radius_(minor_radius)
     {
     }
+
+    virtual ~Torus() = default;
 
     virtual
     double
