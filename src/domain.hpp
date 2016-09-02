@@ -45,11 +45,34 @@ class Translate: public loom::DomainBase
       const std::vector<double> & direction
       ):
     domain_(domain),
-    direction_(Eigen::Vector3d(direction.data()))
+    direction_(Eigen::Vector3d(direction.data())),
+    translated_features_(translate_features(domain->get_features(), direction_))
   {
   }
 
   virtual ~Translate() = default;
+
+  std::vector<std::vector<std::vector<double>>>
+  translate_features(
+      const std::vector<std::vector<std::vector<double>>> & features,
+      const Eigen::Vector3d & direction
+      ) const
+  {
+    std::vector<std::vector<std::vector<double>>> translated_features;
+    for (const auto & feature: features) {
+      std::vector<std::vector<double>> translated_feature;
+      for (const auto & point: feature) {
+        const std::vector<double> translated_point = {
+          point[0] + direction[0],
+          point[1] + direction[1],
+          point[2] + direction[2]
+        };
+        translated_feature.push_back(translated_point);
+      }
+      translated_features.push_back(translated_feature);
+    }
+    return translated_features;
+  }
 
   virtual
   double
@@ -70,9 +93,17 @@ class Translate: public loom::DomainBase
     return (radius + dir_norm)*(radius + dir_norm);
   }
 
+  virtual
+  std::vector<std::vector<std::vector<double>>>
+  get_features() const
+  {
+    return translated_features_;
+  };
+
   private:
     const std::shared_ptr<const loom::DomainBase> domain_;
     const Eigen::Vector3d direction_;
+    const std::vector<std::vector<std::vector<double>>> translated_features_;
 };
 
 class Rotate: public loom::DomainBase
