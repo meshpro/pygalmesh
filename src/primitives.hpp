@@ -26,11 +26,11 @@ class Ball: public loom::DomainBase
 
     virtual
     double
-    eval(const double x, const double y, const double z) const
+    eval(const std::vector<double> & x) const
     {
-      const K::FT xx0 = x - x0_[0];
-      const K::FT yy0 = y - x0_[1];
-      const K::FT zz0 = z - x0_[2];
+      const K::FT xx0 = x[0] - x0_[0];
+      const K::FT yy0 = x[1] - x0_[1];
+      const K::FT zz0 = x[2] - x0_[2];
       return xx0*xx0 + yy0*yy0 + zz0*zz0 - radius_*radius_;
     }
 
@@ -64,12 +64,12 @@ class Cuboid: public loom::DomainBase
 
     virtual
     double
-    eval(const double x, const double y, const double z) const
+    eval(const std::vector<double> & x) const
     {
       return (
-          x0_[0] < x && x < x1_[0] &&
-          x0_[1] < y && y < x1_[1] &&
-          x0_[2] < z && z < x1_[2]
+          x0_[0] < x[0] && x[0] < x1_[0] &&
+          x0_[1] < x[1] && x[1] < x1_[1] &&
+          x0_[2] < x[2] && x[2] < x1_[2]
           ) ? -1.0 : 1.0;
     }
 
@@ -138,11 +138,11 @@ class Ellipsoid: public loom::DomainBase
 
     virtual
     double
-    eval(const double x, const double y, const double z) const
+    eval(const std::vector<double> & x) const
     {
-      const K::FT xx0 = x - x0_[0];
-      const K::FT yy0 = y - x0_[1];
-      const K::FT zz0 = z - x0_[2];
+      const K::FT xx0 = x[0] - x0_[0];
+      const K::FT yy0 = x[1] - x0_[1];
+      const K::FT zz0 = x[2] - x0_[2];
       return xx0*xx0/a0_2_ + yy0*yy0/a1_2_ + zz0*zz0/a2_2_ - 1.0;
     }
 
@@ -182,10 +182,10 @@ class Cylinder: public loom::DomainBase
 
     virtual
     double
-    eval(const double x, const double y, const double z) const
+    eval(const std::vector<double> & x) const
     {
-      return (z0_ < z && z < z1_) ?
-        x*x + y*y - radius_*radius_ :
+      return (z0_ < x[2] && x[2] < z1_) ?
+        x[0]*x[0] + x[1]*x[1] - radius_*radius_ :
         1.0;
     }
 
@@ -245,12 +245,12 @@ class Cone: public loom::DomainBase
 
     virtual
     double
-    eval(const double x, const double y, const double z) const
+    eval(const std::vector<double> & x) const
     {
-      const K::FT rad = radius_ * (1.0 - z / height_);
+      const K::FT rad = radius_ * (1.0 - x[2] / height_);
 
-      return (0.0 < z && z < height_) ?
-        x*x + y*y - rad*rad :
+      return (0.0 < x[2] && x[2] < height_) ?
+        x[0]*x[0] + x[1]*x[1] - rad*rad :
         1.0;
     }
 
@@ -321,9 +321,9 @@ class Tetrahedron: public loom::DomainBase
 
     virtual
     double
-    eval(const double x, const double y, const double z) const
+    eval(const std::vector<double> & x) const
     {
-      Eigen::Vector3d pvec(x, y, z);
+      Eigen::Vector3d pvec(x.data());
       const bool a =
         isOnSameSide(x0_, x1_, x2_, x3_, pvec) &&
         isOnSameSide(x1_, x2_, x3_, x0_, pvec) &&
@@ -388,10 +388,10 @@ class Torus: public loom::DomainBase
 
     virtual
     double
-    eval(const double x, const double y, const double z) const
+    eval(const std::vector<double> & x) const
     {
-      const double r = sqrt(x*x + y*y);
-      return (r - major_radius_)*(r - major_radius_) + z*z <
+      const double r = sqrt(x[0]*x[0] + x[1]*x[1]);
+      return (r - major_radius_)*(r - major_radius_) + x[2]*x[2] <
         minor_radius_*minor_radius_ ?
         -1.0 :
         1.0;

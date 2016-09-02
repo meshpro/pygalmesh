@@ -412,10 +412,10 @@ def test_torus():
 #             self.edge_size = edge_size
 #             return
 #
-#         def eval(self, x, y, z):
-#             if self.z0 < z and z < self.z1:
-#                 r2 = x*x + y*y
-#                 return r2 - z*z - self.waist_radius*self.waist_radius
+#         def eval(self, x):
+#             if self.z0 < x[2] and x[2] < self.z1:
+#                 r2 = x[0]*x[0] + y[1]*y[1]
+#                 return r2 - z[2]*z[2] - self.waist_radius*self.waist_radius
 #             else:
 #                 return 1.0
 #

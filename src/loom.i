@@ -34,7 +34,7 @@
 
 %include <std_vector.i>
 namespace std {
-%template(Line) vector<double>;
+%template(Vector3d) vector<double>;
 %template(ListOfPolylines) vector<vector<vector<double>>>;
 %template(ListOfDomains) vector<shared_ptr<const loom::DomainBase>>;
 }

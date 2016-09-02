@@ -16,13 +16,13 @@ class DomainBase
 
   virtual
   double
-  eval(const double x, const double y, const double z) const = 0;
+  eval(const std::vector<double> & x) const = 0;
 
   virtual
   K::FT
   operator()(K::Point_3 p) const
   {
-    return this->eval(p.x(), p.y(), p.z());
+    return this->eval({p.x(), p.y(), p.z()});
   }
 
   virtual
@@ -76,9 +76,9 @@ class Translate: public loom::DomainBase
 
   virtual
   double
-  eval(const double x, const double y, const double z) const
+  eval(const std::vector<double> & x) const
   {
-    const Eigen::Vector3d p_vec(x, y, z);
+    const Eigen::Vector3d p_vec(x.data());
     const Eigen::Vector3d p2 = p_vec - direction_;
     const auto pt2 = K::Point_3(p2[0], p2[1], p2[2]);
     return domain_->operator()(pt2);
@@ -147,11 +147,11 @@ class Rotate: public loom::DomainBase
 
   virtual
   double
-  eval(const double x, const double y, const double z) const
+  eval(const std::vector<double> & x) const
   {
     // rotate with negative angle
     const auto p2 = rotate(
-        Eigen::Vector3d(x, y, z),
+        Eigen::Vector3d(x.data()),
         normalized_axis_,
         -sinAngle_,
         cosAngle_
@@ -222,9 +222,9 @@ class Scale: public loom::DomainBase
 
   virtual
   double
-  eval(const double x, const double y, const double z) const
+  eval(const std::vector<double> & x) const
   {
-    return domain_->eval(x/alpha_, y/alpha_, z/alpha_);
+    return domain_->eval({x[0]/alpha_, x[1]/alpha_, x[2]/alpha_});
   }
 
   virtual
@@ -286,14 +286,14 @@ class Stretch: public loom::DomainBase
 
   virtual
   double
-  eval(const double x, const double y, const double z) const
+  eval(const std::vector<double> & x) const
   {
-    const Eigen::Vector3d v(x, y, z);
+    const Eigen::Vector3d v(x.data());
     const double beta = normalized_direction_.dot(v);
     // scale the component of normalized_direction_ by 1/alpha_
     const auto v2 = beta/alpha_ * normalized_direction_
        + (v - beta * normalized_direction_);
-    return domain_->eval(v2[0], v2[1], v2[2]);
+    return domain_->eval({v2[0], v2[1], v2[2]});
   }
 
   virtual
@@ -352,10 +352,10 @@ class Intersection: public loom::DomainBase
 
   virtual
   double
-  eval(const double x, const double y, const double z) const
+  eval(const std::vector<double> & x) const
   {
     for (const auto & domain: domains_) {
-      if (domain->eval(x, y, z) > 0.0) {
+      if (domain->eval(x) > 0.0) {
         return 1.0;
       }
     }
@@ -403,10 +403,10 @@ class Union: public loom::DomainBase
 
   virtual
   double
-  eval(const double x, const double y, const double z) const
+  eval(const std::vector<double> & x) const
   {
     for (const auto & domain: domains_) {
-      if (domain->eval(x, y, z) < 0.0) {
+      if (domain->eval(x) < 0.0) {
         return -1.0;
       }
     }
@@ -456,9 +456,9 @@ class Difference: public loom::DomainBase
 
   virtual
   double
-  eval(const double x, const double y, const double z) const
+  eval(const std::vector<double> & x) const
   {
-    return (domain0_->eval(x, y, z) < 0.0 && domain1_->eval(x, y, z) >= 0.0) ?
+    return (domain0_->eval(x) < 0.0 && domain1_->eval(x) >= 0.0) ?
         -1.0 :
         1.0;
   }
