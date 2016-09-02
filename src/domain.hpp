@@ -212,7 +212,8 @@ class Scale: public loom::DomainBase
       const double alpha
       ):
     domain_(domain),
-    alpha_(alpha)
+    alpha_(alpha),
+    scaled_features_(scale_features(domain_->get_features()))
   {
     assert(alpha_ > 0.0);
   }
@@ -233,9 +234,37 @@ class Scale: public loom::DomainBase
     return alpha_*alpha_ * domain_->get_bounding_sphere_squared_radius();
   }
 
+  std::vector<std::vector<std::vector<double>>>
+  scale_features(
+      const std::vector<std::vector<std::vector<double>>> & features
+      ) const
+  {
+    std::vector<std::vector<std::vector<double>>> scaled_features;
+    for (const auto & feature: features) {
+      std::vector<std::vector<double>> scaled_feature;
+      for (const auto & point: feature) {
+        scaled_feature.push_back({
+            alpha_ * point[0],
+            alpha_ * point[1],
+            alpha_ * point[2]
+            });
+      }
+      scaled_features.push_back(scaled_feature);
+    }
+    return scaled_features;
+  }
+
+  virtual
+  std::vector<std::vector<std::vector<double>>>
+  get_features() const
+  {
+    return scaled_features_;
+  };
+
   private:
     std::shared_ptr<const loom::DomainBase> domain_;
     const double alpha_;
+    const std::vector<std::vector<std::vector<double>>> scaled_features_;
 };
 
 class Stretch: public loom::DomainBase

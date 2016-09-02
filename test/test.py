@@ -384,21 +384,28 @@ def test_torus():
 
 
 def test_scaling():
-    alpha = 2.0
-    s = loom.Scale(loom.Ball([0, 0, 0], 1.0), alpha)
-    loom.generate_mesh(s, 'out.mesh', cell_size=0.2, verbose=False)
+    alpha = 1.3
+    s = loom.Scale(loom.Cuboid([0, 0, 0], [1, 2, 3]), alpha)
+    loom.generate_mesh(
+            s,
+            'out.mesh',
+            cell_size=0.2,
+            edge_size=0.1,
+            verbose=False
+            )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
-    assert abs(max(vertices[:, 0]) - alpha) < 0.02
-    assert abs(min(vertices[:, 0]) + alpha) < 0.02
-    assert abs(max(vertices[:, 1]) - alpha) < 0.02
-    assert abs(min(vertices[:, 1]) + alpha) < 0.02
-    assert abs(max(vertices[:, 2]) - alpha) < 0.02
-    assert abs(min(vertices[:, 2]) + alpha) < 0.02
+    tol = 1.0e-3
+    assert abs(max(vertices[:, 0]) - 1*alpha) < tol
+    assert abs(min(vertices[:, 0]) + 0.0) < tol
+    assert abs(max(vertices[:, 1]) - 2*alpha) < tol
+    assert abs(min(vertices[:, 1]) + 0.0) < tol
+    assert abs(max(vertices[:, 2]) - 3*alpha) < tol
+    assert abs(min(vertices[:, 2]) + 0.0) < tol
 
     vol = sum(compute_volumes(vertices, cells['tetra']))
-    assert abs(vol - 4.0/3.0 * numpy.pi * alpha**3) < 0.3
+    assert abs(vol - 6.0 * alpha**3) < tol
 
     return
 
@@ -476,4 +483,4 @@ def test_translation():
 
 
 if __name__ == '__main__':
-    test_rotation()
+    test_scaling()
