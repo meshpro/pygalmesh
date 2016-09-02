@@ -239,6 +239,41 @@ def test_cuboids_intersection():
     return
 
 
+def test_cuboids_union():
+    c0 = loom.Cuboid([0, 0, -0.5], [3, 3, 0.5])
+    c1 = loom.Cuboid([1, 1, -2], [2, 2, 2])
+    inter = loom.ListOfDomains()
+    inter.append(c0)
+    inter.append(c1)
+    u = loom.Union(inter)
+
+    loom.generate_mesh(
+            u,
+            'out.mesh',
+            cell_size=0.2,
+            edge_size=0.2,
+            verbose=False
+            )
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    # filter the vertices that belong to cells
+    verts = vertices[numpy.unique(cells['tetra'])]
+
+    tol = 1.0e-2
+    assert abs(max(verts[:, 0]) - 3.0) < tol
+    assert abs(min(verts[:, 0]) - 0.0) < tol
+    assert abs(max(verts[:, 1]) - 3.0) < tol
+    assert abs(min(verts[:, 1]) - 0.0) < tol
+    assert abs(max(verts[:, 2]) - 2.0) < tol
+    assert abs(min(verts[:, 2]) + 2.0) < tol
+
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    assert abs(vol - 12.0) < 0.1
+
+    return
+
+
 def test_cuboid():
     s0 = loom.Cuboid([0, 0, 0], [1, 2, 3])
     loom.generate_mesh(s0, 'out.mesh', edge_size=0.1, verbose=False)
@@ -538,4 +573,4 @@ def test_translation():
 
 
 if __name__ == '__main__':
-    test_cuboids_intersection()
+    test_cuboids_union()

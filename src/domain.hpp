@@ -424,6 +424,18 @@ class Union: public loom::DomainBase
     return max;
   }
 
+  virtual
+  std::vector<std::vector<std::vector<double>>>
+  get_features() const
+  {
+    std::vector<std::vector<std::vector<double>>> features;
+    for (const auto & domain: domains_) {
+      const auto f = domain->get_features();
+      features.insert(std::end(features), std::begin(f), std::end(f));
+    }
+    return features;
+  };
+
   private:
     std::vector<std::shared_ptr<const loom::DomainBase>> domains_;
 };
@@ -457,6 +469,21 @@ class Difference: public loom::DomainBase
   {
     return domain0_->get_bounding_sphere_squared_radius();
   }
+
+  virtual
+  std::vector<std::vector<std::vector<double>>>
+  get_features() const
+  {
+    std::vector<std::vector<std::vector<double>>> features;
+
+    const auto f0 = domain0_->get_features();
+    features.insert(std::end(features), std::begin(f0), std::end(f0));
+
+    const auto f1 = domain1_->get_features();
+    features.insert(std::end(features), std::begin(f1), std::end(f1));
+
+    return features;
+  };
 
   private:
     std::shared_ptr<const loom::DomainBase> domain0_;
