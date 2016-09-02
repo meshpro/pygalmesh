@@ -412,21 +412,30 @@ def test_scaling():
 
 def test_stretch():
     alpha = 2.0
-    s = loom.Stretch(loom.Ball([0, 0, 0], 1.0), [alpha, 0.0, 0.0])
-    loom.generate_mesh(s, 'out.mesh', cell_size=0.2, verbose=False)
+    s = loom.Stretch(
+            loom.Cuboid([0, 0, 0], [1, 2, 3]),
+            [alpha, 0.0, 0.0]
+            )
+    loom.generate_mesh(
+            s,
+            'out.mesh',
+            cell_size=0.2,
+            edge_size=0.2,
+            verbose=False
+            )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
-    assert abs(max(vertices[:, 0]) - alpha) < 0.02
-    assert abs(min(vertices[:, 0]) + alpha) < 0.02
-    assert abs(max(vertices[:, 1]) - 1.0) < 0.02
-    assert abs(min(vertices[:, 1]) + 1.0) < 0.02
-    assert abs(max(vertices[:, 2]) - 1.0) < 0.02
-    assert abs(min(vertices[:, 2]) + 1.0) < 0.02
+    tol = 1.0e-3
+    assert abs(max(vertices[:, 0]) - alpha) < tol
+    assert abs(min(vertices[:, 0]) + 0.0) < tol
+    assert abs(max(vertices[:, 1]) - 2.0) < tol
+    assert abs(min(vertices[:, 1]) + 0.0) < tol
+    assert abs(max(vertices[:, 2]) - 3.0) < tol
+    assert abs(min(vertices[:, 2]) + 0.0) < tol
 
     vol = sum(compute_volumes(vertices, cells['tetra']))
-    ref_vol = 8.22855460687
-    assert abs(vol - ref_vol) < 0.1
+    assert abs(vol - 12.0) < tol
 
     return
 
@@ -483,4 +492,4 @@ def test_translation():
 
 
 if __name__ == '__main__':
-    test_scaling()
+    test_stretch()

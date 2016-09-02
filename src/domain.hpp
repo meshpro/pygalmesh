@@ -276,7 +276,8 @@ class Stretch: public loom::DomainBase
       ):
     domain_(domain),
     normalized_direction_(Eigen::Vector3d(direction.data()).normalized()),
-    alpha_(Eigen::Vector3d(direction.data()).norm())
+    alpha_(Eigen::Vector3d(direction.data()).norm()),
+    stretched_features_(stretch_features(domain_->get_features()))
   {
     assert(alpha_ > 0.0);
   }
@@ -302,10 +303,39 @@ class Stretch: public loom::DomainBase
     return alpha_*alpha_ * domain_->get_bounding_sphere_squared_radius();
   }
 
+  std::vector<std::vector<std::vector<double>>>
+  stretch_features(
+      const std::vector<std::vector<std::vector<double>>> & features
+      ) const
+  {
+    std::vector<std::vector<std::vector<double>>> stretched_features;
+    for (const auto & feature: features) {
+      std::vector<std::vector<double>> stretched_feature;
+      for (const auto & point: feature) {
+        // scale the component of normalized_direction_ by alpha_
+        const Eigen::Vector3d v(point.data());
+        const double beta = normalized_direction_.dot(v);
+        const auto v2 = beta * alpha_ * normalized_direction_
+           + (v - beta * normalized_direction_);
+        stretched_feature.push_back({v2[0], v2[1], v2[2]});
+      }
+      stretched_features.push_back(stretched_feature);
+    }
+    return stretched_features;
+  }
+
+  virtual
+  std::vector<std::vector<std::vector<double>>>
+  get_features() const
+  {
+    return stretched_features_;
+  };
+
   private:
     std::shared_ptr<const loom::DomainBase> domain_;
     const Eigen::Vector3d normalized_direction_;
     const double alpha_;
+    const std::vector<std::vector<std::vector<double>>> stretched_features_;
 };
 
 class Intersection: public loom::DomainBase
