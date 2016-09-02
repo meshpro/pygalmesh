@@ -440,7 +440,7 @@ def test_rotation():
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
-    tol = 1.0e-1
+    tol = 1.0e-3
     vol = sum(compute_volumes(vertices, cells['tetra']))
     assert abs(vol - 6.0) < tol
 
@@ -476,4 +476,4 @@ def test_translation():
 
 
 if __name__ == '__main__':
-    test_translation()
+    test_rotation()

@@ -117,33 +117,69 @@ class Rotate: public loom::DomainBase
     domain_(domain),
     normalized_axis_(Eigen::Vector3d(axis.data()).normalized()),
     sinAngle_(sin(angle)),
-    cosAngle_(cos(angle))
+    cosAngle_(cos(angle)),
+    rotated_features_(rotate_features(domain_->get_features()))
   {
   }
 
   virtual ~Rotate() = default;
 
-  virtual
-  double
-  eval(const double x, const double y, const double z) const
+  Eigen::Vector3d
+  rotate(
+      const Eigen::Vector3d & vec,
+      const Eigen::Vector3d & axis,
+      const double sinAngle,
+      const double cosAngle
+      ) const
   {
     // Rotate a vector `v` by the angle `theta` in the plane perpendicular
     // to the axis given by `u`.
     // Refer to
     // http://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle
-    const Eigen::Vector3d p_vec(x, y, z);
+    //
+    // cos(theta) * I * v
+    // + sin(theta) u\cross v
+    // + (1-cos(theta)) (u*u^T) * v
+    return cosAngle * vec
+      + sinAngle * axis.cross(vec)
+      + (1.0-cosAngle) * axis.dot(vec) * axis;
+  }
 
-    // cos(-theta) * I * v
-    // + sin(-theta) u\cross v
-    // + (1-cos(-theta)) (u*u^T) * v
-    const Eigen::Vector3d p2 =
-      cosAngle_ * p_vec
-      - sinAngle_ * normalized_axis_.cross(p_vec)
-      + (1.0-cosAngle_) * normalized_axis_.dot(p_vec) * normalized_axis_;
-
+  virtual
+  double
+  eval(const double x, const double y, const double z) const
+  {
+    // rotate with negative angle
+    const auto p2 = rotate(
+        Eigen::Vector3d(x, y, z),
+        normalized_axis_,
+        -sinAngle_,
+        cosAngle_
+        );
     const auto pt2 = K::Point_3(p2[0], p2[1], p2[2]);
-
     return domain_->operator()(pt2);
+  }
+
+  std::vector<std::vector<std::vector<double>>>
+  rotate_features(
+      const std::vector<std::vector<std::vector<double>>> & features
+      ) const
+  {
+    std::vector<std::vector<std::vector<double>>> rotated_features;
+    for (const auto & feature: features) {
+      std::vector<std::vector<double>> rotated_feature;
+      for (const auto & point: feature) {
+        const auto p2 = rotate(
+            Eigen::Vector3d(point.data()),
+            normalized_axis_,
+            sinAngle_,
+            cosAngle_
+            );
+        rotated_feature.push_back({p2[0], p2[1], p2[2]});
+      }
+      rotated_features.push_back(rotated_feature);
+    }
+    return rotated_features;
   }
 
   virtual
@@ -153,11 +189,19 @@ class Rotate: public loom::DomainBase
     return domain_->get_bounding_sphere_squared_radius();
   }
 
+  virtual
+  std::vector<std::vector<std::vector<double>>>
+  get_features() const
+  {
+    return rotated_features_;
+  };
+
   private:
     const std::shared_ptr<const loom::DomainBase> domain_;
     const Eigen::Vector3d normalized_axis_;
     const double sinAngle_;
     const double cosAngle_;
+    const std::vector<std::vector<std::vector<double>>> rotated_features_;
 };
 
 class Scale: public loom::DomainBase
