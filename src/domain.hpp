@@ -373,6 +373,18 @@ class Intersection: public loom::DomainBase
     return min;
   }
 
+  virtual
+  std::vector<std::vector<std::vector<double>>>
+  get_features() const
+  {
+    std::vector<std::vector<std::vector<double>>> features;
+    for (const auto & domain: domains_) {
+      const auto f = domain->get_features();
+      features.insert(std::end(features), std::begin(f), std::end(f));
+    }
+    return features;
+  };
+
   private:
     std::vector<std::shared_ptr<const loom::DomainBase>> domains_;
 };

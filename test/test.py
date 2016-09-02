@@ -193,6 +193,52 @@ def test_balls_difference():
     return
 
 
+def test_cuboids_intersection():
+    c0 = loom.Cuboid([0, 0, -0.5], [3, 3, 0.5])
+    c1 = loom.Cuboid([1, 1, -2], [2, 2, 2])
+    inter = loom.ListOfDomains()
+    inter.append(c0)
+    inter.append(c1)
+    u = loom.Intersection(inter)
+
+    # In CGAL, feature edges must not intersect, and that's a problem here: The
+    # intersection edges of the cuboids share eight points with the edges of
+    # the tall and skinny cuboid.
+    # eps = 1.0e-2
+    # extra_features = [
+    #         [[1.0, 1.0 + eps, 0.5], [1.0, 2.0 - eps, 0.5]],
+    #         [[1.0 + eps, 2.0, 0.5], [2.0 - eps, 2.0, 0.5]],
+    #         [[2.0, 2.0 - eps, 0.5], [2.0, 1.0 + eps, 0.5]],
+    #         [[2.0 - eps, 1.0, 0.5], [1.0 + eps, 1.0, 0.5]],
+    #         ]
+
+    loom.generate_mesh(
+            u,
+            'out.mesh',
+            cell_size=0.1,
+            edge_size=0.1,
+            verbose=False
+            )
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    # filter the vertices that belong to cells
+    verts = vertices[numpy.unique(cells['tetra'])]
+
+    tol = 1.0e-2
+    assert abs(max(verts[:, 0]) - 2.0) < tol
+    assert abs(min(verts[:, 0]) - 1.0) < tol
+    assert abs(max(verts[:, 1]) - 2.0) < tol
+    assert abs(min(verts[:, 1]) - 1.0) < tol
+    assert abs(max(verts[:, 2]) - 0.5) < 0.05
+    assert abs(min(verts[:, 2]) + 0.5) < 0.05
+
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    assert abs(vol - 1.0) < 0.05
+
+    return
+
+
 def test_cuboid():
     s0 = loom.Cuboid([0, 0, 0], [1, 2, 3])
     loom.generate_mesh(s0, 'out.mesh', edge_size=0.1, verbose=False)
@@ -492,4 +538,4 @@ def test_translation():
 
 
 if __name__ == '__main__':
-    test_stretch()
+    test_cuboids_intersection()
