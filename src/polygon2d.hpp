@@ -32,18 +32,6 @@ class Polygon2D {
     return points2;
   }
 
-  double
-  get_bounding_circle_squared_radius() const
-  {
-    double max = 0.0;
-    for (const auto & pt: this->points) {
-      const double norm = pt.x()*pt.x() + pt.y()*pt.y();
-      if (norm > max) {
-        max = norm;
-      }
-    }
-  }
-
   bool
   is_inside(const std::vector<double> & point)
   {
@@ -69,13 +57,14 @@ class Polygon2D {
 
 class Extrude: public loom::DomainBase {
   public:
-  explicit Extrude(
+  Extrude(
       const std::shared_ptr<loom::Polygon2D> & poly,
-      const double height
+      const std::vector<double> & direction
       ):
     poly_(poly),
-    height_(height)
+    direction_(direction)
   {
+    assert(direction_.size() == 3);
   }
 
   virtual ~Extrude() = default;
@@ -84,8 +73,12 @@ class Extrude: public loom::DomainBase {
   double
   eval(const std::vector<double> & x) const
   {
-    if (0.0 <= x[2] && x[2] <= height_) {
-      const std::vector<double> x2 = {x[0], x[1]};
+    if (0.0 <= x[2] && x[2] <= direction_[2]) {
+      const double beta = x[2] / direction_[2];
+      const std::vector<double> x2 = {
+        x[0] - beta * direction_[0],
+        x[1] - beta * direction_[1]
+      };
       return poly_->is_inside(x2) ? -1.0 : 1.0;
     }
     return 1.0;
@@ -95,7 +88,24 @@ class Extrude: public loom::DomainBase {
   double
   get_bounding_sphere_squared_radius() const
   {
-    return poly_->get_bounding_circle_squared_radius() + height_*height_;
+    double max = 0.0;
+    for (const auto & pt: poly_->points) {
+      // bottom polygon
+      const double nrm0 = pt.x()*pt.x() + pt.y()*pt.y();
+      if (nrm0 > max) {
+        max = nrm0;
+      }
+
+      // top polygon
+      const double x = pt.x() + direction_[0];
+      const double y = pt.y() + direction_[1];
+      const double z = direction_[2];
+      const double nrm1 = x*x + y*y + z*z;
+      if (nrm1 > max) {
+        max = nrm1;
+      }
+    }
+    return max;
   }
 
   virtual
@@ -123,20 +133,36 @@ class Extrude: public loom::DomainBase {
     n = poly_->points.size();
     for (size_t i=0; i < n-1; i++) {
       features.push_back({
-        {poly_->points[i].x(), poly_->points[i].y(), height_},
-        {poly_->points[i+1].x(), poly_->points[i+1].y(), height_}
+        {
+        poly_->points[i].x() + direction_[0],
+        poly_->points[i].y() + direction_[1],
+        direction_[2]
+        },
+        {
+        poly_->points[i+1].x() + direction_[0],
+        poly_->points[i+1].y() + direction_[1],
+        direction_[2]
+        }
       });
     }
     features.push_back({
-      {poly_->points[n-1].x(), poly_->points[n-1].y(), height_},
-      {poly_->points[0].x(), poly_->points[0].y(), height_}
+      {
+      poly_->points[n-1].x() + direction_[0],
+      poly_->points[n-1].y() + direction_[1],
+      direction_[2]
+      },
+      {
+      poly_->points[0].x() + direction_[0],
+      poly_->points[0].y() + direction_[1],
+      direction_[2]
+      }
     });
 
     // features connecting the top and bottom
     for (const auto & pt: poly_->points) {
       std::vector<std::vector<double>> line = {
         {pt.x(), pt.y(), 0.0},
-        {pt.x(), pt.y(), height_}
+        {pt.x() + direction_[0], pt.y() + direction_[1], direction_[2]}
       };
       features.push_back(line);
     }
@@ -146,7 +172,7 @@ class Extrude: public loom::DomainBase {
 
   private:
   const std::shared_ptr<loom::Polygon2D> poly_;
-  const double height_;
+  const std::vector<double> direction_;
 };
 
 } // namespace loom
