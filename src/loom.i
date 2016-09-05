@@ -5,6 +5,7 @@
 #include "generate.hpp"
 #include "generate_poly.hpp"
 #include "domain.hpp"
+#include "polygon2d.hpp"
 #include "primitives.hpp"
 %}
 
@@ -12,6 +13,9 @@
 
 %include <std_shared_ptr.i>
 %shared_ptr(loom::DomainBase);
+
+%shared_ptr(loom::Extrude);
+%shared_ptr(loom::Polygon2D);
 
 %shared_ptr(loom::Rotate);
 %shared_ptr(loom::Scale);
@@ -36,6 +40,7 @@
 %include <std_vector.i>
 namespace std {
 %template(Vector3d) vector<double>;
+%template(Polyline) vector<vector<double>>;
 %template(ListOfPolylines) vector<vector<vector<double>>>;
 %template(ListOfDomains) vector<shared_ptr<const loom::DomainBase>>;
 }
@@ -43,4 +48,5 @@ namespace std {
 %include "generate.hpp"
 %include "generate_poly.hpp"
 %include "domain.hpp"
+%include "polygon2d.hpp"
 %include "primitives.hpp"
