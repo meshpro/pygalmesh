@@ -59,10 +59,12 @@ class Extrude: public loom::DomainBase {
   public:
   Extrude(
       const std::shared_ptr<loom::Polygon2D> & poly,
-      const std::vector<double> & direction
+      const std::vector<double> & direction,
+      const double alpha = 0.0
       ):
     poly_(poly),
-    direction_(direction)
+    direction_(direction),
+    alpha_(alpha)
   {
     assert(direction_.size() == 3);
   }
@@ -73,15 +75,28 @@ class Extrude: public loom::DomainBase {
   double
   eval(const std::vector<double> & x) const
   {
-    if (0.0 <= x[2] && x[2] <= direction_[2]) {
-      const double beta = x[2] / direction_[2];
-      const std::vector<double> x2 = {
-        x[0] - beta * direction_[0],
-        x[1] - beta * direction_[1]
-      };
-      return poly_->is_inside(x2) ? -1.0 : 1.0;
+    if (x[2] < 0.0 || x[2] > direction_[2]) {
+      return 1.0;
     }
-    return 1.0;
+
+    const double beta = x[2] / direction_[2];
+
+    std::vector<double> x2 = {
+      x[0] - beta * direction_[0],
+      x[1] - beta * direction_[1]
+    };
+
+    if (alpha_ != 0.0) {
+      std::vector<double> x3(2);
+      // turn by -beta*alpha
+      const double sinAlpha = sin(beta*alpha_);
+      const double cosAlpha = cos(beta*alpha_);
+      x3[0] =  cosAlpha * x2[0] + sinAlpha * x2[1];
+      x3[1] = -sinAlpha * x2[0] + cosAlpha * x2[1];
+      x2 = x3;
+    }
+
+    return poly_->is_inside(x2) ? -1.0 : 1.0;
   }
 
   virtual
@@ -95,6 +110,8 @@ class Extrude: public loom::DomainBase {
       if (nrm0 > max) {
         max = nrm0;
       }
+
+      // TODO rotation
 
       // top polygon
       const double x = pt.x() + direction_[0];
@@ -129,43 +146,45 @@ class Extrude: public loom::DomainBase {
       {poly_->points[0].x(), poly_->points[0].y(), 0.0}
     });
 
-    // top polygon
+    // top polygon, R*x + d
     n = poly_->points.size();
+    const double sinAlpha = sin(alpha_);
+    const double cosAlpha = cos(alpha_);
     for (size_t i=0; i < n-1; i++) {
       features.push_back({
         {
-        poly_->points[i].x() + direction_[0],
-        poly_->points[i].y() + direction_[1],
+        cosAlpha * poly_->points[i].x() - sinAlpha * poly_->points[i].y() + direction_[0],
+        sinAlpha * poly_->points[i].x() + cosAlpha * poly_->points[i].y() + direction_[1],
         direction_[2]
         },
         {
-        poly_->points[i+1].x() + direction_[0],
-        poly_->points[i+1].y() + direction_[1],
+        cosAlpha * poly_->points[i+1].x() - sinAlpha * poly_->points[i+1].y() + direction_[0],
+        sinAlpha * poly_->points[i+1].x() + cosAlpha * poly_->points[i+1].y() + direction_[1],
         direction_[2]
         }
       });
     }
     features.push_back({
       {
-      poly_->points[n-1].x() + direction_[0],
-      poly_->points[n-1].y() + direction_[1],
+      cosAlpha * poly_->points[n-1].x() - sinAlpha * poly_->points[n-1].y() + direction_[0],
+      sinAlpha * poly_->points[n-1].x() + cosAlpha * poly_->points[n-1].y() + direction_[1],
       direction_[2]
       },
       {
-      poly_->points[0].x() + direction_[0],
-      poly_->points[0].y() + direction_[1],
+      cosAlpha * poly_->points[0].x() - sinAlpha * poly_->points[0].y() + direction_[0],
+      sinAlpha * poly_->points[0].x() + cosAlpha * poly_->points[0].y() + direction_[1],
       direction_[2]
       }
     });
 
-    // features connecting the top and bottom
-    for (const auto & pt: poly_->points) {
-      std::vector<std::vector<double>> line = {
-        {pt.x(), pt.y(), 0.0},
-        {pt.x() + direction_[0], pt.y() + direction_[1], direction_[2]}
-      };
-      features.push_back(line);
-    }
+    // // features connecting the top and bottom
+    // for (const auto & pt: poly_->points) {
+    //   std::vector<std::vector<double>> line = {
+    //     {pt.x(), pt.y(), 0.0},
+    //     {pt.x() + direction_[0], pt.y() + direction_[1], direction_[2]}
+    //   };
+    //   features.push_back(line);
+    // }
 
     return features;
   };
@@ -173,6 +192,7 @@ class Extrude: public loom::DomainBase {
   private:
   const std::shared_ptr<loom::Polygon2D> poly_;
   const std::vector<double> direction_;
+  const double alpha_;
 };
 
 } // namespace loom
