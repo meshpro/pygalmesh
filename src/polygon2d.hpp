@@ -103,19 +103,43 @@ class Extrude: public loom::DomainBase {
   get_features() const
   {
     std::vector<std::vector<std::vector<double>>> features = {};
-    // bottom/top polygons
-    std::vector<std::vector<double>> poly0 = {};
-    std::vector<std::vector<double>> poly1 = {};
-    for (const auto & pt: poly_->points) {
-      std::vector<double> vec0 = {pt.x(), pt.y(), 0.0};
-      poly0.push_back(vec0);
-      std::vector<double> vec1 = {pt.x(), pt.y(), height_};
-      poly1.push_back(vec1);
+
+    size_t n;
+
+    // bottom polygon
+    n = poly_->points.size();
+    for (size_t i=0; i < n-1; i++) {
+      features.push_back({
+        {poly_->points[i].x(), poly_->points[i].y(), 0.0},
+        {poly_->points[i+1].x(), poly_->points[i+1].y(), 0.0}
+      });
     }
-    poly0.push_back(poly0[0]);
-    poly1.push_back(poly1[0]);
-    features.push_back(poly0);
-    features.push_back(poly1);
+    features.push_back({
+      {poly_->points[n-1].x(), poly_->points[n-1].y(), 0.0},
+      {poly_->points[0].x(), poly_->points[0].y(), 0.0}
+    });
+
+    // top polygon
+    n = poly_->points.size();
+    for (size_t i=0; i < n-1; i++) {
+      features.push_back({
+        {poly_->points[i].x(), poly_->points[i].y(), height_},
+        {poly_->points[i+1].x(), poly_->points[i+1].y(), height_}
+      });
+    }
+    features.push_back({
+      {poly_->points[n-1].x(), poly_->points[n-1].y(), height_},
+      {poly_->points[0].x(), poly_->points[0].y(), height_}
+    });
+
+    // features connecting the top and bottom
+    for (const auto & pt: poly_->points) {
+      std::vector<std::vector<double>> line = {
+        {pt.x(), pt.y(), 0.0},
+        {pt.x(), pt.y(), height_}
+      };
+      features.push_back(line);
+    }
 
     return features;
   };
