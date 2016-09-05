@@ -14,22 +14,34 @@ namespace loom {
 
 class Polygon2D {
   public:
-  explicit Polygon2D(const std::vector<std::vector<double>> & points):
-    points_(vector_to_cgal_points(points))
+  explicit Polygon2D(const std::vector<std::vector<double>> & _points):
+    points(vector_to_cgal_points(_points))
   {
   }
 
   virtual ~Polygon2D() = default;
 
   std::vector<K::Point_2>
-  vector_to_cgal_points(const std::vector<std::vector<double>> & points)
+  vector_to_cgal_points(const std::vector<std::vector<double>> & _points) const
   {
-    std::vector<K::Point_2> points2(points.size());
-    for (size_t i = 0; i < points.size(); i++) {
-      assert(points[i].size() == 2);
-      points2[i] = K::Point_2(points[i][0], points[i][1]);
+    std::vector<K::Point_2> points2(_points.size());
+    for (size_t i = 0; i < _points.size(); i++) {
+      assert(_points[i].size() == 2);
+      points2[i] = K::Point_2(_points[i][0], _points[i][1]);
     }
     return points2;
+  }
+
+  double
+  get_bounding_circle_squared_radius() const
+  {
+    double max = 0.0;
+    for (const auto & pt: this->points) {
+      const double norm = pt.x()*pt.x() + pt.y()*pt.y();
+      if (norm > max) {
+        max = norm;
+      }
+    }
   }
 
   bool
@@ -37,7 +49,7 @@ class Polygon2D {
   {
     assert(point.size() == 2);
     K::Point_2 pt(point[0], point[1]);
-    switch(CGAL::bounded_side_2(points_.begin(), points_.end(), pt, K())) {
+    switch(CGAL::bounded_side_2(this->points.begin(), this->points.end(), pt, K())) {
       case CGAL::ON_BOUNDED_SIDE:
         return true;
       case CGAL::ON_BOUNDARY:
@@ -50,8 +62,8 @@ class Polygon2D {
     return false;
   }
 
-  private:
-  const std::vector<K::Point_2> points_;
+  public:
+  const std::vector<K::Point_2> points;
 };
 
 
@@ -74,7 +86,6 @@ class Extrude: public loom::DomainBase {
   {
     if (0.0 <= x[2] && x[2] <= height_) {
       const std::vector<double> x2 = {x[0], x[1]};
-      const double a = poly_->is_inside(x2) ? -1.0 : 1.0;
       return poly_->is_inside(x2) ? -1.0 : 1.0;
     }
     return 1.0;
@@ -84,16 +95,30 @@ class Extrude: public loom::DomainBase {
   double
   get_bounding_sphere_squared_radius() const
   {
-    // TODO
-    return 2.0;
+    return poly_->get_bounding_circle_squared_radius() + height_*height_;
   }
 
-  // virtual
-  // std::vector<std::vector<std::vector<double>>>
-  // get_features() const
-  // {
-  //   return {};
-  // };
+  virtual
+  std::vector<std::vector<std::vector<double>>>
+  get_features() const
+  {
+    std::vector<std::vector<std::vector<double>>> features = {};
+    // bottom/top polygons
+    std::vector<std::vector<double>> poly0 = {};
+    std::vector<std::vector<double>> poly1 = {};
+    for (const auto & pt: poly_->points) {
+      std::vector<double> vec0 = {pt.x(), pt.y(), 0.0};
+      poly0.push_back(vec0);
+      std::vector<double> vec1 = {pt.x(), pt.y(), height_};
+      poly1.push_back(vec1);
+    }
+    poly0.push_back(poly0[0]);
+    poly1.push_back(poly1[0]);
+    features.push_back(poly0);
+    features.push_back(poly1);
+
+    return features;
+  };
 
   private:
   const std::shared_ptr<loom::Polygon2D> poly_;
