@@ -1,57 +1,38 @@
-#define CGAL_MESH_3_VERBOSE 1
-
-#include "generate.hpp"
+#include "generate_poly.hpp"
 
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
-
 #include <CGAL/Mesh_triangulation_3.h>
 #include <CGAL/Mesh_complex_3_in_triangulation_3.h>
 #include <CGAL/Mesh_criteria_3.h>
-
-#include <CGAL/Implicit_mesh_domain_3.h>
-#include <CGAL/Mesh_domain_with_polyline_features_3.h>
+#include <CGAL/Polyhedral_mesh_domain_3.h>
 #include <CGAL/make_mesh_3.h>
+#include <CGAL/refine_mesh_3.h>
+
+// IO
+#include <CGAL/IO/Polyhedron_iostream.h>
 
 namespace loom {
 
-typedef CGAL::Mesh_domain_with_polyline_features_3<
-  CGAL::Implicit_mesh_domain_3<DomainBase,K>
-  >
-  Mesh_domain;
+// Domain
+typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
+typedef CGAL::Polyhedron_3<K> Polyhedron;
+typedef CGAL::Polyhedral_mesh_domain_3<Polyhedron, K> Mesh_domain;
 
 // Triangulation
 typedef CGAL::Mesh_triangulation_3<Mesh_domain>::type Tr;
+
 typedef CGAL::Mesh_complex_3_in_triangulation_3<Tr> C3t3;
 
-// Mesh Criteria
+// Criteria
 typedef CGAL::Mesh_criteria_3<Tr> Mesh_criteria;
-typedef Mesh_criteria::Facet_criteria Facet_criteria;
-typedef Mesh_criteria::Cell_criteria Cell_criteria;
 
-// translate vector<vector<vector<double>> to list<vector<Point_3>>
-std::list<std::vector<K::Point_3>>
-translate_feature_edges(
-    const std::vector<std::vector<std::vector<double>>> & feature_edges
-    )
-{
-  std::list<std::vector<K::Point_3>> polylines;
-  for (const auto & feature_edge: feature_edges) {
-    std::vector<K::Point_3> polyline;
-    for (const auto & point: feature_edge) {
-      polyline.push_back(K::Point_3(point[0], point[1], point[2]));
-    }
-    polylines.push_back(polyline);
-  }
-  return polylines;
-}
+// To avoid verbose function and named parameters call
+using namespace CGAL::parameters;
 
 void
-generate_mesh(
-    const std::shared_ptr<loom::DomainBase> & domain,
+generate_poly(
+    const std::string & infile,
     const std::string & outfile,
-    const std::vector<std::vector<std::vector<double>>> & feature_edges,
-    const double bounding_sphere_radius,
-    const double boundary_precision,
     const bool lloyd,
     const bool odt,
     const bool perturb,
@@ -65,22 +46,21 @@ generate_mesh(
     const bool verbose
     )
 {
-  const double bounding_sphere_radius2 = bounding_sphere_radius > 0 ?
-    bounding_sphere_radius*bounding_sphere_radius :
-    domain->get_bounding_sphere_squared_radius();
+  // Create input polyhedron
+  Polyhedron polyhedron;
+  std::ifstream input(infile);
+  input >> polyhedron;
+  if (!input.good()) {
+    std::stringstream msg;
+    msg << "Cannot read input file \"" << infile << "\"" << std::endl;
+    throw std::runtime_error(msg.str());
+  }
+  input.close();
 
-  Mesh_domain cgal_domain(
-      *domain,
-      K::Sphere_3(CGAL::ORIGIN, bounding_sphere_radius2),
-      boundary_precision
-      );
+  // Create domain
+  Mesh_domain cgal_domain(polyhedron);
 
-  const auto native_features = translate_feature_edges(domain->get_features());
-  cgal_domain.add_features(native_features.begin(), native_features.end());
-
-  const auto polylines = translate_feature_edges(feature_edges);
-  cgal_domain.add_features(polylines.begin(), polylines.end());
-
+  // Mesh criteria
   Mesh_criteria criteria(
       CGAL::parameters::edge_size=edge_size,
       CGAL::parameters::facet_angle=facet_angle,
@@ -111,6 +91,14 @@ generate_mesh(
   std::ofstream medit_file(outfile);
   c3t3.output_to_medit(medit_file);
   medit_file.close();
+
+  // // Set tetrahedron size (keep cell_radius_edge_ratio), ignore facets
+  // Mesh_criteria new_criteria(cell_radius_edge_ratio=3, cell_size=0.03);
+  // // Mesh refinement
+  // CGAL::refine_mesh_3(c3t3, domain, new_criteria);
+  // // Output
+  // medit_file.open("out_2.mesh");
+  // c3t3.output_to_medit(medit_file);
 
   return;
 }

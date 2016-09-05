@@ -1,19 +1,15 @@
-#ifndef GENERATE_HPP
-#define GENERATE_HPP
+#ifndef GENERATE_POLY_HPP
+#define GENERATE_POLY_HPP
 
-#include "domain.hpp"
-
-#include <memory>
 #include <string>
+#include <vector>
 
 namespace loom {
 
-void generate_mesh(
-    const std::shared_ptr<loom::DomainBase> & domain,
+void
+generate_poly(
+    const std::string & infile,
     const std::string & outfile,
-    const std::vector<std::vector<std::vector<double>>> & feature_edges = {},
-    const double bounding_sphere_radius = 0.0,
-    const double boundary_precision = 1.0e-4,
     const bool lloyd = false,
     const bool odt = false,
     const bool perturb = true,
@@ -29,4 +25,4 @@ void generate_mesh(
 
 } // namespace loom
 
-#endif // GENERATE_HPP
+#endif // GENERATE_POLY_HPP

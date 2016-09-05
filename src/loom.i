@@ -3,6 +3,7 @@
 %{
 #define SWIG_FILE_WITH_INIT
 #include "generate.hpp"
+#include "generate_poly.hpp"
 #include "domain.hpp"
 #include "primitives.hpp"
 %}
@@ -40,5 +41,6 @@ namespace std {
 }
 
 %include "generate.hpp"
+%include "generate_poly.hpp"
 %include "domain.hpp"
 %include "primitives.hpp"
