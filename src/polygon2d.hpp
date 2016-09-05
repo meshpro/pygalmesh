@@ -60,11 +60,13 @@ class Extrude: public loom::DomainBase {
   Extrude(
       const std::shared_ptr<loom::Polygon2D> & poly,
       const std::vector<double> & direction,
-      const double alpha = 0.0
+      const double alpha = 0.0,
+      const double edge_size = 0.0
       ):
     poly_(poly),
     direction_(direction),
-    alpha_(alpha)
+    alpha_(alpha),
+    edge_size_(edge_size)
   {
     assert(direction_.size() == 3);
   }
@@ -177,14 +179,51 @@ class Extrude: public loom::DomainBase {
       }
     });
 
-    // // features connecting the top and bottom
-    // for (const auto & pt: poly_->points) {
-    //   std::vector<std::vector<double>> line = {
-    //     {pt.x(), pt.y(), 0.0},
-    //     {pt.x() + direction_[0], pt.y() + direction_[1], direction_[2]}
-    //   };
-    //   features.push_back(line);
-    // }
+    // features connecting the top and bottom
+    if (alpha_ == 0) {
+      for (const auto & pt: poly_->points) {
+        std::vector<std::vector<double>> line = {
+          {pt.x(), pt.y(), 0.0},
+          {pt.x() + direction_[0], pt.y() + direction_[1], direction_[2]}
+        };
+        features.push_back(line);
+      }
+    } else {
+      // Alright, we need to chop the lines on which the polygon corners are
+      // sitting into pieces. How long? About edge_size. For the starting point
+      // (x0, y0, z0) height h and angle alpha, the lines are given by
+      //
+      // f(beta) = (
+      //   cos(alpha*beta) x0 - sin(alpha*beta) y0,
+      //   sin(alpha*beta) x0 + cos(alpha*beta) y0,
+      //   z0 + beta * h
+      //   )
+      //
+      // with beta in [0, 1]. The length from beta0 till beta1 is then
+      //
+      //  l = sqrt(alpha^2 (x0^2 + y0^2) + h^2) * (beta1 - beta0).
+      //
+      const double height = direction_[2];
+      for (const auto & pt: poly_->points) {
+        const double l = sqrt(alpha_*alpha_ * (pt.x()*pt.x() + pt.y()*pt.y()) + height*height);
+        assert(edge_size_ > 0.0);
+        const size_t n = int(l / edge_size_ - 0.5) + 1;
+        std::vector<std::vector<double>> line = {
+          {pt.x(), pt.y(), 0.0},
+        };
+        for (size_t i=0; i < n; i++) {
+          const double beta = double(i+1) / n;
+          const double sinAB = sin(alpha_*beta);
+          const double cosAB = cos(alpha_*beta);
+          line.push_back({
+              cosAB * pt.x() - sinAB * pt.y(),
+              sinAB * pt.x() + cosAB * pt.y(),
+              beta * height
+              });
+        }
+        features.push_back(line);
+      }
+    }
 
     return features;
   };
@@ -193,6 +232,7 @@ class Extrude: public loom::DomainBase {
   const std::shared_ptr<loom::Polygon2D> poly_;
   const std::vector<double> direction_;
   const double alpha_;
+  const double edge_size_;
 };
 
 } // namespace loom

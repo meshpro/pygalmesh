@@ -628,27 +628,28 @@ def test_off():
 
 def test_extrude_rotate():
     p = loom.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
-    domain = loom.Extrude(p, [0.0, 0.0, 1.0], 0.5 * 3.14159265359)
+    edge_size = 0.1
+    domain = loom.Extrude(p, [0.0, 0.0, 1.0], 0.5 * 3.14159265359, edge_size)
     loom.generate_mesh(
             domain,
             'out.mesh',
-            cell_size=0.04,
-            edge_size=0.1,
-            verbose=True
+            cell_size=0.1,
+            edge_size=edge_size,
+            verbose=False
             )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
-    # tol = 1.0e-3
-    # assert abs(max(vertices[:, 0]) - 0.5) < tol
-    # assert abs(min(vertices[:, 0]) + 0.5) < tol
-    # assert abs(max(vertices[:, 1]) - 0.8) < tol
-    # assert abs(min(vertices[:, 1]) + 0.3) < tol
-    # assert abs(max(vertices[:, 2]) - 1.0) < tol
-    # assert abs(min(vertices[:, 2]) + 0.0) < tol
+    tol = 1.0e-3
+    assert abs(max(vertices[:, 0]) - 0.583012701892) < tol
+    assert abs(min(vertices[:, 0]) + 0.5) < tol
+    assert abs(max(vertices[:, 1]) - 0.5) < tol
+    assert abs(min(vertices[:, 1]) + 0.583012701892) < tol
+    assert abs(max(vertices[:, 2]) - 1.0) < tol
+    assert abs(min(vertices[:, 2]) + 0.0) < tol
 
-    # vol = sum(compute_volumes(vertices, cells['tetra']))
-    # assert abs(vol - 0.4) < tol
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    assert abs(vol - 0.4) < 0.05
 
     return
 
