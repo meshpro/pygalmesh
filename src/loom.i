@@ -16,6 +16,7 @@
 
 %shared_ptr(loom::Extrude);
 %shared_ptr(loom::Polygon2D);
+%shared_ptr(loom::ring_extrude);
 
 %shared_ptr(loom::Rotate);
 %shared_ptr(loom::Scale);

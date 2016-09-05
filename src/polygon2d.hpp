@@ -235,6 +235,75 @@ class Extrude: public loom::DomainBase {
   const double edge_size_;
 };
 
+
+class ring_extrude: public loom::DomainBase {
+  public:
+  ring_extrude(
+      const std::shared_ptr<loom::Polygon2D> & poly,
+      const double edge_size
+      ):
+    poly_(poly),
+    edge_size_(edge_size)
+  {
+    assert(edge_size > 0.0);
+  }
+
+  virtual ~ring_extrude() = default;
+
+  virtual
+  double
+  eval(const std::vector<double> & x) const
+  {
+    const double r = sqrt(x[0]*x[0] + x[1]*x[1]);
+    const double z = x[2];
+
+    return poly_->is_inside({r, z}) ? -1.0 : 1.0;
+  }
+
+  virtual
+  double
+  get_bounding_sphere_squared_radius() const
+  {
+    double max = 0.0;
+    for (const auto & pt: poly_->points) {
+      const double nrm1 = pt.x()*pt.x() + pt.y()*pt.y();
+      if (nrm1 > max) {
+        max = nrm1;
+      }
+    }
+    return max;
+  }
+
+  virtual
+  std::vector<std::vector<std::vector<double>>>
+  get_features() const
+  {
+    std::vector<std::vector<std::vector<double>>> features = {};
+
+    for (const auto & pt: poly_->points) {
+      const double r = pt.x();
+      const double circ = 2 * 3.14159265359 * r;
+      const size_t n = int(circ / edge_size_ - 0.5) + 1;
+      std::vector<std::vector<double>> line;
+      for (size_t i=0; i < n; i++) {
+        const double alpha = (2 * 3.14159265359 * i) / n;
+        line.push_back({
+          r * cos(alpha),
+          r * sin(alpha),
+          pt.y()
+        });
+      }
+      line.push_back(line.front());
+      features.push_back(line);
+    }
+    return features;
+  }
+
+  private:
+  const std::shared_ptr<loom::Polygon2D> poly_;
+  const double edge_size_;
+};
+
 } // namespace loom
 
 #endif // POLYGON2D_HPP
