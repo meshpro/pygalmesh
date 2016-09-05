@@ -28,5 +28,5 @@ install:
 
 script:
   - cd test
-  - wget https://raw.githubusercontent.com/libigl/libigl-unit-tests/master/data/elephant.off
+  - curl https://raw.githubusercontent.com/libigl/libigl-unit-tests/master/data/elephant.off > elephant.off
   - nosetests
