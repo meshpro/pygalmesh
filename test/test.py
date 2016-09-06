@@ -682,5 +682,34 @@ def test_ring_extrude():
     return
 
 
+def test_heart():
+    class Heart(loom.DomainBase):
+        def __init__(self, edge_size):
+            super(Heart, self).__init__()
+            return
+
+        def eval(self, x):
+            return (x[0]**2 + 9.0/4.0 * x[1]**2 + x[2]**2 - 1)**3 \
+                - x[0]**2 * x[2]**3 - 9.0/80.0 * x[1]**2 * x[2]**3
+
+        def get_bounding_sphere_squared_radius(self):
+            return 10.0
+
+    edge_size = 0.1
+    d = Heart(edge_size)
+
+    loom.generate_mesh(
+            d,
+            'out.mesh',
+            cell_size=0.1,
+            edge_size=edge_size,
+            odt=True,
+            lloyd=True,
+            verbose=True
+            )
+
+    return
+
+
 if __name__ == '__main__':
-    test_ring_extrude()
+    test_heart()
