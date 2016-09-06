@@ -1,10 +1,8 @@
 #ifndef DOMAIN_HPP
 #define DOMAIN_HPP
 
-#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <Eigen/Dense>
-
-typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
+#include <memory>
 
 namespace loom {
 
@@ -17,13 +15,6 @@ class DomainBase
   virtual
   double
   eval(const std::vector<double> & x) const = 0;
-
-  virtual
-  K::FT
-  operator()(K::Point_3 p) const
-  {
-    return this->eval({p.x(), p.y(), p.z()});
-  }
 
   virtual
   double
@@ -78,10 +69,12 @@ class Translate: public loom::DomainBase
   double
   eval(const std::vector<double> & x) const
   {
-    const Eigen::Vector3d p_vec(x.data());
-    const Eigen::Vector3d p2 = p_vec - direction_;
-    const auto pt2 = K::Point_3(p2[0], p2[1], p2[2]);
-    return domain_->operator()(pt2);
+    const std::vector<double> d = {
+      x[0] - direction_[0],
+      x[1] - direction_[1],
+      x[2] - direction_[2]
+    };
+    return domain_->eval(d);
   }
 
   virtual
@@ -156,8 +149,8 @@ class Rotate: public loom::DomainBase
         -sinAngle_,
         cosAngle_
         );
-    const auto pt2 = K::Point_3(p2[0], p2[1], p2[2]);
-    return domain_->operator()(pt2);
+    const std::vector<double> pt2 = {p2[0], p2[1], p2[2]};
+    return domain_->eval(pt2);
   }
 
   std::vector<std::vector<std::vector<double>>>

@@ -703,9 +703,9 @@ def test_heart():
             'out.mesh',
             cell_size=0.1,
             edge_size=edge_size,
-            odt=True,
-            lloyd=True,
-            verbose=True
+            # odt=True,
+            # lloyd=True,
+            # verbose=True
             )
 
     return

@@ -14,8 +14,32 @@
 
 namespace loom {
 
+typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
+
+// Wrapper for DomainBase for translating to K::Point_3/FT.
+class CgalDomainWrapper
+{
+  public:
+  explicit CgalDomainWrapper(const std::shared_ptr<DomainBase> & domain):
+    domain_(domain)
+  {
+  }
+
+  virtual ~CgalDomainWrapper() = default;
+
+  virtual
+  K::FT
+  operator()(K::Point_3 p) const
+  {
+    return domain_->eval({p.x(), p.y(), p.z()});
+  }
+
+  private:
+  const std::shared_ptr<DomainBase> domain_;
+};
+
 typedef CGAL::Mesh_domain_with_polyline_features_3<
-  CGAL::Implicit_mesh_domain_3<DomainBase,K>
+  CGAL::Implicit_mesh_domain_3<CgalDomainWrapper,K>
   >
   Mesh_domain;
 
@@ -69,8 +93,9 @@ generate_mesh(
     bounding_sphere_radius*bounding_sphere_radius :
     domain->get_bounding_sphere_squared_radius();
 
+  const auto d = CgalDomainWrapper(domain);
   Mesh_domain cgal_domain(
-      *domain,
+      d,
       K::Sphere_3(CGAL::ORIGIN, bounding_sphere_radius2),
       boundary_precision
       );
