@@ -2,6 +2,7 @@
 #define DOMAIN_HPP
 
 #include <Eigen/Dense>
+#include <array>
 #include <memory>
 
 namespace loom {
@@ -14,14 +15,14 @@ class DomainBase
 
   virtual
   double
-  eval(const std::vector<double> & x) const = 0;
+  eval(const std::array<double, 3> & x) const = 0;
 
   virtual
   double
   get_bounding_sphere_squared_radius() const = 0;
 
   virtual
-  std::vector<std::vector<std::vector<double>>>
+  std::vector<std::vector<std::array<double, 3>>>
   get_features() const
   {
     return {};
@@ -33,7 +34,7 @@ class Translate: public loom::DomainBase
   public:
   Translate(
       const std::shared_ptr<const loom::DomainBase> & domain,
-      const std::vector<double> & direction
+      const std::array<double, 3> & direction
       ):
     domain_(domain),
     direction_(Eigen::Vector3d(direction.data())),
@@ -43,17 +44,17 @@ class Translate: public loom::DomainBase
 
   virtual ~Translate() = default;
 
-  std::vector<std::vector<std::vector<double>>>
+  std::vector<std::vector<std::array<double, 3>>>
   translate_features(
-      const std::vector<std::vector<std::vector<double>>> & features,
+      const std::vector<std::vector<std::array<double, 3>>> & features,
       const Eigen::Vector3d & direction
       ) const
   {
-    std::vector<std::vector<std::vector<double>>> translated_features;
+    std::vector<std::vector<std::array<double, 3>>> translated_features;
     for (const auto & feature: features) {
-      std::vector<std::vector<double>> translated_feature;
+      std::vector<std::array<double, 3>> translated_feature;
       for (const auto & point: feature) {
-        const std::vector<double> translated_point = {
+        const std::array<double, 3> translated_point = {
           point[0] + direction[0],
           point[1] + direction[1],
           point[2] + direction[2]
@@ -67,9 +68,9 @@ class Translate: public loom::DomainBase
 
   virtual
   double
-  eval(const std::vector<double> & x) const
+  eval(const std::array<double, 3> & x) const
   {
-    const std::vector<double> d = {
+    const std::array<double, 3> d = {
       x[0] - direction_[0],
       x[1] - direction_[1],
       x[2] - direction_[2]
@@ -87,7 +88,7 @@ class Translate: public loom::DomainBase
   }
 
   virtual
-  std::vector<std::vector<std::vector<double>>>
+  std::vector<std::vector<std::array<double, 3>>>
   get_features() const
   {
     return translated_features_;
@@ -96,7 +97,7 @@ class Translate: public loom::DomainBase
   private:
     const std::shared_ptr<const loom::DomainBase> domain_;
     const Eigen::Vector3d direction_;
-    const std::vector<std::vector<std::vector<double>>> translated_features_;
+    const std::vector<std::vector<std::array<double, 3>>> translated_features_;
 };
 
 class Rotate: public loom::DomainBase
@@ -104,7 +105,7 @@ class Rotate: public loom::DomainBase
   public:
   Rotate(
       const std::shared_ptr<const loom::DomainBase> & domain,
-      const std::vector<double> & axis,
+      const std::array<double, 3> & axis,
       const double angle
       ):
     domain_(domain),
@@ -140,7 +141,7 @@ class Rotate: public loom::DomainBase
 
   virtual
   double
-  eval(const std::vector<double> & x) const
+  eval(const std::array<double, 3> & x) const
   {
     // rotate with negative angle
     const auto p2 = rotate(
@@ -149,18 +150,17 @@ class Rotate: public loom::DomainBase
         -sinAngle_,
         cosAngle_
         );
-    const std::vector<double> pt2 = {p2[0], p2[1], p2[2]};
-    return domain_->eval(pt2);
+    return domain_->eval({p2[0], p2[1], p2[2]});
   }
 
-  std::vector<std::vector<std::vector<double>>>
+  std::vector<std::vector<std::array<double, 3>>>
   rotate_features(
-      const std::vector<std::vector<std::vector<double>>> & features
+      const std::vector<std::vector<std::array<double, 3>>> & features
       ) const
   {
-    std::vector<std::vector<std::vector<double>>> rotated_features;
+    std::vector<std::vector<std::array<double, 3>>> rotated_features;
     for (const auto & feature: features) {
-      std::vector<std::vector<double>> rotated_feature;
+      std::vector<std::array<double, 3>> rotated_feature;
       for (const auto & point: feature) {
         const auto p2 = rotate(
             Eigen::Vector3d(point.data()),
@@ -183,7 +183,7 @@ class Rotate: public loom::DomainBase
   }
 
   virtual
-  std::vector<std::vector<std::vector<double>>>
+  std::vector<std::vector<std::array<double, 3>>>
   get_features() const
   {
     return rotated_features_;
@@ -194,7 +194,7 @@ class Rotate: public loom::DomainBase
     const Eigen::Vector3d normalized_axis_;
     const double sinAngle_;
     const double cosAngle_;
-    const std::vector<std::vector<std::vector<double>>> rotated_features_;
+    const std::vector<std::vector<std::array<double, 3>>> rotated_features_;
 };
 
 class Scale: public loom::DomainBase
@@ -215,7 +215,7 @@ class Scale: public loom::DomainBase
 
   virtual
   double
-  eval(const std::vector<double> & x) const
+  eval(const std::array<double, 3> & x) const
   {
     return domain_->eval({x[0]/alpha_, x[1]/alpha_, x[2]/alpha_});
   }
@@ -227,14 +227,14 @@ class Scale: public loom::DomainBase
     return alpha_*alpha_ * domain_->get_bounding_sphere_squared_radius();
   }
 
-  std::vector<std::vector<std::vector<double>>>
+  std::vector<std::vector<std::array<double, 3>>>
   scale_features(
-      const std::vector<std::vector<std::vector<double>>> & features
+      const std::vector<std::vector<std::array<double, 3>>> & features
       ) const
   {
-    std::vector<std::vector<std::vector<double>>> scaled_features;
+    std::vector<std::vector<std::array<double, 3>>> scaled_features;
     for (const auto & feature: features) {
-      std::vector<std::vector<double>> scaled_feature;
+      std::vector<std::array<double, 3>> scaled_feature;
       for (const auto & point: feature) {
         scaled_feature.push_back({
             alpha_ * point[0],
@@ -248,7 +248,7 @@ class Scale: public loom::DomainBase
   }
 
   virtual
-  std::vector<std::vector<std::vector<double>>>
+  std::vector<std::vector<std::array<double, 3>>>
   get_features() const
   {
     return scaled_features_;
@@ -257,7 +257,7 @@ class Scale: public loom::DomainBase
   private:
     std::shared_ptr<const loom::DomainBase> domain_;
     const double alpha_;
-    const std::vector<std::vector<std::vector<double>>> scaled_features_;
+    const std::vector<std::vector<std::array<double, 3>>> scaled_features_;
 };
 
 class Stretch: public loom::DomainBase
@@ -265,7 +265,7 @@ class Stretch: public loom::DomainBase
   public:
   Stretch(
       std::shared_ptr<const loom::DomainBase> & domain,
-      const std::vector<double> & direction
+      const std::array<double, 3> & direction
       ):
     domain_(domain),
     normalized_direction_(Eigen::Vector3d(direction.data()).normalized()),
@@ -279,7 +279,7 @@ class Stretch: public loom::DomainBase
 
   virtual
   double
-  eval(const std::vector<double> & x) const
+  eval(const std::array<double, 3> & x) const
   {
     const Eigen::Vector3d v(x.data());
     const double beta = normalized_direction_.dot(v);
@@ -296,14 +296,14 @@ class Stretch: public loom::DomainBase
     return alpha_*alpha_ * domain_->get_bounding_sphere_squared_radius();
   }
 
-  std::vector<std::vector<std::vector<double>>>
+  std::vector<std::vector<std::array<double, 3>>>
   stretch_features(
-      const std::vector<std::vector<std::vector<double>>> & features
+      const std::vector<std::vector<std::array<double, 3>>> & features
       ) const
   {
-    std::vector<std::vector<std::vector<double>>> stretched_features;
+    std::vector<std::vector<std::array<double, 3>>> stretched_features;
     for (const auto & feature: features) {
-      std::vector<std::vector<double>> stretched_feature;
+      std::vector<std::array<double, 3>> stretched_feature;
       for (const auto & point: feature) {
         // scale the component of normalized_direction_ by alpha_
         const Eigen::Vector3d v(point.data());
@@ -318,7 +318,7 @@ class Stretch: public loom::DomainBase
   }
 
   virtual
-  std::vector<std::vector<std::vector<double>>>
+  std::vector<std::vector<std::array<double, 3>>>
   get_features() const
   {
     return stretched_features_;
@@ -328,7 +328,7 @@ class Stretch: public loom::DomainBase
     std::shared_ptr<const loom::DomainBase> domain_;
     const Eigen::Vector3d normalized_direction_;
     const double alpha_;
-    const std::vector<std::vector<std::vector<double>>> stretched_features_;
+    const std::vector<std::vector<std::array<double, 3>>> stretched_features_;
 };
 
 class Intersection: public loom::DomainBase
@@ -345,7 +345,7 @@ class Intersection: public loom::DomainBase
 
   virtual
   double
-  eval(const std::vector<double> & x) const
+  eval(const std::array<double, 3> & x) const
   {
     for (const auto & domain: domains_) {
       if (domain->eval(x) > 0.0) {
@@ -367,10 +367,10 @@ class Intersection: public loom::DomainBase
   }
 
   virtual
-  std::vector<std::vector<std::vector<double>>>
+  std::vector<std::vector<std::array<double, 3>>>
   get_features() const
   {
-    std::vector<std::vector<std::vector<double>>> features;
+    std::vector<std::vector<std::array<double, 3>>> features;
     for (const auto & domain: domains_) {
       const auto f = domain->get_features();
       features.insert(std::end(features), std::begin(f), std::end(f));
@@ -396,7 +396,7 @@ class Union: public loom::DomainBase
 
   virtual
   double
-  eval(const std::vector<double> & x) const
+  eval(const std::array<double, 3> & x) const
   {
     for (const auto & domain: domains_) {
       if (domain->eval(x) < 0.0) {
@@ -418,10 +418,10 @@ class Union: public loom::DomainBase
   }
 
   virtual
-  std::vector<std::vector<std::vector<double>>>
+  std::vector<std::vector<std::array<double, 3>>>
   get_features() const
   {
-    std::vector<std::vector<std::vector<double>>> features;
+    std::vector<std::vector<std::array<double, 3>>> features;
     for (const auto & domain: domains_) {
       const auto f = domain->get_features();
       features.insert(std::end(features), std::begin(f), std::end(f));
@@ -449,7 +449,7 @@ class Difference: public loom::DomainBase
 
   virtual
   double
-  eval(const std::vector<double> & x) const
+  eval(const std::array<double, 3> & x) const
   {
     return (domain0_->eval(x) < 0.0 && domain1_->eval(x) >= 0.0) ?
         -1.0 :
@@ -464,10 +464,10 @@ class Difference: public loom::DomainBase
   }
 
   virtual
-  std::vector<std::vector<std::vector<double>>>
+  std::vector<std::vector<std::array<double, 3>>>
   get_features() const
   {
-    std::vector<std::vector<std::vector<double>>> features;
+    std::vector<std::vector<std::array<double, 3>>> features;
 
     const auto f0 = domain0_->get_features();
     features.insert(std::end(features), std::begin(f0), std::end(f0));

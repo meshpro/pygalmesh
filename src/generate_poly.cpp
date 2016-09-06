@@ -92,14 +92,6 @@ generate_poly(
   c3t3.output_to_medit(medit_file);
   medit_file.close();
 
-  // // Set tetrahedron size (keep cell_radius_edge_ratio), ignore facets
-  // Mesh_criteria new_criteria(cell_radius_edge_ratio=3, cell_size=0.03);
-  // // Mesh refinement
-  // CGAL::refine_mesh_3(c3t3, domain, new_criteria);
-  // // Output
-  // medit_file.open("out_2.mesh");
-  // c3t3.output_to_medit(medit_file);
-
   return;
 }
 

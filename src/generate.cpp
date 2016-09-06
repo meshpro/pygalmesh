@@ -52,10 +52,10 @@ typedef CGAL::Mesh_criteria_3<Tr> Mesh_criteria;
 typedef Mesh_criteria::Facet_criteria Facet_criteria;
 typedef Mesh_criteria::Cell_criteria Cell_criteria;
 
-// translate vector<vector<vector<double>> to list<vector<Point_3>>
+// translate vector<vector<array<double, 3>> to list<vector<Point_3>>
 std::list<std::vector<K::Point_3>>
 translate_feature_edges(
-    const std::vector<std::vector<std::vector<double>>> & feature_edges
+    const std::vector<std::vector<std::array<double, 3>>> & feature_edges
     )
 {
   std::list<std::vector<K::Point_3>> polylines;
@@ -73,7 +73,7 @@ void
 generate_mesh(
     const std::shared_ptr<loom::DomainBase> & domain,
     const std::string & outfile,
-    const std::vector<std::vector<std::vector<double>>> & feature_edges,
+    const std::vector<std::vector<std::array<double, 3>>> & feature_edges,
     const double bounding_sphere_radius,
     const double boundary_precision,
     const bool lloyd,

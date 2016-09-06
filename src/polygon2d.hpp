@@ -5,6 +5,7 @@
 
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Polygon_2_algorithms.h>
+#include <array>
 #include <memory>
 #include <vector>
 
@@ -14,7 +15,7 @@ namespace loom {
 
 class Polygon2D {
   public:
-  explicit Polygon2D(const std::vector<std::vector<double>> & _points):
+  explicit Polygon2D(const std::vector<std::array<double, 2>> & _points):
     points(vector_to_cgal_points(_points))
   {
   }
@@ -22,7 +23,7 @@ class Polygon2D {
   virtual ~Polygon2D() = default;
 
   std::vector<K::Point_2>
-  vector_to_cgal_points(const std::vector<std::vector<double>> & _points) const
+  vector_to_cgal_points(const std::vector<std::array<double, 2>> & _points) const
   {
     std::vector<K::Point_2> points2(_points.size());
     for (size_t i = 0; i < _points.size(); i++) {
@@ -33,9 +34,8 @@ class Polygon2D {
   }
 
   bool
-  is_inside(const std::vector<double> & point)
+  is_inside(const std::array<double, 2> & point)
   {
-    assert(point.size() == 2);
     K::Point_2 pt(point[0], point[1]);
     switch(CGAL::bounded_side_2(this->points.begin(), this->points.end(), pt, K())) {
       case CGAL::ON_BOUNDED_SIDE:
@@ -59,7 +59,7 @@ class Extrude: public loom::DomainBase {
   public:
   Extrude(
       const std::shared_ptr<loom::Polygon2D> & poly,
-      const std::vector<double> & direction,
+      const std::array<double, 3> & direction,
       const double alpha = 0.0,
       const double edge_size = 0.0
       ):
@@ -68,14 +68,13 @@ class Extrude: public loom::DomainBase {
     alpha_(alpha),
     edge_size_(edge_size)
   {
-    assert(direction_.size() == 3);
   }
 
   virtual ~Extrude() = default;
 
   virtual
   double
-  eval(const std::vector<double> & x) const
+  eval(const std::array<double, 3> & x) const
   {
     if (x[2] < 0.0 || x[2] > direction_[2]) {
       return 1.0;
@@ -83,13 +82,13 @@ class Extrude: public loom::DomainBase {
 
     const double beta = x[2] / direction_[2];
 
-    std::vector<double> x2 = {
+    std::array<double, 2> x2 = {
       x[0] - beta * direction_[0],
       x[1] - beta * direction_[1]
     };
 
     if (alpha_ != 0.0) {
-      std::vector<double> x3(2);
+      std::array<double, 2> x3;
       // turn by -beta*alpha
       const double sinAlpha = sin(beta*alpha_);
       const double cosAlpha = cos(beta*alpha_);
@@ -128,10 +127,10 @@ class Extrude: public loom::DomainBase {
   }
 
   virtual
-  std::vector<std::vector<std::vector<double>>>
+  std::vector<std::vector<std::array<double, 3>>>
   get_features() const
   {
-    std::vector<std::vector<std::vector<double>>> features = {};
+    std::vector<std::vector<std::array<double, 3>>> features = {};
 
     size_t n;
 
@@ -182,7 +181,7 @@ class Extrude: public loom::DomainBase {
     // features connecting the top and bottom
     if (alpha_ == 0) {
       for (const auto & pt: poly_->points) {
-        std::vector<std::vector<double>> line = {
+        std::vector<std::array<double, 3>> line = {
           {pt.x(), pt.y(), 0.0},
           {pt.x() + direction_[0], pt.y() + direction_[1], direction_[2]}
         };
@@ -208,7 +207,7 @@ class Extrude: public loom::DomainBase {
         const double l = sqrt(alpha_*alpha_ * (pt.x()*pt.x() + pt.y()*pt.y()) + height*height);
         assert(edge_size_ > 0.0);
         const size_t n = int(l / edge_size_ - 0.5) + 1;
-        std::vector<std::vector<double>> line = {
+        std::vector<std::array<double, 3>> line = {
           {pt.x(), pt.y(), 0.0},
         };
         for (size_t i=0; i < n; i++) {
@@ -230,7 +229,7 @@ class Extrude: public loom::DomainBase {
 
   private:
   const std::shared_ptr<loom::Polygon2D> poly_;
-  const std::vector<double> direction_;
+  const std::array<double, 3> direction_;
   const double alpha_;
   const double edge_size_;
 };
@@ -252,7 +251,7 @@ class ring_extrude: public loom::DomainBase {
 
   virtual
   double
-  eval(const std::vector<double> & x) const
+  eval(const std::array<double, 3> & x) const
   {
     const double r = sqrt(x[0]*x[0] + x[1]*x[1]);
     const double z = x[2];
@@ -275,16 +274,16 @@ class ring_extrude: public loom::DomainBase {
   }
 
   virtual
-  std::vector<std::vector<std::vector<double>>>
+  std::vector<std::vector<std::array<double, 3>>>
   get_features() const
   {
-    std::vector<std::vector<std::vector<double>>> features = {};
+    std::vector<std::vector<std::array<double, 3>>> features = {};
 
     for (const auto & pt: poly_->points) {
       const double r = pt.x();
       const double circ = 2 * 3.14159265359 * r;
       const size_t n = int(circ / edge_size_ - 0.5) + 1;
-      std::vector<std::vector<double>> line;
+      std::vector<std::array<double, 3>> line;
       for (size_t i=0; i < n; i++) {
         const double alpha = (2 * 3.14159265359 * i) / n;
         line.push_back({

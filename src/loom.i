@@ -38,11 +38,13 @@
 // http://stackoverflow.com/a/39273055/353337
 %feature("director") loom::DomainBase;
 
+%include <std_array.i>
 %include <std_vector.i>
 namespace std {
-%template(Vector3d) vector<double>;
-%template(Polyline) vector<vector<double>>;
-%template(ListOfPolylines) vector<vector<vector<double>>>;
+%template(Vector2d) array<double, 2>;
+%template(Vector3d) array<double, 3>;
+%template(Polyline) vector<array<double, 3>>;
+%template(ListOfPolylines) vector<vector<array<double, 3>>>;
 %template(ListOfDomains) vector<shared_ptr<const loom::DomainBase>>;
 }
 

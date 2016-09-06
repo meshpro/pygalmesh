@@ -12,7 +12,7 @@ class Ball: public loom::DomainBase
 {
   public:
     Ball(
-        const std::vector<double> & x0,
+        const std::array<double, 3> & x0,
         const double radius
         ):
       x0_(x0),
@@ -25,7 +25,7 @@ class Ball: public loom::DomainBase
 
     virtual
     double
-    eval(const std::vector<double> & x) const
+    eval(const std::array<double, 3> & x) const
     {
       const double xx0 = x[0] - x0_[0];
       const double yy0 = x[1] - x0_[1];
@@ -42,7 +42,7 @@ class Ball: public loom::DomainBase
     }
 
   private:
-    const std::vector<double> x0_;
+    const std::array<double, 3> x0_;
     const double radius_;
 };
 
@@ -51,8 +51,8 @@ class Cuboid: public loom::DomainBase
 {
   public:
     Cuboid(
-        const std::vector<double> & x0,
-        const std::vector<double> & x1
+        const std::array<double, 3> & x0,
+        const std::array<double, 3> & x1
         ):
       x0_(x0),
       x1_(x1)
@@ -63,7 +63,7 @@ class Cuboid: public loom::DomainBase
 
     virtual
     double
-    eval(const std::vector<double> & x) const
+    eval(const std::array<double, 3> & x) const
     {
       return (
           x0_[0] < x[0] && x[0] < x1_[0] &&
@@ -82,10 +82,10 @@ class Cuboid: public loom::DomainBase
     }
 
     virtual
-    std::vector<std::vector<std::vector<double>>>
+    std::vector<std::vector<std::array<double, 3>>>
     get_features() const
     {
-      std::vector<std::vector<double>> corners = {
+      std::vector<std::array<double, 3>> corners = {
         {x0_[0], x0_[1], x0_[2]},
         {x1_[0], x0_[1], x0_[2]},
         {x0_[0], x1_[1], x0_[2]},
@@ -112,8 +112,8 @@ class Cuboid: public loom::DomainBase
     };
 
   private:
-    const std::vector<double> x0_;
-    const std::vector<double> x1_;
+    const std::array<double, 3> x0_;
+    const std::array<double, 3> x1_;
 };
 
 
@@ -121,7 +121,7 @@ class Ellipsoid: public loom::DomainBase
 {
   public:
     Ellipsoid(
-        const std::vector<double> & x0,
+        const std::array<double, 3> & x0,
         const double a0,
         const double a1,
         const double a2
@@ -137,7 +137,7 @@ class Ellipsoid: public loom::DomainBase
 
     virtual
     double
-    eval(const std::vector<double> & x) const
+    eval(const std::array<double, 3> & x) const
     {
       const double xx0 = x[0] - x0_[0];
       const double yy0 = x[1] - x0_[1];
@@ -153,7 +153,7 @@ class Ellipsoid: public loom::DomainBase
     }
 
   private:
-    const std::vector<double> x0_;
+    const std::array<double, 3> x0_;
     const double a0_2_;
     const double a1_2_;
     const double a2_2_;
@@ -181,7 +181,7 @@ class Cylinder: public loom::DomainBase
 
     virtual
     double
-    eval(const std::vector<double> & x) const
+    eval(const std::array<double, 3> & x) const
     {
       return (z0_ < x[2] && x[2] < z1_) ?
         x[0]*x[0] + x[1]*x[1] - radius_*radius_ :
@@ -197,13 +197,13 @@ class Cylinder: public loom::DomainBase
     }
 
     virtual
-    std::vector<std::vector<std::vector<double>>>
+    std::vector<std::vector<std::array<double, 3>>>
     get_features() const
     {
       const double pi = 3.1415926535897932384;
       const size_t n = 2 * pi * radius_ / feature_edge_length_;
-      std::vector<std::vector<double>> circ0(n+1);
-      std::vector<std::vector<double>> circ1(n+1);
+      std::vector<std::array<double, 3>> circ0(n+1);
+      std::vector<std::array<double, 3>> circ1(n+1);
       for (size_t i=0; i < n; i++) {
         const double c = radius_ * cos((2*pi * i) / n);
         const double s = radius_ * sin((2*pi * i) / n);
@@ -244,7 +244,7 @@ class Cone: public loom::DomainBase
 
     virtual
     double
-    eval(const std::vector<double> & x) const
+    eval(const std::array<double, 3> & x) const
     {
       const double rad = radius_ * (1.0 - x[2] / height_);
 
@@ -262,12 +262,12 @@ class Cone: public loom::DomainBase
     }
 
     virtual
-    std::vector<std::vector<std::vector<double>>>
+    std::vector<std::vector<std::array<double, 3>>>
     get_features() const
     {
       const double pi = 3.1415926535897932384;
       const size_t n = 2 * pi * radius_ / feature_edge_length_;
-      std::vector<std::vector<double>> circ0(n+1);
+      std::vector<std::array<double, 3>> circ0(n+1);
       for (size_t i=0; i < n; i++) {
         const double c = radius_ * cos((2*pi * i) / n);
         const double s = radius_ * sin((2*pi * i) / n);
@@ -288,10 +288,10 @@ class Tetrahedron: public loom::DomainBase
 {
   public:
     Tetrahedron(
-        const std::vector<double> & x0,
-        const std::vector<double> & x1,
-        const std::vector<double> & x2,
-        const std::vector<double> & x3
+        const std::array<double, 3> & x0,
+        const std::array<double, 3> & x1,
+        const std::array<double, 3> & x2,
+        const std::array<double, 3> & x3
         ):
       x0_(Eigen::Vector3d(x0[0], x0[1], x0[2])),
       x1_(Eigen::Vector3d(x1[0], x1[1], x1[2])),
@@ -320,7 +320,7 @@ class Tetrahedron: public loom::DomainBase
 
     virtual
     double
-    eval(const std::vector<double> & x) const
+    eval(const std::array<double, 3> & x) const
     {
       Eigen::Vector3d pvec(x.data());
       const bool a =
@@ -344,10 +344,10 @@ class Tetrahedron: public loom::DomainBase
     }
 
     virtual
-    std::vector<std::vector<std::vector<double>>>
+    std::vector<std::vector<std::array<double, 3>>>
     get_features() const
     {
-      std::vector<std::vector<double>> pts = {
+      std::vector<std::array<double, 3>> pts = {
         {x0_[0], x0_[1], x0_[2]},
         {x1_[0], x1_[1], x1_[2]},
         {x2_[0], x2_[1], x2_[2]},
@@ -387,7 +387,7 @@ class Torus: public loom::DomainBase
 
     virtual
     double
-    eval(const std::vector<double> & x) const
+    eval(const std::array<double, 3> & x) const
     {
       const double r = sqrt(x[0]*x[0] + x[1]*x[1]);
       return (r - major_radius_)*(r - major_radius_) + x[2]*x[2] <

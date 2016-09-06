@@ -11,7 +11,7 @@ namespace loom {
 void generate_mesh(
     const std::shared_ptr<loom::DomainBase> & domain,
     const std::string & outfile,
-    const std::vector<std::vector<std::vector<double>>> & feature_edges = {},
+    const std::vector<std::vector<std::array<double, 3>>> & feature_edges = {},
     const double bounding_sphere_radius = 0.0,
     const double boundary_precision = 1.0e-4,
     const bool lloyd = false,
