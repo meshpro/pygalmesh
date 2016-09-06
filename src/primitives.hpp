@@ -11,7 +11,6 @@ namespace loom {
 class Ball: public loom::DomainBase
 {
   public:
-    // argument are double (not K::FT) for Python compatibility
     Ball(
         const std::vector<double> & x0,
         const double radius
@@ -28,9 +27,9 @@ class Ball: public loom::DomainBase
     double
     eval(const std::vector<double> & x) const
     {
-      const K::FT xx0 = x[0] - x0_[0];
-      const K::FT yy0 = x[1] - x0_[1];
-      const K::FT zz0 = x[2] - x0_[2];
+      const double xx0 = x[0] - x0_[0];
+      const double yy0 = x[1] - x0_[1];
+      const double zz0 = x[2] - x0_[2];
       return xx0*xx0 + yy0*yy0 + zz0*zz0 - radius_*radius_;
     }
 
@@ -140,9 +139,9 @@ class Ellipsoid: public loom::DomainBase
     double
     eval(const std::vector<double> & x) const
     {
-      const K::FT xx0 = x[0] - x0_[0];
-      const K::FT yy0 = x[1] - x0_[1];
-      const K::FT zz0 = x[2] - x0_[2];
+      const double xx0 = x[0] - x0_[0];
+      const double yy0 = x[1] - x0_[1];
+      const double zz0 = x[2] - x0_[2];
       return xx0*xx0/a0_2_ + yy0*yy0/a1_2_ + zz0*zz0/a2_2_ - 1.0;
     }
 
@@ -247,7 +246,7 @@ class Cone: public loom::DomainBase
     double
     eval(const std::vector<double> & x) const
     {
-      const K::FT rad = radius_ * (1.0 - x[2] / height_);
+      const double rad = radius_ * (1.0 - x[2] / height_);
 
       return (0.0 < x[2] && x[2] < height_) ?
         x[0]*x[0] + x[1]*x[1] - rad*rad :
