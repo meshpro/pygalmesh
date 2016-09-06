@@ -18,7 +18,12 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 SET(CMAKE_SWIG_FLAGS "-keyword")
 
 SET_SOURCE_FILES_PROPERTIES(loom.i PROPERTIES CPLUSPLUS ON)
-SWIG_ADD_MODULE(loom python loom.i generate.cpp generate_poly.cpp)
+SWIG_ADD_MODULE(
+  loom python loom.i
+  generate.cpp
+  generate_poly.cpp
+  generate_surface_mesh.cpp
+  )
 SWIG_LINK_LIBRARIES(
   loom
   ${PYTHON_LIBRARIES}

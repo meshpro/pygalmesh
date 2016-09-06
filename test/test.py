@@ -720,5 +720,21 @@ def test_heart():
     return
 
 
+def test_sphere():
+    s = loom.Ball([0, 0, 0], 1.0)
+    loom.generate_surface_mesh(s, 'out.off', cell_size=0.2, verbose=False)
+
+    # vertices, cells, _, _, _ = meshio.read('out.off')
+
+    # assert abs(max(vertices[:, 0]) - 1.0) < 0.02
+    # assert abs(min(vertices[:, 0]) + 1.0) < 0.02
+    # assert abs(max(vertices[:, 1]) - 1.0) < 0.02
+    # assert abs(min(vertices[:, 1]) + 1.0) < 0.02
+    # assert abs(max(vertices[:, 2]) - 1.0) < 0.02
+    # assert abs(min(vertices[:, 2]) + 1.0) < 0.02
+
+    return
+
+
 if __name__ == '__main__':
-    test_custom_function()
+    test_sphere()
