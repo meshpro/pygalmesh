@@ -1,4 +1,4 @@
-#define CGAL_MESH_3_VERBOSE 1
+#define CGAL_SURFACE_MESHER_VERBOSE 1
 
 #include "generate_surface_mesh.hpp"
 
@@ -80,12 +80,21 @@ generate_surface_mesh(
       0.1   // distance bound
       );
 
+  if (!verbose) {
+    // suppress output
+    std::cout.setstate(std::ios_base::failbit);
+    std::cerr.setstate(std::ios_base::failbit);
+  }
   CGAL::make_surface_mesh(
       c2t3,
       surface,
       criteria,
       CGAL::Non_manifold_tag()
       );
+  if (!verbose) {
+    std::cout.clear();
+    std::cerr.clear();
+  }
 
   // Output
   std::ofstream off_file(outfile);
