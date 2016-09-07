@@ -44,7 +44,8 @@
 namespace std {
 %template(Vector2d) array<double, 2>;
 %template(Vector3d) array<double, 3>;
-%template(Polyline) vector<array<double, 3>>;
+%template(Polyline2d) vector<array<double, 2>>;
+%template(Polyline3d) vector<array<double, 3>>;
 %template(ListOfPolylines) vector<vector<array<double, 3>>>;
 %template(ListOfDomains) vector<shared_ptr<const loom::DomainBase>>;
 }
