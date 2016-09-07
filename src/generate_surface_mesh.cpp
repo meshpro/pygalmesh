@@ -45,19 +45,10 @@ void
 generate_surface_mesh(
     const std::shared_ptr<loom::DomainBase> & domain,
     const std::string & outfile,
-    const std::vector<std::vector<std::vector<double>>> & feature_edges,
     const double bounding_sphere_radius,
-    const double boundary_precision,
-    const bool lloyd,
-    const bool odt,
-    const bool perturb,
-    const bool exude,
-    const double edge_size,
-    const double facet_angle,
-    const double facet_size,
-    const double facet_distance,
-    const double cell_radius_edge_ratio,
-    const double cell_size,
+    const double angle_bound,
+    const double radius_bound,
+    const double distance_bound,
     const bool verbose
     )
 {
@@ -71,13 +62,14 @@ generate_surface_mesh(
   const auto d = CgalDomainWrapper(domain);
   Surface_3 surface(
       d,
-      GT::Sphere_3(CGAL::ORIGIN, bounding_sphere_radius2)
+      // add a little wiggle room
+      GT::Sphere_3(CGAL::ORIGIN, 1.01 * bounding_sphere_radius2)
       );
 
   CGAL::Surface_mesh_default_criteria_3<Tr> criteria(
-      30.,  // angular bound
-      0.1,  // radius bound
-      0.1   // distance bound
+      angle_bound,
+      radius_bound,
+      distance_bound
       );
 
   if (!verbose) {

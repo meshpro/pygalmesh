@@ -6,6 +6,11 @@ import numpy
 import meshio
 
 
+def _row_dot(a, b):
+    # http://stackoverflow.com/a/26168677/353337
+    return numpy.einsum('ij, ij->i', a, b)
+
+
 def compute_volumes(vertices, tets):
     cell_coords = vertices[tets]
 
@@ -14,10 +19,20 @@ def compute_volumes(vertices, tets):
     c = cell_coords[:, 3, :] - cell_coords[:, 0, :]
 
     # omega = <a, b x c>
-    omega = numpy.einsum('ij, ij->i', a, numpy.cross(b, c))
+    omega = _row_dot(a, numpy.cross(b, c))
 
     # https://en.wikipedia.org/wiki/Tetrahedron#Volume
     return abs(omega) / 6.0
+
+
+def compute_triangle_areas(vertices, triangles):
+    e0 = vertices[triangles[:, 1]] - vertices[triangles[:, 0]]
+    e1 = vertices[triangles[:, 2]] - vertices[triangles[:, 1]]
+
+    e0_cross_e1 = numpy.cross(e0, e1)
+    areas = 0.5 * numpy.sqrt(_row_dot(e0_cross_e1, e0_cross_e1))
+
+    return areas
 
 
 def test_ball():
@@ -721,18 +736,30 @@ def test_heart():
 
 
 def test_sphere():
-    s = loom.Ball([0, 0, 0], 1.0)
-    loom.generate_surface_mesh(s, 'out.off', cell_size=0.2, verbose=False)
+    radius = 1.0
+    s = loom.Ball([0, 0, 0], radius)
+    loom.generate_surface_mesh(
+            s,
+            'out.off',
+            angle_bound=30,
+            radius_bound=0.1,
+            distance_bound=0.1,
+            verbose=False
+            )
 
     vertices, cells, _, _, _ = meshio.read('out.off')
 
     tol = 1.0e-2
-    assert abs(max(vertices[:, 0]) - 1.0) < tol
-    assert abs(min(vertices[:, 0]) + 1.0) < tol
-    assert abs(max(vertices[:, 1]) - 1.0) < tol
-    assert abs(min(vertices[:, 1]) + 1.0) < tol
-    assert abs(max(vertices[:, 2]) - 1.0) < tol
-    assert abs(min(vertices[:, 2]) + 1.0) < tol
+    assert abs(max(vertices[:, 0]) - radius) < tol
+    assert abs(min(vertices[:, 0]) + radius) < tol
+    assert abs(max(vertices[:, 1]) - radius) < tol
+    assert abs(min(vertices[:, 1]) + radius) < tol
+    assert abs(max(vertices[:, 2]) - radius) < tol
+    assert abs(min(vertices[:, 2]) + radius) < tol
+
+    areas = compute_triangle_areas(vertices, cells['triangle'])
+    surface_area = sum(areas)
+    assert abs(surface_area - 4 * numpy.pi * radius**2) < 0.1
 
     return
 
