@@ -2,6 +2,6 @@
 *.vtu
 *.mesh
 build/
-meshmaker/loom.py
-meshmaker/loom_wrap.cpp
-meshmaker/loom_wrap.h
+meshmaker/meshmaker.py
+meshmaker/meshmaker_wrap.cpp
+meshmaker/meshmaker_wrap.h
