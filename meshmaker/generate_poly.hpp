@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace loom {
+namespace meshmaker {
 
 void
 generate_poly(
@@ -23,6 +23,6 @@ generate_poly(
     const bool verbose = true
     );
 
-} // namespace loom
+} // namespace meshmaker
 
 #endif // GENERATE_POLY_HPP

@@ -11,7 +11,7 @@
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 
-namespace loom {
+namespace meshmaker {
 
 class Polygon2D {
   public:
@@ -55,10 +55,10 @@ class Polygon2D {
 };
 
 
-class Extrude: public loom::DomainBase {
+class Extrude: public meshmaker::DomainBase {
   public:
   Extrude(
-      const std::shared_ptr<loom::Polygon2D> & poly,
+      const std::shared_ptr<meshmaker::Polygon2D> & poly,
       const std::array<double, 3> & direction,
       const double alpha = 0.0,
       const double edge_size = 0.0
@@ -228,17 +228,17 @@ class Extrude: public loom::DomainBase {
   };
 
   private:
-  const std::shared_ptr<loom::Polygon2D> poly_;
+  const std::shared_ptr<meshmaker::Polygon2D> poly_;
   const std::array<double, 3> direction_;
   const double alpha_;
   const double edge_size_;
 };
 
 
-class ring_extrude: public loom::DomainBase {
+class ring_extrude: public meshmaker::DomainBase {
   public:
   ring_extrude(
-      const std::shared_ptr<loom::Polygon2D> & poly,
+      const std::shared_ptr<meshmaker::Polygon2D> & poly,
       const double edge_size
       ):
     poly_(poly),
@@ -299,10 +299,10 @@ class ring_extrude: public loom::DomainBase {
   }
 
   private:
-  const std::shared_ptr<loom::Polygon2D> poly_;
+  const std::shared_ptr<meshmaker::Polygon2D> poly_;
   const double edge_size_;
 };
 
-} // namespace loom
+} // namespace meshmaker
 
 #endif // POLYGON2D_HPP

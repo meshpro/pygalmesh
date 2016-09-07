@@ -12,7 +12,7 @@
 #include <CGAL/Mesh_domain_with_polyline_features_3.h>
 #include <CGAL/make_mesh_3.h>
 
-namespace loom {
+namespace meshmaker {
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 
@@ -71,7 +71,7 @@ translate_feature_edges(
 
 void
 generate_mesh(
-    const std::shared_ptr<loom::DomainBase> & domain,
+    const std::shared_ptr<meshmaker::DomainBase> & domain,
     const std::string & outfile,
     const std::vector<std::vector<std::array<double, 3>>> & feature_edges,
     const double bounding_sphere_radius,
@@ -141,4 +141,4 @@ generate_mesh(
   return;
 }
 
-} // namespace loom
+} // namespace meshmaker

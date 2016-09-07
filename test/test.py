@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-import loom
+import meshmaker
 
 import numpy
 import meshio
@@ -36,8 +36,8 @@ def compute_triangle_areas(vertices, triangles):
 
 
 def test_ball():
-    s = loom.Ball([0, 0, 0], 1.0)
-    loom.generate_mesh(s, 'out.mesh', cell_size=0.2, verbose=False)
+    s = meshmaker.Ball([0, 0, 0], 1.0)
+    meshmaker.generate_mesh(s, 'out.mesh', cell_size=0.2, verbose=False)
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -57,12 +57,12 @@ def test_ball():
 def test_balls_union():
     radius = 1.0
     displacement = 0.5
-    s0 = loom.Ball([displacement, 0, 0], radius)
-    s1 = loom.Ball([-displacement, 0, 0], radius)
-    uni = loom.ListOfDomains()
+    s0 = meshmaker.Ball([displacement, 0, 0], radius)
+    s1 = meshmaker.Ball([-displacement, 0, 0], radius)
+    uni = meshmaker.ListOfDomains()
     uni.append(s0)
     uni.append(s1)
-    u = loom.Union(uni)
+    u = meshmaker.Union(uni)
 
     a = numpy.sqrt(radius**2 - displacement**2)
     edge_size = 0.1
@@ -76,7 +76,7 @@ def test_balls_union():
         ]
     circ.append(circ[0])
 
-    loom.generate_mesh(
+    meshmaker.generate_mesh(
             u,
             'out.mesh',
             feature_edges=[circ],
@@ -109,12 +109,12 @@ def test_balls_union():
 def test_balls_intersection():
     radius = 1.0
     displacement = 0.5
-    s0 = loom.Ball([displacement, 0, 0], radius)
-    s1 = loom.Ball([-displacement, 0, 0], radius)
-    inter = loom.ListOfDomains()
+    s0 = meshmaker.Ball([displacement, 0, 0], radius)
+    s1 = meshmaker.Ball([-displacement, 0, 0], radius)
+    inter = meshmaker.ListOfDomains()
     inter.append(s0)
     inter.append(s1)
-    u = loom.Intersection(inter)
+    u = meshmaker.Intersection(inter)
 
     a = numpy.sqrt(radius**2 - displacement**2)
     edge_size = 0.1
@@ -128,7 +128,7 @@ def test_balls_intersection():
         ]
     circ.append(circ[0])
 
-    loom.generate_mesh(
+    meshmaker.generate_mesh(
             u,
             'out.mesh',
             feature_edges=[circ],
@@ -160,9 +160,9 @@ def test_balls_intersection():
 def test_balls_difference():
     radius = 1.0
     displacement = 0.5
-    s0 = loom.Ball([displacement, 0, 0], radius)
-    s1 = loom.Ball([-displacement, 0, 0], radius)
-    u = loom.Difference(s0, s1)
+    s0 = meshmaker.Ball([displacement, 0, 0], radius)
+    s1 = meshmaker.Ball([-displacement, 0, 0], radius)
+    u = meshmaker.Difference(s0, s1)
 
     a = numpy.sqrt(radius**2 - displacement**2)
     edge_size = 0.15
@@ -176,7 +176,7 @@ def test_balls_difference():
         ]
     circ.append(circ[0])
 
-    loom.generate_mesh(
+    meshmaker.generate_mesh(
             u,
             'out.mesh',
             feature_edges=[circ],
@@ -209,12 +209,12 @@ def test_balls_difference():
 
 
 def test_cuboids_intersection():
-    c0 = loom.Cuboid([0, 0, -0.5], [3, 3, 0.5])
-    c1 = loom.Cuboid([1, 1, -2], [2, 2, 2])
-    inter = loom.ListOfDomains()
+    c0 = meshmaker.Cuboid([0, 0, -0.5], [3, 3, 0.5])
+    c1 = meshmaker.Cuboid([1, 1, -2], [2, 2, 2])
+    inter = meshmaker.ListOfDomains()
     inter.append(c0)
     inter.append(c1)
-    u = loom.Intersection(inter)
+    u = meshmaker.Intersection(inter)
 
     # In CGAL, feature edges must not intersect, and that's a problem here: The
     # intersection edges of the cuboids share eight points with the edges of
@@ -227,7 +227,7 @@ def test_cuboids_intersection():
     #         [[2.0 - eps, 1.0, 0.5], [1.0 + eps, 1.0, 0.5]],
     #         ]
 
-    loom.generate_mesh(
+    meshmaker.generate_mesh(
             u,
             'out.mesh',
             cell_size=0.1,
@@ -255,14 +255,14 @@ def test_cuboids_intersection():
 
 
 def test_cuboids_union():
-    c0 = loom.Cuboid([0, 0, -0.5], [3, 3, 0.5])
-    c1 = loom.Cuboid([1, 1, -2], [2, 2, 2])
-    inter = loom.ListOfDomains()
+    c0 = meshmaker.Cuboid([0, 0, -0.5], [3, 3, 0.5])
+    c1 = meshmaker.Cuboid([1, 1, -2], [2, 2, 2])
+    inter = meshmaker.ListOfDomains()
     inter.append(c0)
     inter.append(c1)
-    u = loom.Union(inter)
+    u = meshmaker.Union(inter)
 
-    loom.generate_mesh(
+    meshmaker.generate_mesh(
             u,
             'out.mesh',
             cell_size=0.2,
@@ -290,8 +290,8 @@ def test_cuboids_union():
 
 
 def test_cuboid():
-    s0 = loom.Cuboid([0, 0, 0], [1, 2, 3])
-    loom.generate_mesh(s0, 'out.mesh', edge_size=0.1, verbose=False)
+    s0 = meshmaker.Cuboid([0, 0, 0], [1, 2, 3])
+    meshmaker.generate_mesh(s0, 'out.mesh', edge_size=0.1, verbose=False)
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -313,8 +313,8 @@ def test_cone():
     base_radius = 1.0
     height = 2.0
     edge_size = 0.1
-    s0 = loom.Cone(base_radius, height, edge_size)
-    loom.generate_mesh(
+    s0 = meshmaker.Cone(base_radius, height, edge_size)
+    meshmaker.generate_mesh(
             s0, 'out.mesh', cell_size=0.1, edge_size=edge_size,
             verbose=False
             )
@@ -341,8 +341,8 @@ def test_cylinder():
     z0 = 0.0
     z1 = 1.0
     edge_length = 0.1
-    s0 = loom.Cylinder(z0, z1, radius, edge_length)
-    loom.generate_mesh(
+    s0 = meshmaker.Cylinder(z0, z1, radius, edge_length)
+    meshmaker.generate_mesh(
             s0, 'out.mesh', cell_size=0.1, edge_size=edge_length,
             verbose=False
             )
@@ -365,13 +365,13 @@ def test_cylinder():
 
 
 def test_tetrahedron():
-    s0 = loom.Tetrahedron(
+    s0 = meshmaker.Tetrahedron(
             [0.0, 0.0, 0.0],
             [1.0, 0.0, 0.0],
             [0.0, 1.0, 0.0],
             [0.0, 0.0, 1.0]
             )
-    loom.generate_mesh(
+    meshmaker.generate_mesh(
             s0, 'out.mesh', cell_size=0.1, edge_size=0.1,
             verbose=False
             )
@@ -395,8 +395,8 @@ def test_tetrahedron():
 def test_torus():
     major_radius = 1.0
     minor_radius = 0.5
-    s0 = loom.Torus(major_radius, minor_radius)
-    loom.generate_mesh(s0, 'out.mesh', cell_size=0.1, verbose=False)
+    s0 = meshmaker.Torus(major_radius, minor_radius)
+    meshmaker.generate_mesh(s0, 'out.mesh', cell_size=0.1, verbose=False)
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -418,7 +418,7 @@ def test_torus():
 
 
 def test_custom_function():
-    class Hyperboloid(loom.DomainBase):
+    class Hyperboloid(meshmaker.DomainBase):
         def __init__(self, edge_size):
             super(Hyperboloid, self).__init__()
             self.z0 = -1.0
@@ -464,7 +464,7 @@ def test_custom_function():
     edge_size = 0.12
     d = Hyperboloid(edge_size)
 
-    loom.generate_mesh(
+    meshmaker.generate_mesh(
             d,
             'out.mesh',
             cell_size=0.1,
@@ -490,8 +490,8 @@ def test_custom_function():
 
 def test_scaling():
     alpha = 1.3
-    s = loom.Scale(loom.Cuboid([0, 0, 0], [1, 2, 3]), alpha)
-    loom.generate_mesh(
+    s = meshmaker.Scale(meshmaker.Cuboid([0, 0, 0], [1, 2, 3]), alpha)
+    meshmaker.generate_mesh(
             s,
             'out.mesh',
             cell_size=0.2,
@@ -517,11 +517,11 @@ def test_scaling():
 
 def test_stretch():
     alpha = 2.0
-    s = loom.Stretch(
-            loom.Cuboid([0, 0, 0], [1, 2, 3]),
+    s = meshmaker.Stretch(
+            meshmaker.Cuboid([0, 0, 0], [1, 2, 3]),
             [alpha, 0.0, 0.0]
             )
-    loom.generate_mesh(
+    meshmaker.generate_mesh(
             s,
             'out.mesh',
             cell_size=0.2,
@@ -546,12 +546,12 @@ def test_stretch():
 
 
 def test_rotation():
-    s0 = loom.Rotate(
-            loom.Cuboid([0, 0, 0], [1, 2, 3]),
+    s0 = meshmaker.Rotate(
+            meshmaker.Cuboid([0, 0, 0], [1, 2, 3]),
             [1.0, 0.0, 0.0],
             numpy.pi / 12.0
             )
-    loom.generate_mesh(
+    meshmaker.generate_mesh(
             s0,
             'out.mesh',
             cell_size=0.1,
@@ -569,11 +569,11 @@ def test_rotation():
 
 
 def test_translation():
-    s0 = loom.Translate(
-            loom.Cuboid([0, 0, 0], [1, 2, 3]),
+    s0 = meshmaker.Translate(
+            meshmaker.Cuboid([0, 0, 0], [1, 2, 3]),
             [1.0, 0.0, 0.0]
             )
-    loom.generate_mesh(
+    meshmaker.generate_mesh(
             s0,
             'out.mesh',
             cell_size=0.1,
@@ -597,7 +597,7 @@ def test_translation():
 
 
 def test_off():
-    loom.generate_poly(
+    meshmaker.generate_poly(
             'elephant.off',
             'out.mesh',
             facet_angle=25.0,
@@ -624,9 +624,9 @@ def test_off():
 
 
 # def test_extrude():
-#     p = loom.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
-#     domain = loom.Extrude(p, [0.0, 0.3, 1.0])
-#     loom.generate_mesh(
+#     p = meshmaker.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
+#     domain = meshmaker.Extrude(p, [0.0, 0.3, 1.0])
+#     meshmaker.generate_mesh(
 #             domain,
 #             'out.mesh',
 #             cell_size=0.1,
@@ -651,10 +651,10 @@ def test_off():
 
 
 def test_extrude_rotate():
-    p = loom.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
+    p = meshmaker.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
     edge_size = 0.1
-    domain = loom.Extrude(p, [0.0, 0.0, 1.0], 0.5 * 3.14159265359, edge_size)
-    loom.generate_mesh(
+    domain = meshmaker.Extrude(p, [0.0, 0.0, 1.0], 0.5 * 3.14159265359, edge_size)
+    meshmaker.generate_mesh(
             domain,
             'out.mesh',
             cell_size=0.1,
@@ -679,10 +679,10 @@ def test_extrude_rotate():
 
 
 def test_ring_extrude():
-    p = loom.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
+    p = meshmaker.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
     edge_size = 0.1
-    domain = loom.ring_extrude(p, edge_size)
-    loom.generate_mesh(
+    domain = meshmaker.ring_extrude(p, edge_size)
+    meshmaker.generate_mesh(
             domain,
             'out.mesh',
             cell_size=0.1,
@@ -707,7 +707,7 @@ def test_ring_extrude():
 
 
 def test_heart():
-    class Heart(loom.DomainBase):
+    class Heart(meshmaker.DomainBase):
         def __init__(self, edge_size):
             super(Heart, self).__init__()
             return
@@ -722,7 +722,7 @@ def test_heart():
     edge_size = 0.1
     d = Heart(edge_size)
 
-    loom.generate_mesh(
+    meshmaker.generate_mesh(
             d,
             'out.mesh',
             cell_size=0.1,
@@ -737,8 +737,8 @@ def test_heart():
 
 def test_sphere():
     radius = 1.0
-    s = loom.Ball([0, 0, 0], radius)
-    loom.generate_surface_mesh(
+    s = meshmaker.Ball([0, 0, 0], radius)
+    meshmaker.generate_surface_mesh(
             s,
             'out.off',
             angle_bound=30,

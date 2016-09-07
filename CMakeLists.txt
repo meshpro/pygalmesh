@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(loom)
+project(meshmaker)
 
 add_subdirectory(src)

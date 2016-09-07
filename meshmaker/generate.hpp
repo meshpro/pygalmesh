@@ -6,10 +6,10 @@
 #include <memory>
 #include <string>
 
-namespace loom {
+namespace meshmaker {
 
 void generate_mesh(
-    const std::shared_ptr<loom::DomainBase> & domain,
+    const std::shared_ptr<meshmaker::DomainBase> & domain,
     const std::string & outfile,
     const std::vector<std::vector<std::array<double, 3>>> & feature_edges = {},
     const double bounding_sphere_radius = 0.0,
@@ -27,6 +27,6 @@ void generate_mesh(
     const bool verbose = true
     );
 
-} // namespace loom
+} // namespace meshmaker
 
 #endif // GENERATE_HPP

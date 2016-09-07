@@ -5,7 +5,7 @@
 #include <array>
 #include <memory>
 
-namespace loom {
+namespace meshmaker {
 
 class DomainBase
 {
@@ -29,11 +29,11 @@ class DomainBase
   };
 };
 
-class Translate: public loom::DomainBase
+class Translate: public meshmaker::DomainBase
 {
   public:
   Translate(
-      const std::shared_ptr<const loom::DomainBase> & domain,
+      const std::shared_ptr<const meshmaker::DomainBase> & domain,
       const std::array<double, 3> & direction
       ):
     domain_(domain),
@@ -95,16 +95,16 @@ class Translate: public loom::DomainBase
   };
 
   private:
-    const std::shared_ptr<const loom::DomainBase> domain_;
+    const std::shared_ptr<const meshmaker::DomainBase> domain_;
     const Eigen::Vector3d direction_;
     const std::vector<std::vector<std::array<double, 3>>> translated_features_;
 };
 
-class Rotate: public loom::DomainBase
+class Rotate: public meshmaker::DomainBase
 {
   public:
   Rotate(
-      const std::shared_ptr<const loom::DomainBase> & domain,
+      const std::shared_ptr<const meshmaker::DomainBase> & domain,
       const std::array<double, 3> & axis,
       const double angle
       ):
@@ -190,18 +190,18 @@ class Rotate: public loom::DomainBase
   };
 
   private:
-    const std::shared_ptr<const loom::DomainBase> domain_;
+    const std::shared_ptr<const meshmaker::DomainBase> domain_;
     const Eigen::Vector3d normalized_axis_;
     const double sinAngle_;
     const double cosAngle_;
     const std::vector<std::vector<std::array<double, 3>>> rotated_features_;
 };
 
-class Scale: public loom::DomainBase
+class Scale: public meshmaker::DomainBase
 {
   public:
   Scale(
-      std::shared_ptr<const loom::DomainBase> & domain,
+      std::shared_ptr<const meshmaker::DomainBase> & domain,
       const double alpha
       ):
     domain_(domain),
@@ -255,16 +255,16 @@ class Scale: public loom::DomainBase
   };
 
   private:
-    std::shared_ptr<const loom::DomainBase> domain_;
+    std::shared_ptr<const meshmaker::DomainBase> domain_;
     const double alpha_;
     const std::vector<std::vector<std::array<double, 3>>> scaled_features_;
 };
 
-class Stretch: public loom::DomainBase
+class Stretch: public meshmaker::DomainBase
 {
   public:
   Stretch(
-      std::shared_ptr<const loom::DomainBase> & domain,
+      std::shared_ptr<const meshmaker::DomainBase> & domain,
       const std::array<double, 3> & direction
       ):
     domain_(domain),
@@ -325,17 +325,17 @@ class Stretch: public loom::DomainBase
   };
 
   private:
-    std::shared_ptr<const loom::DomainBase> domain_;
+    std::shared_ptr<const meshmaker::DomainBase> domain_;
     const Eigen::Vector3d normalized_direction_;
     const double alpha_;
     const std::vector<std::vector<std::array<double, 3>>> stretched_features_;
 };
 
-class Intersection: public loom::DomainBase
+class Intersection: public meshmaker::DomainBase
 {
   public:
   explicit Intersection(
-      std::vector<std::shared_ptr<const loom::DomainBase>> & domains
+      std::vector<std::shared_ptr<const meshmaker::DomainBase>> & domains
       ):
     domains_(domains)
   {
@@ -379,14 +379,14 @@ class Intersection: public loom::DomainBase
   };
 
   private:
-    std::vector<std::shared_ptr<const loom::DomainBase>> domains_;
+    std::vector<std::shared_ptr<const meshmaker::DomainBase>> domains_;
 };
 
-class Union: public loom::DomainBase
+class Union: public meshmaker::DomainBase
 {
   public:
   explicit Union(
-      std::vector<std::shared_ptr<const loom::DomainBase>> & domains
+      std::vector<std::shared_ptr<const meshmaker::DomainBase>> & domains
       ):
     domains_(domains)
   {
@@ -430,15 +430,15 @@ class Union: public loom::DomainBase
   };
 
   private:
-    std::vector<std::shared_ptr<const loom::DomainBase>> domains_;
+    std::vector<std::shared_ptr<const meshmaker::DomainBase>> domains_;
 };
 
-class Difference: public loom::DomainBase
+class Difference: public meshmaker::DomainBase
 {
   public:
   Difference(
-      std::shared_ptr<const loom::DomainBase> & domain0,
-      std::shared_ptr<const loom::DomainBase> & domain1
+      std::shared_ptr<const meshmaker::DomainBase> & domain0,
+      std::shared_ptr<const meshmaker::DomainBase> & domain1
       ):
     domain0_(domain0),
     domain1_(domain1)
@@ -479,9 +479,9 @@ class Difference: public loom::DomainBase
   };
 
   private:
-    std::shared_ptr<const loom::DomainBase> domain0_;
-    std::shared_ptr<const loom::DomainBase> domain1_;
+    std::shared_ptr<const meshmaker::DomainBase> domain0_;
+    std::shared_ptr<const meshmaker::DomainBase> domain1_;
 };
 
-} // namespace loom
+} // namespace meshmaker
 #endif // DOMAIN_HPP

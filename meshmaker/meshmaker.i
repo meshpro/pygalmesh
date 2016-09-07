@@ -1,4 +1,4 @@
-%module(directors="1") loom
+%module(directors="1") meshmaker
 
 %{
 #define SWIG_FILE_WITH_INIT
@@ -13,31 +13,31 @@
 %include "std_string.i"
 
 %include <std_shared_ptr.i>
-%shared_ptr(loom::DomainBase);
+%shared_ptr(meshmaker::DomainBase);
 
-%shared_ptr(loom::Extrude);
-%shared_ptr(loom::Polygon2D);
-%shared_ptr(loom::ring_extrude);
+%shared_ptr(meshmaker::Extrude);
+%shared_ptr(meshmaker::Polygon2D);
+%shared_ptr(meshmaker::ring_extrude);
 
-%shared_ptr(loom::Rotate);
-%shared_ptr(loom::Scale);
-%shared_ptr(loom::Stretch);
-%shared_ptr(loom::Translate);
+%shared_ptr(meshmaker::Rotate);
+%shared_ptr(meshmaker::Scale);
+%shared_ptr(meshmaker::Stretch);
+%shared_ptr(meshmaker::Translate);
 
-%shared_ptr(loom::Difference);
-%shared_ptr(loom::Intersection);
-%shared_ptr(loom::Union);
+%shared_ptr(meshmaker::Difference);
+%shared_ptr(meshmaker::Intersection);
+%shared_ptr(meshmaker::Union);
 
-%shared_ptr(loom::Ball);
-%shared_ptr(loom::Cone);
-%shared_ptr(loom::Cuboid);
-%shared_ptr(loom::Cylinder);
-%shared_ptr(loom::Ellipsoid);
-%shared_ptr(loom::Tetrahedron);
-%shared_ptr(loom::Torus);
+%shared_ptr(meshmaker::Ball);
+%shared_ptr(meshmaker::Cone);
+%shared_ptr(meshmaker::Cuboid);
+%shared_ptr(meshmaker::Cylinder);
+%shared_ptr(meshmaker::Ellipsoid);
+%shared_ptr(meshmaker::Tetrahedron);
+%shared_ptr(meshmaker::Torus);
 
 // http://stackoverflow.com/a/39273055/353337
-%feature("director") loom::DomainBase;
+%feature("director") meshmaker::DomainBase;
 
 %include <std_array.i>
 %include <std_vector.i>
@@ -47,7 +47,7 @@ namespace std {
 %template(Polyline2d) vector<array<double, 2>>;
 %template(Polyline3d) vector<array<double, 3>>;
 %template(ListOfPolylines) vector<vector<array<double, 3>>>;
-%template(ListOfDomains) vector<shared_ptr<const loom::DomainBase>>;
+%template(ListOfDomains) vector<shared_ptr<const meshmaker::DomainBase>>;
 }
 
 %include "generate.hpp"

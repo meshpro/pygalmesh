@@ -6,9 +6,9 @@
 #include <memory>
 #include <vector>
 
-namespace loom {
+namespace meshmaker {
 
-class Ball: public loom::DomainBase
+class Ball: public meshmaker::DomainBase
 {
   public:
     Ball(
@@ -47,7 +47,7 @@ class Ball: public loom::DomainBase
 };
 
 
-class Cuboid: public loom::DomainBase
+class Cuboid: public meshmaker::DomainBase
 {
   public:
     Cuboid(
@@ -117,7 +117,7 @@ class Cuboid: public loom::DomainBase
 };
 
 
-class Ellipsoid: public loom::DomainBase
+class Ellipsoid: public meshmaker::DomainBase
 {
   public:
     Ellipsoid(
@@ -160,7 +160,7 @@ class Ellipsoid: public loom::DomainBase
 };
 
 
-class Cylinder: public loom::DomainBase
+class Cylinder: public meshmaker::DomainBase
 {
   public:
     Cylinder(
@@ -224,7 +224,7 @@ class Cylinder: public loom::DomainBase
 };
 
 
-class Cone: public loom::DomainBase
+class Cone: public meshmaker::DomainBase
 {
   public:
     Cone(
@@ -284,7 +284,7 @@ class Cone: public loom::DomainBase
 };
 
 
-class Tetrahedron: public loom::DomainBase
+class Tetrahedron: public meshmaker::DomainBase
 {
   public:
     Tetrahedron(
@@ -371,7 +371,7 @@ class Tetrahedron: public loom::DomainBase
 };
 
 
-class Torus: public loom::DomainBase
+class Torus: public meshmaker::DomainBase
 {
   public:
     Torus(
@@ -408,6 +408,6 @@ class Torus: public loom::DomainBase
     const double minor_radius_;
 };
 
-} // namespace loom
+} // namespace meshmaker
 
 #endif // PRIMITIVES_HPP

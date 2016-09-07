@@ -17,15 +17,15 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 SET(CMAKE_SWIG_FLAGS "-keyword")
 
-SET_SOURCE_FILES_PROPERTIES(loom.i PROPERTIES CPLUSPLUS ON)
+SET_SOURCE_FILES_PROPERTIES(meshmaker.i PROPERTIES CPLUSPLUS ON)
 SWIG_ADD_MODULE(
-  loom python loom.i
+  meshmaker python meshmaker.i
   generate.cpp
   generate_poly.cpp
   generate_surface_mesh.cpp
   )
 SWIG_LINK_LIBRARIES(
-  loom
+  meshmaker
   ${PYTHON_LIBRARIES}
   ${CGAL_LIBRARY}
   ${GMP_LIBRARIES}
@@ -38,8 +38,8 @@ execute_process(
   OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
   OUTPUT_STRIP_TRAILING_WHITESPACE
   )
-install(TARGETS _loom DESTINATION ${PYTHON_SITE_PACKAGES})
+install(TARGETS _meshmaker DESTINATION ${PYTHON_SITE_PACKAGES})
 install(
-  FILES ${CMAKE_BINARY_DIR}/src/loom.py
+  FILES ${CMAKE_BINARY_DIR}/src/meshmaker.py
   DESTINATION ${PYTHON_SITE_PACKAGES}
   )

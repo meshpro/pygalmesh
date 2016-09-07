@@ -11,7 +11,7 @@
 // IO
 #include <CGAL/IO/Polyhedron_iostream.h>
 
-namespace loom {
+namespace meshmaker {
 
 // Domain
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
@@ -95,4 +95,4 @@ generate_poly(
   return;
 }
 
-} // namespace loom
+} // namespace meshmaker
