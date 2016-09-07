@@ -91,7 +91,8 @@ generate_mesh(
 {
   const double bounding_sphere_radius2 = bounding_sphere_radius > 0 ?
     bounding_sphere_radius*bounding_sphere_radius :
-    domain->get_bounding_sphere_squared_radius();
+    // some wiggle room
+    1.01 * domain->get_bounding_sphere_squared_radius();
 
   const auto d = CgalDomainWrapper(domain);
   Mesh_domain cgal_domain(

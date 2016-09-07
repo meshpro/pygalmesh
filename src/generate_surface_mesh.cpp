@@ -54,7 +54,8 @@ generate_surface_mesh(
 {
   const double bounding_sphere_radius2 = bounding_sphere_radius > 0 ?
     bounding_sphere_radius*bounding_sphere_radius :
-    domain->get_bounding_sphere_squared_radius();
+    // add a little wiggle room
+    1.01 * domain->get_bounding_sphere_squared_radius();
 
   Tr tr;  // 3D-Delaunay triangulation
   C2t3 c2t3 (tr);  // 2D-complex in 3D-Delaunay triangulation
@@ -62,8 +63,7 @@ generate_surface_mesh(
   const auto d = CgalDomainWrapper(domain);
   Surface_3 surface(
       d,
-      // add a little wiggle room
-      GT::Sphere_3(CGAL::ORIGIN, 1.01 * bounding_sphere_radius2)
+      GT::Sphere_3(CGAL::ORIGIN, bounding_sphere_radius2)
       );
 
   CGAL::Surface_mesh_default_criteria_3<Tr> criteria(
