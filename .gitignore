@@ -1,0 +1,7 @@
+*.off
+*.vtu
+*.mesh
+build/
+meshmaker/loom.py
+meshmaker/loom_wrap.cpp
+meshmaker/loom_wrap.h
