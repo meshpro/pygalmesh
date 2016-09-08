@@ -488,285 +488,285 @@ def test_custom_function():
     return
 
 
-def test_scaling():
-    alpha = 1.3
-    s = meshmaker.Scale(meshmaker.Cuboid([0, 0, 0], [1, 2, 3]), alpha)
-    meshmaker.generate_mesh(
-            s,
-            'out.mesh',
-            cell_size=0.2,
-            edge_size=0.1,
-            verbose=False
-            )
-
-    vertices, cells, _, _, _ = meshio.read('out.mesh')
-
-    tol = 1.0e-3
-    assert abs(max(vertices[:, 0]) - 1*alpha) < tol
-    assert abs(min(vertices[:, 0]) + 0.0) < tol
-    assert abs(max(vertices[:, 1]) - 2*alpha) < tol
-    assert abs(min(vertices[:, 1]) + 0.0) < tol
-    assert abs(max(vertices[:, 2]) - 3*alpha) < tol
-    assert abs(min(vertices[:, 2]) + 0.0) < tol
-
-    vol = sum(compute_volumes(vertices, cells['tetra']))
-    assert abs(vol - 6.0 * alpha**3) < tol
-
-    return
-
-
-def test_stretch():
-    alpha = 2.0
-    s = meshmaker.Stretch(
-            meshmaker.Cuboid([0, 0, 0], [1, 2, 3]),
-            [alpha, 0.0, 0.0]
-            )
-    meshmaker.generate_mesh(
-            s,
-            'out.mesh',
-            cell_size=0.2,
-            edge_size=0.2,
-            verbose=False
-            )
-
-    vertices, cells, _, _, _ = meshio.read('out.mesh')
-
-    tol = 1.0e-3
-    assert abs(max(vertices[:, 0]) - alpha) < tol
-    assert abs(min(vertices[:, 0]) + 0.0) < tol
-    assert abs(max(vertices[:, 1]) - 2.0) < tol
-    assert abs(min(vertices[:, 1]) + 0.0) < tol
-    assert abs(max(vertices[:, 2]) - 3.0) < tol
-    assert abs(min(vertices[:, 2]) + 0.0) < tol
-
-    vol = sum(compute_volumes(vertices, cells['tetra']))
-    assert abs(vol - 12.0) < tol
-
-    return
-
-
-def test_rotation():
-    s0 = meshmaker.Rotate(
-            meshmaker.Cuboid([0, 0, 0], [1, 2, 3]),
-            [1.0, 0.0, 0.0],
-            numpy.pi / 12.0
-            )
-    meshmaker.generate_mesh(
-            s0,
-            'out.mesh',
-            cell_size=0.1,
-            edge_size=0.1,
-            verbose=False
-            )
-
-    vertices, cells, _, _, _ = meshio.read('out.mesh')
-
-    tol = 1.0e-3
-    vol = sum(compute_volumes(vertices, cells['tetra']))
-    assert abs(vol - 6.0) < tol
-
-    return
-
-
-def test_translation():
-    s0 = meshmaker.Translate(
-            meshmaker.Cuboid([0, 0, 0], [1, 2, 3]),
-            [1.0, 0.0, 0.0]
-            )
-    meshmaker.generate_mesh(
-            s0,
-            'out.mesh',
-            cell_size=0.1,
-            edge_size=0.1,
-            verbose=False
-            )
-
-    vertices, cells, _, _, _ = meshio.read('out.mesh')
-
-    tol = 1.0e-3
-    assert abs(max(vertices[:, 0]) - 2.0) < tol
-    assert abs(min(vertices[:, 0]) - 1.0) < tol
-    assert abs(max(vertices[:, 1]) - 2.0) < tol
-    assert abs(min(vertices[:, 1]) + 0.0) < tol
-    assert abs(max(vertices[:, 2]) - 3.0) < tol
-    assert abs(min(vertices[:, 2]) + 0.0) < tol
-    vol = sum(compute_volumes(vertices, cells['tetra']))
-    assert abs(vol - 6.0) < tol
-
-    return
-
-
-def test_off():
-    meshmaker.generate_poly(
-            'elephant.off',
-            'out.mesh',
-            facet_angle=25.0,
-            facet_size=0.15,
-            facet_distance=0.008,
-            cell_radius_edge_ratio=3.0,
-            verbose=False
-            )
-
-    vertices, cells, _, _, _ = meshio.read('out.mesh')
-
-    tol = 1.0e-3
-    assert abs(max(vertices[:, 0]) - 0.357612477657) < tol
-    assert abs(min(vertices[:, 0]) + 0.358747130015) < tol
-    assert abs(max(vertices[:, 1]) - 0.496137874959) < tol
-    assert abs(min(vertices[:, 1]) + 0.495301051456) < tol
-    assert abs(max(vertices[:, 2]) - 0.298780230629) < tol
-    assert abs(min(vertices[:, 2]) + 0.300472866512) < tol
-
-    vol = sum(compute_volumes(vertices, cells['tetra']))
-    assert abs(vol - 0.044164693065) < tol
-
-    return
-
-
-def test_extrude():
-    p = meshmaker.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
-    domain = meshmaker.Extrude(p, [0.0, 0.3, 1.0])
-    meshmaker.generate_mesh(
-            domain,
-            'out.mesh',
-            cell_size=0.1,
-            edge_size=0.1,
-            verbose=False
-            )
-
-    vertices, cells, _, _, _ = meshio.read('out.mesh')
-
-    tol = 1.0e-3
-    assert abs(max(vertices[:, 0]) - 0.5) < tol
-    assert abs(min(vertices[:, 0]) + 0.5) < tol
-    assert abs(max(vertices[:, 1]) - 0.8) < tol
-    assert abs(min(vertices[:, 1]) + 0.3) < tol
-    assert abs(max(vertices[:, 2]) - 1.0) < tol
-    assert abs(min(vertices[:, 2]) + 0.0) < tol
-
-    vol = sum(compute_volumes(vertices, cells['tetra']))
-    assert abs(vol - 0.4) < tol
-
-    return
-
-
-def test_extrude_rotate():
-    p = meshmaker.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
-    edge_size = 0.1
-    domain = meshmaker.Extrude(
-            p,
-            [0.0, 0.0, 1.0],
-            0.5 * 3.14159265359,
-            edge_size
-            )
-    meshmaker.generate_mesh(
-            domain,
-            'out.mesh',
-            cell_size=0.1,
-            edge_size=edge_size,
-            verbose=False
-            )
-
-    vertices, cells, _, _, _ = meshio.read('out.mesh')
-
-    tol = 1.0e-3
-    assert abs(max(vertices[:, 0]) - 0.583012701892) < tol
-    assert abs(min(vertices[:, 0]) + 0.5) < tol
-    assert abs(max(vertices[:, 1]) - 0.5) < tol
-    assert abs(min(vertices[:, 1]) + 0.583012701892) < tol
-    assert abs(max(vertices[:, 2]) - 1.0) < tol
-    assert abs(min(vertices[:, 2]) + 0.0) < tol
-
-    vol = sum(compute_volumes(vertices, cells['tetra']))
-    assert abs(vol - 0.4) < 0.05
-
-    return
-
-
-def test_ring_extrude():
-    p = meshmaker.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
-    edge_size = 0.1
-    domain = meshmaker.ring_extrude(p, edge_size)
-    meshmaker.generate_mesh(
-            domain,
-            'out.mesh',
-            cell_size=0.1,
-            edge_size=edge_size,
-            verbose=False
-            )
-
-    vertices, cells, _, _, _ = meshio.read('out.mesh')
-
-    tol = 1.0e-3
-    assert abs(max(vertices[:, 0]) - 1.5) < tol
-    assert abs(min(vertices[:, 0]) + 1.5) < tol
-    assert abs(max(vertices[:, 1]) - 1.5) < tol
-    assert abs(min(vertices[:, 1]) + 1.5) < tol
-    assert abs(max(vertices[:, 2]) - 0.5) < tol
-    assert abs(min(vertices[:, 2]) + 0.3) < tol
-
-    vol = sum(compute_volumes(vertices, cells['tetra']))
-    assert abs(vol - 2 * numpy.pi * 0.4) < 0.05
-
-    return
-
-
-# def test_heart():
-#     class Heart(meshmaker.DomainBase):
-#         def __init__(self, edge_size):
-#             super(Heart, self).__init__()
-#             return
-#
-#         def eval(self, x):
-#             return (x[0]**2 + 9.0/4.0 * x[1]**2 + x[2]**2 - 1)**3 \
-#                 - x[0]**2 * x[2]**3 - 9.0/80.0 * x[1]**2 * x[2]**3
-#
-#         def get_bounding_sphere_squared_radius(self):
-#             return 10.0
-#
-#     edge_size = 0.1
-#     d = Heart(edge_size)
-#
+# def test_scaling():
+#     alpha = 1.3
+#     s = meshmaker.Scale(meshmaker.Cuboid([0, 0, 0], [1, 2, 3]), alpha)
 #     meshmaker.generate_mesh(
-#             d,
+#             s,
+#             'out.mesh',
+#             cell_size=0.2,
+#             edge_size=0.1,
+#             verbose=False
+#             )
+#
+#     vertices, cells, _, _, _ = meshio.read('out.mesh')
+#
+#     tol = 1.0e-3
+#     assert abs(max(vertices[:, 0]) - 1*alpha) < tol
+#     assert abs(min(vertices[:, 0]) + 0.0) < tol
+#     assert abs(max(vertices[:, 1]) - 2*alpha) < tol
+#     assert abs(min(vertices[:, 1]) + 0.0) < tol
+#     assert abs(max(vertices[:, 2]) - 3*alpha) < tol
+#     assert abs(min(vertices[:, 2]) + 0.0) < tol
+#
+#     vol = sum(compute_volumes(vertices, cells['tetra']))
+#     assert abs(vol - 6.0 * alpha**3) < tol
+#
+#     return
+#
+#
+# def test_stretch():
+#     alpha = 2.0
+#     s = meshmaker.Stretch(
+#             meshmaker.Cuboid([0, 0, 0], [1, 2, 3]),
+#             [alpha, 0.0, 0.0]
+#             )
+#     meshmaker.generate_mesh(
+#             s,
+#             'out.mesh',
+#             cell_size=0.2,
+#             edge_size=0.2,
+#             verbose=False
+#             )
+#
+#     vertices, cells, _, _, _ = meshio.read('out.mesh')
+#
+#     tol = 1.0e-3
+#     assert abs(max(vertices[:, 0]) - alpha) < tol
+#     assert abs(min(vertices[:, 0]) + 0.0) < tol
+#     assert abs(max(vertices[:, 1]) - 2.0) < tol
+#     assert abs(min(vertices[:, 1]) + 0.0) < tol
+#     assert abs(max(vertices[:, 2]) - 3.0) < tol
+#     assert abs(min(vertices[:, 2]) + 0.0) < tol
+#
+#     vol = sum(compute_volumes(vertices, cells['tetra']))
+#     assert abs(vol - 12.0) < tol
+#
+#     return
+#
+#
+# def test_rotation():
+#     s0 = meshmaker.Rotate(
+#             meshmaker.Cuboid([0, 0, 0], [1, 2, 3]),
+#             [1.0, 0.0, 0.0],
+#             numpy.pi / 12.0
+#             )
+#     meshmaker.generate_mesh(
+#             s0,
 #             'out.mesh',
 #             cell_size=0.1,
-#             edge_size=edge_size,
-#             # odt=True,
-#             # lloyd=True,
-#             # verbose=True
+#             edge_size=0.1,
+#             verbose=False
 #             )
+#
+#     vertices, cells, _, _, _ = meshio.read('out.mesh')
+#
+#     tol = 1.0e-3
+#     vol = sum(compute_volumes(vertices, cells['tetra']))
+#     assert abs(vol - 6.0) < tol
+#
+#     return
+#
+#
+# def test_translation():
+#     s0 = meshmaker.Translate(
+#             meshmaker.Cuboid([0, 0, 0], [1, 2, 3]),
+#             [1.0, 0.0, 0.0]
+#             )
+#     meshmaker.generate_mesh(
+#             s0,
+#             'out.mesh',
+#             cell_size=0.1,
+#             edge_size=0.1,
+#             verbose=False
+#             )
+#
+#     vertices, cells, _, _, _ = meshio.read('out.mesh')
+#
+#     tol = 1.0e-3
+#     assert abs(max(vertices[:, 0]) - 2.0) < tol
+#     assert abs(min(vertices[:, 0]) - 1.0) < tol
+#     assert abs(max(vertices[:, 1]) - 2.0) < tol
+#     assert abs(min(vertices[:, 1]) + 0.0) < tol
+#     assert abs(max(vertices[:, 2]) - 3.0) < tol
+#     assert abs(min(vertices[:, 2]) + 0.0) < tol
+#     vol = sum(compute_volumes(vertices, cells['tetra']))
+#     assert abs(vol - 6.0) < tol
 #
 #     return
 
 
-def test_sphere():
-    radius = 1.0
-    s = meshmaker.Ball([0, 0, 0], radius)
-    meshmaker.generate_surface_mesh(
-            s,
-            'out.off',
-            angle_bound=30,
-            radius_bound=0.1,
-            distance_bound=0.1,
-            verbose=False
-            )
-
-    vertices, cells, _, _, _ = meshio.read('out.off')
-
-    tol = 1.0e-2
-    assert abs(max(vertices[:, 0]) - radius) < tol
-    assert abs(min(vertices[:, 0]) + radius) < tol
-    assert abs(max(vertices[:, 1]) - radius) < tol
-    assert abs(min(vertices[:, 1]) + radius) < tol
-    assert abs(max(vertices[:, 2]) - radius) < tol
-    assert abs(min(vertices[:, 2]) + radius) < tol
-
-    areas = compute_triangle_areas(vertices, cells['triangle'])
-    surface_area = sum(areas)
-    assert abs(surface_area - 4 * numpy.pi * radius**2) < 0.1
-
-    return
+# def test_off():
+#     meshmaker.generate_poly(
+#             'elephant.off',
+#             'out.mesh',
+#             facet_angle=25.0,
+#             facet_size=0.15,
+#             facet_distance=0.008,
+#             cell_radius_edge_ratio=3.0,
+#             verbose=False
+#             )
+#
+#     vertices, cells, _, _, _ = meshio.read('out.mesh')
+#
+#     tol = 1.0e-3
+#     assert abs(max(vertices[:, 0]) - 0.357612477657) < tol
+#     assert abs(min(vertices[:, 0]) + 0.358747130015) < tol
+#     assert abs(max(vertices[:, 1]) - 0.496137874959) < tol
+#     assert abs(min(vertices[:, 1]) + 0.495301051456) < tol
+#     assert abs(max(vertices[:, 2]) - 0.298780230629) < tol
+#     assert abs(min(vertices[:, 2]) + 0.300472866512) < tol
+#
+#     vol = sum(compute_volumes(vertices, cells['tetra']))
+#     assert abs(vol - 0.044164693065) < tol
+#
+#     return
+#
+#
+# def test_extrude():
+#     p = meshmaker.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
+#     domain = meshmaker.Extrude(p, [0.0, 0.3, 1.0])
+#     meshmaker.generate_mesh(
+#             domain,
+#             'out.mesh',
+#             cell_size=0.1,
+#             edge_size=0.1,
+#             verbose=False
+#             )
+#
+#     vertices, cells, _, _, _ = meshio.read('out.mesh')
+#
+#     tol = 1.0e-3
+#     assert abs(max(vertices[:, 0]) - 0.5) < tol
+#     assert abs(min(vertices[:, 0]) + 0.5) < tol
+#     assert abs(max(vertices[:, 1]) - 0.8) < tol
+#     assert abs(min(vertices[:, 1]) + 0.3) < tol
+#     assert abs(max(vertices[:, 2]) - 1.0) < tol
+#     assert abs(min(vertices[:, 2]) + 0.0) < tol
+#
+#     vol = sum(compute_volumes(vertices, cells['tetra']))
+#     assert abs(vol - 0.4) < tol
+#
+#     return
+#
+#
+# def test_extrude_rotate():
+#     p = meshmaker.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
+#     edge_size = 0.1
+#     domain = meshmaker.Extrude(
+#             p,
+#             [0.0, 0.0, 1.0],
+#             0.5 * 3.14159265359,
+#             edge_size
+#             )
+#     meshmaker.generate_mesh(
+#             domain,
+#             'out.mesh',
+#             cell_size=0.1,
+#             edge_size=edge_size,
+#             verbose=False
+#             )
+#
+#     vertices, cells, _, _, _ = meshio.read('out.mesh')
+#
+#     tol = 1.0e-3
+#     assert abs(max(vertices[:, 0]) - 0.583012701892) < tol
+#     assert abs(min(vertices[:, 0]) + 0.5) < tol
+#     assert abs(max(vertices[:, 1]) - 0.5) < tol
+#     assert abs(min(vertices[:, 1]) + 0.583012701892) < tol
+#     assert abs(max(vertices[:, 2]) - 1.0) < tol
+#     assert abs(min(vertices[:, 2]) + 0.0) < tol
+#
+#     vol = sum(compute_volumes(vertices, cells['tetra']))
+#     assert abs(vol - 0.4) < 0.05
+#
+#     return
+#
+#
+# def test_ring_extrude():
+#     p = meshmaker.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
+#     edge_size = 0.1
+#     domain = meshmaker.ring_extrude(p, edge_size)
+#     meshmaker.generate_mesh(
+#             domain,
+#             'out.mesh',
+#             cell_size=0.1,
+#             edge_size=edge_size,
+#             verbose=False
+#             )
+#
+#     vertices, cells, _, _, _ = meshio.read('out.mesh')
+#
+#     tol = 1.0e-3
+#     assert abs(max(vertices[:, 0]) - 1.5) < tol
+#     assert abs(min(vertices[:, 0]) + 1.5) < tol
+#     assert abs(max(vertices[:, 1]) - 1.5) < tol
+#     assert abs(min(vertices[:, 1]) + 1.5) < tol
+#     assert abs(max(vertices[:, 2]) - 0.5) < tol
+#     assert abs(min(vertices[:, 2]) + 0.3) < tol
+#
+#     vol = sum(compute_volumes(vertices, cells['tetra']))
+#     assert abs(vol - 2 * numpy.pi * 0.4) < 0.05
+#
+#     return
+#
+#
+# # def test_heart():
+# #     class Heart(meshmaker.DomainBase):
+# #         def __init__(self, edge_size):
+# #             super(Heart, self).__init__()
+# #             return
+# #
+# #         def eval(self, x):
+# #             return (x[0]**2 + 9.0/4.0 * x[1]**2 + x[2]**2 - 1)**3 \
+# #                 - x[0]**2 * x[2]**3 - 9.0/80.0 * x[1]**2 * x[2]**3
+# #
+# #         def get_bounding_sphere_squared_radius(self):
+# #             return 10.0
+# #
+# #     edge_size = 0.1
+# #     d = Heart(edge_size)
+# #
+# #     meshmaker.generate_mesh(
+# #             d,
+# #             'out.mesh',
+# #             cell_size=0.1,
+# #             edge_size=edge_size,
+# #             # odt=True,
+# #             # lloyd=True,
+# #             # verbose=True
+# #             )
+# #
+# #     return
+#
+#
+# def test_sphere():
+#     radius = 1.0
+#     s = meshmaker.Ball([0, 0, 0], radius)
+#     meshmaker.generate_surface_mesh(
+#             s,
+#             'out.off',
+#             angle_bound=30,
+#             radius_bound=0.1,
+#             distance_bound=0.1,
+#             verbose=False
+#             )
+#
+#     vertices, cells, _, _, _ = meshio.read('out.off')
+#
+#     tol = 1.0e-2
+#     assert abs(max(vertices[:, 0]) - radius) < tol
+#     assert abs(min(vertices[:, 0]) + radius) < tol
+#     assert abs(max(vertices[:, 1]) - radius) < tol
+#     assert abs(min(vertices[:, 1]) + radius) < tol
+#     assert abs(max(vertices[:, 2]) - radius) < tol
+#     assert abs(min(vertices[:, 2]) + radius) < tol
+#
+#     areas = compute_triangle_areas(vertices, cells['triangle'])
+#     surface_area = sum(areas)
+#     assert abs(surface_area - 4 * numpy.pi * radius**2) < 0.1
+#
+#     return
 
 
 if __name__ == '__main__':
