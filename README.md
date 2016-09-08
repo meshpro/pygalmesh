@@ -69,6 +69,9 @@ frentos.generate_mesh(
 ```
 
 #### Other primitive shapes
+<p align="center">
+<img src="https://nschloe.github.io/frentos/tetrahedron.png"/>
+</p>
 
 frentos provides out-of-the-box support for balls, cuboids, ellpsoids, tori,
 cones, cylinders, and tetrahedra. Try for example
@@ -87,6 +90,9 @@ frentos.generate_mesh(
 ```
 
 #### Domain combinations
+<p align="center">
+<img src="https://nschloe.github.io/frentos/ball-difference.png"/>
+</p>
 
 Supported are unions, intersections, and differences of all domains. As
 mentioned above, however, the sharp intersections between two domains are not
@@ -131,6 +137,9 @@ of the mesh generation. This makes sure that it fits in nicely with the rest of
 the mesh.
 
 #### Domain deformations
+<p align="center">
+<img src="https://nschloe.github.io/frentos/egg.png"/>
+</p>
 
 You can of coure translate, rotate, scale, and stretch any domain. Try, for
 example,
@@ -150,6 +159,9 @@ frentos.generate_mesh(
 ```
 
 #### Extrusion of 2D polygons
+<p align="center">
+<img src="https://nschloe.github.io/frentos/triangle-rotated.png"/>
+</p>
 
 frentos lets you extrude any polygon into a 3D body. It even supports
 rotation alongside!
@@ -176,6 +188,10 @@ Feature edges are automatically preserved here, which is why an edge length
 needs to be given to `frentos.Extrude`.
 
 #### Rotation bodies
+<p align="center">
+<img src="https://nschloe.github.io/frentos/circle-rotate-extr.png"/>
+</p>
+
 Polygons in the x-z-plane can also be rotated around the z-axis to yield a
 rotation body.
 ```python
@@ -194,6 +210,9 @@ frentos.generate_mesh(
 ```
 
 #### Your own custom level set function
+<p align="center">
+<img src="https://nschloe.github.io/frentos/heart.png"/>
+</p>
 If all of the variety is not enough for you, you can define your own custom
 level set function. You simply need to subclass `frentos.DomainBase` and
 specify a function, e.g.,
@@ -250,6 +269,9 @@ documention](http://doc.cgal.org/latest/Surface_mesher/index.html) for the
 options.
 
 #### Meshes from OFF files
+<p align="center">
+<img src="https://nschloe.github.io/frentos/elephant.png"/>
+</p>
 
 If you have an OFF file at hand (like
 [elephant.off](https://raw.githubusercontent.com/CGAL/cgal-swig-bindings/master/examples/data/elephant.off)
