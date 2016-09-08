@@ -6,9 +6,9 @@
 #include <memory>
 #include <vector>
 
-namespace meshmaker {
+namespace frentos {
 
-class Ball: public meshmaker::DomainBase
+class Ball: public frentos::DomainBase
 {
   public:
     Ball(
@@ -47,7 +47,7 @@ class Ball: public meshmaker::DomainBase
 };
 
 
-class Cuboid: public meshmaker::DomainBase
+class Cuboid: public frentos::DomainBase
 {
   public:
     Cuboid(
@@ -117,7 +117,7 @@ class Cuboid: public meshmaker::DomainBase
 };
 
 
-class Ellipsoid: public meshmaker::DomainBase
+class Ellipsoid: public frentos::DomainBase
 {
   public:
     Ellipsoid(
@@ -160,7 +160,7 @@ class Ellipsoid: public meshmaker::DomainBase
 };
 
 
-class Cylinder: public meshmaker::DomainBase
+class Cylinder: public frentos::DomainBase
 {
   public:
     Cylinder(
@@ -224,7 +224,7 @@ class Cylinder: public meshmaker::DomainBase
 };
 
 
-class Cone: public meshmaker::DomainBase
+class Cone: public frentos::DomainBase
 {
   public:
     Cone(
@@ -284,7 +284,7 @@ class Cone: public meshmaker::DomainBase
 };
 
 
-class Tetrahedron: public meshmaker::DomainBase
+class Tetrahedron: public frentos::DomainBase
 {
   public:
     Tetrahedron(
@@ -371,7 +371,7 @@ class Tetrahedron: public meshmaker::DomainBase
 };
 
 
-class Torus: public meshmaker::DomainBase
+class Torus: public frentos::DomainBase
 {
   public:
     Torus(
@@ -408,6 +408,6 @@ class Torus: public meshmaker::DomainBase
     const double minor_radius_;
 };
 
-} // namespace meshmaker
+} // namespace frentos
 
 #endif // PRIMITIVES_HPP

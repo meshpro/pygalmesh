@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(meshmaker)
+project(frentos)
 
 add_subdirectory(src)

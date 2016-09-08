@@ -5,7 +5,7 @@
 #include <array>
 #include <memory>
 
-namespace meshmaker {
+namespace frentos {
 
 class DomainBase
 {
@@ -29,11 +29,11 @@ class DomainBase
   };
 };
 
-class Translate: public meshmaker::DomainBase
+class Translate: public frentos::DomainBase
 {
   public:
   Translate(
-      const std::shared_ptr<const meshmaker::DomainBase> & domain,
+      const std::shared_ptr<const frentos::DomainBase> & domain,
       const std::array<double, 3> & direction
       ):
     domain_(domain),
@@ -95,16 +95,16 @@ class Translate: public meshmaker::DomainBase
   };
 
   private:
-    const std::shared_ptr<const meshmaker::DomainBase> domain_;
+    const std::shared_ptr<const frentos::DomainBase> domain_;
     const Eigen::Vector3d direction_;
     const std::vector<std::vector<std::array<double, 3>>> translated_features_;
 };
 
-class Rotate: public meshmaker::DomainBase
+class Rotate: public frentos::DomainBase
 {
   public:
   Rotate(
-      const std::shared_ptr<const meshmaker::DomainBase> & domain,
+      const std::shared_ptr<const frentos::DomainBase> & domain,
       const std::array<double, 3> & axis,
       const double angle
       ):
@@ -190,18 +190,18 @@ class Rotate: public meshmaker::DomainBase
   };
 
   private:
-    const std::shared_ptr<const meshmaker::DomainBase> domain_;
+    const std::shared_ptr<const frentos::DomainBase> domain_;
     const Eigen::Vector3d normalized_axis_;
     const double sinAngle_;
     const double cosAngle_;
     const std::vector<std::vector<std::array<double, 3>>> rotated_features_;
 };
 
-class Scale: public meshmaker::DomainBase
+class Scale: public frentos::DomainBase
 {
   public:
   Scale(
-      std::shared_ptr<const meshmaker::DomainBase> & domain,
+      std::shared_ptr<const frentos::DomainBase> & domain,
       const double alpha
       ):
     domain_(domain),
@@ -255,16 +255,16 @@ class Scale: public meshmaker::DomainBase
   };
 
   private:
-    std::shared_ptr<const meshmaker::DomainBase> domain_;
+    std::shared_ptr<const frentos::DomainBase> domain_;
     const double alpha_;
     const std::vector<std::vector<std::array<double, 3>>> scaled_features_;
 };
 
-class Stretch: public meshmaker::DomainBase
+class Stretch: public frentos::DomainBase
 {
   public:
   Stretch(
-      std::shared_ptr<const meshmaker::DomainBase> & domain,
+      std::shared_ptr<const frentos::DomainBase> & domain,
       const std::array<double, 3> & direction
       ):
     domain_(domain),
@@ -325,17 +325,17 @@ class Stretch: public meshmaker::DomainBase
   };
 
   private:
-    std::shared_ptr<const meshmaker::DomainBase> domain_;
+    std::shared_ptr<const frentos::DomainBase> domain_;
     const Eigen::Vector3d normalized_direction_;
     const double alpha_;
     const std::vector<std::vector<std::array<double, 3>>> stretched_features_;
 };
 
-class Intersection: public meshmaker::DomainBase
+class Intersection: public frentos::DomainBase
 {
   public:
   explicit Intersection(
-      std::vector<std::shared_ptr<const meshmaker::DomainBase>> & domains
+      std::vector<std::shared_ptr<const frentos::DomainBase>> & domains
       ):
     domains_(domains)
   {
@@ -379,14 +379,14 @@ class Intersection: public meshmaker::DomainBase
   };
 
   private:
-    std::vector<std::shared_ptr<const meshmaker::DomainBase>> domains_;
+    std::vector<std::shared_ptr<const frentos::DomainBase>> domains_;
 };
 
-class Union: public meshmaker::DomainBase
+class Union: public frentos::DomainBase
 {
   public:
   explicit Union(
-      std::vector<std::shared_ptr<const meshmaker::DomainBase>> & domains
+      std::vector<std::shared_ptr<const frentos::DomainBase>> & domains
       ):
     domains_(domains)
   {
@@ -430,15 +430,15 @@ class Union: public meshmaker::DomainBase
   };
 
   private:
-    std::vector<std::shared_ptr<const meshmaker::DomainBase>> domains_;
+    std::vector<std::shared_ptr<const frentos::DomainBase>> domains_;
 };
 
-class Difference: public meshmaker::DomainBase
+class Difference: public frentos::DomainBase
 {
   public:
   Difference(
-      std::shared_ptr<const meshmaker::DomainBase> & domain0,
-      std::shared_ptr<const meshmaker::DomainBase> & domain1
+      std::shared_ptr<const frentos::DomainBase> & domain0,
+      std::shared_ptr<const frentos::DomainBase> & domain1
       ):
     domain0_(domain0),
     domain1_(domain1)
@@ -479,9 +479,9 @@ class Difference: public meshmaker::DomainBase
   };
 
   private:
-    std::shared_ptr<const meshmaker::DomainBase> domain0_;
-    std::shared_ptr<const meshmaker::DomainBase> domain1_;
+    std::shared_ptr<const frentos::DomainBase> domain0_;
+    std::shared_ptr<const frentos::DomainBase> domain1_;
 };
 
-} // namespace meshmaker
+} // namespace frentos
 #endif // DOMAIN_HPP

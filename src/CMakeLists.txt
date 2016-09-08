@@ -17,15 +17,15 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 SET(CMAKE_SWIG_FLAGS "-keyword")
 
-SET_SOURCE_FILES_PROPERTIES(meshmaker.i PROPERTIES CPLUSPLUS ON)
+SET_SOURCE_FILES_PROPERTIES(frentos.i PROPERTIES CPLUSPLUS ON)
 SWIG_ADD_MODULE(
-  meshmaker python meshmaker.i
+  frentos python frentos.i
   generate.cpp
   generate_from_off.cpp
   generate_surface_mesh.cpp
   )
 SWIG_LINK_LIBRARIES(
-  meshmaker
+  frentos
   ${PYTHON_LIBRARIES}
   ${CGAL_LIBRARY}
   ${GMP_LIBRARIES}
@@ -38,8 +38,8 @@ execute_process(
   OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
   OUTPUT_STRIP_TRAILING_WHITESPACE
   )
-install(TARGETS _meshmaker DESTINATION ${PYTHON_SITE_PACKAGES})
+install(TARGETS _frentos DESTINATION ${PYTHON_SITE_PACKAGES})
 install(
-  FILES ${CMAKE_BINARY_DIR}/src/meshmaker.py
+  FILES ${CMAKE_BINARY_DIR}/src/frentos.py
   DESTINATION ${PYTHON_SITE_PACKAGES}
   )

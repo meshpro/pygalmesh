@@ -4,7 +4,7 @@ from distutils.core import setup, Extension
 import os
 import codecs
 
-# from meshmaker import __version__, __license__, __author__, __email__
+# from frentos import __version__, __license__, __author__, __email__
 __version__ = '0.1.0'
 __license__ = 'MIT'
 __author__ = 'Nico Schlömer'
@@ -22,15 +22,15 @@ def read(fname):
     return content
 
 setup(
-    name='meshmaker',
+    name='frentos',
     ext_modules=[
         Extension(
-            '_meshmaker',
+            '_frentos',
             [
                 'src/generate.cpp',
                 'src/generate_from_off.cpp',
                 'src/generate_surface_mesh.cpp',
-                'src/meshmaker.i'
+                'src/frentos.i'
             ],
             include_dirs=['/usr/include/eigen3/'],
             libraries=['CGAL', 'gmp', 'mpfr'],
@@ -38,11 +38,11 @@ setup(
             extra_compile_args=['-std=c++11']
             )
         ],
-    py_modules=['meshmaker'],
+    py_modules=['frentos'],
     package_dir={'': 'src'},
     version=__version__,
-    url='https://github.com/nschloe/meshmaker',
-    download_url='https://pypi.python.org/pypi/meshmaker',
+    url='https://github.com/nschloe/frentos',
+    download_url='https://pypi.python.org/pypi/frentos',
     author=__author__,
     author_email=__email__,
     requires=['numpy'],

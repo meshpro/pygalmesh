@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace meshmaker {
+namespace frentos {
 
 void
 generate_from_off(
@@ -23,6 +23,6 @@ generate_from_off(
     const bool verbose = true
     );
 
-} // namespace meshmaker
+} // namespace frentos
 
 #endif // GENERATE_FROM_OFF_HPP

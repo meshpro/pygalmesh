@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-import meshmaker
+import frentos
 
 import numpy
 import meshio
@@ -36,8 +36,8 @@ def compute_triangle_areas(vertices, triangles):
 
 
 def test_ball():
-    s = meshmaker.Ball([0, 0, 0], 1.0)
-    meshmaker.generate_mesh(s, 'out.mesh', cell_size=0.2, verbose=False)
+    s = frentos.Ball([0, 0, 0], 1.0)
+    frentos.generate_mesh(s, 'out.mesh', cell_size=0.2, verbose=False)
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -57,12 +57,12 @@ def test_ball():
 def test_balls_union():
     radius = 1.0
     displacement = 0.5
-    s0 = meshmaker.Ball([displacement, 0, 0], radius)
-    s1 = meshmaker.Ball([-displacement, 0, 0], radius)
-    uni = meshmaker.ListOfDomains()
+    s0 = frentos.Ball([displacement, 0, 0], radius)
+    s1 = frentos.Ball([-displacement, 0, 0], radius)
+    uni = frentos.ListOfDomains()
     uni.append(s0)
     uni.append(s1)
-    u = meshmaker.Union(uni)
+    u = frentos.Union(uni)
 
     a = numpy.sqrt(radius**2 - displacement**2)
     edge_size = 0.1
@@ -76,7 +76,7 @@ def test_balls_union():
         ]
     circ.append(circ[0])
 
-    meshmaker.generate_mesh(
+    frentos.generate_mesh(
             u,
             'out.mesh',
             feature_edges=[circ],
@@ -109,12 +109,12 @@ def test_balls_union():
 def test_balls_intersection():
     radius = 1.0
     displacement = 0.5
-    s0 = meshmaker.Ball([displacement, 0, 0], radius)
-    s1 = meshmaker.Ball([-displacement, 0, 0], radius)
-    inter = meshmaker.ListOfDomains()
+    s0 = frentos.Ball([displacement, 0, 0], radius)
+    s1 = frentos.Ball([-displacement, 0, 0], radius)
+    inter = frentos.ListOfDomains()
     inter.append(s0)
     inter.append(s1)
-    u = meshmaker.Intersection(inter)
+    u = frentos.Intersection(inter)
 
     a = numpy.sqrt(radius**2 - displacement**2)
     edge_size = 0.1
@@ -128,7 +128,7 @@ def test_balls_intersection():
         ]
     circ.append(circ[0])
 
-    meshmaker.generate_mesh(
+    frentos.generate_mesh(
             u,
             'out.mesh',
             feature_edges=[circ],
@@ -160,9 +160,9 @@ def test_balls_intersection():
 def test_balls_difference():
     radius = 1.0
     displacement = 0.5
-    s0 = meshmaker.Ball([displacement, 0, 0], radius)
-    s1 = meshmaker.Ball([-displacement, 0, 0], radius)
-    u = meshmaker.Difference(s0, s1)
+    s0 = frentos.Ball([displacement, 0, 0], radius)
+    s1 = frentos.Ball([-displacement, 0, 0], radius)
+    u = frentos.Difference(s0, s1)
 
     a = numpy.sqrt(radius**2 - displacement**2)
     edge_size = 0.15
@@ -176,7 +176,7 @@ def test_balls_difference():
         ]
     circ.append(circ[0])
 
-    meshmaker.generate_mesh(
+    frentos.generate_mesh(
             u,
             'out.mesh',
             feature_edges=[circ],
@@ -209,12 +209,12 @@ def test_balls_difference():
 
 
 def test_cuboids_intersection():
-    c0 = meshmaker.Cuboid([0, 0, -0.5], [3, 3, 0.5])
-    c1 = meshmaker.Cuboid([1, 1, -2], [2, 2, 2])
-    inter = meshmaker.ListOfDomains()
+    c0 = frentos.Cuboid([0, 0, -0.5], [3, 3, 0.5])
+    c1 = frentos.Cuboid([1, 1, -2], [2, 2, 2])
+    inter = frentos.ListOfDomains()
     inter.append(c0)
     inter.append(c1)
-    u = meshmaker.Intersection(inter)
+    u = frentos.Intersection(inter)
 
     # In CGAL, feature edges must not intersect, and that's a problem here: The
     # intersection edges of the cuboids share eight points with the edges of
@@ -227,7 +227,7 @@ def test_cuboids_intersection():
     #         [[2.0 - eps, 1.0, 0.5], [1.0 + eps, 1.0, 0.5]],
     #         ]
 
-    meshmaker.generate_mesh(
+    frentos.generate_mesh(
             u,
             'out.mesh',
             cell_size=0.1,
@@ -255,14 +255,14 @@ def test_cuboids_intersection():
 
 
 def test_cuboids_union():
-    c0 = meshmaker.Cuboid([0, 0, -0.5], [3, 3, 0.5])
-    c1 = meshmaker.Cuboid([1, 1, -2], [2, 2, 2])
-    inter = meshmaker.ListOfDomains()
+    c0 = frentos.Cuboid([0, 0, -0.5], [3, 3, 0.5])
+    c1 = frentos.Cuboid([1, 1, -2], [2, 2, 2])
+    inter = frentos.ListOfDomains()
     inter.append(c0)
     inter.append(c1)
-    u = meshmaker.Union(inter)
+    u = frentos.Union(inter)
 
-    meshmaker.generate_mesh(
+    frentos.generate_mesh(
             u,
             'out.mesh',
             cell_size=0.2,
@@ -290,8 +290,8 @@ def test_cuboids_union():
 
 
 def test_cuboid():
-    s0 = meshmaker.Cuboid([0, 0, 0], [1, 2, 3])
-    meshmaker.generate_mesh(s0, 'out.mesh', edge_size=0.1, verbose=False)
+    s0 = frentos.Cuboid([0, 0, 0], [1, 2, 3])
+    frentos.generate_mesh(s0, 'out.mesh', edge_size=0.1, verbose=False)
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -313,8 +313,8 @@ def test_cone():
     base_radius = 1.0
     height = 2.0
     edge_size = 0.1
-    s0 = meshmaker.Cone(base_radius, height, edge_size)
-    meshmaker.generate_mesh(
+    s0 = frentos.Cone(base_radius, height, edge_size)
+    frentos.generate_mesh(
             s0, 'out.mesh', cell_size=0.1, edge_size=edge_size,
             verbose=False
             )
@@ -341,8 +341,8 @@ def test_cylinder():
     z0 = 0.0
     z1 = 1.0
     edge_length = 0.1
-    s0 = meshmaker.Cylinder(z0, z1, radius, edge_length)
-    meshmaker.generate_mesh(
+    s0 = frentos.Cylinder(z0, z1, radius, edge_length)
+    frentos.generate_mesh(
             s0, 'out.mesh', cell_size=0.1, edge_size=edge_length,
             verbose=False
             )
@@ -365,13 +365,13 @@ def test_cylinder():
 
 
 def test_tetrahedron():
-    s0 = meshmaker.Tetrahedron(
+    s0 = frentos.Tetrahedron(
             [0.0, 0.0, 0.0],
             [1.0, 0.0, 0.0],
             [0.0, 1.0, 0.0],
             [0.0, 0.0, 1.0]
             )
-    meshmaker.generate_mesh(
+    frentos.generate_mesh(
             s0, 'out.mesh', cell_size=0.1, edge_size=0.1,
             verbose=False
             )
@@ -395,8 +395,8 @@ def test_tetrahedron():
 def test_torus():
     major_radius = 1.0
     minor_radius = 0.5
-    s0 = meshmaker.Torus(major_radius, minor_radius)
-    meshmaker.generate_mesh(s0, 'out.mesh', cell_size=0.1, verbose=False)
+    s0 = frentos.Torus(major_radius, minor_radius)
+    frentos.generate_mesh(s0, 'out.mesh', cell_size=0.1, verbose=False)
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -418,7 +418,7 @@ def test_torus():
 
 
 def test_custom_function():
-    class Hyperboloid(meshmaker.DomainBase):
+    class Hyperboloid(frentos.DomainBase):
         def __init__(self, edge_size):
             super(Hyperboloid, self).__init__()
             self.z0 = -1.0
@@ -464,7 +464,7 @@ def test_custom_function():
     edge_size = 0.12
     d = Hyperboloid(edge_size)
 
-    meshmaker.generate_mesh(
+    frentos.generate_mesh(
             d,
             'out.mesh',
             cell_size=0.1,
@@ -490,8 +490,8 @@ def test_custom_function():
 
 def test_scaling():
     alpha = 1.3
-    s = meshmaker.Scale(meshmaker.Cuboid([0, 0, 0], [1, 2, 3]), alpha)
-    meshmaker.generate_mesh(
+    s = frentos.Scale(frentos.Cuboid([0, 0, 0], [1, 2, 3]), alpha)
+    frentos.generate_mesh(
             s,
             'out.mesh',
             cell_size=0.2,
@@ -517,11 +517,11 @@ def test_scaling():
 
 def test_stretch():
     alpha = 2.0
-    s = meshmaker.Stretch(
-            meshmaker.Cuboid([0, 0, 0], [1, 2, 3]),
+    s = frentos.Stretch(
+            frentos.Cuboid([0, 0, 0], [1, 2, 3]),
             [alpha, 0.0, 0.0]
             )
-    meshmaker.generate_mesh(
+    frentos.generate_mesh(
             s,
             'out.mesh',
             cell_size=0.2,
@@ -546,12 +546,12 @@ def test_stretch():
 
 
 def test_rotation():
-    s0 = meshmaker.Rotate(
-            meshmaker.Cuboid([0, 0, 0], [1, 2, 3]),
+    s0 = frentos.Rotate(
+            frentos.Cuboid([0, 0, 0], [1, 2, 3]),
             [1.0, 0.0, 0.0],
             numpy.pi / 12.0
             )
-    meshmaker.generate_mesh(
+    frentos.generate_mesh(
             s0,
             'out.mesh',
             cell_size=0.1,
@@ -569,11 +569,11 @@ def test_rotation():
 
 
 def test_translation():
-    s0 = meshmaker.Translate(
-            meshmaker.Cuboid([0, 0, 0], [1, 2, 3]),
+    s0 = frentos.Translate(
+            frentos.Cuboid([0, 0, 0], [1, 2, 3]),
             [1.0, 0.0, 0.0]
             )
-    meshmaker.generate_mesh(
+    frentos.generate_mesh(
             s0,
             'out.mesh',
             cell_size=0.1,
@@ -598,7 +598,7 @@ def test_translation():
 
 # # segfaults on travis, works locally
 # def test_off():
-#     meshmaker.generate_from_off(
+#     frentos.generate_from_off(
 #             'elephant.off',
 #             'out.mesh',
 #             facet_angle=25.0,
@@ -625,9 +625,9 @@ def test_translation():
 
 
 def test_extrude():
-    p = meshmaker.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
-    domain = meshmaker.Extrude(p, [0.0, 0.3, 1.0])
-    meshmaker.generate_mesh(
+    p = frentos.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
+    domain = frentos.Extrude(p, [0.0, 0.3, 1.0])
+    frentos.generate_mesh(
             domain,
             'out.mesh',
             cell_size=0.1,
@@ -652,15 +652,15 @@ def test_extrude():
 
 
 def test_extrude_rotate():
-    p = meshmaker.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
+    p = frentos.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
     edge_size = 0.1
-    domain = meshmaker.Extrude(
+    domain = frentos.Extrude(
             p,
             [0.0, 0.0, 1.0],
             0.5 * 3.14159265359,
             edge_size
             )
-    meshmaker.generate_mesh(
+    frentos.generate_mesh(
             domain,
             'out.mesh',
             cell_size=0.1,
@@ -685,10 +685,10 @@ def test_extrude_rotate():
 
 
 def test_ring_extrude():
-    p = meshmaker.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
+    p = frentos.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
     edge_size = 0.1
-    domain = meshmaker.ring_extrude(p, edge_size)
-    meshmaker.generate_mesh(
+    domain = frentos.ring_extrude(p, edge_size)
+    frentos.generate_mesh(
             domain,
             'out.mesh',
             cell_size=0.1,
@@ -713,7 +713,7 @@ def test_ring_extrude():
 
 
 # def test_heart():
-#     class Heart(meshmaker.DomainBase):
+#     class Heart(frentos.DomainBase):
 #         def __init__(self, edge_size):
 #             super(Heart, self).__init__()
 #             return
@@ -728,7 +728,7 @@ def test_ring_extrude():
 #     edge_size = 0.1
 #     d = Heart(edge_size)
 #
-#     meshmaker.generate_mesh(
+#     frentos.generate_mesh(
 #             d,
 #             'out.mesh',
 #             cell_size=0.1,
@@ -743,8 +743,8 @@ def test_ring_extrude():
 
 def test_sphere():
     radius = 1.0
-    s = meshmaker.Ball([0, 0, 0], radius)
-    meshmaker.generate_surface_mesh(
+    s = frentos.Ball([0, 0, 0], radius)
+    frentos.generate_surface_mesh(
             s,
             'out.off',
             angle_bound=30,

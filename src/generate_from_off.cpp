@@ -11,7 +11,7 @@
 // IO
 #include <CGAL/IO/Polyhedron_iostream.h>
 
-namespace meshmaker {
+namespace frentos {
 
 // Domain
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
@@ -96,4 +96,4 @@ generate_mesh_from_off(
   return;
 }
 
-} // namespace meshmaker
+} // namespace frentos

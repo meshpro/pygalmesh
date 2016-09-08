@@ -1,9 +1,11 @@
-# meshmaker
+# frentos
 
-[![Build Status](https://travis-ci.org/nschloe/meshmaker.svg?branch=master)](https://travis-ci.org/nschloe/meshmaker)
+[The meshmaker.](https://youtu.be/JqgqgcE8Zck)
 
-This is meshmaker, a Python frontend to CGAL's 3D mesh generation capabilities.
-meshmaker aims to make it easy to create high-quality 3D volume and surface
+[![Build Status](https://travis-ci.org/nschloe/frentos.svg?branch=master)](https://travis-ci.org/nschloe/frentos)
+
+This is frentos, a Python frontend to CGAL's 3D mesh generation capabilities.
+frentos aims to make it easy to create high-quality 3D volume and surface
 meshes.
 
 CGAL offers two different approaches for mesh generation:
@@ -11,7 +13,7 @@ CGAL offers two different approaches for mesh generation:
 1. Meshes defined implicitly by level sets of functions.
 2. Meshes defined by a collection of bounding planes.
 
-meshmaker provides a front-end to the first approach, which has the following
+frentos provides a front-end to the first approach, which has the following
 advantages and disadvantages:
 
 * All boundary points are guaranteed to be in the level set within any specified
@@ -38,13 +40,13 @@ frontend to [gmsh](http://gmsh.info/)) and
 
 #### A simple ball
 <p align="center">
-<img src="https://nschloe.github.io/meshmaker/ball.png"/>
+<img src="https://nschloe.github.io/frentos/ball.png"/>
 </p>
 ```python
-import meshmaker
+import frentos
 
-s = meshmaker.Ball([0, 0, 0], 1.0)
-meshmaker.generate_mesh(s, 'out.mesh', cell_size=0.2)
+s = frentos.Ball([0, 0, 0], 1.0)
+frentos.generate_mesh(s, 'out.mesh', cell_size=0.2)
 ```
 CGAL's mesh generator returns Medit-files, which can be processed by, e.g.,
 [meshio](https://github.com/nschloe/meshio).
@@ -54,7 +56,7 @@ vertices, cells, _, _, _ = meshio.read('out.mesh')
 The mesh generation comes with many more options, described
 [here](http://doc.cgal.org/latest/Mesh_3/). Try, for example,
 ```python
-meshmaker.generate_mesh(
+frentos.generate_mesh(
     s,
     'out.mesh',
     cell_size=0.2,
@@ -67,18 +69,18 @@ meshmaker.generate_mesh(
 
 #### Other primitive shapes
 
-meshmaker provides out-of-the-box support for balls, cuboids, ellpsoids, tori,
+frentos provides out-of-the-box support for balls, cuboids, ellpsoids, tori,
 cones, cylinders, and tetrahedra. Try for example
 ```python
-import meshmaker
+import frentos
 
-s0 = meshmaker.Tetrahedron(
+s0 = frentos.Tetrahedron(
         [0.0, 0.0, 0.0],
         [1.0, 0.0, 0.0],
         [0.0, 1.0, 0.0],
         [0.0, 0.0, 1.0]
         )
-meshmaker.generate_mesh(
+frentos.generate_mesh(
         s0, 'out.mesh', cell_size=0.1, edge_size=0.1
         )
 ```
@@ -89,13 +91,13 @@ Supported are unions, intersections, and differences of all domains. As
 mentioned above, however, the sharp intersections between two domains are not
 automatically handled. Try for example
 ```python
-import meshmaker
+import frentos
 
 radius = 1.0
 displacement = 0.5
-s0 = meshmaker.Ball([displacement, 0, 0], radius)
-s1 = meshmaker.Ball([-displacement, 0, 0], radius)
-u = meshmaker.Difference(s0, s1)
+s0 = frentos.Ball([displacement, 0, 0], radius)
+s1 = frentos.Ball([-displacement, 0, 0], radius)
+u = frentos.Difference(s0, s1)
 ```
 To sharpen the intersection circle, add it as a feature edge polygon line,
 e.g.,
@@ -112,7 +114,7 @@ circ = [
     ]
 circ.append(circ[0])
 
-meshmaker.generate_mesh(
+frentos.generate_mesh(
         u,
         'out.mesh',
         feature_edges=[circ],
@@ -132,14 +134,14 @@ the mesh.
 You can of coure translate, rotate, scale, and stretch any domain. Try, for
 example,
 ```
-import meshmaker
+import frentos
 
-s = meshmaker.Stretch(
-        meshmaker.Ball([0, 0, 0], 1.0),
+s = frentos.Stretch(
+        frentos.Ball([0, 0, 0], 1.0),
         [1.0, 2.0, 0.0]
         )
 
-meshmaker.generate_mesh(
+frentos.generate_mesh(
         s,
         'out.mesh',
         cell_size=0.1
@@ -148,20 +150,20 @@ meshmaker.generate_mesh(
 
 #### Extrusion of 2D polygons
 
-meshmaker lets you extrude any polygon into a 3D body. It even supports
+frentos lets you extrude any polygon into a 3D body. It even supports
 rotation alongside!
 ```python
-import meshmaker
+import frentos
 
-p = meshmaker.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
+p = frentos.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
 edge_size = 0.1
-domain = meshmaker.Extrude(
+domain = frentos.Extrude(
         p,
         [0.0, 0.0, 1.0],
         0.5 * 3.14159265359,
         edge_size
         )
-meshmaker.generate_mesh(
+frentos.generate_mesh(
         domain,
         'out.mesh',
         cell_size=0.1,
@@ -170,18 +172,18 @@ meshmaker.generate_mesh(
         )
 ```
 Feature edges are automatically preserved here, which is why an edge length
-needs to be given to `meshmaker.Extrude`.
+needs to be given to `frentos.Extrude`.
 
 #### Rotation bodies
 Polygons in the x-z-plane can also be rotated around the z-axis to yield a
 rotation body.
 ```python
-import meshmaker
+import frentos
 
-p = meshmaker.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
+p = frentos.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
 edge_size = 0.1
-domain = meshmaker.ring_extrude(p, edge_size)
-meshmaker.generate_mesh(
+domain = frentos.ring_extrude(p, edge_size)
+frentos.generate_mesh(
         domain,
         'out.mesh',
         cell_size=0.1,
@@ -192,11 +194,11 @@ meshmaker.generate_mesh(
 
 #### Your own custom level set function
 If all of the variety is not enough for you, you can define your own custom
-level set function. You simply need to subclass `meshmaker.DomainBase` and
+level set function. You simply need to subclass `frentos.DomainBase` and
 specify a function, e.g.,
 ```python
-import meshmaker
-class Heart(meshmaker.DomainBase):
+import frentos
+class Heart(frentos.DomainBase):
     def __init__(self, edge_size):
         super(Heart, self).__init__()
         return
@@ -211,7 +213,7 @@ class Heart(meshmaker.DomainBase):
 edge_size = 0.1
 d = Heart(edge_size)
 
-meshmaker.generate_mesh(
+frentos.generate_mesh(
         d,
         'out.mesh',
         cell_size=0.1,
@@ -223,14 +225,14 @@ an input to CGAL's mesh generator.
 
 #### Surface meshes
 
-If you're only after the surface of a body, meshmaker has
+If you're only after the surface of a body, frentos has
 `generate_surface_mesh` for you. It offers fewer options (obviously,
 `cell_size` is gone), but otherwise works the same way:
 ```python
-import meshmaker
+import frentos
 
-s = meshmaker.Ball([0, 0, 0], 1.0)
-meshmaker.generate_surface_mesh(
+s = frentos.Ball([0, 0, 0], 1.0)
+frentos.generate_surface_mesh(
         s,
         'out.off',
         angle_bound=30,
@@ -251,11 +253,11 @@ options.
 If you have an OFF file at hand (like
 [elephant.off](https://raw.githubusercontent.com/CGAL/cgal-swig-bindings/master/examples/data/elephant.off)
 or [these](https://github.com/CGAL/cgal/tree/master/Surface_mesher/demo/Surface_mesher/inputs)),
-meshmaker generates the mesh via
+frentos generates the mesh via
 ```python
-import meshmaker
+import frentos
 
-meshmaker.generate_from_off(
+frentos.generate_from_off(
         'elephant.off',
         'out.mesh',
         facet_angle=25.0,
@@ -268,7 +270,7 @@ meshmaker.generate_from_off(
 
 ### Installation
 
-For installation, meshmaker needs [CGAL](http://www.cgal.org/) and
+For installation, frentos needs [CGAL](http://www.cgal.org/) and
 [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) installed on your
 system. They are typically available on your Linux distribution, e.g., on
 Ubuntu
@@ -279,18 +281,18 @@ sudo apt install libcgal-dev libeigen3-dev
 meshes.
 
 #### PyPi
-[meshmaker](https://pypi.python.org/pypi/meshmaker) is available via PyPi, so
+[frentos](https://pypi.python.org/pypi/frentos) is available via PyPi, so
 with [pip](https://pypi.python.org/pypi/pip) installed (`sudo apt install
 python-pip`) you can simply type
 ```
-sudo -H pip install meshmaker
+sudo -H pip install frentos
 ```
 to get started.
 
 #### Manual installation
 
 For manual installation (if you're a developer or just really keen on getting
-the bleeding edge version of meshmaker), there are two possibilities:
+the bleeding edge version of frentos), there are two possibilities:
 
  * Get the sources, type `sudo python setup.py install`. This does the trick
    most the time.
@@ -311,4 +313,4 @@ To create a new release
 
 ### License
 
-meshmaker is published under the [MIT license](https://en.wikipedia.org/wiki/MIT_License).
+frentos is published under the [MIT license](https://en.wikipedia.org/wiki/MIT_License).

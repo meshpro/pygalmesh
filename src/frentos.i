@@ -1,4 +1,4 @@
-%module(directors="1") meshmaker
+%module(directors="1") frentos
 
 %{
 #define SWIG_FILE_WITH_INIT
@@ -13,31 +13,31 @@
 %include "std_string.i"
 
 %include <std_shared_ptr.i>
-%shared_ptr(meshmaker::DomainBase);
+%shared_ptr(frentos::DomainBase);
 
-%shared_ptr(meshmaker::Extrude);
-%shared_ptr(meshmaker::Polygon2D);
-%shared_ptr(meshmaker::ring_extrude);
+%shared_ptr(frentos::Extrude);
+%shared_ptr(frentos::Polygon2D);
+%shared_ptr(frentos::ring_extrude);
 
-%shared_ptr(meshmaker::Rotate);
-%shared_ptr(meshmaker::Scale);
-%shared_ptr(meshmaker::Stretch);
-%shared_ptr(meshmaker::Translate);
+%shared_ptr(frentos::Rotate);
+%shared_ptr(frentos::Scale);
+%shared_ptr(frentos::Stretch);
+%shared_ptr(frentos::Translate);
 
-%shared_ptr(meshmaker::Difference);
-%shared_ptr(meshmaker::Intersection);
-%shared_ptr(meshmaker::Union);
+%shared_ptr(frentos::Difference);
+%shared_ptr(frentos::Intersection);
+%shared_ptr(frentos::Union);
 
-%shared_ptr(meshmaker::Ball);
-%shared_ptr(meshmaker::Cone);
-%shared_ptr(meshmaker::Cuboid);
-%shared_ptr(meshmaker::Cylinder);
-%shared_ptr(meshmaker::Ellipsoid);
-%shared_ptr(meshmaker::Tetrahedron);
-%shared_ptr(meshmaker::Torus);
+%shared_ptr(frentos::Ball);
+%shared_ptr(frentos::Cone);
+%shared_ptr(frentos::Cuboid);
+%shared_ptr(frentos::Cylinder);
+%shared_ptr(frentos::Ellipsoid);
+%shared_ptr(frentos::Tetrahedron);
+%shared_ptr(frentos::Torus);
 
 // http://stackoverflow.com/a/39273055/353337
-%feature("director") meshmaker::DomainBase;
+%feature("director") frentos::DomainBase;
 
 %include <std_array.i>
 %include <std_vector.i>
@@ -47,7 +47,7 @@ namespace std {
 %template(Polyline2d) vector<array<double, 2>>;
 %template(Polyline3d) vector<array<double, 3>>;
 %template(ListOfPolylines) vector<vector<array<double, 3>>>;
-%template(ListOfDomains) vector<shared_ptr<const meshmaker::DomainBase>>;
+%template(ListOfDomains) vector<shared_ptr<const frentos::DomainBase>>;
 }
 
 %include "generate.hpp"

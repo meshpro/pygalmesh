@@ -6,10 +6,10 @@
 #include <memory>
 #include <string>
 
-namespace meshmaker {
+namespace frentos {
 
 void generate_surface_mesh(
-    const std::shared_ptr<meshmaker::DomainBase> & domain,
+    const std::shared_ptr<frentos::DomainBase> & domain,
     const std::string & outfile,
     const double bounding_sphere_radius = 0.0,
     const double angle_bound = 0.0,
@@ -18,6 +18,6 @@ void generate_surface_mesh(
     const bool verbose = true
     );
 
-} // namespace meshmaker
+} // namespace frentos
 
 #endif // GENERATE_SURFACE_MESH_HPP

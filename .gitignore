@@ -2,6 +2,6 @@
 *.vtu
 *.mesh
 build/
-src/meshmaker.py
-src/meshmaker_wrap.cpp
-src/meshmaker_wrap.h
+src/frentos.py
+src/frentos_wrap.cpp
+src/frentos_wrap.h
