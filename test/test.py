@@ -621,68 +621,68 @@ def test_translation():
 #     assert abs(vol - 0.044164693065) < tol
 #
 #     return
-#
-#
-# def test_extrude():
-#     p = meshmaker.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
-#     domain = meshmaker.Extrude(p, [0.0, 0.3, 1.0])
-#     meshmaker.generate_mesh(
-#             domain,
-#             'out.mesh',
-#             cell_size=0.1,
-#             edge_size=0.1,
-#             verbose=False
-#             )
-#
-#     vertices, cells, _, _, _ = meshio.read('out.mesh')
-#
-#     tol = 1.0e-3
-#     assert abs(max(vertices[:, 0]) - 0.5) < tol
-#     assert abs(min(vertices[:, 0]) + 0.5) < tol
-#     assert abs(max(vertices[:, 1]) - 0.8) < tol
-#     assert abs(min(vertices[:, 1]) + 0.3) < tol
-#     assert abs(max(vertices[:, 2]) - 1.0) < tol
-#     assert abs(min(vertices[:, 2]) + 0.0) < tol
-#
-#     vol = sum(compute_volumes(vertices, cells['tetra']))
-#     assert abs(vol - 0.4) < tol
-#
-#     return
-#
-#
-# def test_extrude_rotate():
-#     p = meshmaker.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
-#     edge_size = 0.1
-#     domain = meshmaker.Extrude(
-#             p,
-#             [0.0, 0.0, 1.0],
-#             0.5 * 3.14159265359,
-#             edge_size
-#             )
-#     meshmaker.generate_mesh(
-#             domain,
-#             'out.mesh',
-#             cell_size=0.1,
-#             edge_size=edge_size,
-#             verbose=False
-#             )
-#
-#     vertices, cells, _, _, _ = meshio.read('out.mesh')
-#
-#     tol = 1.0e-3
-#     assert abs(max(vertices[:, 0]) - 0.583012701892) < tol
-#     assert abs(min(vertices[:, 0]) + 0.5) < tol
-#     assert abs(max(vertices[:, 1]) - 0.5) < tol
-#     assert abs(min(vertices[:, 1]) + 0.583012701892) < tol
-#     assert abs(max(vertices[:, 2]) - 1.0) < tol
-#     assert abs(min(vertices[:, 2]) + 0.0) < tol
-#
-#     vol = sum(compute_volumes(vertices, cells['tetra']))
-#     assert abs(vol - 0.4) < 0.05
-#
-#     return
-#
-#
+
+
+def test_extrude():
+    p = meshmaker.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
+    domain = meshmaker.Extrude(p, [0.0, 0.3, 1.0])
+    meshmaker.generate_mesh(
+            domain,
+            'out.mesh',
+            cell_size=0.1,
+            edge_size=0.1,
+            verbose=False
+            )
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    tol = 1.0e-3
+    assert abs(max(vertices[:, 0]) - 0.5) < tol
+    assert abs(min(vertices[:, 0]) + 0.5) < tol
+    assert abs(max(vertices[:, 1]) - 0.8) < tol
+    assert abs(min(vertices[:, 1]) + 0.3) < tol
+    assert abs(max(vertices[:, 2]) - 1.0) < tol
+    assert abs(min(vertices[:, 2]) + 0.0) < tol
+
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    assert abs(vol - 0.4) < tol
+
+    return
+
+
+def test_extrude_rotate():
+    p = meshmaker.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
+    edge_size = 0.1
+    domain = meshmaker.Extrude(
+            p,
+            [0.0, 0.0, 1.0],
+            0.5 * 3.14159265359,
+            edge_size
+            )
+    meshmaker.generate_mesh(
+            domain,
+            'out.mesh',
+            cell_size=0.1,
+            edge_size=edge_size,
+            verbose=False
+            )
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    tol = 1.0e-3
+    assert abs(max(vertices[:, 0]) - 0.583012701892) < tol
+    assert abs(min(vertices[:, 0]) + 0.5) < tol
+    assert abs(max(vertices[:, 1]) - 0.5) < tol
+    assert abs(min(vertices[:, 1]) + 0.583012701892) < tol
+    assert abs(max(vertices[:, 2]) - 1.0) < tol
+    assert abs(min(vertices[:, 2]) + 0.0) < tol
+
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    assert abs(vol - 0.4) < 0.05
+
+    return
+
+
 # def test_ring_extrude():
 #     p = meshmaker.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
 #     edge_size = 0.1
