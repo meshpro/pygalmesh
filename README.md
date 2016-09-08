@@ -50,7 +50,8 @@ frentos.generate_mesh(s, 'out.mesh', cell_size=0.2)
 ```
 CGAL's mesh generator returns Medit-files, which can be processed by, e.g.,
 [meshio](https://github.com/nschloe/meshio).
-```
+```python
+import meshio
 vertices, cells, _, _, _ = meshio.read('out.mesh')
 ```
 The mesh generation comes with many more options, described

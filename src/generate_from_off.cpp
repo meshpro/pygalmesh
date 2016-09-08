@@ -30,7 +30,7 @@ typedef CGAL::Mesh_criteria_3<Tr> Mesh_criteria;
 using namespace CGAL::parameters;
 
 void
-generate_mesh_from_off(
+generate_from_off(
     const std::string & infile,
     const std::string & outfile,
     const bool lloyd,
