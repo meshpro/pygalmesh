@@ -37,6 +37,9 @@ frontend to [gmsh](http://gmsh.info/)) and
 ### Examples
 
 #### A simple ball
+<p align="center">
+<img src="https://nschloe.github.io/meshmaker/ball.png"/>
+</p>
 ```python
 import meshmaker
 
