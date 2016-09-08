@@ -219,7 +219,7 @@ specify a function, e.g.,
 ```python
 import frentos
 class Heart(frentos.DomainBase):
-    def __init__(self, edge_size):
+    def __init__(self):
         super(Heart, self).__init__()
         return
 
@@ -230,15 +230,8 @@ class Heart(frentos.DomainBase):
     def get_bounding_sphere_squared_radius(self):
         return 10.0
 
-edge_size = 0.1
-d = Heart(edge_size)
-
-frentos.generate_mesh(
-        d,
-        'out.mesh',
-        cell_size=0.1,
-        edge_size=edge_size
-        )
+d = Heart()
+frentos.generate_mesh(d, 'out.mesh', cell_size=0.1)
 ```
 Note that you need to specify the square of a bounding sphere radius, used as
 an input to CGAL's mesh generator.
