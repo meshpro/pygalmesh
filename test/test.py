@@ -566,34 +566,34 @@ def test_rotation():
     assert abs(vol - 6.0) < tol
 
     return
-#
-#
-# def test_translation():
-#     s0 = meshmaker.Translate(
-#             meshmaker.Cuboid([0, 0, 0], [1, 2, 3]),
-#             [1.0, 0.0, 0.0]
-#             )
-#     meshmaker.generate_mesh(
-#             s0,
-#             'out.mesh',
-#             cell_size=0.1,
-#             edge_size=0.1,
-#             verbose=False
-#             )
-#
-#     vertices, cells, _, _, _ = meshio.read('out.mesh')
-#
-#     tol = 1.0e-3
-#     assert abs(max(vertices[:, 0]) - 2.0) < tol
-#     assert abs(min(vertices[:, 0]) - 1.0) < tol
-#     assert abs(max(vertices[:, 1]) - 2.0) < tol
-#     assert abs(min(vertices[:, 1]) + 0.0) < tol
-#     assert abs(max(vertices[:, 2]) - 3.0) < tol
-#     assert abs(min(vertices[:, 2]) + 0.0) < tol
-#     vol = sum(compute_volumes(vertices, cells['tetra']))
-#     assert abs(vol - 6.0) < tol
-#
-#     return
+
+
+def test_translation():
+    s0 = meshmaker.Translate(
+            meshmaker.Cuboid([0, 0, 0], [1, 2, 3]),
+            [1.0, 0.0, 0.0]
+            )
+    meshmaker.generate_mesh(
+            s0,
+            'out.mesh',
+            cell_size=0.1,
+            edge_size=0.1,
+            verbose=False
+            )
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    tol = 1.0e-3
+    assert abs(max(vertices[:, 0]) - 2.0) < tol
+    assert abs(min(vertices[:, 0]) - 1.0) < tol
+    assert abs(max(vertices[:, 1]) - 2.0) < tol
+    assert abs(min(vertices[:, 1]) + 0.0) < tol
+    assert abs(max(vertices[:, 2]) - 3.0) < tol
+    assert abs(min(vertices[:, 2]) + 0.0) < tol
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    assert abs(vol - 6.0) < tol
+
+    return
 
 
 # def test_off():
@@ -709,64 +709,64 @@ def test_rotation():
 #     assert abs(vol - 2 * numpy.pi * 0.4) < 0.05
 #
 #     return
+
+
+# def test_heart():
+#     class Heart(meshmaker.DomainBase):
+#         def __init__(self, edge_size):
+#             super(Heart, self).__init__()
+#             return
 #
+#         def eval(self, x):
+#             return (x[0]**2 + 9.0/4.0 * x[1]**2 + x[2]**2 - 1)**3 \
+#                 - x[0]**2 * x[2]**3 - 9.0/80.0 * x[1]**2 * x[2]**3
 #
-# # def test_heart():
-# #     class Heart(meshmaker.DomainBase):
-# #         def __init__(self, edge_size):
-# #             super(Heart, self).__init__()
-# #             return
-# #
-# #         def eval(self, x):
-# #             return (x[0]**2 + 9.0/4.0 * x[1]**2 + x[2]**2 - 1)**3 \
-# #                 - x[0]**2 * x[2]**3 - 9.0/80.0 * x[1]**2 * x[2]**3
-# #
-# #         def get_bounding_sphere_squared_radius(self):
-# #             return 10.0
-# #
-# #     edge_size = 0.1
-# #     d = Heart(edge_size)
-# #
-# #     meshmaker.generate_mesh(
-# #             d,
-# #             'out.mesh',
-# #             cell_size=0.1,
-# #             edge_size=edge_size,
-# #             # odt=True,
-# #             # lloyd=True,
-# #             # verbose=True
-# #             )
-# #
-# #     return
+#         def get_bounding_sphere_squared_radius(self):
+#             return 10.0
 #
+#     edge_size = 0.1
+#     d = Heart(edge_size)
 #
-# def test_sphere():
-#     radius = 1.0
-#     s = meshmaker.Ball([0, 0, 0], radius)
-#     meshmaker.generate_surface_mesh(
-#             s,
-#             'out.off',
-#             angle_bound=30,
-#             radius_bound=0.1,
-#             distance_bound=0.1,
-#             verbose=False
+#     meshmaker.generate_mesh(
+#             d,
+#             'out.mesh',
+#             cell_size=0.1,
+#             edge_size=edge_size,
+#             # odt=True,
+#             # lloyd=True,
+#             # verbose=True
 #             )
 #
-#     vertices, cells, _, _, _ = meshio.read('out.off')
-#
-#     tol = 1.0e-2
-#     assert abs(max(vertices[:, 0]) - radius) < tol
-#     assert abs(min(vertices[:, 0]) + radius) < tol
-#     assert abs(max(vertices[:, 1]) - radius) < tol
-#     assert abs(min(vertices[:, 1]) + radius) < tol
-#     assert abs(max(vertices[:, 2]) - radius) < tol
-#     assert abs(min(vertices[:, 2]) + radius) < tol
-#
-#     areas = compute_triangle_areas(vertices, cells['triangle'])
-#     surface_area = sum(areas)
-#     assert abs(surface_area - 4 * numpy.pi * radius**2) < 0.1
-#
 #     return
+
+
+def test_sphere():
+    radius = 1.0
+    s = meshmaker.Ball([0, 0, 0], radius)
+    meshmaker.generate_surface_mesh(
+            s,
+            'out.off',
+            angle_bound=30,
+            radius_bound=0.1,
+            distance_bound=0.1,
+            verbose=False
+            )
+
+    vertices, cells, _, _, _ = meshio.read('out.off')
+
+    tol = 1.0e-2
+    assert abs(max(vertices[:, 0]) - radius) < tol
+    assert abs(min(vertices[:, 0]) + radius) < tol
+    assert abs(max(vertices[:, 1]) - radius) < tol
+    assert abs(min(vertices[:, 1]) + radius) < tol
+    assert abs(max(vertices[:, 2]) - radius) < tol
+    assert abs(min(vertices[:, 2]) + radius) < tol
+
+    areas = compute_triangle_areas(vertices, cells['triangle'])
+    surface_area = sum(areas)
+    assert abs(surface_area - 4 * numpy.pi * radius**2) < 0.1
+
+    return
 
 
 if __name__ == '__main__':
