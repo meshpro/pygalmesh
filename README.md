@@ -70,7 +70,7 @@ frentos.generate_mesh(
 
 #### Other primitive shapes
 <p align="center">
-<img src="https://nschloe.github.io/frentos/tetrahedron.png"/>
+<img src="https://nschloe.github.io/frentos/tetra.png"/>
 </p>
 
 frentos provides out-of-the-box support for balls, cuboids, ellpsoids, tori,
