@@ -21,7 +21,7 @@ SET_SOURCE_FILES_PROPERTIES(meshmaker.i PROPERTIES CPLUSPLUS ON)
 SWIG_ADD_MODULE(
   meshmaker python meshmaker.i
   generate.cpp
-  generate_poly.cpp
+  generate_from_off.cpp
   generate_surface_mesh.cpp
   )
 SWIG_LINK_LIBRARIES(
