@@ -2,6 +2,6 @@
 *.vtu
 *.mesh
 build/
-meshmaker/meshmaker.py
-meshmaker/meshmaker_wrap.cpp
-meshmaker/meshmaker_wrap.h
+src/meshmaker.py
+src/meshmaker_wrap.cpp
+src/meshmaker_wrap.h

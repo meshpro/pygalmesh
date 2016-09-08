@@ -27,18 +27,20 @@ setup(
         Extension(
             '_meshmaker',
             [
-                'meshmaker/generate.cpp',
-                'meshmaker/generate_poly.cpp',
-                'meshmaker/generate_surface_mesh.cpp',
-                'meshmaker/meshmaker.i'
+                'src/generate.cpp',
+                'src/generate_poly.cpp',
+                'src/generate_surface_mesh.cpp',
+                'src/meshmaker.i'
             ],
             include_dirs=['/usr/include/eigen3/'],
-            swig_opts=['-keyword', '-c++'],
+            libraries=['CGAL', 'gmp', 'mpfr'],
+            swig_opts=['-keyword', '-c++', '-modern'],
             extra_compile_args=['-std=c++11']
             )
         ],
+    py_modules=['meshmaker'],
+    package_dir={'': 'src'},
     version=__version__,
-    packages=['meshmaker'],
     url='https://github.com/nschloe/meshmaker',
     download_url='https://pypi.python.org/pypi/meshmaker',
     author=__author__,
