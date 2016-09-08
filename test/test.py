@@ -683,32 +683,32 @@ def test_extrude_rotate():
     return
 
 
-# def test_ring_extrude():
-#     p = meshmaker.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
-#     edge_size = 0.1
-#     domain = meshmaker.ring_extrude(p, edge_size)
-#     meshmaker.generate_mesh(
-#             domain,
-#             'out.mesh',
-#             cell_size=0.1,
-#             edge_size=edge_size,
-#             verbose=False
-#             )
-#
-#     vertices, cells, _, _, _ = meshio.read('out.mesh')
-#
-#     tol = 1.0e-3
-#     assert abs(max(vertices[:, 0]) - 1.5) < tol
-#     assert abs(min(vertices[:, 0]) + 1.5) < tol
-#     assert abs(max(vertices[:, 1]) - 1.5) < tol
-#     assert abs(min(vertices[:, 1]) + 1.5) < tol
-#     assert abs(max(vertices[:, 2]) - 0.5) < tol
-#     assert abs(min(vertices[:, 2]) + 0.3) < tol
-#
-#     vol = sum(compute_volumes(vertices, cells['tetra']))
-#     assert abs(vol - 2 * numpy.pi * 0.4) < 0.05
-#
-#     return
+def test_ring_extrude():
+    p = meshmaker.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
+    edge_size = 0.1
+    domain = meshmaker.ring_extrude(p, edge_size)
+    meshmaker.generate_mesh(
+            domain,
+            'out.mesh',
+            cell_size=0.1,
+            edge_size=edge_size,
+            verbose=False
+            )
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    tol = 1.0e-3
+    assert abs(max(vertices[:, 0]) - 1.5) < tol
+    assert abs(min(vertices[:, 0]) + 1.5) < tol
+    assert abs(max(vertices[:, 1]) - 1.5) < tol
+    assert abs(min(vertices[:, 1]) + 1.5) < tol
+    assert abs(max(vertices[:, 2]) - 0.5) < tol
+    assert abs(min(vertices[:, 2]) + 0.3) < tol
+
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    assert abs(vol - 2 * numpy.pi * 0.4) < 0.05
+
+    return
 
 
 # def test_heart():
