@@ -488,31 +488,31 @@ def test_custom_function():
     return
 
 
-# def test_scaling():
-#     alpha = 1.3
-#     s = meshmaker.Scale(meshmaker.Cuboid([0, 0, 0], [1, 2, 3]), alpha)
-#     meshmaker.generate_mesh(
-#             s,
-#             'out.mesh',
-#             cell_size=0.2,
-#             edge_size=0.1,
-#             verbose=False
-#             )
-#
-#     vertices, cells, _, _, _ = meshio.read('out.mesh')
-#
-#     tol = 1.0e-3
-#     assert abs(max(vertices[:, 0]) - 1*alpha) < tol
-#     assert abs(min(vertices[:, 0]) + 0.0) < tol
-#     assert abs(max(vertices[:, 1]) - 2*alpha) < tol
-#     assert abs(min(vertices[:, 1]) + 0.0) < tol
-#     assert abs(max(vertices[:, 2]) - 3*alpha) < tol
-#     assert abs(min(vertices[:, 2]) + 0.0) < tol
-#
-#     vol = sum(compute_volumes(vertices, cells['tetra']))
-#     assert abs(vol - 6.0 * alpha**3) < tol
-#
-#     return
+def test_scaling():
+    alpha = 1.3
+    s = meshmaker.Scale(meshmaker.Cuboid([0, 0, 0], [1, 2, 3]), alpha)
+    meshmaker.generate_mesh(
+            s,
+            'out.mesh',
+            cell_size=0.2,
+            edge_size=0.1,
+            verbose=False
+            )
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    tol = 1.0e-3
+    assert abs(max(vertices[:, 0]) - 1*alpha) < tol
+    assert abs(min(vertices[:, 0]) + 0.0) < tol
+    assert abs(max(vertices[:, 1]) - 2*alpha) < tol
+    assert abs(min(vertices[:, 1]) + 0.0) < tol
+    assert abs(max(vertices[:, 2]) - 3*alpha) < tol
+    assert abs(min(vertices[:, 2]) + 0.0) < tol
+
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    assert abs(vol - 6.0 * alpha**3) < tol
+
+    return
 
 
 def test_stretch():
