@@ -28,7 +28,7 @@ setup(
             '_meshmaker',
             [
                 'src/generate.cpp',
-                'src/generate_poly.cpp',
+                'src/generate_from_off.cpp',
                 'src/generate_surface_mesh.cpp',
                 'src/meshmaker.i'
             ],

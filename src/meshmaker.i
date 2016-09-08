@@ -3,7 +3,7 @@
 %{
 #define SWIG_FILE_WITH_INIT
 #include "generate.hpp"
-#include "generate_poly.hpp"
+#include "generate_from_off.hpp"
 #include "generate_surface_mesh.hpp"
 #include "domain.hpp"
 #include "polygon2d.hpp"
@@ -51,7 +51,7 @@ namespace std {
 }
 
 %include "generate.hpp"
-%include "generate_poly.hpp"
+%include "generate_from_off.hpp"
 %include "generate_surface_mesh.hpp"
 %include "domain.hpp"
 %include "polygon2d.hpp"

@@ -1,4 +1,4 @@
-#include "generate_poly.hpp"
+#include "generate_from_off.hpp"
 
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Mesh_triangulation_3.h>
@@ -30,7 +30,7 @@ typedef CGAL::Mesh_criteria_3<Tr> Mesh_criteria;
 using namespace CGAL::parameters;
 
 void
-generate_poly(
+generate_mesh_from_off(
     const std::string & infile,
     const std::string & outfile,
     const bool lloyd,

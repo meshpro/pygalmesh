@@ -598,7 +598,7 @@ def test_translation():
 
 # # segfaults on travis, works locally
 # def test_off():
-#     meshmaker.generate_poly(
+#     meshmaker.generate_from_off(
 #             'elephant.off',
 #             'out.mesh',
 #             facet_angle=25.0,

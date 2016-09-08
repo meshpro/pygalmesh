@@ -1,5 +1,5 @@
-#ifndef GENERATE_POLY_HPP
-#define GENERATE_POLY_HPP
+#ifndef GENERATE_FROM_OFF_HPP
+#define GENERATE_FROM_OFF_HPP
 
 #include <string>
 #include <vector>
@@ -7,7 +7,7 @@
 namespace meshmaker {
 
 void
-generate_poly(
+generate_from_off(
     const std::string & infile,
     const std::string & outfile,
     const bool lloyd = false,
@@ -25,4 +25,4 @@ generate_poly(
 
 } // namespace meshmaker
 
-#endif // GENERATE_POLY_HPP
+#endif // GENERATE_FROM_OFF_HPP
