@@ -623,37 +623,42 @@ def test_off():
     return
 
 
-# def test_extrude():
-#     p = meshmaker.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
-#     domain = meshmaker.Extrude(p, [0.0, 0.3, 1.0])
-#     meshmaker.generate_mesh(
-#             domain,
-#             'out.mesh',
-#             cell_size=0.1,
-#             edge_size=0.1,
-#             verbose=False
-#             )
-#
-#     vertices, cells, _, _, _ = meshio.read('out.mesh')
-#
-#     tol = 1.0e-3
-#     assert abs(max(vertices[:, 0]) - 0.5) < tol
-#     assert abs(min(vertices[:, 0]) + 0.5) < tol
-#     assert abs(max(vertices[:, 1]) - 0.8) < tol
-#     assert abs(min(vertices[:, 1]) + 0.3) < tol
-#     assert abs(max(vertices[:, 2]) - 1.0) < tol
-#     assert abs(min(vertices[:, 2]) + 0.0) < tol
-#
-#     vol = sum(compute_volumes(vertices, cells['tetra']))
-#     assert abs(vol - 0.4) < tol
-#
-#     return
+def test_extrude():
+    p = meshmaker.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
+    domain = meshmaker.Extrude(p, [0.0, 0.3, 1.0])
+    meshmaker.generate_mesh(
+            domain,
+            'out.mesh',
+            cell_size=0.1,
+            edge_size=0.1,
+            verbose=False
+            )
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    tol = 1.0e-3
+    assert abs(max(vertices[:, 0]) - 0.5) < tol
+    assert abs(min(vertices[:, 0]) + 0.5) < tol
+    assert abs(max(vertices[:, 1]) - 0.8) < tol
+    assert abs(min(vertices[:, 1]) + 0.3) < tol
+    assert abs(max(vertices[:, 2]) - 1.0) < tol
+    assert abs(min(vertices[:, 2]) + 0.0) < tol
+
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    assert abs(vol - 0.4) < tol
+
+    return
 
 
 def test_extrude_rotate():
     p = meshmaker.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
     edge_size = 0.1
-    domain = meshmaker.Extrude(p, [0.0, 0.0, 1.0], 0.5 * 3.14159265359, edge_size)
+    domain = meshmaker.Extrude(
+            p,
+            [0.0, 0.0, 1.0],
+            0.5 * 3.14159265359,
+            edge_size
+            )
     meshmaker.generate_mesh(
             domain,
             'out.mesh',
@@ -706,33 +711,33 @@ def test_ring_extrude():
     return
 
 
-def test_heart():
-    class Heart(meshmaker.DomainBase):
-        def __init__(self, edge_size):
-            super(Heart, self).__init__()
-            return
-
-        def eval(self, x):
-            return (x[0]**2 + 9.0/4.0 * x[1]**2 + x[2]**2 - 1)**3 \
-                - x[0]**2 * x[2]**3 - 9.0/80.0 * x[1]**2 * x[2]**3
-
-        def get_bounding_sphere_squared_radius(self):
-            return 10.0
-
-    edge_size = 0.1
-    d = Heart(edge_size)
-
-    meshmaker.generate_mesh(
-            d,
-            'out.mesh',
-            cell_size=0.1,
-            edge_size=edge_size,
-            # odt=True,
-            # lloyd=True,
-            # verbose=True
-            )
-
-    return
+# def test_heart():
+#     class Heart(meshmaker.DomainBase):
+#         def __init__(self, edge_size):
+#             super(Heart, self).__init__()
+#             return
+#
+#         def eval(self, x):
+#             return (x[0]**2 + 9.0/4.0 * x[1]**2 + x[2]**2 - 1)**3 \
+#                 - x[0]**2 * x[2]**3 - 9.0/80.0 * x[1]**2 * x[2]**3
+#
+#         def get_bounding_sphere_squared_radius(self):
+#             return 10.0
+#
+#     edge_size = 0.1
+#     d = Heart(edge_size)
+#
+#     meshmaker.generate_mesh(
+#             d,
+#             'out.mesh',
+#             cell_size=0.1,
+#             edge_size=edge_size,
+#             # odt=True,
+#             # lloyd=True,
+#             # verbose=True
+#             )
+#
+#     return
 
 
 def test_sphere():
