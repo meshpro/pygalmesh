@@ -1,6 +1,6 @@
 # frentos
 
-[The meshmaker.](https://youtu.be/JqgqgcE8Zck)
+[The mesh maker.](https://youtu.be/JqgqgcE8Zck)
 
 [![Build Status](https://travis-ci.org/nschloe/frentos.svg?branch=master)](https://travis-ci.org/nschloe/frentos)
 [![PyPi Version](https://img.shields.io/pypi/v/frentos.svg)](https://pypi.python.org/pypi/frentos)
@@ -10,10 +10,12 @@ This is frentos, a Python frontend to CGAL's 3D mesh generation capabilities.
 frentos aims to make it easy to create high-quality 3D volume and surface
 meshes.
 
+### Background
+
 CGAL offers two different approaches for mesh generation:
 
 1. Meshes defined implicitly by level sets of functions.
-2. Meshes defined by a collection of bounding planes.
+2. Meshes defined by a set of bounding planes.
 
 frentos provides a front-end to the first approach, which has the following
 advantages and disadvantages:
@@ -24,9 +26,8 @@ advantages and disadvantages:
   need to be specified manually (via features edges, see below), which can be
   tedious.
 
-Accordingly the bounding-plane approach, realized by
-[mshr](https://bitbucket.org/fenics-project/mshr), has the following advantages
-and disadvantages:
+On the other hand, the bounding-plane approach (realized by
+[mshr](https://bitbucket.org/fenics-project/mshr)), has the following properties:
 
 * Smooth, curved domains are approximated by a set of bounding planes,
   resulting in more of less visible edges.
@@ -145,7 +146,7 @@ the mesh.
 
 You can of coure translate, rotate, scale, and stretch any domain. Try, for
 example,
-```
+```python
 import frentos
 
 s = frentos.Stretch(
@@ -295,17 +296,17 @@ Ubuntu
 ```
 sudo apt install libcgal-dev libeigen3-dev
 ```
-[meshio](https://github.com/nschloe/meshio) can be helpful in processing the
-meshes.
+[meshio](https://github.com/nschloe/meshio) (`sudo -H pip install meshio`)
+can be helpful in processing the meshes.
 
 #### PyPi
 [frentos](https://pypi.python.org/pypi/frentos) is available via PyPi, so
 with [pip](https://pypi.python.org/pypi/pip) installed (`sudo apt install
 python-pip`) you can simply type
 ```
-sudo -H pip install frentos
+sudo -H pip install -U frentos
 ```
-to get started.
+to install or upgrade frentos.
 
 #### Manual installation
 
@@ -321,11 +322,11 @@ the bleeding edge version of frentos), there are two possibilities:
 
 To create a new release
 
-1. bump the `__version__` number,
+1. bump the `__version__` number (in `setup.py` _and_ `src/frentos.i`)
 
 2. publish to PyPi and GitHub:
     ```
-    $ make publish
+    make publish
     ```
 
 
