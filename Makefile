@@ -1,4 +1,4 @@
-VERSION=$(shell python -c "import frentos; print(frentos.__version__)")
+VERSION=$(shell grep '__version__ = ' setup.py | sed 's/[^0-9]*\([0-9\.]*\).*/\1/')
 
 # Make sure we're on the master branch
 ifneq "$(shell git rev-parse --abbrev-ref HEAD)" "master"
