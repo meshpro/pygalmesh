@@ -42,9 +42,7 @@ frontend to [gmsh](http://gmsh.info/)) and
 ### Examples
 
 #### A simple ball
-<p align="center">
-<img src="https://nschloe.github.io/frentos/ball.png"/>
-</p>
+![Ball](https://nschloe.github.io/frentos/ball.png)
 ```python
 import frentos
 
@@ -72,9 +70,7 @@ frentos.generate_mesh(
 ```
 
 #### Other primitive shapes
-<p align="center">
-<img src="https://nschloe.github.io/frentos/tetra.png"/>
-</p>
+![Tetrahedron](https://nschloe.github.io/frentos/tetra.png)
 
 frentos provides out-of-the-box support for balls, cuboids, ellpsoids, tori,
 cones, cylinders, and tetrahedra. Try for example
@@ -93,9 +89,7 @@ frentos.generate_mesh(
 ```
 
 #### Domain combinations
-<p align="center">
-<img src="https://nschloe.github.io/frentos/ball-difference.png"/>
-</p>
+![Balls difference](https://nschloe.github.io/frentos/ball-difference.png)
 
 Supported are unions, intersections, and differences of all domains. As
 mentioned above, however, the sharp intersections between two domains are not
@@ -140,9 +134,7 @@ of the mesh generation. This makes sure that it fits in nicely with the rest of
 the mesh.
 
 #### Domain deformations
-<p align="center">
-<img src="https://nschloe.github.io/frentos/egg.png"/>
-</p>
+![Egg](https://nschloe.github.io/frentos/egg.png)
 
 You can of coure translate, rotate, scale, and stretch any domain. Try, for
 example,
@@ -162,9 +154,7 @@ frentos.generate_mesh(
 ```
 
 #### Extrusion of 2D polygons
-<p align="center">
-<img src="https://nschloe.github.io/frentos/triangle-rotated.png"/>
-</p>
+![triangle rotated](https://nschloe.github.io/frentos/triangle-rotated.png)
 
 frentos lets you extrude any polygon into a 3D body. It even supports
 rotation alongside!
@@ -191,9 +181,7 @@ Feature edges are automatically preserved here, which is why an edge length
 needs to be given to `frentos.Extrude`.
 
 #### Rotation bodies
-<p align="center">
-<img src="https://nschloe.github.io/frentos/circle-rotate-extr.png"/>
-</p>
+![triangle ring extruded](https://nschloe.github.io/frentos/circle-rotate-extr.png)
 
 Polygons in the x-z-plane can also be rotated around the z-axis to yield a
 rotation body.
@@ -213,9 +201,8 @@ frentos.generate_mesh(
 ```
 
 #### Your own custom level set function
-<p align="center">
-<img src="https://nschloe.github.io/frentos/heart.png"/>
-</p>
+![triangle ring extruded](https://nschloe.github.io/frentos/heart.png)
+
 If all of the variety is not enough for you, you can define your own custom
 level set function. You simply need to subclass `frentos.DomainBase` and
 specify a function, e.g.,
@@ -265,9 +252,7 @@ documention](http://doc.cgal.org/latest/Surface_mesher/index.html) for the
 options.
 
 #### Meshes from OFF files
-<p align="center">
-<img src="https://nschloe.github.io/frentos/elephant.png"/>
-</p>
+![elephant](https://nschloe.github.io/frentos/elephant.png)
 
 If you have an OFF file at hand (like
 [elephant.off](https://raw.githubusercontent.com/CGAL/cgal-swig-bindings/master/examples/data/elephant.off)
