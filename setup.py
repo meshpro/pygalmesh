@@ -4,7 +4,10 @@ from distutils.core import setup, Extension
 import os
 import codecs
 
-from frentos import __version__, __license__, __author__, __email__
+__version__ = '0.1.0'
+__license__ = 'MIT License'
+__author__ = 'Nico Schlömer'
+__email__ = 'nico.schloemer@gmail.com'
 
 
 def read(fname):
