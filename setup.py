@@ -11,10 +11,15 @@ __email__ = 'nico.schloemer@gmail.com'
 
 
 def read(fname):
-    content = codecs.open(
-        os.path.join(os.path.dirname(__file__), fname),
-        encoding='utf-8'
-        ).read()
+    # `pip install` doesn't generate README.rst and fails, so intercept with
+    # try-execpt.
+    try:
+        content = codecs.open(
+            os.path.join(os.path.dirname(__file__), fname),
+            encoding='utf-8'
+            ).read()
+    except:
+        content = ''
     return content
 
 setup(
