@@ -4,7 +4,7 @@ from distutils.core import setup, Extension
 import os
 import codecs
 
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 __license__ = 'MIT License'
 __author__ = 'Nico Schlömer'
 __email__ = 'nico.schloemer@gmail.com'
