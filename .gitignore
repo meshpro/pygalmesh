@@ -2,6 +2,9 @@
 *.vtu
 *.mesh
 build/
+dist/
+MANIFEST
+README.rst
 src/frentos.py
 src/frentos_wrap.cpp
 src/frentos_wrap.h

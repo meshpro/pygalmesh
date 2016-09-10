@@ -72,7 +72,7 @@ frentos.generate_mesh(
 #### Other primitive shapes
 ![Tetrahedron](https://nschloe.github.io/frentos/tetra.png)
 
-frentos provides out-of-the-box support for balls, cuboids, ellpsoids, tori,
+frentos provides out-of-the-box support for balls, cuboids, ellipsoids, tori,
 cones, cylinders, and tetrahedra. Try for example
 ```python
 import frentos
@@ -129,14 +129,14 @@ frentos.generate_mesh(
         cell_radius_edge_ratio=2.0
         )
 ```
-Note that the length of the polygon legs are keps in sync with the `edge_size`
+Note that the length of the polygon legs are kept in sync with the `edge_size`
 of the mesh generation. This makes sure that it fits in nicely with the rest of
 the mesh.
 
 #### Domain deformations
 ![Egg](https://nschloe.github.io/frentos/egg.png)
 
-You can of coure translate, rotate, scale, and stretch any domain. Try, for
+You can of course translate, rotate, scale, and stretch any domain. Try, for
 example,
 ```python
 import frentos
