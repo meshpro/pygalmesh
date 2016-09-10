@@ -5,7 +5,7 @@ from distutils.command.build import build
 import os
 import codecs
 
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 __license__ = 'MIT License'
 __author__ = 'Nico Schlömer'
 __email__ = 'nico.schloemer@gmail.com'
