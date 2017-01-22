@@ -57,7 +57,9 @@ setup(
     download_url='https://pypi.python.org/pypi/frentos',
     author=__author__,
     author_email=__email__,
-    requires=['numpy'],
+    install_requires=[
+        'numpy'
+        ],
     description='3D mesh generation',
     long_description=read('README.rst'),
     license=__license__,
