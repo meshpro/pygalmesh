@@ -1,6 +1,7 @@
 *.off
 *.vtu
 *.mesh
+.cache/
 build/
 dist/
 MANIFEST

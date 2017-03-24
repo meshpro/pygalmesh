@@ -303,6 +303,13 @@ the bleeding edge version of frentos), there are two possibilities:
  * As a fallback, there's a CMake-based installation. Simply go `cmake
    /path/to/sources/` and `make`.
 
+### Testing
+
+To run the frentos unit tests, check out this repository and type
+```
+pytest
+```
+
 ### Distribution
 
 To create a new release

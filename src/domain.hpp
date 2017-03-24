@@ -4,6 +4,7 @@
 #include <Eigen/Dense>
 #include <array>
 #include <memory>
+#include <vector>
 
 namespace frentos {
 
