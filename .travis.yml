@@ -20,7 +20,7 @@ addons:
     packages:
     - libcgal-dev
     - libcgal-qt5-11  # bug in cgal, should be installed automatically
-    - libeigen-dev
+    - libeigen3-dev
     - pandoc
     - python-numpy
     - swig
