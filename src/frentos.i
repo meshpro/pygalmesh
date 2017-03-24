@@ -2,9 +2,11 @@
 
 %pythoncode %{
 __version__ = '0.1.4'
-__license__ = 'MIT License'
-__author__ = 'Nico Schlömer'
-__email__ = 'nico.schloemer@gmail.com'
+__author__ = u'Nico Schlömer'
+__author_email__ = 'nico.schloemer@gmail.com'
+__status__ = 'Development Status :: 3 - Alpha'
+__license__ = 'License :: OSI Approved :: MIT License'
+__url__ = 'https://github.com/nschloe/frentos'
 %}
 
 %{

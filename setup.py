@@ -6,9 +6,11 @@ import os
 import codecs
 
 __version__ = '0.1.4'
-__license__ = 'MIT License'
-__author__ = 'Nico Schlömer'
-__email__ = 'nico.schloemer@gmail.com'
+__author__ = u'Nico Schlömer'
+__author_email__ = 'nico.schloemer@gmail.com'
+__status__ = 'Development Status :: 3 - Alpha'
+__license__ = 'License :: OSI Approved :: MIT License'
+__url__ = 'https://github.com/nschloe/frentos'
 
 
 class CustomBuild(build):
@@ -18,7 +20,7 @@ class CustomBuild(build):
         ('build_py', build.has_pure_modules),
         ('build_clib', build.has_c_libraries),
         ('build_scripts', build.has_scripts),
-    ]
+        ]
 
 
 def read(fname):
@@ -29,7 +31,7 @@ def read(fname):
             os.path.join(os.path.dirname(__file__), fname),
             encoding='utf-8'
             ).read()
-    except:
+    except Exception:
         content = ''
     return content
 
@@ -45,7 +47,7 @@ setup(
             'src/generate_from_off.cpp',
             'src/generate_surface_mesh.cpp',
             'src/frentos.i'
-            ],
+        ],
         include_dirs=['/usr/include/eigen3/'],
         libraries=['CGAL', 'gmp', 'mpfr'],
         swig_opts=['-keyword', '-c++', '-modern'],
@@ -53,10 +55,10 @@ setup(
         )],
     package_dir={'': 'src'},
     version=__version__,
-    url='https://github.com/nschloe/frentos',
+    url=__url__,
     download_url='https://pypi.python.org/pypi/frentos',
     author=__author__,
-    author_email=__email__,
+    author_email=__author_email__,
     install_requires=[
         'numpy'
         ],
@@ -64,8 +66,8 @@ setup(
     long_description=read('README.rst'),
     license=__license__,
     classifiers=[
-        'Development Status :: 3 - Alpha',
-        'License :: OSI Approved :: MIT License',
+        __status__,
+        __license__,
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
