@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-from distutils.core import setup, Extension
-from distutils.command.build import build
+from setuptools import setup, Extension
+from setuptools.command.build_ext import build_ext
 import os
 import codecs
 
@@ -13,14 +13,28 @@ __license__ = 'License :: OSI Approved :: MIT License'
 __url__ = 'https://github.com/nschloe/frentos'
 
 
-class CustomBuild(build):
+class BuildExt(build_ext):
     # <http://stackoverflow.com/a/21236111/353337>
     sub_commands = [
-        ('build_ext', build.has_ext_modules),
-        ('build_py', build.has_pure_modules),
-        ('build_clib', build.has_c_libraries),
-        ('build_scripts', build.has_scripts),
+        ('build_ext', build_ext.has_ext_modules),
+        ('build_py', build_ext.has_pure_modules),
+        ('build_clib', build_ext.has_c_libraries),
+        ('build_scripts', build_ext.has_scripts),
         ]
+
+
+# class get_pybind_include(object):
+#     '''Helper class to determine the pybind11 include path
+#     The purpose of this class is to postpone importing pybind11
+#     until it is actually installed, so that the ``get_include()``
+#     method can be invoked.
+#     '''
+#     def __init__(self, user=False):
+#         self.user = user
+#
+#     def __str__(self):
+#         import pybind11
+#         return pybind11.get_include(self.user)
 
 
 def read(fname):
@@ -38,7 +52,7 @@ def read(fname):
 
 setup(
     name='frentos',
-    cmdclass={'build': CustomBuild},
+    cmdclass={'build_ext': BuildExt},
     py_modules=['frentos'],
     ext_modules=[Extension(
         '_frentos',
@@ -48,7 +62,13 @@ setup(
             'src/generate_surface_mesh.cpp',
             'src/frentos.i'
         ],
-        include_dirs=['/usr/include/eigen3/'],
+        language='c++',
+        include_dirs=[
+            '/usr/include/eigen3/',
+            # Path to pybind11 headers
+            # get_pybind_include(),
+            # get_pybind_include(user=True)
+            ],
         libraries=['CGAL', 'gmp', 'mpfr'],
         swig_opts=['-keyword', '-c++', '-modern'],
         extra_compile_args=['-std=c++11']
