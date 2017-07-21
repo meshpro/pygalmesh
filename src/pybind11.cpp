@@ -16,10 +16,12 @@ PYBIND11_PLUGIN(frentos) {
     py::module m("frentos");
 
     // Domain base
-    py::class_<DomainBase>(m, "DomainBase");
+    // shared_ptr b/c of
+    // <https://github.com/pybind/pybind11/issues/956#issuecomment-317022720>
+    py::class_<DomainBase, std::shared_ptr<DomainBase>>(m, "DomainBase");
 
     // Domain transformations
-    py::class_<Translate, DomainBase>(m, "Translate")
+    py::class_<Translate, DomainBase, std::shared_ptr<Translate>>(m, "Translate")
           .def(py::init<
               const std::shared_ptr<const DomainBase> &,
               const std::array<double, 3> &
@@ -29,7 +31,7 @@ PYBIND11_PLUGIN(frentos) {
           .def("get_bounding_sphere_squared_radius", &Translate::get_bounding_sphere_squared_radius)
           .def("get_features", &Translate::get_features);
 
-    py::class_<Rotate, DomainBase>(m, "Rotate")
+    py::class_<Rotate, DomainBase, std::shared_ptr<Rotate>>(m, "Rotate")
           .def(py::init<
               const std::shared_ptr<const frentos::DomainBase> &,
               const std::array<double, 3> &,
@@ -41,7 +43,7 @@ PYBIND11_PLUGIN(frentos) {
           .def("get_bounding_sphere_squared_radius", &Rotate::get_bounding_sphere_squared_radius)
           .def("get_features", &Rotate::get_features);
 
-    py::class_<Scale, DomainBase>(m, "Scale")
+    py::class_<Scale, DomainBase, std::shared_ptr<Scale>>(m, "Scale")
           .def(py::init<
               std::shared_ptr<const frentos::DomainBase> &,
               const double
@@ -51,7 +53,7 @@ PYBIND11_PLUGIN(frentos) {
           .def("get_bounding_sphere_squared_radius", &Scale::get_bounding_sphere_squared_radius)
           .def("get_features", &Scale::get_features);
 
-    py::class_<Stretch, DomainBase>(m, "Stretch")
+    py::class_<Stretch, DomainBase, std::shared_ptr<Stretch>>(m, "Stretch")
           .def(py::init<
               std::shared_ptr<const frentos::DomainBase> &,
               const std::array<double, 3> &
@@ -61,7 +63,7 @@ PYBIND11_PLUGIN(frentos) {
           .def("get_bounding_sphere_squared_radius", &Stretch::get_bounding_sphere_squared_radius)
           .def("get_features", &Stretch::get_features);
 
-    py::class_<Intersection, DomainBase>(m, "Intersection")
+    py::class_<Intersection, DomainBase, std::shared_ptr<Intersection>>(m, "Intersection")
           .def(py::init<
               std::vector<std::shared_ptr<const frentos::DomainBase>> &
               >())
@@ -69,7 +71,7 @@ PYBIND11_PLUGIN(frentos) {
           .def("get_bounding_sphere_squared_radius", &Intersection::get_bounding_sphere_squared_radius)
           .def("get_features", &Intersection::get_features);
 
-    py::class_<Union, DomainBase>(m, "Union")
+    py::class_<Union, DomainBase, std::shared_ptr<Union>>(m, "Union")
           .def(py::init<
               std::vector<std::shared_ptr<const frentos::DomainBase>> &
               >())
@@ -77,7 +79,7 @@ PYBIND11_PLUGIN(frentos) {
           .def("get_bounding_sphere_squared_radius", &Union::get_bounding_sphere_squared_radius)
           .def("get_features", &Union::get_features);
 
-    py::class_<Difference, DomainBase>(m, "Difference")
+    py::class_<Difference, DomainBase, std::shared_ptr<Difference>>(m, "Difference")
           .def(py::init<
               std::shared_ptr<const frentos::DomainBase> &,
               std::shared_ptr<const frentos::DomainBase> &
@@ -87,7 +89,7 @@ PYBIND11_PLUGIN(frentos) {
           .def("get_features", &Difference::get_features);
 
     // Primitives
-    py::class_<Ball, DomainBase>(m, "Ball")
+    py::class_<Ball, DomainBase, std::shared_ptr<Ball>>(m, "Ball")
           .def(py::init<
               const std::array<double, 3> &,
               const double
@@ -95,7 +97,7 @@ PYBIND11_PLUGIN(frentos) {
           .def("eval", &Ball::eval)
           .def("get_bounding_sphere_squared_radius", &Ball::get_bounding_sphere_squared_radius);
 
-    py::class_<Cuboid, DomainBase>(m, "Cuboid")
+    py::class_<Cuboid, DomainBase, std::shared_ptr<Cuboid>>(m, "Cuboid")
           .def(py::init<
               const std::array<double, 3> &,
               const std::array<double, 3> &
@@ -104,7 +106,7 @@ PYBIND11_PLUGIN(frentos) {
           .def("get_bounding_sphere_squared_radius", &Cuboid::get_bounding_sphere_squared_radius)
           .def("get_features", &Cuboid::get_features);
 
-    py::class_<Ellipsoid, DomainBase>(m, "Ellipsoid")
+    py::class_<Ellipsoid, DomainBase, std::shared_ptr<Ellipsoid>>(m, "Ellipsoid")
           .def(py::init<
               const std::array<double, 3> &,
               const double,
@@ -115,7 +117,7 @@ PYBIND11_PLUGIN(frentos) {
           .def("get_bounding_sphere_squared_radius", &Ellipsoid::get_bounding_sphere_squared_radius)
           .def("get_features", &Ellipsoid::get_features);
 
-    py::class_<Cylinder, DomainBase>(m, "Cylinder")
+    py::class_<Cylinder, DomainBase, std::shared_ptr<Cylinder>>(m, "Cylinder")
           .def(py::init<
               const double,
               const double,
@@ -126,7 +128,7 @@ PYBIND11_PLUGIN(frentos) {
           .def("get_bounding_sphere_squared_radius", &Cylinder::get_bounding_sphere_squared_radius)
           .def("get_features", &Cylinder::get_features);
 
-    py::class_<Cone, DomainBase>(m, "Cone")
+    py::class_<Cone, DomainBase, std::shared_ptr<Cone>>(m, "Cone")
           .def(py::init<
               const double,
               const double,
@@ -136,7 +138,7 @@ PYBIND11_PLUGIN(frentos) {
           .def("get_bounding_sphere_squared_radius", &Cone::get_bounding_sphere_squared_radius)
           .def("get_features", &Cone::get_features);
 
-    py::class_<Tetrahedron, DomainBase>(m, "Tetrahedron")
+    py::class_<Tetrahedron, DomainBase, std::shared_ptr<Tetrahedron>>(m, "Tetrahedron")
           .def(py::init<
               const std::array<double, 3> &,
               const std::array<double, 3> &,
@@ -147,7 +149,7 @@ PYBIND11_PLUGIN(frentos) {
           .def("get_bounding_sphere_squared_radius", &Tetrahedron::get_bounding_sphere_squared_radius)
           .def("get_features", &Tetrahedron::get_features);
 
-    py::class_<Torus, DomainBase>(m, "Torus")
+    py::class_<Torus, DomainBase, std::shared_ptr<Torus>>(m, "Torus")
           .def(py::init<
               const double,
               const double
@@ -164,7 +166,7 @@ PYBIND11_PLUGIN(frentos) {
           .def("vector_to_cgal_points", &Polygon2D::vector_to_cgal_points)
           .def("is_inside", &Polygon2D::is_inside);
 
-    py::class_<Extrude, DomainBase>(m, "Extrude")
+    py::class_<Extrude, DomainBase, std::shared_ptr<Extrude>>(m, "Extrude")
           .def(py::init<
               const std::shared_ptr<frentos::Polygon2D> &,
               const std::array<double, 3> &,
@@ -175,7 +177,7 @@ PYBIND11_PLUGIN(frentos) {
           .def("get_bounding_sphere_squared_radius", &Extrude::get_bounding_sphere_squared_radius)
           .def("get_features", &Extrude::get_features);
 
-    py::class_<ring_extrude, DomainBase>(m, "RingExtrude")
+    py::class_<ring_extrude, DomainBase, std::shared_ptr<ring_extrude>>(m, "RingExtrude")
           .def(py::init<
               const std::shared_ptr<frentos::Polygon2D> &,
               const double
