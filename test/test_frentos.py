@@ -462,11 +462,12 @@ def test_custom_function():
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
-    tol = 1.0e-2
-    assert abs(max(vertices[:, 0]) - 1.5) < tol
-    assert abs(min(vertices[:, 0]) + 1.5) < tol
-    assert abs(max(vertices[:, 1]) - 1.5) < tol
-    assert abs(min(vertices[:, 1]) + 1.5) < tol
+    # TODO check the reference values
+    tol = 1.0e-1
+    assert abs(max(vertices[:, 0]) - 1.4) < tol
+    assert abs(min(vertices[:, 0]) + 1.4) < tol
+    assert abs(max(vertices[:, 1]) - 1.4) < tol
+    assert abs(min(vertices[:, 1]) + 1.4) < tol
     assert abs(max(vertices[:, 2]) - 1.0) < tol
     assert abs(min(vertices[:, 2]) + 1.0) < tol
 
