@@ -98,29 +98,29 @@ def read(fname):
             os.path.join(os.path.dirname(__file__), fname),
             encoding='utf-8'
             ).read()
-    except Exception:
+    except IOError:
         content = ''
     return content
 
 
 ext_modules = [Extension(
-        'frentos',
-        [
-            'src/generate.cpp',
-            'src/generate_from_off.cpp',
-            'src/generate_surface_mesh.cpp',
-            'src/pybind11.cpp',
-            ],
-        language='c++',
-        include_dirs=[
-            '/usr/include/eigen3/',
-            # Path to pybind11 headers
-            get_pybind_include(),
-            get_pybind_include(user=True)
-            ],
-        libraries=['CGAL', 'gmp', 'mpfr'],
-        # extra_compile_args=['-std=c++11']
-        )]
+    'frentos',
+    [
+        'src/generate.cpp',
+        'src/generate_from_off.cpp',
+        'src/generate_surface_mesh.cpp',
+        'src/pybind11.cpp',
+        ],
+    language='c++',
+    include_dirs=[
+        '/usr/include/eigen3/',
+        # Path to pybind11 headers
+        get_pybind_include(),
+        get_pybind_include(user=True)
+        ],
+    libraries=['CGAL', 'gmp', 'mpfr'],
+    # extra_compile_args=['-std=c++11']
+    )]
 
 setup(
     name='frentos',
