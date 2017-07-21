@@ -6,4 +6,4 @@ build/
 dist/
 MANIFEST
 README.rst
-src/frentos.py
+do-configure.sh
