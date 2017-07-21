@@ -27,7 +27,7 @@ jobs:
     steps:
       - run: apt-get update
       - run: apt-get install -y libcgal-dev libeigen3-dev pandoc python3-numpy python3-pip
-      - run: pip3 install -U pytest pytest-cov pylint
+      - run: pip3 install -U pytest pytest-cov pylint meshio
       - checkout
       # install
       - run: LANG=C.UTF-8 pip3 install .
