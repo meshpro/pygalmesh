@@ -12,13 +12,44 @@ namespace py = pybind11;
 using namespace frentos;
 
 
+// https://pybind11.readthedocs.io/en/stable/advanced/classes.html#overriding-virtual-functions-in-python
+class PyDomainBase: public DomainBase {
+public:
+    using DomainBase::DomainBase;
+
+    double
+    eval(const std::array<double, 3> & x) const override {
+      PYBIND11_OVERLOAD_PURE(double, DomainBase, eval, x);
+    }
+
+    double
+    get_bounding_sphere_squared_radius() const override {
+      PYBIND11_OVERLOAD_PURE(double, DomainBase, get_bounding_sphere_squared_radius);
+    }
+
+    // std::vector<std::vector<std::array<double, 3>>>
+    // get_features() const override {
+    //   PYBIND11_OVERLOAD(
+    //       std::vector<std::vector<std::array<double, 3>>>,
+    //       DomainBase,
+    //       get_features,
+    //       0.0
+    //       );
+    // }
+};
+
+
 PYBIND11_PLUGIN(frentos) {
     py::module m("frentos");
 
     // Domain base.
     // shared_ptr b/c of
     // <https://github.com/pybind/pybind11/issues/956#issuecomment-317022720>
-    py::class_<DomainBase, std::shared_ptr<DomainBase>>(m, "DomainBase");
+    py::class_<DomainBase, PyDomainBase, std::shared_ptr<DomainBase>>(m, "DomainBase")
+      .def(py::init<>())
+      .def("eval", &DomainBase::eval)
+      .def("get_bounding_sphere_squared_radius", &DomainBase::get_bounding_sphere_squared_radius)
+      .def("get_features", &DomainBase::get_features);
 
     // Domain transformations
     py::class_<Translate, DomainBase, std::shared_ptr<Translate>>(m, "Translate")
