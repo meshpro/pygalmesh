@@ -182,7 +182,25 @@ PYBIND11_PLUGIN(frentos) {
 
     // functions
     m.def("generate_from_off", &generate_from_off);
-    m.def("generate_mesh", &generate_mesh);
+    m.def(
+        "generate_mesh", &generate_mesh,
+        py::arg("domain"),
+        py::arg("outfile"),
+        py::arg("feature_edges") = {},
+        py::arg("bounding_sphere_radius") = 0.0,
+        py::arg("boundary_precision") = 1.0e-4,
+        py::arg("lloyd") = false,
+        py::arg("odt") = false,
+        py::arg("perturb") = true,
+        py::arg("exude") = true,
+        py::arg("edge_size") = 0.0,
+        py::arg("facet_angle") = 0.0,
+        py::arg("facet_size") = 0.0,
+        py::arg("facet_distance") = 0.0,
+        py::arg("cell_radius_edge_ratio") = 0.0,
+        py::arg("cell_size") = 0.0,
+        py::arg("verbose") = true
+        );
     m.def("generate_surface_mesh", &generate_surface_mesh);
     return m.ptr();
 }
