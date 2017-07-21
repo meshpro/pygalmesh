@@ -173,7 +173,12 @@ PYBIND11_PLUGIN(frentos) {
               const double,
               const double
               >())
-          .def("eval", &Extrude::eval)
+          .def("eval", &Extrude::eval,
+              py::arg("poly"),
+              py::arg("direction"),
+              py::arg("alpha") = 0.0,
+              py::arg("edge_size") = 0.0
+              )
           .def("get_bounding_sphere_squared_radius", &Extrude::get_bounding_sphere_squared_radius)
           .def("get_features", &Extrude::get_features);
 
