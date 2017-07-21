@@ -613,7 +613,12 @@ def test_translation():
 
 def test_extrude():
     p = frentos.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
-    domain = frentos.Extrude(p, [0.0, 0.3, 1.0])
+    domain = frentos.Extrude(
+            p, [0.0, 0.3, 1.0],
+            # Default arguments in constructors are not yet supported by
+            # pybind11, cf. <https://github.com/pybind/pybind11/issues/957>.
+            0.0, 0.0
+            )
     frentos.generate_mesh(
             domain,
             'out.mesh',
