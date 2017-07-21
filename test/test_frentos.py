@@ -59,10 +59,7 @@ def test_balls_union():
     displacement = 0.5
     s0 = frentos.Ball([displacement, 0, 0], radius)
     s1 = frentos.Ball([-displacement, 0, 0], radius)
-    uni = frentos.ListOfDomains()
-    uni.append(s0)
-    uni.append(s1)
-    u = frentos.Union(uni)
+    u = frentos.Union([s0, s1])
 
     a = numpy.sqrt(radius**2 - displacement**2)
     edge_size = 0.1
@@ -111,10 +108,7 @@ def test_balls_intersection():
     displacement = 0.5
     s0 = frentos.Ball([displacement, 0, 0], radius)
     s1 = frentos.Ball([-displacement, 0, 0], radius)
-    inter = frentos.ListOfDomains()
-    inter.append(s0)
-    inter.append(s1)
-    u = frentos.Intersection(inter)
+    u = frentos.Intersection([s0, s1])
 
     a = numpy.sqrt(radius**2 - displacement**2)
     edge_size = 0.1
@@ -211,10 +205,7 @@ def test_balls_difference():
 def test_cuboids_intersection():
     c0 = frentos.Cuboid([0, 0, -0.5], [3, 3, 0.5])
     c1 = frentos.Cuboid([1, 1, -2], [2, 2, 2])
-    inter = frentos.ListOfDomains()
-    inter.append(c0)
-    inter.append(c1)
-    u = frentos.Intersection(inter)
+    u = frentos.Intersection([c0, c1])
 
     # In CGAL, feature edges must not intersect, and that's a problem here: The
     # intersection edges of the cuboids share eight points with the edges of
@@ -257,10 +248,7 @@ def test_cuboids_intersection():
 def test_cuboids_union():
     c0 = frentos.Cuboid([0, 0, -0.5], [3, 3, 0.5])
     c1 = frentos.Cuboid([1, 1, -2], [2, 2, 2])
-    inter = frentos.ListOfDomains()
-    inter.append(c0)
-    inter.append(c1)
-    u = frentos.Union(inter)
+    u = frentos.Union([c0, c1])
 
     frentos.generate_mesh(
             u,
