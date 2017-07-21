@@ -408,6 +408,7 @@ def test_torus():
 def test_custom_function():
     class Hyperboloid(frentos.DomainBase):
         def __init__(self, edge_size):
+            super(Hyperboloid, self).__init__()
             self.z0 = -1.0
             self.z1 = 1.0
             self.waist_radius = 0.5
