@@ -190,7 +190,7 @@ PYBIND11_PLUGIN(frentos) {
           .def("get_features", &Torus::get_features);
 
     // polygon2d
-    py::class_<Polygon2D>(m, "Polygon2D")
+    py::class_<Polygon2D, std::shared_ptr<Polygon2D>>(m, "Polygon2D")
           .def(py::init<
               const std::vector<std::array<double, 2>> &
               >())
