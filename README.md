@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/nschloe/frentos.svg?branch=master)](https://travis-ci.org/nschloe/frentos)
 [![PyPi Version](https://img.shields.io/pypi/v/frentos.svg)](https://pypi.python.org/pypi/frentos)
-[![GitHub stars](https://img.shields.io/github/stars/nschloe/frentos.svg?style=social&label=Star&maxAge=2592000)](https://github.com/nschloe/frentos)
+[![GitHub stars](https://img.shields.io/github/stars/nschloe/frentos.svg?style=social&label=Stars&maxAge=2592000)](https://github.com/nschloe/frentos)
 
 This is frentos, a Python frontend to CGAL's 3D mesh generation capabilities.
 frentos aims to make it easy to create high-quality 3D volume and surface
