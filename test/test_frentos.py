@@ -675,7 +675,7 @@ def test_extrude_rotate():
 def test_ring_extrude():
     p = frentos.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
     edge_size = 0.1
-    domain = frentos.ring_extrude(p, edge_size)
+    domain = frentos.RingExtrude(p, edge_size)
     frentos.generate_mesh(
             domain,
             'out.mesh',
