@@ -125,7 +125,6 @@ ext_modules = [Extension(
 setup(
     name='frentos',
     cmdclass={'build_ext': BuildExt},
-    py_modules=['frentos'],
     ext_modules=ext_modules,
     package_dir={'': 'src'},
     version=__version__,
