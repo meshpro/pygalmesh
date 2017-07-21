@@ -743,7 +743,7 @@ def test_ring_extrude():
 
 def test_sphere():
     radius = 1.0
-    s = frentos.Ball([0, 0, 0], radius)
+    s = frentos.Ball([0.0, 0.0, 0.0], radius)
     frentos.generate_surface_mesh(
             s,
             'out.off',

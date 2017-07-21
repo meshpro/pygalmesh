@@ -2,6 +2,7 @@
 #include "generate.hpp"
 #include "generate_from_off.hpp"
 #include "generate_surface_mesh.hpp"
+#include "polygon2d.hpp"
 #include "primitives.hpp"
 
 #include <pybind11/pybind11.h>
@@ -149,6 +150,34 @@ PYBIND11_PLUGIN(frentos) {
           .def("eval", &Torus::eval)
           .def("get_bounding_sphere_squared_radius", &Torus::get_bounding_sphere_squared_radius)
           .def("get_features", &Torus::get_features);
+
+    // polygon2d
+    py::class_<Polygon2D>(m, "Polygon2D")
+          .def(py::init<
+              const std::vector<std::array<double, 2>> &
+              >())
+          .def("vector_to_cgal_points", &Polygon2D::vector_to_cgal_points)
+          .def("is_inside", &Polygon2D::is_inside);
+
+    py::class_<Extrude>(m, "Extrude")
+          .def(py::init<
+              const std::shared_ptr<frentos::Polygon2D> &,
+              const std::array<double, 3> &,
+              const double,
+              const double
+              >())
+          .def("eval", &Extrude::eval)
+          .def("get_bounding_sphere_squared_radius", &Extrude::get_bounding_sphere_squared_radius)
+          .def("get_features", &Extrude::get_features);
+
+    py::class_<ring_extrude>(m, "RingExtrude")
+          .def(py::init<
+              const std::shared_ptr<frentos::Polygon2D> &,
+              const double
+              >())
+          .def("eval", &ring_extrude::eval)
+          .def("get_bounding_sphere_squared_radius", &ring_extrude::get_bounding_sphere_squared_radius)
+          .def("get_features", &ring_extrude::get_features);
 
     // functions
     m.def("generate_from_off", &generate_from_off);
