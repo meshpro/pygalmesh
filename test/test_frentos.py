@@ -36,7 +36,7 @@ def compute_triangle_areas(vertices, triangles):
 
 
 def test_ball():
-    s = frentos.Ball([0, 0, 0], 1.0)
+    s = frentos.Ball([0.0, 0.0, 0.0], 1.0)
     frentos.generate_mesh(s, 'out.mesh', cell_size=0.2, verbose=False)
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
