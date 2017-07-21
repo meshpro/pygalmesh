@@ -207,6 +207,16 @@ PYBIND11_PLUGIN(frentos) {
         py::arg("cell_size") = 0.0,
         py::arg("verbose") = true
         );
-    m.def("generate_surface_mesh", &generate_surface_mesh);
+    m.def(
+        "generate_surface_mesh", &generate_surface_mesh,
+        py::arg("domain"),
+        py::arg("outfile"),
+        py::arg("bounding_sphere_radius") = 0.0,
+        py::arg("angle_bound") = 0.0,
+        py::arg("radius_bound") = 0.0,
+        py::arg("distance_bound") = 0.0,
+        py::arg("verbose") = true
+        );
+
     return m.ptr();
 }
