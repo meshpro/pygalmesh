@@ -134,7 +134,8 @@ setup(
     author_email=__author_email__,
     install_requires=[
         'numpy',
-        'pybind11>=1.7'
+        # https://github.com/pybind/pybind11/issues/956
+        'pybind11<2.1'
         ],
     description='3D mesh generation',
     long_description=read('README.rst'),
