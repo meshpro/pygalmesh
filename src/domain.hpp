@@ -12,8 +12,6 @@ class DomainBase
 {
   public:
 
-  DomainBase() {};
-
   virtual ~DomainBase() = default;
 
   virtual
