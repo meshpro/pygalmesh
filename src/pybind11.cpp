@@ -15,7 +15,7 @@ using namespace frentos;
 PYBIND11_PLUGIN(frentos) {
     py::module m("frentos");
 
-    // Domain base
+    // Domain base.
     // shared_ptr b/c of
     // <https://github.com/pybind/pybind11/issues/956#issuecomment-317022720>
     py::class_<DomainBase, std::shared_ptr<DomainBase>>(m, "DomainBase");
