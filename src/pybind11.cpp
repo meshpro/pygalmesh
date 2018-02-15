@@ -253,6 +253,4 @@ PYBIND11_MODULE(pygalmesh, m) {
         py::arg("distance_bound") = 0.0,
         py::arg("verbose") = true
         );
-
-    return m.ptr();
 }
