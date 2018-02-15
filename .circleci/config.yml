@@ -14,7 +14,7 @@ jobs:
       # install
       - run: pip3 install .
       # lint
-      - run: pylint setup.py
+      - run: pylint setup.py test/*.py
       # make sure that rst converts correctly
       - run: pip3 install docutils pygments
       - run: make README.rst
