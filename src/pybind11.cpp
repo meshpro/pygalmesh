@@ -39,8 +39,8 @@ public:
 };
 
 
-PYBIND11_PLUGIN(pygalmesh) {
-    py::module m("pygalmesh");
+PYBIND11_MODULE(pygalmesh, m) {
+    // m.doc() = "documentation string";
 
     // Domain base.
     // shared_ptr b/c of
