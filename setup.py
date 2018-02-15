@@ -9,7 +9,7 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 __author__ = u'Nico Schlömer'
 __author_email__ = 'nico.schloemer@gmail.com'
 __status__ = 'Development Status :: 3 - Alpha'
