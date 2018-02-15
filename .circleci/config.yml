@@ -9,7 +9,7 @@ jobs:
     steps:
       - run: apt-get update
       - run: apt-get install -y libcgal-dev libeigen3-dev pandoc python3-pip
-      - run: pip3 install -U pytest pytest-cov pylint meshio
+      - run: pip3 install -U pytest pytest-cov pylint meshio pybind11
       - checkout
       # lint
       - run: pylint setup.py test/*.py
