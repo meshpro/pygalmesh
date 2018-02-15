@@ -4,6 +4,7 @@ A Python frontend to [CGAL](https://www.cgal.org/)'s 3D mesh generation
 capabilities.
 
 [![CircleCI](https://img.shields.io/circleci/project/github/nschloe/pygalmesh/master.svg)](https://circleci.com/gh/nschloe/pygalmesh/tree/master)
+[![Codacy grade](https://img.shields.io/codacy/grade/26d491d592134f438c6175a250290915.svg)](https://app.codacy.com/app/nschloe/pygalmesh/dashboard)
 [![PyPi Version](https://img.shields.io/pypi/v/pygalmesh.svg)](https://pypi.python.org/pypi/pygalmesh)
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/pygalmesh.svg?style=social&label=Stars)](https://github.com/nschloe/pygalmesh)
 
@@ -57,7 +58,7 @@ import meshio
 vertices, cells, _, _, _ = meshio.read('out.mesh')
 ```
 The mesh generation comes with many more options, described
-[here](http://doc.cgal.org/latest/Mesh_3/). Try, for example,
+[here](https://doc.cgal.org/latest/Mesh_3/). Try, for example,
 ```python
 pygalmesh.generate_mesh(
     s,
@@ -249,7 +250,7 @@ The output format is
 handled by [meshio](https://github.com/nschloe/meshio).
 
 Refer to [CGAL's
-documention](http://doc.cgal.org/latest/Surface_mesher/index.html) for the
+documention](https://doc.cgal.org/latest/Surface_mesher/index.html) for the
 options.
 
 #### Meshes from OFF files
@@ -275,24 +276,22 @@ pygalmesh.generate_from_off(
 
 ### Installation
 
-For installation, pygalmesh needs [CGAL](http://www.cgal.org/) and
+For installation, pygalmesh needs [CGAL](https://www.cgal.org/) and
 [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) installed on your
 system. They are typically available on your Linux distribution, e.g., on
 Ubuntu
 ```
 sudo apt install libcgal-dev libeigen3-dev
 ```
+After that, pygalmesh can be [installed from the Python Package
+Index](https://pypi.python.org/pypi/pygalmesh/), so with
+```
+pip install -U pygalmesh
+```
+you can install/upgrade.
+
 [meshio](https://github.com/nschloe/meshio) (`sudo -H pip install meshio`)
 can be helpful in processing the meshes.
-
-#### PyPi
-[pygalmesh](https://pypi.python.org/pypi/pygalmesh) is available via PyPi, so
-with [pip](https://pypi.python.org/pypi/pip) installed (`sudo apt install
-python-pip`) you can simply type
-```
-sudo -H pip install -U pygalmesh
-```
-to install or upgrade pygalmesh.
 
 #### Manual installation
 
@@ -321,7 +320,6 @@ To create a new release
     ```
     make publish
     ```
-
 
 ### License
 

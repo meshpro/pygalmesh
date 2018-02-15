@@ -9,7 +9,7 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 __author__ = u'Nico Schlömer'
 __author_email__ = 'nico.schloemer@gmail.com'
 __status__ = 'Development Status :: 3 - Alpha'
@@ -79,7 +79,7 @@ def has_flag(compiler, flagname):
 
 def cpp_flag(compiler):
     '''Return the -std=c++[11/14] compiler flag.
-    The c++14 is prefered over c++11 (when it is available).
+    The c++14 is preferred over c++11 (when it is available).
     '''
     if has_flag(compiler, '-std=c++14'):
         return '-std=c++14'
@@ -134,9 +134,9 @@ setup(
     author_email=__author_email__,
     install_requires=[
         'numpy',
-        'pybind11'
+        'pybind11 >= 2.2',
         ],
-    description='3D mesh generation',
+    description='Python frontend to CGAL\'s 3D mesh generation capabilities',
     long_description=read('README.rst'),
     license=__license__,
     classifiers=[
@@ -146,6 +146,9 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 3',
-        'Topic :: Scientific/Engineering'
+        'Topic :: Scientific/Engineering',
+        'Topic :: Scientific/Engineering :: Mathematics',
+        'Topic :: Scientific/Engineering :: Physics',
+        'Topic :: Scientific/Engineering :: Visualization',
         ]
     )

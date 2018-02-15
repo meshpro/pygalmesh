@@ -39,8 +39,8 @@ public:
 };
 
 
-PYBIND11_PLUGIN(pygalmesh) {
-    py::module m("pygalmesh");
+PYBIND11_MODULE(pygalmesh, m) {
+    // m.doc() = "documentation string";
 
     // Domain base.
     // shared_ptr b/c of
@@ -253,6 +253,4 @@ PYBIND11_PLUGIN(pygalmesh) {
         py::arg("distance_bound") = 0.0,
         py::arg("verbose") = true
         );
-
-    return m.ptr();
 }

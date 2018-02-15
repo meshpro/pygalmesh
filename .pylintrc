@@ -1,6 +1,7 @@
 [MESSAGES CONTROL]
 
 disable=
+    fixme,
     invalid-name,
     missing-docstring,
     too-few-public-methods

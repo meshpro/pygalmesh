@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 #
-import pygalmesh
-
 import numpy
 import meshio
+
+# pylint: disable=import-error
+import pygalmesh
 
 
 def _row_dot(a, b):
@@ -74,13 +75,13 @@ def test_balls_union():
     circ.append(circ[0])
 
     pygalmesh.generate_mesh(
-            u,
-            'out.mesh',
-            feature_edges=[circ],
-            cell_size=0.15,
-            edge_size=edge_size,
-            verbose=False
-            )
+        u,
+        'out.mesh',
+        feature_edges=[circ],
+        cell_size=0.15,
+        edge_size=edge_size,
+        verbose=False
+        )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -113,23 +114,21 @@ def test_balls_intersection():
     a = numpy.sqrt(radius**2 - displacement**2)
     edge_size = 0.1
     n = int(2*numpy.pi*a / edge_size)
-    circ = [
-        [
-            0.0,
-            a * numpy.cos(i * 2*numpy.pi / n),
-            a * numpy.sin(i * 2*numpy.pi / n)
-        ] for i in range(n)
-        ]
+    circ = [[
+        0.0,
+        a * numpy.cos(i * 2*numpy.pi / n),
+        a * numpy.sin(i * 2*numpy.pi / n)
+        ] for i in range(n)]
     circ.append(circ[0])
 
     pygalmesh.generate_mesh(
-            u,
-            'out.mesh',
-            feature_edges=[circ],
-            cell_size=0.15,
-            edge_size=edge_size,
-            verbose=False
-            )
+        u,
+        'out.mesh',
+        feature_edges=[circ],
+        cell_size=0.15,
+        edge_size=edge_size,
+        verbose=False
+        )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -151,6 +150,7 @@ def test_balls_intersection():
     return
 
 
+# pylint: disable=too-many-locals
 def test_balls_difference():
     radius = 1.0
     displacement = 0.5
@@ -171,16 +171,16 @@ def test_balls_difference():
     circ.append(circ[0])
 
     pygalmesh.generate_mesh(
-            u,
-            'out.mesh',
-            feature_edges=[circ],
-            cell_size=0.15,
-            edge_size=edge_size,
-            facet_angle=25,
-            facet_size=0.15,
-            cell_radius_edge_ratio=2.0,
-            verbose=False
-            )
+        u,
+        'out.mesh',
+        feature_edges=[circ],
+        cell_size=0.15,
+        edge_size=edge_size,
+        facet_angle=25,
+        facet_size=0.15,
+        cell_radius_edge_ratio=2.0,
+        verbose=False
+        )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -219,12 +219,12 @@ def test_cuboids_intersection():
     #         ]
 
     pygalmesh.generate_mesh(
-            u,
-            'out.mesh',
-            cell_size=0.1,
-            edge_size=0.1,
-            verbose=False
-            )
+        u,
+        'out.mesh',
+        cell_size=0.1,
+        edge_size=0.1,
+        verbose=False
+        )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -251,12 +251,12 @@ def test_cuboids_union():
     u = pygalmesh.Union([c0, c1])
 
     pygalmesh.generate_mesh(
-            u,
-            'out.mesh',
-            cell_size=0.2,
-            edge_size=0.2,
-            verbose=False
-            )
+        u,
+        'out.mesh',
+        cell_size=0.2,
+        edge_size=0.2,
+        verbose=False
+        )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -303,9 +303,9 @@ def test_cone():
     edge_size = 0.1
     s0 = pygalmesh.Cone(base_radius, height, edge_size)
     pygalmesh.generate_mesh(
-            s0, 'out.mesh', cell_size=0.1, edge_size=edge_size,
-            verbose=False
-            )
+        s0, 'out.mesh', cell_size=0.1, edge_size=edge_size,
+        verbose=False
+        )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -331,9 +331,9 @@ def test_cylinder():
     edge_length = 0.1
     s0 = pygalmesh.Cylinder(z0, z1, radius, edge_length)
     pygalmesh.generate_mesh(
-            s0, 'out.mesh', cell_size=0.1, edge_size=edge_length,
-            verbose=False
-            )
+        s0, 'out.mesh', cell_size=0.1, edge_size=edge_length,
+        verbose=False
+        )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -354,15 +354,15 @@ def test_cylinder():
 
 def test_tetrahedron():
     s0 = pygalmesh.Tetrahedron(
-            [0.0, 0.0, 0.0],
-            [1.0, 0.0, 0.0],
-            [0.0, 1.0, 0.0],
-            [0.0, 0.0, 1.0]
-            )
+        [0.0, 0.0, 0.0],
+        [1.0, 0.0, 0.0],
+        [0.0, 1.0, 0.0],
+        [0.0, 0.0, 1.0]
+        )
     pygalmesh.generate_mesh(
-            s0, 'out.mesh', cell_size=0.1, edge_size=0.1,
-            verbose=False
-            )
+        s0, 'out.mesh', cell_size=0.1, edge_size=0.1,
+        verbose=False
+        )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -417,10 +417,8 @@ def test_custom_function():
 
         def eval(self, x):
             if self.z0 < x[2] and x[2] < self.z1:
-                r2 = x[0]**2 + x[1]**2
-                return r2 - (x[2]**2 + self.waist_radius)**2
-            else:
-                return 1.0
+                return x[0]**2 + x[1]**2 - (x[2]**2 + self.waist_radius)**2
+            return 1.0
 
         def get_bounding_sphere_squared_radius(self):
             z_max = max(abs(self.z0), abs(self.z1))
@@ -431,21 +429,19 @@ def test_custom_function():
             radius0 = self.z0**2 + self.waist_radius
             n0 = int(2*numpy.pi*radius0 / self.edge_size)
             circ0 = [[
-                    radius0 * numpy.cos((2*numpy.pi * k) / n0),
-                    radius0 * numpy.sin((2*numpy.pi * k) / n0),
-                    self.z0
-                    ] for k in range(n0)
-                    ]
+                radius0 * numpy.cos((2*numpy.pi * k) / n0),
+                radius0 * numpy.sin((2*numpy.pi * k) / n0),
+                self.z0
+                ] for k in range(n0)]
             circ0.append(circ0[0])
 
             radius1 = self.z1**2 + self.waist_radius
             n1 = int(2*numpy.pi*radius1 / self.edge_size)
             circ1 = [[
-                    radius1 * numpy.cos((2*numpy.pi * k) / n1),
-                    radius1 * numpy.sin((2*numpy.pi * k) / n1),
-                    self.z1
-                    ] for k in range(n1)
-                    ]
+                radius1 * numpy.cos((2*numpy.pi * k) / n1),
+                radius1 * numpy.sin((2*numpy.pi * k) / n1),
+                self.z1
+                ] for k in range(n1)]
             circ1.append(circ1[0])
             return [circ0, circ1]
 
@@ -453,12 +449,12 @@ def test_custom_function():
     d = Hyperboloid(edge_size)
 
     pygalmesh.generate_mesh(
-            d,
-            'out.mesh',
-            cell_size=0.1,
-            edge_size=edge_size,
-            verbose=False
-            )
+        d,
+        'out.mesh',
+        cell_size=0.1,
+        edge_size=edge_size,
+        verbose=False
+        )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -481,12 +477,12 @@ def test_scaling():
     alpha = 1.3
     s = pygalmesh.Scale(pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]), alpha)
     pygalmesh.generate_mesh(
-            s,
-            'out.mesh',
-            cell_size=0.2,
-            edge_size=0.1,
-            verbose=False
-            )
+        s,
+        'out.mesh',
+        cell_size=0.2,
+        edge_size=0.1,
+        verbose=False
+        )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -507,16 +503,16 @@ def test_scaling():
 def test_stretch():
     alpha = 2.0
     s = pygalmesh.Stretch(
-            pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]),
-            [alpha, 0.0, 0.0]
-            )
+        pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]),
+        [alpha, 0.0, 0.0]
+        )
     pygalmesh.generate_mesh(
-            s,
-            'out.mesh',
-            cell_size=0.2,
-            edge_size=0.2,
-            verbose=False
-            )
+        s,
+        'out.mesh',
+        cell_size=0.2,
+        edge_size=0.2,
+        verbose=False
+        )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -536,17 +532,17 @@ def test_stretch():
 
 def test_rotation():
     s0 = pygalmesh.Rotate(
-            pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]),
-            [1.0, 0.0, 0.0],
-            numpy.pi / 12.0
-            )
+        pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]),
+        [1.0, 0.0, 0.0],
+        numpy.pi / 12.0
+        )
     pygalmesh.generate_mesh(
-            s0,
-            'out.mesh',
-            cell_size=0.1,
-            edge_size=0.1,
-            verbose=False
-            )
+        s0,
+        'out.mesh',
+        cell_size=0.1,
+        edge_size=0.1,
+        verbose=False
+        )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -559,16 +555,16 @@ def test_rotation():
 
 def test_translation():
     s0 = pygalmesh.Translate(
-            pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]),
-            [1.0, 0.0, 0.0]
-            )
+        pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]),
+        [1.0, 0.0, 0.0]
+        )
     pygalmesh.generate_mesh(
-            s0,
-            'out.mesh',
-            cell_size=0.1,
-            edge_size=0.1,
-            verbose=False
-            )
+        s0,
+        'out.mesh',
+        cell_size=0.1,
+        edge_size=0.1,
+        verbose=False
+        )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -617,12 +613,12 @@ def test_extrude():
     p = pygalmesh.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
     domain = pygalmesh.Extrude(p, [0.0, 0.3, 1.0])
     pygalmesh.generate_mesh(
-            domain,
-            'out.mesh',
-            cell_size=0.1,
-            edge_size=0.1,
-            verbose=False
-            )
+        domain,
+        'out.mesh',
+        cell_size=0.1,
+        edge_size=0.1,
+        verbose=False
+        )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -644,18 +640,18 @@ def test_extrude_rotate():
     p = pygalmesh.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
     edge_size = 0.1
     domain = pygalmesh.Extrude(
-            p,
-            [0.0, 0.0, 1.0],
-            0.5 * 3.14159265359,
-            edge_size
-            )
+        p,
+        [0.0, 0.0, 1.0],
+        0.5 * 3.14159265359,
+        edge_size
+        )
     pygalmesh.generate_mesh(
-            domain,
-            'out.mesh',
-            cell_size=0.1,
-            edge_size=edge_size,
-            verbose=False
-            )
+        domain,
+        'out.mesh',
+        cell_size=0.1,
+        edge_size=edge_size,
+        verbose=False
+        )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -678,12 +674,12 @@ def test_ring_extrude():
     edge_size = 0.1
     domain = pygalmesh.RingExtrude(p, edge_size)
     pygalmesh.generate_mesh(
-            domain,
-            'out.mesh',
-            cell_size=0.1,
-            edge_size=edge_size,
-            verbose=False
-            )
+        domain,
+        'out.mesh',
+        cell_size=0.1,
+        edge_size=edge_size,
+        verbose=False
+        )
 
     vertices, cells, _, _, _ = meshio.read('out.mesh')
 
@@ -734,13 +730,13 @@ def test_sphere():
     radius = 1.0
     s = pygalmesh.Ball([0.0, 0.0, 0.0], radius)
     pygalmesh.generate_surface_mesh(
-            s,
-            'out.off',
-            angle_bound=30,
-            radius_bound=0.1,
-            distance_bound=0.1,
-            verbose=False
-            )
+        s,
+        'out.off',
+        angle_bound=30,
+        radius_bound=0.1,
+        distance_bound=0.1,
+        verbose=False
+        )
 
     vertices, cells, _, _, _ = meshio.read('out.off')
 

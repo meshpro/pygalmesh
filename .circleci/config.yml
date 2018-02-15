@@ -5,15 +5,19 @@ jobs:
   build:
     working_directory: ~/pygalmesh
     docker:
-      - image: ubuntu:17.10
+      - image: ubuntu:18.04
     steps:
       - run: apt-get update
-      - run: apt-get install -y libcgal-dev libeigen3-dev pandoc python3-pip
-      - run: pip3 install -U pytest pytest-cov pylint meshio
+      - run: apt-get install -y libcgal-dev libeigen3-dev pandoc python3-pip clang++-6.0
+      - run: pip3 install -U pytest pytest-cov pylint meshio pybind11
       - checkout
-      # install
-      - run: LANG=C.UTF-8 pip3 install .
       # lint
-      - run: pylint setup.py
+      - run: pylint setup.py test/*.py
+      # make sure that rst converts correctly
+      - run: pip3 install docutils pygments
+      - run: make README.rst
+      # install
+      # Use clang++ for its smaller memory footprint.
+      - run: CC="clang++-6.0" pip3 install .
       # The actual test
       - run: cd test/ && pytest
