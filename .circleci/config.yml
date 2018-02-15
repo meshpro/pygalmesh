@@ -12,8 +12,11 @@ jobs:
       - run: pip3 install -U pytest pytest-cov pylint meshio
       - checkout
       # install
-      - run: LANG=C.UTF-8 pip3 install .
+      - run: pip3 install .
       # lint
       - run: pylint setup.py
+      # make sure that rst converts correctly
+      - run: pip3 install docutils pygments
+      - run: make README.rst
       # The actual test
       - run: cd test/ && pytest
