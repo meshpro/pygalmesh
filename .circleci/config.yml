@@ -11,12 +11,12 @@ jobs:
       - run: apt-get install -y libcgal-dev libeigen3-dev pandoc python3-pip
       - run: pip3 install -U pytest pytest-cov pylint meshio
       - checkout
-      # install
-      - run: pip3 install .
       # lint
       - run: pylint setup.py test/*.py
       # make sure that rst converts correctly
       - run: pip3 install docutils pygments
       - run: make README.rst
+      # install
+      - run: pip3 install .
       # The actual test
       - run: cd test/ && pytest
