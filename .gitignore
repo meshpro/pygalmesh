@@ -7,3 +7,4 @@ dist/
 MANIFEST
 README.rst
 do-configure.sh
+.pytest_cache/
