@@ -9,7 +9,7 @@
 #include <CGAL/IO/Complex_2_in_triangulation_3_file_writer.h>
 #include <CGAL/Implicit_surface_3.h>
 
-namespace frentos {
+namespace pygalmesh {
 
 // default triangulation for Surface_mesher
 typedef CGAL::Surface_mesh_default_triangulation_3 Tr;
@@ -43,7 +43,7 @@ typedef CGAL::Implicit_surface_3<GT, CgalDomainWrapper> Surface_3;
 
 void
 generate_surface_mesh(
-    const std::shared_ptr<frentos::DomainBase> & domain,
+    const std::shared_ptr<pygalmesh::DomainBase> & domain,
     const std::string & outfile,
     const double bounding_sphere_radius,
     const double angle_bound,
@@ -96,4 +96,4 @@ generate_surface_mesh(
   return;
 }
 
-} // namespace frentos
+} // namespace pygalmesh

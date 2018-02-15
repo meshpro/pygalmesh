@@ -14,7 +14,7 @@ __author__ = u'Nico Schlömer'
 __author_email__ = 'nico.schloemer@gmail.com'
 __status__ = 'Development Status :: 3 - Alpha'
 __license__ = 'License :: OSI Approved :: MIT License'
-__url__ = 'https://github.com/nschloe/frentos'
+__url__ = 'https://github.com/nschloe/pygalmesh'
 
 
 # https://github.com/pybind/python_example/blob/master/setup.py
@@ -104,7 +104,7 @@ def read(fname):
 
 
 ext_modules = [Extension(
-    'frentos',
+    'pygalmesh',
     [
         'src/generate.cpp',
         'src/generate_from_off.cpp',
@@ -123,13 +123,13 @@ ext_modules = [Extension(
     )]
 
 setup(
-    name='frentos',
+    name='pygalmesh',
     cmdclass={'build_ext': BuildExt},
     ext_modules=ext_modules,
     package_dir={'': 'src'},
     version=__version__,
     url=__url__,
-    download_url='https://pypi.python.org/pypi/frentos',
+    download_url='https://pypi.python.org/pypi/pygalmesh',
     author=__author__,
     author_email=__author_email__,
     install_requires=[

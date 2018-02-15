@@ -6,9 +6,9 @@
 #include <memory>
 #include <vector>
 
-namespace frentos {
+namespace pygalmesh {
 
-class Ball: public frentos::DomainBase
+class Ball: public pygalmesh::DomainBase
 {
   public:
     Ball(
@@ -47,7 +47,7 @@ class Ball: public frentos::DomainBase
 };
 
 
-class Cuboid: public frentos::DomainBase
+class Cuboid: public pygalmesh::DomainBase
 {
   public:
     Cuboid(
@@ -117,7 +117,7 @@ class Cuboid: public frentos::DomainBase
 };
 
 
-class Ellipsoid: public frentos::DomainBase
+class Ellipsoid: public pygalmesh::DomainBase
 {
   public:
     Ellipsoid(
@@ -160,7 +160,7 @@ class Ellipsoid: public frentos::DomainBase
 };
 
 
-class Cylinder: public frentos::DomainBase
+class Cylinder: public pygalmesh::DomainBase
 {
   public:
     Cylinder(
@@ -224,7 +224,7 @@ class Cylinder: public frentos::DomainBase
 };
 
 
-class Cone: public frentos::DomainBase
+class Cone: public pygalmesh::DomainBase
 {
   public:
     Cone(
@@ -284,7 +284,7 @@ class Cone: public frentos::DomainBase
 };
 
 
-class Tetrahedron: public frentos::DomainBase
+class Tetrahedron: public pygalmesh::DomainBase
 {
   public:
     Tetrahedron(
@@ -371,7 +371,7 @@ class Tetrahedron: public frentos::DomainBase
 };
 
 
-class Torus: public frentos::DomainBase
+class Torus: public pygalmesh::DomainBase
 {
   public:
     Torus(
@@ -408,6 +408,6 @@ class Torus: public frentos::DomainBase
     const double minor_radius_;
 };
 
-} // namespace frentos
+} // namespace pygalmesh
 
 #endif // PRIMITIVES_HPP

@@ -14,7 +14,7 @@ README.rst: README.md
 
 upload: setup.py README.rst
 	python setup.py sdist upload --sign
-	# HTTPError: 400 Client Error: Binary wheel 'frentos-0.2.0-cp27-cp27mu-linux_x86_64.whl' has an unsupported platform tag 'linux_x86_64'. for url: https://upload.pypi.org/legacy/
+	# HTTPError: 400 Client Error: Binary wheel 'pygalmesh-0.2.0-cp27-cp27mu-linux_x86_64.whl' has an unsupported platform tag 'linux_x86_64'. for url: https://upload.pypi.org/legacy/
 	# rm -f dist/*
 	# python setup.py bdist_wheel --universal
 	# gpg --detach-sign -a dist/*

@@ -6,7 +6,7 @@
 #include <memory>
 #include <vector>
 
-namespace frentos {
+namespace pygalmesh {
 
 class DomainBase
 {
@@ -30,11 +30,11 @@ class DomainBase
   };
 };
 
-class Translate: public frentos::DomainBase
+class Translate: public pygalmesh::DomainBase
 {
   public:
   Translate(
-      const std::shared_ptr<const frentos::DomainBase> & domain,
+      const std::shared_ptr<const pygalmesh::DomainBase> & domain,
       const std::array<double, 3> & direction
       ):
     domain_(domain),
@@ -96,16 +96,16 @@ class Translate: public frentos::DomainBase
   };
 
   private:
-    const std::shared_ptr<const frentos::DomainBase> domain_;
+    const std::shared_ptr<const pygalmesh::DomainBase> domain_;
     const Eigen::Vector3d direction_;
     const std::vector<std::vector<std::array<double, 3>>> translated_features_;
 };
 
-class Rotate: public frentos::DomainBase
+class Rotate: public pygalmesh::DomainBase
 {
   public:
   Rotate(
-      const std::shared_ptr<const frentos::DomainBase> & domain,
+      const std::shared_ptr<const pygalmesh::DomainBase> & domain,
       const std::array<double, 3> & axis,
       const double angle
       ):
@@ -191,18 +191,18 @@ class Rotate: public frentos::DomainBase
   };
 
   private:
-    const std::shared_ptr<const frentos::DomainBase> domain_;
+    const std::shared_ptr<const pygalmesh::DomainBase> domain_;
     const Eigen::Vector3d normalized_axis_;
     const double sinAngle_;
     const double cosAngle_;
     const std::vector<std::vector<std::array<double, 3>>> rotated_features_;
 };
 
-class Scale: public frentos::DomainBase
+class Scale: public pygalmesh::DomainBase
 {
   public:
   Scale(
-      std::shared_ptr<const frentos::DomainBase> & domain,
+      std::shared_ptr<const pygalmesh::DomainBase> & domain,
       const double alpha
       ):
     domain_(domain),
@@ -256,16 +256,16 @@ class Scale: public frentos::DomainBase
   };
 
   private:
-    std::shared_ptr<const frentos::DomainBase> domain_;
+    std::shared_ptr<const pygalmesh::DomainBase> domain_;
     const double alpha_;
     const std::vector<std::vector<std::array<double, 3>>> scaled_features_;
 };
 
-class Stretch: public frentos::DomainBase
+class Stretch: public pygalmesh::DomainBase
 {
   public:
   Stretch(
-      std::shared_ptr<const frentos::DomainBase> & domain,
+      std::shared_ptr<const pygalmesh::DomainBase> & domain,
       const std::array<double, 3> & direction
       ):
     domain_(domain),
@@ -326,17 +326,17 @@ class Stretch: public frentos::DomainBase
   };
 
   private:
-    std::shared_ptr<const frentos::DomainBase> domain_;
+    std::shared_ptr<const pygalmesh::DomainBase> domain_;
     const Eigen::Vector3d normalized_direction_;
     const double alpha_;
     const std::vector<std::vector<std::array<double, 3>>> stretched_features_;
 };
 
-class Intersection: public frentos::DomainBase
+class Intersection: public pygalmesh::DomainBase
 {
   public:
   explicit Intersection(
-      std::vector<std::shared_ptr<const frentos::DomainBase>> & domains
+      std::vector<std::shared_ptr<const pygalmesh::DomainBase>> & domains
       ):
     domains_(domains)
   {
@@ -380,14 +380,14 @@ class Intersection: public frentos::DomainBase
   };
 
   private:
-    std::vector<std::shared_ptr<const frentos::DomainBase>> domains_;
+    std::vector<std::shared_ptr<const pygalmesh::DomainBase>> domains_;
 };
 
-class Union: public frentos::DomainBase
+class Union: public pygalmesh::DomainBase
 {
   public:
   explicit Union(
-      std::vector<std::shared_ptr<const frentos::DomainBase>> & domains
+      std::vector<std::shared_ptr<const pygalmesh::DomainBase>> & domains
       ):
     domains_(domains)
   {
@@ -431,15 +431,15 @@ class Union: public frentos::DomainBase
   };
 
   private:
-    std::vector<std::shared_ptr<const frentos::DomainBase>> domains_;
+    std::vector<std::shared_ptr<const pygalmesh::DomainBase>> domains_;
 };
 
-class Difference: public frentos::DomainBase
+class Difference: public pygalmesh::DomainBase
 {
   public:
   Difference(
-      std::shared_ptr<const frentos::DomainBase> & domain0,
-      std::shared_ptr<const frentos::DomainBase> & domain1
+      std::shared_ptr<const pygalmesh::DomainBase> & domain0,
+      std::shared_ptr<const pygalmesh::DomainBase> & domain1
       ):
     domain0_(domain0),
     domain1_(domain1)
@@ -480,9 +480,9 @@ class Difference: public frentos::DomainBase
   };
 
   private:
-    std::shared_ptr<const frentos::DomainBase> domain0_;
-    std::shared_ptr<const frentos::DomainBase> domain1_;
+    std::shared_ptr<const pygalmesh::DomainBase> domain0_;
+    std::shared_ptr<const pygalmesh::DomainBase> domain1_;
 };
 
-} // namespace frentos
+} // namespace pygalmesh
 #endif // DOMAIN_HPP
