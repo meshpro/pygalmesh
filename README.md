@@ -283,16 +283,15 @@ Ubuntu
 ```
 sudo apt install libcgal-dev libeigen3-dev
 ```
-[meshio](https://github.com/nschloe/meshio) (`sudo -H pip install meshio`)
-can be helpful in processing the meshes.
-
-### Installation
-
-pygalmesh is [available from the Python Package Index](https://pypi.python.org/pypi/pygalmesh/), so with
+After that, pygalmesh can be [installed from the Python Package
+Index](https://pypi.python.org/pypi/pygalmesh/), so with
 ```
 pip install -U pygalmesh
 ```
 you can install/upgrade.
+
+[meshio](https://github.com/nschloe/meshio) (`sudo -H pip install meshio`)
+can be helpful in processing the meshes.
 
 #### Manual installation
 
