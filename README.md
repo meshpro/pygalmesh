@@ -57,7 +57,7 @@ import meshio
 vertices, cells, _, _, _ = meshio.read('out.mesh')
 ```
 The mesh generation comes with many more options, described
-[here](http://doc.cgal.org/latest/Mesh_3/). Try, for example,
+[here](https://doc.cgal.org/latest/Mesh_3/). Try, for example,
 ```python
 pygalmesh.generate_mesh(
     s,
@@ -249,7 +249,7 @@ The output format is
 handled by [meshio](https://github.com/nschloe/meshio).
 
 Refer to [CGAL's
-documention](http://doc.cgal.org/latest/Surface_mesher/index.html) for the
+documention](https://doc.cgal.org/latest/Surface_mesher/index.html) for the
 options.
 
 #### Meshes from OFF files
@@ -275,7 +275,7 @@ pygalmesh.generate_from_off(
 
 ### Installation
 
-For installation, pygalmesh needs [CGAL](http://www.cgal.org/) and
+For installation, pygalmesh needs [CGAL](https://www.cgal.org/) and
 [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) installed on your
 system. They are typically available on your Linux distribution, e.g., on
 Ubuntu
@@ -285,14 +285,13 @@ sudo apt install libcgal-dev libeigen3-dev
 [meshio](https://github.com/nschloe/meshio) (`sudo -H pip install meshio`)
 can be helpful in processing the meshes.
 
-#### PyPi
-[pygalmesh](https://pypi.python.org/pypi/pygalmesh) is available via PyPi, so
-with [pip](https://pypi.python.org/pypi/pip) installed (`sudo apt install
-python-pip`) you can simply type
+### Installation
+
+pygalmesh is [available from the Python Package Index](https://pypi.python.org/pypi/pygalmesh/), so with
 ```
-sudo -H pip install -U pygalmesh
+pip install -U pygalmesh
 ```
-to install or upgrade pygalmesh.
+you can install/upgrade.
 
 #### Manual installation
 
@@ -321,7 +320,6 @@ To create a new release
     ```
     make publish
     ```
-
 
 ### License
 
