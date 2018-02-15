@@ -11,7 +11,7 @@
 // IO
 #include <CGAL/IO/Polyhedron_iostream.h>
 
-namespace frentos {
+namespace pygalmesh {
 
 // Domain
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
@@ -96,4 +96,4 @@ generate_from_off(
   return;
 }
 
-} // namespace frentos
+} // namespace pygalmesh

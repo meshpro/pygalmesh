@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace frentos {
+namespace pygalmesh {
 
 void
 generate_from_off(
@@ -23,6 +23,6 @@ generate_from_off(
     const bool verbose = true
     );
 
-} // namespace frentos
+} // namespace pygalmesh
 
 #endif // GENERATE_FROM_OFF_HPP

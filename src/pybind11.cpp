@@ -9,7 +9,7 @@
 #include <pybind11/stl.h>
 
 namespace py = pybind11;
-using namespace frentos;
+using namespace pygalmesh;
 
 
 // https://pybind11.readthedocs.io/en/stable/advanced/classes.html#overriding-virtual-functions-in-python
@@ -39,8 +39,8 @@ public:
 };
 
 
-PYBIND11_PLUGIN(frentos) {
-    py::module m("frentos");
+PYBIND11_PLUGIN(pygalmesh) {
+    py::module m("pygalmesh");
 
     // Domain base.
     // shared_ptr b/c of
@@ -64,7 +64,7 @@ PYBIND11_PLUGIN(frentos) {
 
     py::class_<Rotate, DomainBase, std::shared_ptr<Rotate>>(m, "Rotate")
           .def(py::init<
-              const std::shared_ptr<const frentos::DomainBase> &,
+              const std::shared_ptr<const pygalmesh::DomainBase> &,
               const std::array<double, 3> &,
               const double
               >())
@@ -76,7 +76,7 @@ PYBIND11_PLUGIN(frentos) {
 
     py::class_<Scale, DomainBase, std::shared_ptr<Scale>>(m, "Scale")
           .def(py::init<
-              std::shared_ptr<const frentos::DomainBase> &,
+              std::shared_ptr<const pygalmesh::DomainBase> &,
               const double
               >())
           .def("eval", &Scale::eval)
@@ -86,7 +86,7 @@ PYBIND11_PLUGIN(frentos) {
 
     py::class_<Stretch, DomainBase, std::shared_ptr<Stretch>>(m, "Stretch")
           .def(py::init<
-              std::shared_ptr<const frentos::DomainBase> &,
+              std::shared_ptr<const pygalmesh::DomainBase> &,
               const std::array<double, 3> &
               >())
           .def("eval", &Stretch::eval)
@@ -96,7 +96,7 @@ PYBIND11_PLUGIN(frentos) {
 
     py::class_<Intersection, DomainBase, std::shared_ptr<Intersection>>(m, "Intersection")
           .def(py::init<
-              std::vector<std::shared_ptr<const frentos::DomainBase>> &
+              std::vector<std::shared_ptr<const pygalmesh::DomainBase>> &
               >())
           .def("eval", &Intersection::eval)
           .def("get_bounding_sphere_squared_radius", &Intersection::get_bounding_sphere_squared_radius)
@@ -104,7 +104,7 @@ PYBIND11_PLUGIN(frentos) {
 
     py::class_<Union, DomainBase, std::shared_ptr<Union>>(m, "Union")
           .def(py::init<
-              std::vector<std::shared_ptr<const frentos::DomainBase>> &
+              std::vector<std::shared_ptr<const pygalmesh::DomainBase>> &
               >())
           .def("eval", &Union::eval)
           .def("get_bounding_sphere_squared_radius", &Union::get_bounding_sphere_squared_radius)
@@ -112,8 +112,8 @@ PYBIND11_PLUGIN(frentos) {
 
     py::class_<Difference, DomainBase, std::shared_ptr<Difference>>(m, "Difference")
           .def(py::init<
-              std::shared_ptr<const frentos::DomainBase> &,
-              std::shared_ptr<const frentos::DomainBase> &
+              std::shared_ptr<const pygalmesh::DomainBase> &,
+              std::shared_ptr<const pygalmesh::DomainBase> &
               >())
           .def("eval", &Difference::eval)
           .def("get_bounding_sphere_squared_radius", &Difference::get_bounding_sphere_squared_radius)
@@ -199,7 +199,7 @@ PYBIND11_PLUGIN(frentos) {
 
     py::class_<Extrude, DomainBase, std::shared_ptr<Extrude>>(m, "Extrude")
           .def(py::init<
-              const std::shared_ptr<frentos::Polygon2D> &,
+              const std::shared_ptr<pygalmesh::Polygon2D> &,
               const std::array<double, 3> &,
               const double,
               const double
@@ -215,7 +215,7 @@ PYBIND11_PLUGIN(frentos) {
 
     py::class_<ring_extrude, DomainBase, std::shared_ptr<ring_extrude>>(m, "RingExtrude")
           .def(py::init<
-              const std::shared_ptr<frentos::Polygon2D> &,
+              const std::shared_ptr<pygalmesh::Polygon2D> &,
               const double
               >())
           .def("eval", &ring_extrude::eval)
