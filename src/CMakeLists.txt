@@ -1,5 +1,5 @@
-FIND_PACKAGE(CGAL REQUIRED)
-include(${CGAL_USE_FILE})
+FIND_PACKAGE(pybind11 REQUIRED)
+# include_directories(${PYBIND11_INCLUDE_DIR})
 
 FIND_PACKAGE(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
@@ -7,10 +7,13 @@ include_directories(${EIGEN3_INCLUDE_DIR})
 FILE(GLOB pygalmesh_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 # FILE(GLOB pygalmesh_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp")
 
-FIND_PACKAGE(pybind11 REQUIRED)
-# include_directories(${PYBIND11_INCLUDE_DIR})
-
 pybind11_add_module(pygalmesh ${pygalmesh_SRCS})
+
+# Call CGAL as late as possible. It messes around with some
+# compiler variables. TODO report CGAL bug
+FIND_PACKAGE(CGAL REQUIRED)
+include(${CGAL_USE_FILE})
+
 # ADD_LIBRARY(pygalmesh ${pygalmesh_SRCS})
 target_link_libraries(pygalmesh PRIVATE ${CGAL_LIBRARIES})
 
