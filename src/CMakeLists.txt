@@ -10,7 +10,9 @@ FILE(GLOB pygalmesh_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 pybind11_add_module(pygalmesh ${pygalmesh_SRCS})
 
 # Call CGAL as late as possible. It messes around with some
-# compiler variables. TODO report CGAL bug
+# compiler variables. See bugs
+# <https://github.com/CGAL/cgal/issues/2849> and
+# <https://github.com/CGAL/cgal/issues/2850>.
 FIND_PACKAGE(CGAL REQUIRED)
 include(${CGAL_USE_FILE})
 
