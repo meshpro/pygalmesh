@@ -135,6 +135,7 @@ setup(
     install_requires=[
         'numpy',
         'pybind11 >= 2.2',
+        'pipdate',
         ],
     description='Python frontend to CGAL\'s 3D mesh generation capabilities',
     long_description=read('README.rst'),
