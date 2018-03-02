@@ -127,7 +127,6 @@ setup(
     packages=find_packages(),
     cmdclass={'build_ext': BuildExt},
     ext_modules=ext_modules,
-    package_dir={'': 'src'},
     version=about['__version__'],
     url=about['__url__'],
     download_url='https://pypi.python.org/pypi/pygalmesh',
