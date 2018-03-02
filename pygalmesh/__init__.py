@@ -4,7 +4,7 @@ from __future__ import print_function
 
 # https://github.com/pybind/pybind11/issues/1004
 # pylint: disable=wildcard-import
-from _accupy import *
+from _pygalmesh import *
 
 from .__about__ import (
     __author__,

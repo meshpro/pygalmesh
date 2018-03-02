@@ -12,7 +12,7 @@ from setuptools.command.build_ext import build_ext
 # https://packaging.python.org/single_source_version/
 base_dir = os.path.abspath(os.path.dirname(__file__))
 about = {}
-with open(os.path.join(base_dir, 'accupy', '__about__.py'), 'rb') as handle:
+with open(os.path.join(base_dir, 'pygalmesh', '__about__.py'), 'rb') as handle:
     # pylint: disable=exec-used
     exec(handle.read(), about)
 
