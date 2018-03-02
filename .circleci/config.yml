@@ -11,13 +11,13 @@ jobs:
       - run: apt-get install -y libcgal-dev libeigen3-dev pandoc python3-pip clang++-6.0
       - run: pip3 install -U pytest pytest-cov pylint meshio pybind11
       - checkout
-      # lint
-      - run: pylint setup.py test/*.py
       # make sure that rst converts correctly
       - run: pip3 install docutils pygments
       - run: make README.rst
       # install
       # Use clang++ for its smaller memory footprint.
       - run: CC="clang++-6.0" pip3 install .
+      # lint
+      - run: pylint setup.py test/*.py
       # The actual test
       - run: cd test/ && pytest
