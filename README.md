@@ -6,7 +6,7 @@ capabilities](https://doc.cgal.org/latest/Mesh_3/index.html).
 [![CircleCI](https://img.shields.io/circleci/project/github/nschloe/pygalmesh/master.svg)](https://circleci.com/gh/nschloe/pygalmesh/tree/master)
 [![Codacy grade](https://img.shields.io/codacy/grade/26d491d592134f438c6175a250290915.svg)](https://app.codacy.com/app/nschloe/pygalmesh/dashboard)
 [![PyPi Version](https://img.shields.io/pypi/v/pygalmesh.svg)](https://pypi.python.org/pypi/pygalmesh)
-[![GitHub stars](https://img.shields.io/github/stars/nschloe/pygalmesh.svg?style=social&label=Stars)](https://github.com/nschloe/pygalmesh)
+[![GitHub stars](https://img.shields.io/github/stars/nschloe/pygalmesh.svg?style=social&label=Stars&logo=github)](https://github.com/nschloe/pygalmesh)
 
 pygalmesh makes it easy to create high-quality 3D volume and surface meshes.
 
