@@ -1,7 +1,7 @@
 # pygalmesh
 
-A Python frontend to [CGAL](https://www.cgal.org/)'s 3D mesh generation
-capabilities.
+A Python frontend to [CGAL](https://www.cgal.org/)'s [3D mesh generation
+capabilities](https://doc.cgal.org/latest/Mesh_3/index.html).
 
 [![CircleCI](https://img.shields.io/circleci/project/github/nschloe/pygalmesh/master.svg)](https://circleci.com/gh/nschloe/pygalmesh/tree/master)
 [![Codacy grade](https://img.shields.io/codacy/grade/26d491d592134f438c6175a250290915.svg)](https://app.codacy.com/app/nschloe/pygalmesh/dashboard)
@@ -23,7 +23,7 @@ advantages and disadvantages:
 * All boundary points are guaranteed to be in the level set within any specified
   residual. This results in smooth curved surfaces.
 * Sharp intersections of subdomains (e.g., in unions or differences of sets)
-  need to be specified manually (via features edges, see below), which can be
+  need to be specified manually (via feature edges, see below), which can be
   tedious.
 
 On the other hand, the bounding-plane approach (realized by
