@@ -9,12 +9,12 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 
 
-__version__ = '0.2.1'
-__author__ = u'Nico Schlömer'
-__author_email__ = 'nico.schloemer@gmail.com'
-__status__ = 'Development Status :: 3 - Alpha'
-__license__ = 'License :: OSI Approved :: MIT License'
-__url__ = 'https://github.com/nschloe/pygalmesh'
+# https://packaging.python.org/single_source_version/
+base_dir = os.path.abspath(os.path.dirname(__file__))
+about = {}
+with open(os.path.join(base_dir, 'accupy', '__about__.py'), 'rb') as f:
+    # pylint: disable=exec-used
+    exec(f.read(), about)
 
 
 # https://github.com/pybind/python_example/blob/master/setup.py
@@ -104,7 +104,7 @@ def read(fname):
 
 
 ext_modules = [Extension(
-    'pygalmesh',
+    '_pygalmesh',
     [
         'src/generate.cpp',
         'src/generate_from_off.cpp',
@@ -124,24 +124,25 @@ ext_modules = [Extension(
 
 setup(
     name='pygalmesh',
+    packages=find_packages(),
     cmdclass={'build_ext': BuildExt},
     ext_modules=ext_modules,
     package_dir={'': 'src'},
-    version=__version__,
-    url=__url__,
+    version=about['__version__'],
+    url=about['__url__'],
     download_url='https://pypi.python.org/pypi/pygalmesh',
-    author=__author__,
-    author_email=__author_email__,
+    author=about['__author__'],
+    author_email=about['__author_email__'],
     install_requires=[
         'numpy',
         'pybind11 >= 2.2',
         ],
     description='Python frontend to CGAL\'s 3D mesh generation capabilities',
     long_description=read('README.rst'),
-    license=__license__,
+    license=about['__license__'],
     classifiers=[
-        __status__,
-        __license__,
+        about['__status__'],
+        about['__license__'],
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
