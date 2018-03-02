@@ -4,4 +4,5 @@ disable=
     fixme,
     invalid-name,
     missing-docstring,
+    no-member,
     too-few-public-methods

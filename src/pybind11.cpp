@@ -39,7 +39,7 @@ public:
 };
 
 
-PYBIND11_MODULE(pygalmesh, m) {
+PYBIND11_MODULE(_pygalmesh, m) {
     // m.doc() = "documentation string";
 
     // Domain base.
