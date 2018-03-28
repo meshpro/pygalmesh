@@ -441,7 +441,7 @@ class HalfSpace: public pygalmesh::DomainBase
 
   private:
     const std::array<double, 3> n_;
-    const double alpha;
+    const double alpha_;
     const double bounding_sphere_squared_radius_;
 };
 

@@ -195,7 +195,7 @@ PYBIND11_MODULE(_pygalmesh, m) {
               const double,
               const double
               >())
-          .def("eval", &HalfSpaces::eval)
+          .def("eval", &HalfSpace::eval)
           .def("get_bounding_sphere_squared_radius", &HalfSpace::get_bounding_sphere_squared_radius);
 
     // polygon2d
