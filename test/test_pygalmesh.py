@@ -756,8 +756,16 @@ def test_sphere():
 
 
 def test_halfspace():
+    c = pygalmesh.Cuboid([0, 0, 0], [1, 1, 1])
     s = pygalmesh.HalfSpace([1.0, 2.0, 3.0], 1.0, 2.0)
-    pygalmesh.generate_mesh(s, 'out.mesh', cell_size=0.2, verbose=False)
+    u = pygalmesh.Intersection([c, s])
+
+    pygalmesh.generate_mesh(u, 'out.mesh', cell_size=0.2, edge_size=0.2, verbose=False)
+
+    vertices, cells, _, _, _ = meshio.read('out.mesh')
+
+    vol = sum(compute_volumes(vertices, cells['tetra']))
+    assert abs(vol - 1/750) < 1.0e-3
     return
 
 
