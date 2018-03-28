@@ -755,5 +755,11 @@ def test_sphere():
     return
 
 
+def test_halfspace():
+    s = pygalmesh.Halfspace([1.0, 2.0, 3.0], 1.0, 2.0)
+    pygalmesh.generate_mesh(s, 'out.mesh', cell_size=0.2, verbose=False)
+    return
+
+
 if __name__ == '__main__':
     test_sphere()
