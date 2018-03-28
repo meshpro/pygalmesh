@@ -21,3 +21,6 @@ upload: setup.py
 	# twine upload dist/*.whl
 
 publish: tag upload
+
+clean:
+	@find . | grep -E "(__pycache__|\.pyc|\.pyo$\)" | xargs rm -rf
