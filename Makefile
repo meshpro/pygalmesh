@@ -1,4 +1,4 @@
-VERSION=$(shell grep '__version__ = ' setup.py | sed 's/[^0-9]*\([0-9\.]*\).*/\1/')
+VERSION=$(shell python3 -c "import pygalmesh; print(pygalmesh.__version__)")
 
 default:
 	@echo "\"make publish\"?"
