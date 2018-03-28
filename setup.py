@@ -29,16 +29,7 @@ class get_pybind_include(object):
 
 
 def read(fname):
-    # `pip install` doesn't generate README.rst and fails, so intercept with
-    # try-execpt.
-    try:
-        content = codecs.open(
-            os.path.join(os.path.dirname(__file__), fname),
-            encoding='utf-8'
-            ).read()
-    except IOError:
-        content = ''
-    return content
+    return codecs.open(os.path.join(base_dir, fname), encoding='utf-8').read()
 
 
 ext_modules = [Extension(
@@ -76,7 +67,7 @@ setup(
         'pipdate',
         ],
     description='Python frontend to CGAL\'s 3D mesh generation capabilities',
-    long_description=read('README.rst'),
+    long_description=read('README.md'),
     license=about['__license__'],
     classifiers=[
         about['__status__'],
