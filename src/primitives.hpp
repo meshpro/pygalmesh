@@ -408,6 +408,43 @@ class Torus: public pygalmesh::DomainBase
     const double minor_radius_;
 };
 
+
+class HalfSpace: public pygalmesh::DomainBase
+{
+  public:
+    HalfSpace(
+        const std::array<double, 3> & n,
+        const double alpha,
+        const double bounding_sphere_squared_radius
+        ):
+      n_(n),
+      alpha_(alpha),
+      bounding_sphere_squared_radius_(bounding_sphere_squared_radius)
+    {
+    }
+
+    virtual ~HalfSpace() = default;
+
+    virtual
+    double
+    eval(const std::array<double, 3> & x) const
+    {
+      return n_[0]*x[0] + n_[1]*x[1] + n_[2]*x[2] - alpha_;
+    }
+
+    virtual
+    double
+    get_bounding_sphere_squared_radius() const
+    {
+      return bounding_sphere_squared_radius_;
+    }
+
+  private:
+    const std::array<double, 3> n_;
+    const double alpha_;
+    const double bounding_sphere_squared_radius_;
+};
+
 } // namespace pygalmesh
 
 #endif // PRIMITIVES_HPP

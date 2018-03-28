@@ -189,6 +189,15 @@ PYBIND11_MODULE(_pygalmesh, m) {
           .def("get_bounding_sphere_squared_radius", &Torus::get_bounding_sphere_squared_radius)
           .def("get_features", &Torus::get_features);
 
+    py::class_<HalfSpace, DomainBase, std::shared_ptr<HalfSpace>>(m, "HalfSpace")
+          .def(py::init<
+              const std::array<double, 3> &,
+              const double,
+              const double
+              >())
+          .def("eval", &HalfSpace::eval)
+          .def("get_bounding_sphere_squared_radius", &HalfSpace::get_bounding_sphere_squared_radius);
+
     // polygon2d
     py::class_<Polygon2D, std::shared_ptr<Polygon2D>>(m, "Polygon2D")
           .def(py::init<

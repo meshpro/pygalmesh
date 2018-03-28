@@ -58,7 +58,6 @@ setup(
     ext_modules=ext_modules,
     version=about['__version__'],
     url=about['__url__'],
-    download_url='https://pypi.python.org/pypi/pygalmesh',
     author=about['__author__'],
     author_email=about['__author_email__'],
     install_requires=[
@@ -68,6 +67,7 @@ setup(
         ],
     description='Python frontend to CGAL\'s 3D mesh generation capabilities',
     long_description=read('README.md'),
+    long_description_content_type='text/markdown',
     license=about['__license__'],
     classifiers=[
         about['__status__'],
