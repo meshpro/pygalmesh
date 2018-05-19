@@ -3,6 +3,7 @@
 
 #include <Eigen/Dense>
 #include <array>
+#include <limits>
 #include <memory>
 #include <vector>
 
@@ -348,12 +349,12 @@ class Intersection: public pygalmesh::DomainBase
   double
   eval(const std::array<double, 3> & x) const
   {
+    // TODO find a differentiable expression
+    double maxval = std::numeric_limits<double>::lowest();
     for (const auto & domain: domains_) {
-      if (domain->eval(x) > 0.0) {
-        return 1.0;
-      }
+      maxval = std::max(maxval, domain->eval(x));
     }
-    return -1.0;
+    return maxval;
   }
 
   virtual
@@ -399,12 +400,12 @@ class Union: public pygalmesh::DomainBase
   double
   eval(const std::array<double, 3> & x) const
   {
+    // TODO find a differentiable expression
+    double minval = std::numeric_limits<double>::max();
     for (const auto & domain: domains_) {
-      if (domain->eval(x) < 0.0) {
-        return -1.0;
-      }
+      minval = std::min(minval, domain->eval(x));
     }
-    return 1.0;
+    return minval;
   }
 
   virtual
@@ -452,9 +453,10 @@ class Difference: public pygalmesh::DomainBase
   double
   eval(const std::array<double, 3> & x) const
   {
-    return (domain0_->eval(x) < 0.0 && domain1_->eval(x) >= 0.0) ?
-        -1.0 :
-        1.0;
+    // TODO find a continuous (perhaps even differentiable) expression
+    const double val0 = domain0_->eval(x);
+    const double val1 = domain1_->eval(x);
+    return (val0 < 0.0 && val1 >= 0.0) ? val0 : std::max(val0, -val1);
   }
 
   virtual
