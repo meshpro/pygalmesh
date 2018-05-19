@@ -65,11 +65,13 @@ class Cuboid: public pygalmesh::DomainBase
     double
     eval(const std::array<double, 3> & x) const
     {
-      return (
-          x0_[0] < x[0] && x[0] < x1_[0] &&
-          x0_[1] < x[1] && x[1] < x1_[1] &&
-          x0_[2] < x[2] && x[2] < x1_[2]
-          ) ? -1.0 : 1.0;
+      // TODO differentiable expression?
+      return std::max(std::max(
+          (x[0] - x0_[0]) * (x[0] - x1_[0]),
+          (x[1] - x0_[1]) * (x[1] - x1_[1])
+          ),
+          (x[2] - x0_[2]) * (x[2] - x1_[2])
+          );
     }
 
     virtual
@@ -322,6 +324,7 @@ class Tetrahedron: public pygalmesh::DomainBase
     double
     eval(const std::array<double, 3> & x) const
     {
+      // TODO continuous expression
       Eigen::Vector3d pvec(x.data());
       const bool a =
         isOnSameSide(x0_, x1_, x2_, x3_, pvec) &&
@@ -390,10 +393,10 @@ class Torus: public pygalmesh::DomainBase
     eval(const std::array<double, 3> & x) const
     {
       const double r = sqrt(x[0]*x[0] + x[1]*x[1]);
-      return (r - major_radius_)*(r - major_radius_) + x[2]*x[2] <
-        minor_radius_*minor_radius_ ?
-        -1.0 :
-        1.0;
+      return (
+        (r - major_radius_)*(r - major_radius_) + x[2]*x[2]
+        - minor_radius_*minor_radius_
+        );
     }
 
     virtual
