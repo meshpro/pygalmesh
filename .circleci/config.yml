@@ -15,6 +15,7 @@ jobs:
       # Use clang++ for its smaller memory footprint.
       - run: CC="clang++-6.0" pip3 install .
       # lint
-      - run: pylint setup.py pygalmesh test/*.py
+      - run: LC_ALL=C.UTF-8 black --check setup.py pygalmesh/ test/*.py
+      - run: flake8 setup.py pygalmesh/ test/*.py
       # The actual test
       - run: cd test/ && pytest

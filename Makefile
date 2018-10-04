@@ -23,3 +23,10 @@ publish: tag upload
 
 clean:
 	@find . | grep -E "(__pycache__|\.pyc|\.pyo$\)" | xargs rm -rf
+
+black:
+	black setup.py pygalmesh/ test/*.py
+
+lint:
+	black --check setup.py pygalmesh/ test/*.py
+	flake8 setup.py pygalmesh/ test/*.py
