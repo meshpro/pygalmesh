@@ -40,18 +40,17 @@ def test_ball():
     s = pygalmesh.Ball([0.0, 0.0, 0.0], 1.0)
     pygalmesh.generate_mesh(s, "out.mesh", cell_size=0.2, verbose=False)
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
-    assert abs(max(vertices[:, 0]) - 1.0) < 0.02
-    assert abs(min(vertices[:, 0]) + 1.0) < 0.02
-    assert abs(max(vertices[:, 1]) - 1.0) < 0.02
-    assert abs(min(vertices[:, 1]) + 1.0) < 0.02
-    assert abs(max(vertices[:, 2]) - 1.0) < 0.02
-    assert abs(min(vertices[:, 2]) + 1.0) < 0.02
+    assert abs(max(mesh.points[:, 0]) - 1.0) < 0.02
+    assert abs(min(mesh.points[:, 0]) + 1.0) < 0.02
+    assert abs(max(mesh.points[:, 1]) - 1.0) < 0.02
+    assert abs(min(mesh.points[:, 1]) + 1.0) < 0.02
+    assert abs(max(mesh.points[:, 2]) - 1.0) < 0.02
+    assert abs(min(mesh.points[:, 2]) + 1.0) < 0.02
 
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 4.0 / 3.0 * numpy.pi) < 0.15
-
     return
 
 
@@ -80,16 +79,16 @@ def test_balls_union():
         verbose=False,
     )
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
-    assert abs(max(vertices[:, 0]) - (radius + displacement)) < 0.02
-    assert abs(min(vertices[:, 0]) + (radius + displacement)) < 0.02
-    assert abs(max(vertices[:, 1]) - radius) < 0.02
-    assert abs(min(vertices[:, 1]) + radius) < 0.02
-    assert abs(max(vertices[:, 2]) - radius) < 0.02
-    assert abs(min(vertices[:, 2]) + radius) < 0.02
+    assert abs(max(mesh.points[:, 0]) - (radius + displacement)) < 0.02
+    assert abs(min(mesh.points[:, 0]) + (radius + displacement)) < 0.02
+    assert abs(max(mesh.points[:, 1]) - radius) < 0.02
+    assert abs(min(mesh.points[:, 1]) + radius) < 0.02
+    assert abs(max(mesh.points[:, 2]) - radius) < 0.02
+    assert abs(min(mesh.points[:, 2]) + radius) < 0.02
 
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     h = radius - displacement
     ref_vol = 2 * (
         4.0 / 3.0 * numpy.pi * radius ** 3 - h * numpy.pi / 6.0 * (3 * a ** 2 + h ** 2)
@@ -125,16 +124,16 @@ def test_balls_intersection():
         verbose=False,
     )
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
-    assert abs(max(vertices[:, 0]) - (radius - displacement)) < 0.02
-    assert abs(min(vertices[:, 0]) + (radius - displacement)) < 0.02
-    assert abs(max(vertices[:, 1]) - a) < 0.02
-    assert abs(min(vertices[:, 1]) + a) < 0.02
-    assert abs(max(vertices[:, 2]) - a) < 0.02
-    assert abs(min(vertices[:, 2]) + a) < 0.02
+    assert abs(max(mesh.points[:, 0]) - (radius - displacement)) < 0.02
+    assert abs(min(mesh.points[:, 0]) + (radius - displacement)) < 0.02
+    assert abs(max(mesh.points[:, 1]) - a) < 0.02
+    assert abs(min(mesh.points[:, 1]) + a) < 0.02
+    assert abs(max(mesh.points[:, 2]) - a) < 0.02
+    assert abs(min(mesh.points[:, 2]) + a) < 0.02
 
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     h = radius - displacement
     ref_vol = 2 * (h * numpy.pi / 6.0 * (3 * a ** 2 + h ** 2))
 
@@ -172,17 +171,17 @@ def test_balls_difference():
         verbose=False,
     )
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
     tol = 0.02
-    assert abs(max(vertices[:, 0]) - (radius + displacement)) < tol
-    assert abs(min(vertices[:, 0]) - 0.0) < tol
-    assert abs(max(vertices[:, 1]) - radius) < tol
-    assert abs(min(vertices[:, 1]) + radius) < tol
-    assert abs(max(vertices[:, 2]) - radius) < tol
-    assert abs(min(vertices[:, 2]) + radius) < tol
+    assert abs(max(mesh.points[:, 0]) - (radius + displacement)) < tol
+    assert abs(min(mesh.points[:, 0]) - 0.0) < tol
+    assert abs(max(mesh.points[:, 1]) - radius) < tol
+    assert abs(min(mesh.points[:, 1]) + radius) < tol
+    assert abs(max(mesh.points[:, 2]) - radius) < tol
+    assert abs(min(mesh.points[:, 2]) + radius) < tol
 
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     h = radius - displacement
     ref_vol = 4.0 / 3.0 * numpy.pi * radius ** 3 - 2 * h * numpy.pi / 6.0 * (
         3 * a ** 2 + h ** 2
@@ -211,10 +210,10 @@ def test_cuboids_intersection():
 
     pygalmesh.generate_mesh(u, "out.mesh", cell_size=0.1, edge_size=0.1, verbose=False)
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
     # filter the vertices that belong to cells
-    verts = vertices[numpy.unique(cells["tetra"])]
+    verts = mesh.points[numpy.unique(mesh.cells["tetra"])]
 
     tol = 1.0e-2
     assert abs(max(verts[:, 0]) - 2.0) < tol
@@ -224,7 +223,7 @@ def test_cuboids_intersection():
     assert abs(max(verts[:, 2]) - 0.5) < 0.05
     assert abs(min(verts[:, 2]) + 0.5) < 0.05
 
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 1.0) < 0.05
 
     return
@@ -237,10 +236,10 @@ def test_cuboids_union():
 
     pygalmesh.generate_mesh(u, "out.mesh", cell_size=0.2, edge_size=0.2, verbose=False)
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
     # filter the vertices that belong to cells
-    verts = vertices[numpy.unique(cells["tetra"])]
+    verts = mesh.points[numpy.unique(mesh.cells["tetra"])]
 
     tol = 1.0e-2
     assert abs(max(verts[:, 0]) - 3.0) < tol
@@ -250,9 +249,8 @@ def test_cuboids_union():
     assert abs(max(verts[:, 2]) - 2.0) < tol
     assert abs(min(verts[:, 2]) + 2.0) < tol
 
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 12.0) < 0.1
-
     return
 
 
@@ -260,19 +258,18 @@ def test_cuboid():
     s0 = pygalmesh.Cuboid([0, 0, 0], [1, 2, 3])
     pygalmesh.generate_mesh(s0, "out.mesh", edge_size=0.1, verbose=False)
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
     tol = 1.0e-3
-    assert abs(max(vertices[:, 0]) - 1.0) < tol
-    assert abs(min(vertices[:, 0]) + 0.0) < tol
-    assert abs(max(vertices[:, 1]) - 2.0) < tol
-    assert abs(min(vertices[:, 1]) + 0.0) < tol
-    assert abs(max(vertices[:, 2]) - 3.0) < tol
-    assert abs(min(vertices[:, 2]) + 0.0) < tol
+    assert abs(max(mesh.points[:, 0]) - 1.0) < tol
+    assert abs(min(mesh.points[:, 0]) + 0.0) < tol
+    assert abs(max(mesh.points[:, 1]) - 2.0) < tol
+    assert abs(min(mesh.points[:, 1]) + 0.0) < tol
+    assert abs(max(mesh.points[:, 2]) - 3.0) < tol
+    assert abs(min(mesh.points[:, 2]) + 0.0) < tol
 
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 6.0) < tol
-
     return
 
 
@@ -285,20 +282,19 @@ def test_cone():
         s0, "out.mesh", cell_size=0.1, edge_size=edge_size, verbose=False
     )
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
     tol = 2.0e-1
-    assert abs(max(vertices[:, 0]) - base_radius) < tol
-    assert abs(min(vertices[:, 0]) + base_radius) < tol
-    assert abs(max(vertices[:, 1]) - base_radius) < tol
-    assert abs(min(vertices[:, 1]) + base_radius) < tol
-    assert abs(max(vertices[:, 2]) - height) < tol
-    assert abs(min(vertices[:, 2]) + 0.0) < tol
+    assert abs(max(mesh.points[:, 0]) - base_radius) < tol
+    assert abs(min(mesh.points[:, 0]) + base_radius) < tol
+    assert abs(max(mesh.points[:, 1]) - base_radius) < tol
+    assert abs(min(mesh.points[:, 1]) + base_radius) < tol
+    assert abs(max(mesh.points[:, 2]) - height) < tol
+    assert abs(min(mesh.points[:, 2]) + 0.0) < tol
 
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     ref_vol = numpy.pi * base_radius * base_radius / 3.0 * height
     assert abs(vol - ref_vol) < tol
-
     return
 
 
@@ -312,20 +308,19 @@ def test_cylinder():
         s0, "out.mesh", cell_size=0.1, edge_size=edge_length, verbose=False
     )
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
     tol = 1.0e-1
-    assert abs(max(vertices[:, 0]) - radius) < tol
-    assert abs(min(vertices[:, 0]) + radius) < tol
-    assert abs(max(vertices[:, 1]) - radius) < tol
-    assert abs(min(vertices[:, 1]) + radius) < tol
-    assert abs(max(vertices[:, 2]) - z1) < tol
-    assert abs(min(vertices[:, 2]) + z0) < tol
+    assert abs(max(mesh.points[:, 0]) - radius) < tol
+    assert abs(min(mesh.points[:, 0]) + radius) < tol
+    assert abs(max(mesh.points[:, 1]) - radius) < tol
+    assert abs(min(mesh.points[:, 1]) + radius) < tol
+    assert abs(max(mesh.points[:, 2]) - z1) < tol
+    assert abs(min(mesh.points[:, 2]) + z0) < tol
 
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     ref_vol = numpy.pi * radius * radius * (z1 - z0)
     assert abs(vol - ref_vol) < tol
-
     return
 
 
@@ -335,19 +330,18 @@ def test_tetrahedron():
     )
     pygalmesh.generate_mesh(s0, "out.mesh", cell_size=0.1, edge_size=0.1, verbose=False)
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
     tol = 1.0e-4
-    assert abs(max(vertices[:, 0]) - 1.0) < tol
-    assert abs(min(vertices[:, 0]) + 0.0) < tol
-    assert abs(max(vertices[:, 1]) - 1.0) < tol
-    assert abs(min(vertices[:, 1]) + 0.0) < tol
-    assert abs(max(vertices[:, 2]) - 1.0) < tol
-    assert abs(min(vertices[:, 2]) + 0.0) < tol
+    assert abs(max(mesh.points[:, 0]) - 1.0) < tol
+    assert abs(min(mesh.points[:, 0]) + 0.0) < tol
+    assert abs(max(mesh.points[:, 1]) - 1.0) < tol
+    assert abs(min(mesh.points[:, 1]) + 0.0) < tol
+    assert abs(max(mesh.points[:, 2]) - 1.0) < tol
+    assert abs(min(mesh.points[:, 2]) + 0.0) < tol
 
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 1.0 / 6.0) < tol
-
     return
 
 
@@ -357,21 +351,20 @@ def test_torus():
     s0 = pygalmesh.Torus(major_radius, minor_radius)
     pygalmesh.generate_mesh(s0, "out.mesh", cell_size=0.1, verbose=False)
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
     tol = 1.0e-2
     radii_sum = major_radius + minor_radius
-    assert abs(max(vertices[:, 0]) - radii_sum) < tol
-    assert abs(min(vertices[:, 0]) + radii_sum) < tol
-    assert abs(max(vertices[:, 1]) - radii_sum) < tol
-    assert abs(min(vertices[:, 1]) + radii_sum) < tol
-    assert abs(max(vertices[:, 2]) - minor_radius) < tol
-    assert abs(min(vertices[:, 2]) + minor_radius) < tol
+    assert abs(max(mesh.points[:, 0]) - radii_sum) < tol
+    assert abs(min(mesh.points[:, 0]) + radii_sum) < tol
+    assert abs(max(mesh.points[:, 1]) - radii_sum) < tol
+    assert abs(min(mesh.points[:, 1]) + radii_sum) < tol
+    assert abs(max(mesh.points[:, 2]) - minor_radius) < tol
+    assert abs(min(mesh.points[:, 2]) + minor_radius) < tol
 
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     ref_vol = (numpy.pi * minor_radius * minor_radius) * (2 * numpy.pi * major_radius)
     assert abs(vol - ref_vol) < 1.0e-1
-
     return
 
 
@@ -428,20 +421,19 @@ def test_custom_function():
         d, "out.mesh", cell_size=0.1, edge_size=edge_size, verbose=False
     )
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
     # TODO check the reference values
     tol = 1.0e-1
-    assert abs(max(vertices[:, 0]) - 1.4) < tol
-    assert abs(min(vertices[:, 0]) + 1.4) < tol
-    assert abs(max(vertices[:, 1]) - 1.4) < tol
-    assert abs(min(vertices[:, 1]) + 1.4) < tol
-    assert abs(max(vertices[:, 2]) - 1.0) < tol
-    assert abs(min(vertices[:, 2]) + 1.0) < tol
+    assert abs(max(mesh.points[:, 0]) - 1.4) < tol
+    assert abs(min(mesh.points[:, 0]) + 1.4) < tol
+    assert abs(max(mesh.points[:, 1]) - 1.4) < tol
+    assert abs(min(mesh.points[:, 1]) + 1.4) < tol
+    assert abs(max(mesh.points[:, 2]) - 1.0) < tol
+    assert abs(min(mesh.points[:, 2]) + 1.0) < tol
 
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 2 * numpy.pi * 47.0 / 60.0) < 0.15
-
     return
 
 
@@ -450,19 +442,18 @@ def test_scaling():
     s = pygalmesh.Scale(pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]), alpha)
     pygalmesh.generate_mesh(s, "out.mesh", cell_size=0.2, edge_size=0.1, verbose=False)
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
     tol = 1.0e-3
-    assert abs(max(vertices[:, 0]) - 1 * alpha) < tol
-    assert abs(min(vertices[:, 0]) + 0.0) < tol
-    assert abs(max(vertices[:, 1]) - 2 * alpha) < tol
-    assert abs(min(vertices[:, 1]) + 0.0) < tol
-    assert abs(max(vertices[:, 2]) - 3 * alpha) < tol
-    assert abs(min(vertices[:, 2]) + 0.0) < tol
+    assert abs(max(mesh.points[:, 0]) - 1 * alpha) < tol
+    assert abs(min(mesh.points[:, 0]) + 0.0) < tol
+    assert abs(max(mesh.points[:, 1]) - 2 * alpha) < tol
+    assert abs(min(mesh.points[:, 1]) + 0.0) < tol
+    assert abs(max(mesh.points[:, 2]) - 3 * alpha) < tol
+    assert abs(min(mesh.points[:, 2]) + 0.0) < tol
 
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 6.0 * alpha ** 3) < tol
-
     return
 
 
@@ -471,17 +462,17 @@ def test_stretch():
     s = pygalmesh.Stretch(pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]), [alpha, 0.0, 0.0])
     pygalmesh.generate_mesh(s, "out.mesh", cell_size=0.2, edge_size=0.2, verbose=False)
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
     tol = 1.0e-3
-    assert abs(max(vertices[:, 0]) - alpha) < tol
-    assert abs(min(vertices[:, 0]) + 0.0) < tol
-    assert abs(max(vertices[:, 1]) - 2.0) < tol
-    assert abs(min(vertices[:, 1]) + 0.0) < tol
-    assert abs(max(vertices[:, 2]) - 3.0) < tol
-    assert abs(min(vertices[:, 2]) + 0.0) < tol
+    assert abs(max(mesh.points[:, 0]) - alpha) < tol
+    assert abs(min(mesh.points[:, 0]) + 0.0) < tol
+    assert abs(max(mesh.points[:, 1]) - 2.0) < tol
+    assert abs(min(mesh.points[:, 1]) + 0.0) < tol
+    assert abs(max(mesh.points[:, 2]) - 3.0) < tol
+    assert abs(min(mesh.points[:, 2]) + 0.0) < tol
 
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 12.0) < tol
 
     return
@@ -493,12 +484,11 @@ def test_rotation():
     )
     pygalmesh.generate_mesh(s0, "out.mesh", cell_size=0.1, edge_size=0.1, verbose=False)
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
     tol = 1.0e-3
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 6.0) < tol
-
     return
 
 
@@ -506,18 +496,17 @@ def test_translation():
     s0 = pygalmesh.Translate(pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]), [1.0, 0.0, 0.0])
     pygalmesh.generate_mesh(s0, "out.mesh", cell_size=0.1, edge_size=0.1, verbose=False)
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
     tol = 1.0e-3
-    assert abs(max(vertices[:, 0]) - 2.0) < tol
-    assert abs(min(vertices[:, 0]) - 1.0) < tol
-    assert abs(max(vertices[:, 1]) - 2.0) < tol
-    assert abs(min(vertices[:, 1]) + 0.0) < tol
-    assert abs(max(vertices[:, 2]) - 3.0) < tol
-    assert abs(min(vertices[:, 2]) + 0.0) < tol
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    assert abs(max(mesh.points[:, 0]) - 2.0) < tol
+    assert abs(min(mesh.points[:, 0]) - 1.0) < tol
+    assert abs(max(mesh.points[:, 1]) - 2.0) < tol
+    assert abs(min(mesh.points[:, 1]) + 0.0) < tol
+    assert abs(max(mesh.points[:, 2]) - 3.0) < tol
+    assert abs(min(mesh.points[:, 2]) + 0.0) < tol
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 6.0) < tol
-
     return
 
 
@@ -545,7 +534,6 @@ def test_translation():
 #
 #     vol = sum(compute_volumes(vertices, cells['tetra']))
 #     assert abs(vol - 0.044164693065) < tol
-#
 #     return
 
 
@@ -556,19 +544,18 @@ def test_extrude():
         domain, "out.mesh", cell_size=0.1, edge_size=0.1, verbose=False
     )
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
     tol = 1.0e-3
-    assert abs(max(vertices[:, 0]) - 0.5) < tol
-    assert abs(min(vertices[:, 0]) + 0.5) < tol
-    assert abs(max(vertices[:, 1]) - 0.8) < tol
-    assert abs(min(vertices[:, 1]) + 0.3) < tol
-    assert abs(max(vertices[:, 2]) - 1.0) < tol
-    assert abs(min(vertices[:, 2]) + 0.0) < tol
+    assert abs(max(mesh.points[:, 0]) - 0.5) < tol
+    assert abs(min(mesh.points[:, 0]) + 0.5) < tol
+    assert abs(max(mesh.points[:, 1]) - 0.8) < tol
+    assert abs(min(mesh.points[:, 1]) + 0.3) < tol
+    assert abs(max(mesh.points[:, 2]) - 1.0) < tol
+    assert abs(min(mesh.points[:, 2]) + 0.0) < tol
 
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 0.4) < tol
-
     return
 
 
@@ -580,19 +567,18 @@ def test_extrude_rotate():
         domain, "out.mesh", cell_size=0.1, edge_size=edge_size, verbose=False
     )
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
     tol = 1.0e-3
-    assert abs(max(vertices[:, 0]) - 0.583012701892) < tol
-    assert abs(min(vertices[:, 0]) + 0.5) < tol
-    assert abs(max(vertices[:, 1]) - 0.5) < tol
-    assert abs(min(vertices[:, 1]) + 0.583012701892) < tol
-    assert abs(max(vertices[:, 2]) - 1.0) < tol
-    assert abs(min(vertices[:, 2]) + 0.0) < tol
+    assert abs(max(mesh.points[:, 0]) - 0.583012701892) < tol
+    assert abs(min(mesh.points[:, 0]) + 0.5) < tol
+    assert abs(max(mesh.points[:, 1]) - 0.5) < tol
+    assert abs(min(mesh.points[:, 1]) + 0.583012701892) < tol
+    assert abs(max(mesh.points[:, 2]) - 1.0) < tol
+    assert abs(min(mesh.points[:, 2]) + 0.0) < tol
 
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 0.4) < 0.05
-
     return
 
 
@@ -604,19 +590,18 @@ def test_ring_extrude():
         domain, "out.mesh", cell_size=0.1, edge_size=edge_size, verbose=False
     )
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
     tol = 1.0e-3
-    assert abs(max(vertices[:, 0]) - 1.5) < tol
-    assert abs(min(vertices[:, 0]) + 1.5) < tol
-    assert abs(max(vertices[:, 1]) - 1.5) < tol
-    assert abs(min(vertices[:, 1]) + 1.5) < tol
-    assert abs(max(vertices[:, 2]) - 0.5) < tol
-    assert abs(min(vertices[:, 2]) + 0.3) < tol
+    assert abs(max(mesh.points[:, 0]) - 1.5) < tol
+    assert abs(min(mesh.points[:, 0]) + 1.5) < tol
+    assert abs(max(mesh.points[:, 1]) - 1.5) < tol
+    assert abs(min(mesh.points[:, 1]) + 1.5) < tol
+    assert abs(max(mesh.points[:, 2]) - 0.5) < tol
+    assert abs(min(mesh.points[:, 2]) + 0.3) < tol
 
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 2 * numpy.pi * 0.4) < 0.05
-
     return
 
 
@@ -661,20 +646,19 @@ def test_sphere():
         verbose=False,
     )
 
-    vertices, cells, _, _, _ = meshio.read("out.off")
+    mesh = meshio.read("out.off")
 
     tol = 1.0e-2
-    assert abs(max(vertices[:, 0]) - radius) < tol
-    assert abs(min(vertices[:, 0]) + radius) < tol
-    assert abs(max(vertices[:, 1]) - radius) < tol
-    assert abs(min(vertices[:, 1]) + radius) < tol
-    assert abs(max(vertices[:, 2]) - radius) < tol
-    assert abs(min(vertices[:, 2]) + radius) < tol
+    assert abs(max(mesh.points[:, 0]) - radius) < tol
+    assert abs(min(mesh.points[:, 0]) + radius) < tol
+    assert abs(max(mesh.points[:, 1]) - radius) < tol
+    assert abs(min(mesh.points[:, 1]) + radius) < tol
+    assert abs(max(mesh.points[:, 2]) - radius) < tol
+    assert abs(min(mesh.points[:, 2]) + radius) < tol
 
-    areas = compute_triangle_areas(vertices, cells["triangle"])
+    areas = compute_triangle_areas(mesh.points, mesh.cells["triangle"])
     surface_area = sum(areas)
     assert abs(surface_area - 4 * numpy.pi * radius ** 2) < 0.1
-
     return
 
 
@@ -685,9 +669,9 @@ def test_halfspace():
 
     pygalmesh.generate_mesh(u, "out.mesh", cell_size=0.2, edge_size=0.2, verbose=False)
 
-    vertices, cells, _, _, _ = meshio.read("out.mesh")
+    mesh = meshio.read("out.mesh")
 
-    vol = sum(compute_volumes(vertices, cells["tetra"]))
+    vol = sum(compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 1 / 750) < 1.0e-3
     return
 
