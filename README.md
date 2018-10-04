@@ -4,7 +4,7 @@ A Python frontend to [CGAL](https://www.cgal.org/)'s [3D mesh generation
 capabilities](https://doc.cgal.org/latest/Mesh_3/index.html).
 
 [![CircleCI](https://img.shields.io/circleci/project/github/nschloe/pygalmesh/master.svg)](https://circleci.com/gh/nschloe/pygalmesh/tree/master)
-[![Codacy grade](https://img.shields.io/codacy/grade/26d491d592134f438c6175a250290915.svg)](https://app.codacy.com/app/nschloe/pygalmesh/dashboard)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 [![PyPi Version](https://img.shields.io/pypi/v/pygalmesh.svg)](https://pypi.org/project/pygalmesh)
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/pygalmesh.svg?label=Stars&logo=github)](https://github.com/nschloe/pygalmesh)
 
@@ -44,7 +44,8 @@ meshes.
 ### Examples
 
 #### A simple ball
-![Ball](https://nschloe.github.io/pygalmesh/ball.png)
+<img src="https://nschloe.github.io/pygalmesh/ball.png" width="30%">
+
 ```python
 import pygalmesh
 
@@ -72,7 +73,7 @@ pygalmesh.generate_mesh(
 ```
 
 #### Other primitive shapes
-![Tetrahedron](https://nschloe.github.io/pygalmesh/tetra.png)
+<img src="https://nschloe.github.io/pygalmesh/tetra.png" width="30%">
 
 pygalmesh provides out-of-the-box support for balls, cuboids, ellipsoids, tori,
 cones, cylinders, and tetrahedra. Try for example
@@ -91,7 +92,7 @@ pygalmesh.generate_mesh(
 ```
 
 #### Domain combinations
-![Balls difference](https://nschloe.github.io/pygalmesh/ball-difference.png)
+<img src="https://nschloe.github.io/pygalmesh/ball-difference.png" width="30%">
 
 Supported are unions, intersections, and differences of all domains. As
 mentioned above, however, the sharp intersections between two domains are not
@@ -136,7 +137,7 @@ of the mesh generation. This makes sure that it fits in nicely with the rest of
 the mesh.
 
 #### Domain deformations
-![Egg](https://nschloe.github.io/pygalmesh/egg.png)
+<img src="https://nschloe.github.io/pygalmesh/egg.png" width="30%">
 
 You can of course translate, rotate, scale, and stretch any domain. Try, for
 example,
@@ -156,7 +157,7 @@ pygalmesh.generate_mesh(
 ```
 
 #### Extrusion of 2D polygons
-![triangle rotated](https://nschloe.github.io/pygalmesh/triangle-rotated.png)
+<img src="https://nschloe.github.io/pygalmesh/triangle-rotated.png" width="30%">
 
 pygalmesh lets you extrude any polygon into a 3D body. It even supports
 rotation alongside!
@@ -183,7 +184,7 @@ Feature edges are automatically preserved here, which is why an edge length
 needs to be given to `pygalmesh.Extrude`.
 
 #### Rotation bodies
-![triangle ring extruded](https://nschloe.github.io/pygalmesh/circle-rotate-extr.png)
+<img src="https://nschloe.github.io/pygalmesh/circle-rotate-extr.png" width="30%">
 
 Polygons in the x-z-plane can also be rotated around the z-axis to yield a
 rotation body.
@@ -192,7 +193,7 @@ import pygalmesh
 
 p = pygalmesh.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
 edge_size = 0.1
-domain = pygalmesh.ring_extrude(p, edge_size)
+domain = pygalmesh.RingExtrude(p, edge_size)
 pygalmesh.generate_mesh(
         domain,
         'out.mesh',
@@ -203,7 +204,7 @@ pygalmesh.generate_mesh(
 ```
 
 #### Your own custom level set function
-![triangle ring extruded](https://nschloe.github.io/pygalmesh/heart.png)
+<img src="https://nschloe.github.io/pygalmesh/heart.png" width="30%">
 
 If all of the variety is not enough for you, you can define your own custom
 level set function. You simply need to subclass `pygalmesh.DomainBase` and
@@ -254,7 +255,7 @@ documention](https://doc.cgal.org/latest/Surface_mesher/index.html) for the
 options.
 
 #### Meshes from OFF files
-![elephant](https://nschloe.github.io/pygalmesh/elephant.png)
+<img src="https://nschloe.github.io/pygalmesh/elephant.png" width="30%">
 
 If you have an OFF file at hand (like
 [elephant.off](https://raw.githubusercontent.com/CGAL/cgal-swig-bindings/master/examples/data/elephant.off)

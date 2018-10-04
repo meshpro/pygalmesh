@@ -1,10 +1,30 @@
 # -*- coding: utf-8 -*-
 #
-from __future__ import print_function
-
 # https://github.com/pybind/pybind11/issues/1004
-# pylint: disable=wildcard-import
-from _pygalmesh import *
+from _pygalmesh import (
+    DomainBase,
+    Translate,
+    Rotate,
+    Scale,
+    Stretch,
+    Intersection,
+    Union,
+    Difference,
+    Extrude,
+    Ball,
+    Cuboid,
+    Ellipsoid,
+    Tetrahedron,
+    Cone,
+    Cylinder,
+    Torus,
+    HalfSpace,
+    Polygon2D,
+    RingExtrude,
+    generate_mesh,
+    generate_surface_mesh,
+    generate_from_off,
+)
 
 from .__about__ import (
     __author__,
@@ -14,12 +34,37 @@ from .__about__ import (
     __version__,
     __maintainer__,
     __status__,
-    )
+)
 
-try:
-    import pipdate
-except ImportError:
-    pass
-else:
-    if pipdate.needs_checking(__name__):
-        print(pipdate.check(__name__, __version__), end='')
+__all__ = [
+    "__author__",
+    "__author_email__",
+    "__copyright__",
+    "__license__",
+    "__version__",
+    "__maintainer__",
+    "__status__",
+    #
+    "DomainBase",
+    "Translate",
+    "Rotate",
+    "Scale",
+    "Stretch",
+    "Intersection",
+    "Union",
+    "Difference",
+    "Extrude",
+    "Ball",
+    "Cuboid",
+    "Ellipsoid",
+    "Tetrahedron",
+    "Cone",
+    "Cylinder",
+    "Torus",
+    "HalfSpace",
+    "Polygon2D",
+    "RingExtrude",
+    "generate_mesh",
+    "generate_surface_mesh",
+    "generate_from_off",
+]

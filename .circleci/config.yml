@@ -9,12 +9,13 @@ jobs:
     steps:
       - run: apt-get update
       - run: apt-get install -y libcgal-dev libeigen3-dev python3-pip clang++-6.0
-      - run: pip3 install -U pytest pytest-cov pylint meshio pybind11
+      - run: pip3 install -U pytest pytest-cov black flake8 meshio pybind11
       - checkout
       # install
       # Use clang++ for its smaller memory footprint.
       - run: CC="clang++-6.0" pip3 install .
       # lint
-      - run: pylint setup.py pygalmesh test/*.py
+      - run: LC_ALL=C.UTF-8 black --check setup.py pygalmesh/ test/*.py
+      - run: flake8 setup.py pygalmesh/ test/*.py
       # The actual test
       - run: cd test/ && pytest
