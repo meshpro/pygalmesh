@@ -10,6 +10,7 @@ from _pygalmesh import (
     Intersection,
     Union,
     Difference,
+    Extrude,
     Ball,
     Cuboid,
     Ellipsoid,
@@ -20,6 +21,8 @@ from _pygalmesh import (
     HalfSpace,
     Polygon2D,
     RingExtrude,
+    generate_mesh,
+    generate_surface_mesh,
     generate_from_off,
 )
 
@@ -50,6 +53,7 @@ __all__ = [
     "Intersection",
     "Union",
     "Difference",
+    "Extrude",
     "Ball",
     "Cuboid",
     "Ellipsoid",
@@ -60,5 +64,7 @@ __all__ = [
     "HalfSpace",
     "Polygon2D",
     "RingExtrude",
+    "generate_mesh",
+    "generate_surface_mesh",
     "generate_from_off",
 ]
