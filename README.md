@@ -50,26 +50,26 @@ meshes.
 import pygalmesh
 
 s = pygalmesh.Ball([0, 0, 0], 1.0)
-pygalmesh.generate_mesh(s, 'out.mesh', cell_size=0.2)
+pygalmesh.generate_mesh(s, "out.mesh", cell_size=0.2)
 ```
 CGAL's mesh generator returns Medit-files, which can be processed by, e.g.,
 [meshio](https://github.com/nschloe/meshio).
 ```python
 import meshio
-vertices, cells, _, _, _ = meshio.read('out.mesh')
+vertices, cells, _, _, _ = meshio.read("out.mesh")
 ```
 The mesh generation comes with many more options, described
 [here](https://doc.cgal.org/latest/Mesh_3/). Try, for example,
 ```python
 pygalmesh.generate_mesh(
     s,
-    'out.mesh',
+    "out.mesh",
     cell_size=0.2,
     edge_size=0.1,
     odt=True,
     lloyd=True,
     verbose=False
-    )
+)
 ```
 
 #### Other primitive shapes
@@ -81,14 +81,12 @@ cones, cylinders, and tetrahedra. Try for example
 import pygalmesh
 
 s0 = pygalmesh.Tetrahedron(
-        [0.0, 0.0, 0.0],
-        [1.0, 0.0, 0.0],
-        [0.0, 1.0, 0.0],
-        [0.0, 0.0, 1.0]
-        )
-pygalmesh.generate_mesh(
-        s0, 'out.mesh', cell_size=0.1, edge_size=0.1
-        )
+    [0.0, 0.0, 0.0],
+    [1.0, 0.0, 0.0],
+    [0.0, 1.0, 0.0],
+    [0.0, 0.0, 1.0]
+)
+pygalmesh.generate_mesh(s0, "out.mesh", cell_size=0.1, edge_size=0.1)
 ```
 
 #### Domain combinations
@@ -122,15 +120,15 @@ circ = [
 circ.append(circ[0])
 
 pygalmesh.generate_mesh(
-        u,
-        'out.mesh',
-        feature_edges=[circ],
-        cell_size=0.15,
-        edge_size=edge_size,
-        facet_angle=25,
-        facet_size=0.15,
-        cell_radius_edge_ratio=2.0
-        )
+    u,
+    "out.mesh",
+    feature_edges=[circ],
+    cell_size=0.15,
+    edge_size=edge_size,
+    facet_angle=25,
+    facet_size=0.15,
+    cell_radius_edge_ratio=2.0
+)
 ```
 Note that the length of the polygon legs are kept in sync with the `edge_size`
 of the mesh generation. This makes sure that it fits in nicely with the rest of
@@ -145,15 +143,11 @@ example,
 import pygalmesh
 
 s = pygalmesh.Stretch(
-        pygalmesh.Ball([0, 0, 0], 1.0),
-        [1.0, 2.0, 0.0]
-        )
+    pygalmesh.Ball([0, 0, 0], 1.0),
+    [1.0, 2.0, 0.0]
+)
 
-pygalmesh.generate_mesh(
-        s,
-        'out.mesh',
-        cell_size=0.1
-        )
+pygalmesh.generate_mesh(s, "out.mesh", cell_size=0.1)
 ```
 
 #### Extrusion of 2D polygons
@@ -167,18 +161,18 @@ import pygalmesh
 p = pygalmesh.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
 edge_size = 0.1
 domain = pygalmesh.Extrude(
-        p,
-        [0.0, 0.0, 1.0],
-        0.5 * 3.14159265359,
-        edge_size
-        )
+    p,
+    [0.0, 0.0, 1.0],
+    0.5 * 3.14159265359,
+    edge_size
+)
 pygalmesh.generate_mesh(
-        domain,
-        'out.mesh',
-        cell_size=0.1,
-        edge_size=edge_size,
-        verbose=False
-        )
+    domain,
+    "out.mesh",
+    cell_size=0.1,
+    edge_size=edge_size,
+    verbose=False
+)
 ```
 Feature edges are automatically preserved here, which is why an edge length
 needs to be given to `pygalmesh.Extrude`.
@@ -195,12 +189,12 @@ p = pygalmesh.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
 edge_size = 0.1
 domain = pygalmesh.RingExtrude(p, edge_size)
 pygalmesh.generate_mesh(
-        domain,
-        'out.mesh',
-        cell_size=0.1,
-        edge_size=edge_size,
-        verbose=False
-        )
+    domain,
+    "out.mesh",
+    cell_size=0.1,
+    edge_size=edge_size,
+    verbose=False
+)
 ```
 
 #### Your own custom level set function
@@ -224,7 +218,7 @@ class Heart(pygalmesh.DomainBase):
         return 10.0
 
 d = Heart()
-pygalmesh.generate_mesh(d, 'out.mesh', cell_size=0.1)
+pygalmesh.generate_mesh(d, "out.mesh", cell_size=0.1)
 ```
 Note that you need to specify the square of a bounding sphere radius, used as
 an input to CGAL's mesh generator.
@@ -239,12 +233,12 @@ import pygalmesh
 
 s = pygalmesh.Ball([0, 0, 0], 1.0)
 pygalmesh.generate_surface_mesh(
-        s,
-        'out.off',
-        angle_bound=30,
-        radius_bound=0.1,
-        distance_bound=0.1
-        )
+    s,
+    "out.off",
+    angle_bound=30,
+    radius_bound=0.1,
+    distance_bound=0.1
+)
 ```
 The output format is
 [OFF](http://segeval.cs.princeton.edu/public/off_format.html) which again is
@@ -265,14 +259,14 @@ pygalmesh generates the mesh via
 import pygalmesh
 
 pygalmesh.generate_from_off(
-        'elephant.off',
-        'out.mesh',
-        facet_angle=25.0,
-        facet_size=0.15,
-        facet_distance=0.008,
-        cell_radius_edge_ratio=3.0,
-        verbose=False
-        )
+    "elephant.off",
+    "out.mesh",
+    facet_angle=25.0,
+    facet_size=0.15,
+    facet_distance=0.008,
+    cell_radius_edge_ratio=3.0,
+    verbose=False
+)
 ```
 
 ### Installation
