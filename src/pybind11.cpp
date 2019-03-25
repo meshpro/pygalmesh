@@ -233,23 +233,7 @@ PYBIND11_MODULE(_pygalmesh, m) {
 
     // functions
     m.def(
-        "generate_from_off", &generate_from_off,
-        py::arg("infile"),
-        py::arg("outfile"),
-        py::arg("lloyd") = false,
-        py::arg("odt") = false,
-        py::arg("perturb") = true,
-        py::arg("exude") = true,
-        py::arg("edge_size") = 0.0,  // std::numeric_limits<double>::max(),
-        py::arg("facet_angle") = 0.0,
-        py::arg("facet_size") = 0.0,
-        py::arg("facet_distance") = 0.0,
-        py::arg("cell_radius_edge_ratio") = 0.0,
-        py::arg("cell_size") = 0.0,
-        py::arg("verbose") = true
-        );
-    m.def(
-        "generate_mesh", &generate_mesh,
+        "_generate_mesh", &generate_mesh,
         py::arg("domain"),
         py::arg("outfile"),
         py::arg("feature_edges") = std::vector<std::vector<std::array<double, 3>>>(),
@@ -268,13 +252,29 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("verbose") = true
         );
     m.def(
-        "generate_surface_mesh", &generate_surface_mesh,
+        "_generate_surface_mesh", &generate_surface_mesh,
         py::arg("domain"),
         py::arg("outfile"),
         py::arg("bounding_sphere_radius") = 0.0,
         py::arg("angle_bound") = 0.0,
         py::arg("radius_bound") = 0.0,
         py::arg("distance_bound") = 0.0,
+        py::arg("verbose") = true
+        );
+    m.def(
+        "_generate_from_off", &generate_from_off,
+        py::arg("infile"),
+        py::arg("outfile"),
+        py::arg("lloyd") = false,
+        py::arg("odt") = false,
+        py::arg("perturb") = true,
+        py::arg("exude") = true,
+        py::arg("edge_size") = 0.0,  // std::numeric_limits<double>::max(),
+        py::arg("facet_angle") = 0.0,
+        py::arg("facet_size") = 0.0,
+        py::arg("facet_distance") = 0.0,
+        py::arg("cell_radius_edge_ratio") = 0.0,
+        py::arg("cell_size") = 0.0,
         py::arg("verbose") = true
         );
 }

@@ -63,7 +63,7 @@ setup(
     url=about["__url__"],
     author=about["__author__"],
     author_email=about["__author_email__"],
-    install_requires=["numpy", "pybind11 >= 2.2", "pipdate"],
+    install_requires=["meshio", "numpy", "pybind11 >= 2.2", "pipdate"],
     description="Python frontend to CGAL's 3D mesh generation capabilities",
     long_description=read("README.md"),
     long_description_content_type="text/markdown",

@@ -50,20 +50,20 @@ meshes.
 import pygalmesh
 
 s = pygalmesh.Ball([0, 0, 0], 1.0)
-pygalmesh.generate_mesh(s, "out.mesh", cell_size=0.2)
+mesh = pygalmesh.generate_mesh(s, cell_size=0.2)
+
+# mesh.points, mesh.cells, ...
 ```
-CGAL's mesh generator returns Medit-files, which can be processed by, e.g.,
-[meshio](https://github.com/nschloe/meshio).
+You can write the mesh using [meshio](https://github.com/nschloe/meshio), e.g.,
 ```python
 import meshio
-vertices, cells, _, _, _ = meshio.read("out.mesh")
+meshio.write("out.vtk", mesh)
 ```
 The mesh generation comes with many more options, described
 [here](https://doc.cgal.org/latest/Mesh_3/). Try, for example,
 ```python
-pygalmesh.generate_mesh(
+mesh = pygalmesh.generate_mesh(
     s,
-    "out.mesh",
     cell_size=0.2,
     edge_size=0.1,
     odt=True,
@@ -86,7 +86,7 @@ s0 = pygalmesh.Tetrahedron(
     [0.0, 1.0, 0.0],
     [0.0, 0.0, 1.0]
 )
-pygalmesh.generate_mesh(s0, "out.mesh", cell_size=0.1, edge_size=0.1)
+mesh = pygalmesh.generate_mesh(s0, cell_size=0.1, edge_size=0.1)
 ```
 
 #### Domain combinations
@@ -119,9 +119,8 @@ circ = [
     ]
 circ.append(circ[0])
 
-pygalmesh.generate_mesh(
+mesh = pygalmesh.generate_mesh(
     u,
-    "out.mesh",
     feature_edges=[circ],
     cell_size=0.15,
     edge_size=edge_size,
@@ -147,7 +146,7 @@ s = pygalmesh.Stretch(
     [1.0, 2.0, 0.0]
 )
 
-pygalmesh.generate_mesh(s, "out.mesh", cell_size=0.1)
+mesh = pygalmesh.generate_mesh(s, cell_size=0.1)
 ```
 
 #### Extrusion of 2D polygons
@@ -166,9 +165,8 @@ domain = pygalmesh.Extrude(
     0.5 * 3.14159265359,
     edge_size
 )
-pygalmesh.generate_mesh(
+mesh = pygalmesh.generate_mesh(
     domain,
-    "out.mesh",
     cell_size=0.1,
     edge_size=edge_size,
     verbose=False
@@ -188,9 +186,8 @@ import pygalmesh
 p = pygalmesh.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
 edge_size = 0.1
 domain = pygalmesh.RingExtrude(p, edge_size)
-pygalmesh.generate_mesh(
+mesh = pygalmesh.generate_mesh(
     domain,
-    "out.mesh",
     cell_size=0.1,
     edge_size=edge_size,
     verbose=False
@@ -218,7 +215,7 @@ class Heart(pygalmesh.DomainBase):
         return 10.0
 
 d = Heart()
-pygalmesh.generate_mesh(d, "out.mesh", cell_size=0.1)
+mesh = pygalmesh.generate_mesh(d, cell_size=0.1)
 ```
 Note that you need to specify the square of a bounding sphere radius, used as
 an input to CGAL's mesh generator.
@@ -232,9 +229,8 @@ If you're only after the surface of a body, pygalmesh has
 import pygalmesh
 
 s = pygalmesh.Ball([0, 0, 0], 1.0)
-pygalmesh.generate_surface_mesh(
+mesh = pygalmesh.generate_surface_mesh(
     s,
-    "out.off",
     angle_bound=30,
     radius_bound=0.1,
     distance_bound=0.1
@@ -248,18 +244,17 @@ Refer to [CGAL's
 documention](https://doc.cgal.org/latest/Surface_mesher/index.html) for the
 options.
 
-#### Meshes from OFF files
+#### Volume meshes from surface meshes
 <img src="https://nschloe.github.io/pygalmesh/elephant.png" width="30%">
 
-If you have an OFF file at hand (like
-[elephant.off](http://nschloe.github.io/pygalmesh/elephant.off),
-pygalmesh generates the mesh via
+If you have a surface mesh at hand (like
+[elephant.off](http://nschloe.github.io/pygalmesh/elephant.vtu)),
+pygalmesh generates a volume mesh via
 ```python
 import pygalmesh
 
-pygalmesh.generate_from_off(
-    "elephant.off",
-    "out.mesh",
+mesh = pygalmesh.generate_volume_mesh_from_surface_mesh(
+    "elephant.vtu",
     facet_angle=25.0,
     facet_size=0.15,
     facet_distance=0.008,
