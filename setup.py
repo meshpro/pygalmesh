@@ -10,7 +10,6 @@ from setuptools import setup, Extension, find_packages
 base_dir = os.path.abspath(os.path.dirname(__file__))
 about = {}
 with open(os.path.join(base_dir, "pygalmesh", "__about__.py"), "rb") as handle:
-    # pylint: disable=exec-used
     exec(handle.read(), about)
 
 

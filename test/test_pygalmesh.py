@@ -3,8 +3,9 @@
 import numpy
 import meshio
 
-# pylint: disable=import-error
 import pygalmesh
+
+import helpers
 
 
 def _row_dot(a, b):
@@ -142,7 +143,6 @@ def test_balls_intersection():
     return
 
 
-# pylint: disable=too-many-locals
 def test_balls_difference():
     radius = 1.0
     displacement = 0.5
@@ -511,6 +511,7 @@ def test_translation():
 
 
 def test_off():
+    helpers.download("elephant.off", "2a52c3747fdf0d57f8401f7de504e3d1")
     pygalmesh.generate_from_off(
         "elephant.off",
         "out.mesh",
