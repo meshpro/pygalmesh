@@ -484,7 +484,7 @@ def test_translation():
 def test_off():
     helpers.download("elephant.off", "2a52c3747fdf0d57f8401f7de504e3d1")
     pygalmesh.generate_from_off(
-        "elephant.off",
+        "/tmp/elephant.off",
         "out.mesh",
         facet_angle=25.0,
         facet_size=0.15,
