@@ -10,9 +10,7 @@ import helpers
 
 def test_ball():
     s = pygalmesh.Ball([0.0, 0.0, 0.0], 1.0)
-    pygalmesh.generate_mesh(s, "out.mesh", cell_size=0.2, verbose=False)
-
-    mesh = meshio.read("out.mesh")
+    mesh = pygalmesh.generate_mesh(s, cell_size=0.2, verbose=False)
 
     assert abs(max(mesh.points[:, 0]) - 1.0) < 0.02
     assert abs(min(mesh.points[:, 0]) + 1.0) < 0.02
@@ -42,16 +40,9 @@ def test_balls_union():
     ]
     circ.append(circ[0])
 
-    pygalmesh.generate_mesh(
-        u,
-        "out.mesh",
-        feature_edges=[circ],
-        cell_size=0.15,
-        edge_size=edge_size,
-        verbose=False,
+    mesh = pygalmesh.generate_mesh(
+        u, feature_edges=[circ], cell_size=0.15, edge_size=edge_size, verbose=False
     )
-
-    mesh = meshio.read("out.mesh")
 
     assert abs(max(mesh.points[:, 0]) - (radius + displacement)) < 0.02
     assert abs(min(mesh.points[:, 0]) + (radius + displacement)) < 0.02
@@ -87,16 +78,9 @@ def test_balls_intersection():
     ]
     circ.append(circ[0])
 
-    pygalmesh.generate_mesh(
-        u,
-        "out.mesh",
-        feature_edges=[circ],
-        cell_size=0.15,
-        edge_size=edge_size,
-        verbose=False,
+    mesh = pygalmesh.generate_mesh(
+        u, feature_edges=[circ], cell_size=0.15, edge_size=edge_size, verbose=False
     )
-
-    mesh = meshio.read("out.mesh")
 
     assert abs(max(mesh.points[:, 0]) - (radius - displacement)) < 0.02
     assert abs(min(mesh.points[:, 0]) + (radius - displacement)) < 0.02
@@ -130,9 +114,8 @@ def test_balls_difference():
     ]
     circ.append(circ[0])
 
-    pygalmesh.generate_mesh(
+    mesh = pygalmesh.generate_mesh(
         u,
-        "out.mesh",
         feature_edges=[circ],
         cell_size=0.15,
         edge_size=edge_size,
@@ -141,8 +124,6 @@ def test_balls_difference():
         cell_radius_edge_ratio=2.0,
         verbose=False,
     )
-
-    mesh = meshio.read("out.mesh")
 
     tol = 0.02
     assert abs(max(mesh.points[:, 0]) - (radius + displacement)) < tol
@@ -179,9 +160,7 @@ def test_cuboids_intersection():
     #         [[2.0 - eps, 1.0, 0.5], [1.0 + eps, 1.0, 0.5]],
     #         ]
 
-    pygalmesh.generate_mesh(u, "out.mesh", cell_size=0.1, edge_size=0.1, verbose=False)
-
-    mesh = meshio.read("out.mesh")
+    mesh = pygalmesh.generate_mesh(u, cell_size=0.1, edge_size=0.1, verbose=False)
 
     # filter the vertices that belong to cells
     verts = mesh.points[numpy.unique(mesh.cells["tetra"])]
@@ -205,9 +184,7 @@ def test_cuboids_union():
     c1 = pygalmesh.Cuboid([1, 1, -2], [2, 2, 2])
     u = pygalmesh.Union([c0, c1])
 
-    pygalmesh.generate_mesh(u, "out.mesh", cell_size=0.2, edge_size=0.2, verbose=False)
-
-    mesh = meshio.read("out.mesh")
+    mesh = pygalmesh.generate_mesh(u, cell_size=0.2, edge_size=0.2, verbose=False)
 
     # filter the vertices that belong to cells
     verts = mesh.points[numpy.unique(mesh.cells["tetra"])]
@@ -227,9 +204,7 @@ def test_cuboids_union():
 
 def test_cuboid():
     s0 = pygalmesh.Cuboid([0, 0, 0], [1, 2, 3])
-    pygalmesh.generate_mesh(s0, "out.mesh", edge_size=0.1, verbose=False)
-
-    mesh = meshio.read("out.mesh")
+    mesh = pygalmesh.generate_mesh(s0, edge_size=0.1, verbose=False)
 
     tol = 1.0e-3
     assert abs(max(mesh.points[:, 0]) - 1.0) < tol
@@ -249,11 +224,9 @@ def test_cone():
     height = 2.0
     edge_size = 0.1
     s0 = pygalmesh.Cone(base_radius, height, edge_size)
-    pygalmesh.generate_mesh(
-        s0, "out.mesh", cell_size=0.1, edge_size=edge_size, verbose=False
+    mesh = pygalmesh.generate_mesh(
+        s0, cell_size=0.1, edge_size=edge_size, verbose=False
     )
-
-    mesh = meshio.read("out.mesh")
 
     tol = 2.0e-1
     assert abs(max(mesh.points[:, 0]) - base_radius) < tol
@@ -275,11 +248,9 @@ def test_cylinder():
     z1 = 1.0
     edge_length = 0.1
     s0 = pygalmesh.Cylinder(z0, z1, radius, edge_length)
-    pygalmesh.generate_mesh(
-        s0, "out.mesh", cell_size=0.1, edge_size=edge_length, verbose=False
+    mesh = pygalmesh.generate_mesh(
+        s0, cell_size=0.1, edge_size=edge_length, verbose=False
     )
-
-    mesh = meshio.read("out.mesh")
 
     tol = 1.0e-1
     assert abs(max(mesh.points[:, 0]) - radius) < tol
@@ -299,9 +270,7 @@ def test_tetrahedron():
     s0 = pygalmesh.Tetrahedron(
         [0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]
     )
-    pygalmesh.generate_mesh(s0, "out.mesh", cell_size=0.1, edge_size=0.1, verbose=False)
-
-    mesh = meshio.read("out.mesh")
+    mesh = pygalmesh.generate_mesh(s0, cell_size=0.1, edge_size=0.1, verbose=False)
 
     tol = 1.0e-4
     assert abs(max(mesh.points[:, 0]) - 1.0) < tol
@@ -320,9 +289,7 @@ def test_torus():
     major_radius = 1.0
     minor_radius = 0.5
     s0 = pygalmesh.Torus(major_radius, minor_radius)
-    pygalmesh.generate_mesh(s0, "out.mesh", cell_size=0.1, verbose=False)
-
-    mesh = meshio.read("out.mesh")
+    mesh = pygalmesh.generate_mesh(s0, cell_size=0.1, verbose=False)
 
     tol = 1.0e-2
     radii_sum = major_radius + minor_radius
@@ -388,11 +355,7 @@ def test_custom_function():
     edge_size = 0.12
     d = Hyperboloid(edge_size)
 
-    pygalmesh.generate_mesh(
-        d, "out.mesh", cell_size=0.1, edge_size=edge_size, verbose=False
-    )
-
-    mesh = meshio.read("out.mesh")
+    mesh = pygalmesh.generate_mesh(d, cell_size=0.1, edge_size=edge_size, verbose=False)
 
     # TODO check the reference values
     tol = 1.0e-1
@@ -411,9 +374,7 @@ def test_custom_function():
 def test_scaling():
     alpha = 1.3
     s = pygalmesh.Scale(pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]), alpha)
-    pygalmesh.generate_mesh(s, "out.mesh", cell_size=0.2, edge_size=0.1, verbose=False)
-
-    mesh = meshio.read("out.mesh")
+    mesh = pygalmesh.generate_mesh(s, cell_size=0.2, edge_size=0.1, verbose=False)
 
     tol = 1.0e-3
     assert abs(max(mesh.points[:, 0]) - 1 * alpha) < tol
@@ -431,9 +392,7 @@ def test_scaling():
 def test_stretch():
     alpha = 2.0
     s = pygalmesh.Stretch(pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]), [alpha, 0.0, 0.0])
-    pygalmesh.generate_mesh(s, "out.mesh", cell_size=0.2, edge_size=0.2, verbose=False)
-
-    mesh = meshio.read("out.mesh")
+    mesh = pygalmesh.generate_mesh(s, cell_size=0.2, edge_size=0.2, verbose=False)
 
     tol = 1.0e-3
     assert abs(max(mesh.points[:, 0]) - alpha) < tol
@@ -453,9 +412,7 @@ def test_rotation():
     s0 = pygalmesh.Rotate(
         pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]), [1.0, 0.0, 0.0], numpy.pi / 12.0
     )
-    pygalmesh.generate_mesh(s0, "out.mesh", cell_size=0.1, edge_size=0.1, verbose=False)
-
-    mesh = meshio.read("out.mesh")
+    mesh = pygalmesh.generate_mesh(s0, cell_size=0.1, edge_size=0.1, verbose=False)
 
     tol = 1.0e-3
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
@@ -465,9 +422,7 @@ def test_rotation():
 
 def test_translation():
     s0 = pygalmesh.Translate(pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]), [1.0, 0.0, 0.0])
-    pygalmesh.generate_mesh(s0, "out.mesh", cell_size=0.1, edge_size=0.1, verbose=False)
-
-    mesh = meshio.read("out.mesh")
+    mesh = pygalmesh.generate_mesh(s0, cell_size=0.1, edge_size=0.1, verbose=False)
 
     tol = 1.0e-3
     assert abs(max(mesh.points[:, 0]) - 2.0) < tol
@@ -511,11 +466,7 @@ def test_off():
 def test_extrude():
     p = pygalmesh.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
     domain = pygalmesh.Extrude(p, [0.0, 0.3, 1.0])
-    pygalmesh.generate_mesh(
-        domain, "out.mesh", cell_size=0.1, edge_size=0.1, verbose=False
-    )
-
-    mesh = meshio.read("out.mesh")
+    mesh = pygalmesh.generate_mesh(domain, cell_size=0.1, edge_size=0.1, verbose=False)
 
     tol = 1.0e-3
     assert abs(max(mesh.points[:, 0]) - 0.5) < tol
@@ -534,11 +485,9 @@ def test_extrude_rotate():
     p = pygalmesh.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
     edge_size = 0.1
     domain = pygalmesh.Extrude(p, [0.0, 0.0, 1.0], 0.5 * 3.14159265359, edge_size)
-    pygalmesh.generate_mesh(
-        domain, "out.mesh", cell_size=0.1, edge_size=edge_size, verbose=False
+    mesh = pygalmesh.generate_mesh(
+        domain, cell_size=0.1, edge_size=edge_size, verbose=False
     )
-
-    mesh = meshio.read("out.mesh")
 
     tol = 1.0e-3
     assert abs(max(mesh.points[:, 0]) - 0.583012701892) < tol
@@ -557,11 +506,9 @@ def test_ring_extrude():
     p = pygalmesh.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
     edge_size = 0.1
     domain = pygalmesh.RingExtrude(p, edge_size)
-    pygalmesh.generate_mesh(
-        domain, "out.mesh", cell_size=0.1, edge_size=edge_size, verbose=False
+    mesh = pygalmesh.generate_mesh(
+        domain, cell_size=0.1, edge_size=edge_size, verbose=False
     )
-
-    mesh = meshio.read("out.mesh")
 
     tol = 1.0e-3
     assert abs(max(mesh.points[:, 0]) - 1.5) < tol
@@ -638,9 +585,7 @@ def test_halfspace():
     s = pygalmesh.HalfSpace([1.0, 2.0, 3.0], 1.0, 2.0)
     u = pygalmesh.Intersection([c, s])
 
-    pygalmesh.generate_mesh(u, "out.mesh", cell_size=0.2, edge_size=0.2, verbose=False)
-
-    mesh = meshio.read("out.mesh")
+    mesh = pygalmesh.generate_mesh(u, cell_size=0.2, edge_size=0.2, verbose=False)
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 1 / 750) < 1.0e-3

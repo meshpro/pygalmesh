@@ -233,7 +233,7 @@ PYBIND11_MODULE(_pygalmesh, m) {
 
     // functions
     m.def(
-        "generate_from_off", &generate_from_off,
+        "_generate_from_off", &generate_from_off,
         py::arg("infile"),
         py::arg("outfile"),
         py::arg("lloyd") = false,
@@ -249,7 +249,7 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("verbose") = true
         );
     m.def(
-        "generate_mesh", &generate_mesh,
+        "_generate_mesh", &generate_mesh,
         py::arg("domain"),
         py::arg("outfile"),
         py::arg("feature_edges") = std::vector<std::vector<std::array<double, 3>>>(),
@@ -268,7 +268,7 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("verbose") = true
         );
     m.def(
-        "generate_surface_mesh", &generate_surface_mesh,
+        "_generate_surface_mesh", &generate_surface_mesh,
         py::arg("domain"),
         py::arg("outfile"),
         py::arg("bounding_sphere_radius") = 0.0,
