@@ -69,5 +69,5 @@ __all__ = [
     "RingExtrude",
     "generate_mesh",
     "generate_surface_mesh",
-    "generate_from_off",
+    "generate_volume_mesh_from_surface_mesh",
 ]
