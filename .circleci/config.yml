@@ -1,7 +1,16 @@
 version: 2
 
 jobs:
-
+  lint:
+    docker:
+      - image: ubuntu:18.04
+    steps:
+      - checkout
+      - run: apt update
+      - run: apt install -y python3-pip
+      - run: pip3 install -U black flake8
+      - run: LC_ALL=C.UTF-8 black --check setup.py pygalmesh/ test/*.py
+      - run: flake8 setup.py pygalmesh/ test/*.py
   build:
     working_directory: ~/pygalmesh
     docker:
@@ -9,13 +18,17 @@ jobs:
     steps:
       - run: apt-get update
       - run: apt-get install -y libcgal-dev libeigen3-dev python3-pip clang++-6.0
-      - run: pip3 install -U pytest pytest-cov black flake8 meshio pybind11
+      - run: pip3 install -U pytest pytest-cov meshio pybind11
       - checkout
       # install
       # Use clang++ for its smaller memory footprint.
       - run: CC="clang++-6.0" pip3 install .
-      # lint
-      - run: LC_ALL=C.UTF-8 black --check setup.py pygalmesh/ test/*.py
-      - run: flake8 setup.py pygalmesh/ test/*.py
       # The actual test
       - run: cd test/ && pytest
+
+workflows:
+  version: 2
+  lint_and_build:
+    jobs:
+      - lint
+      - build
