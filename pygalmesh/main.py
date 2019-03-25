@@ -27,7 +27,8 @@ def generate_mesh(
 ):
     feature_edges = [] if feature_edges is None else feature_edges
 
-    outfile = tempfile.mkstemp(suffix=".mesh")
+    fh, outfile = tempfile.mkstemp(suffix=".mesh")
+    os.close(fh)
 
     _generate_mesh(
         domain,
