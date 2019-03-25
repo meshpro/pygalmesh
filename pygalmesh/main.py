@@ -62,7 +62,7 @@ def generate_surface_mesh(
     distance_bound=0.0,
     verbose=True,
 ):
-    fh, outfile = tempfile.mkstemp(suffix=".mesh")
+    fh, outfile = tempfile.mkstemp(suffix=".off")
     os.close(fh)
 
     _generate_surface_mesh(
