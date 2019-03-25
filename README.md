@@ -17,29 +17,25 @@ CGAL offers two different approaches for mesh generation:
 1. Meshes defined implicitly by level sets of functions.
 2. Meshes defined by a set of bounding planes.
 
-pygalmesh provides a front-end to the first approach, which has the following
-advantages and disadvantages:
+pygalmesh provides a front-end to the first approach, which has the following advantages
+and disadvantages:
 
 * All boundary points are guaranteed to be in the level set within any specified
   residual. This results in smooth curved surfaces.
-* Sharp intersections of subdomains (e.g., in unions or differences of sets)
-  need to be specified manually (via feature edges, see below), which can be
-  tedious.
+* Sharp intersections of subdomains (e.g., in unions or differences of sets) need to be
+  specified manually (via feature edges, see below), which can be tedious.
 
 On the other hand, the bounding-plane approach (realized by
-[mshr](https://bitbucket.org/fenics-project/mshr)), has the following
-properties:
+[mshr](https://bitbucket.org/fenics-project/mshr)), has the following properties:
 
-* Smooth, curved domains are approximated by a set of bounding planes,
-  resulting in more of less visible edges.
-* Intersections of domains can be computed automatically, so domain unions etc.
-  have sharp edges where they belong.
+* Smooth, curved domains are approximated by a set of bounding planes, resulting in more
+  of less visible edges.
+* Intersections of domains can be computed automatically, so domain unions etc.  have
+  sharp edges where they belong.
 
-Other Python mesh generators are [pygmsh](https://github.com/nschloe/pygmsh) (a
-frontend to [gmsh](http://gmsh.info/)) and
-[MeshPy](https://github.com/inducer/meshpy).
-[meshzoo](https://github.com/nschloe/meshzoo) provides some basic canonical
-meshes.
+Other Python mesh generators are [pygmsh](https://github.com/nschloe/pygmsh) (a frontend
+to [gmsh](http://gmsh.info/)) and [MeshPy](https://github.com/inducer/meshpy).
+[meshzoo](https://github.com/nschloe/meshzoo) provides some basic canonical meshes.
 
 ### Examples
 
@@ -75,8 +71,8 @@ mesh = pygalmesh.generate_mesh(
 #### Other primitive shapes
 <img src="https://nschloe.github.io/pygalmesh/tetra.png" width="30%">
 
-pygalmesh provides out-of-the-box support for balls, cuboids, ellipsoids, tori,
-cones, cylinders, and tetrahedra. Try for example
+pygalmesh provides out-of-the-box support for balls, cuboids, ellipsoids, tori, cones,
+cylinders, and tetrahedra. Try for example
 ```python
 import pygalmesh
 
@@ -92,9 +88,9 @@ mesh = pygalmesh.generate_mesh(s0, cell_size=0.1, edge_size=0.1)
 #### Domain combinations
 <img src="https://nschloe.github.io/pygalmesh/ball-difference.png" width="30%">
 
-Supported are unions, intersections, and differences of all domains. As
-mentioned above, however, the sharp intersections between two domains are not
-automatically handled. Try for example
+Supported are unions, intersections, and differences of all domains. As mentioned above,
+however, the sharp intersections between two domains are not automatically handled. Try
+for example
 ```python
 import pygalmesh
 
@@ -104,8 +100,7 @@ s0 = pygalmesh.Ball([displacement, 0, 0], radius)
 s1 = pygalmesh.Ball([-displacement, 0, 0], radius)
 u = pygalmesh.Difference(s0, s1)
 ```
-To sharpen the intersection circle, add it as a feature edge polygon line,
-e.g.,
+To sharpen the intersection circle, add it as a feature edge polygon line, e.g.,
 ```python
 a = numpy.sqrt(radius**2 - displacement**2)
 edge_size = 0.15
@@ -129,15 +124,13 @@ mesh = pygalmesh.generate_mesh(
     cell_radius_edge_ratio=2.0
 )
 ```
-Note that the length of the polygon legs are kept in sync with the `edge_size`
-of the mesh generation. This makes sure that it fits in nicely with the rest of
-the mesh.
+Note that the length of the polygon legs are kept in sync with the `edge_size` of the
+mesh generation. This makes sure that it fits in nicely with the rest of the mesh.
 
 #### Domain deformations
 <img src="https://nschloe.github.io/pygalmesh/egg.png" width="30%">
 
-You can of course translate, rotate, scale, and stretch any domain. Try, for
-example,
+You can of course translate, rotate, scale, and stretch any domain. Try, for example,
 ```python
 import pygalmesh
 
@@ -152,8 +145,8 @@ mesh = pygalmesh.generate_mesh(s, cell_size=0.1)
 #### Extrusion of 2D polygons
 <img src="https://nschloe.github.io/pygalmesh/triangle-rotated.png" width="30%">
 
-pygalmesh lets you extrude any polygon into a 3D body. It even supports
-rotation alongside!
+pygalmesh lets you extrude any polygon into a 3D body. It even supports rotation
+alongside!
 ```python
 import pygalmesh
 
@@ -172,14 +165,14 @@ mesh = pygalmesh.generate_mesh(
     verbose=False
 )
 ```
-Feature edges are automatically preserved here, which is why an edge length
-needs to be given to `pygalmesh.Extrude`.
+Feature edges are automatically preserved here, which is why an edge length needs to be
+given to `pygalmesh.Extrude`.
 
 #### Rotation bodies
 <img src="https://nschloe.github.io/pygalmesh/circle-rotate-extr.png" width="30%">
 
-Polygons in the x-z-plane can also be rotated around the z-axis to yield a
-rotation body.
+Polygons in the x-z-plane can also be rotated around the z-axis to yield a rotation
+body.
 ```python
 import pygalmesh
 
@@ -197,9 +190,9 @@ mesh = pygalmesh.generate_mesh(
 #### Your own custom level set function
 <img src="https://nschloe.github.io/pygalmesh/heart.png" width="30%">
 
-If all of the variety is not enough for you, you can define your own custom
-level set function. You simply need to subclass `pygalmesh.DomainBase` and
-specify a function, e.g.,
+If all of the variety is not enough for you, you can define your own custom level set
+function. You simply need to subclass `pygalmesh.DomainBase` and specify a function,
+e.g.,
 ```python
 import pygalmesh
 class Heart(pygalmesh.DomainBase):
@@ -217,14 +210,14 @@ class Heart(pygalmesh.DomainBase):
 d = Heart()
 mesh = pygalmesh.generate_mesh(d, cell_size=0.1)
 ```
-Note that you need to specify the square of a bounding sphere radius, used as
-an input to CGAL's mesh generator.
+Note that you need to specify the square of a bounding sphere radius, used as an input
+to CGAL's mesh generator.
 
 #### Surface meshes
 
-If you're only after the surface of a body, pygalmesh has
-`generate_surface_mesh` for you. It offers fewer options (obviously,
-`cell_size` is gone), but otherwise works the same way:
+If you're only after the surface of a body, pygalmesh has `generate_surface_mesh` for
+you. It offers fewer options (obviously, `cell_size` is gone), but otherwise works the
+same way:
 ```python
 import pygalmesh
 
@@ -236,10 +229,6 @@ mesh = pygalmesh.generate_surface_mesh(
     distance_bound=0.1
 )
 ```
-The output format is
-[OFF](http://segeval.cs.princeton.edu/public/off_format.html) which again is
-handled by [meshio](https://github.com/nschloe/meshio).
-
 Refer to [CGAL's
 documention](https://doc.cgal.org/latest/Surface_mesher/index.html) for the
 options.
@@ -248,8 +237,8 @@ options.
 <img src="https://nschloe.github.io/pygalmesh/elephant.png" width="30%">
 
 If you have a surface mesh at hand (like
-[elephant.off](http://nschloe.github.io/pygalmesh/elephant.vtu)),
-pygalmesh generates a volume mesh via
+[elephant.vtu](http://nschloe.github.io/pygalmesh/elephant.vtu)), pygalmesh generates a
+volume mesh via
 ```python
 import pygalmesh
 
