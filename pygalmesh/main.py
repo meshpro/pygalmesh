@@ -98,7 +98,7 @@ def generate_volume_mesh_from_surface_mesh(
 
     fh, off_file = tempfile.mkstemp(suffix=".off")
     os.close(fh)
-    meshio.write(off_file)
+    meshio.write(off_file, mesh)
 
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
     os.close(fh)
