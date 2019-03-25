@@ -252,8 +252,7 @@ options.
 <img src="https://nschloe.github.io/pygalmesh/elephant.png" width="30%">
 
 If you have an OFF file at hand (like
-[elephant.off](https://raw.githubusercontent.com/CGAL/cgal-swig-bindings/master/examples/data/elephant.off)
-or [these](https://github.com/CGAL/cgal/tree/master/Surface_mesher/demo/Surface_mesher/inputs)),
+[elephant.off](http://nschloe.github.io/pygalmesh/elephant.off),
 pygalmesh generates the mesh via
 ```python
 import pygalmesh
