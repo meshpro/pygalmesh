@@ -64,7 +64,6 @@ void generate_from_off(const std::string& infile, const std::string& outfile,
     // suppress output
     std::cerr.setstate(std::ios_base::failbit);
   }
-  // TODO make_mesh_3 segfaults on travis. hm.
   C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
       cgal_domain, criteria,
       lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
