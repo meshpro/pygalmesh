@@ -21,10 +21,9 @@ from _pygalmesh import (
     HalfSpace,
     Polygon2D,
     RingExtrude,
-    generate_mesh,
-    generate_surface_mesh,
-    generate_from_off,
 )
+
+from .main import generate_mesh
 
 from .__about__ import (
     __author__,
