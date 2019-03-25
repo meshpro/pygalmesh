@@ -23,7 +23,11 @@ from _pygalmesh import (
     RingExtrude,
 )
 
-from .main import generate_mesh
+from .main import (
+    generate_mesh,
+    generate_surface_mesh,
+    generate_volume_mesh_from_surface_mesh,
+)
 
 from .__about__ import (
     __author__,

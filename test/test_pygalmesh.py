@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 #
 import numpy
-import meshio
 
 import pygalmesh
 
@@ -437,18 +436,15 @@ def test_translation():
 
 
 def test_off():
-    helpers.download("elephant.off", "2a52c3747fdf0d57f8401f7de504e3d1")
-    pygalmesh.generate_from_off(
-        "/tmp/elephant.off",
-        "out.mesh",
+    helpers.download("elephant.vtu", "3552eb5b7f549b345d871999b4218dfc")
+    mesh = pygalmesh.generate_volume_mesh_from_surface_mesh(
+        "/tmp/elephant.vtu",
         facet_angle=25.0,
         facet_size=0.15,
         facet_distance=0.008,
         cell_radius_edge_ratio=3.0,
         verbose=False,
     )
-
-    mesh = meshio.read("out.mesh")
 
     tol = 1.0e-3
     assert abs(max(mesh.points[:, 0]) - 0.357612477657) < tol
@@ -555,16 +551,9 @@ def test_ring_extrude():
 def test_sphere():
     radius = 1.0
     s = pygalmesh.Ball([0.0, 0.0, 0.0], radius)
-    pygalmesh.generate_surface_mesh(
-        s,
-        "out.off",
-        angle_bound=30,
-        radius_bound=0.1,
-        distance_bound=0.1,
-        verbose=False,
+    mesh = pygalmesh.generate_surface_mesh(
+        s, angle_bound=30, radius_bound=0.1, distance_bound=0.1, verbose=False
     )
-
-    mesh = meshio.read("out.off")
 
     tol = 1.0e-2
     assert abs(max(mesh.points[:, 0]) - radius) < tol
