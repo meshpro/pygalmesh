@@ -1,5 +1,5 @@
-#ifndef GENERATE_HPP
-#define GENERATE_HPP
+#ifndef GENERATE_PERIODIC_HPP
+#define GENERATE_PERIODIC_HPP
 
 #include "domain.hpp"
 
@@ -9,10 +9,9 @@
 
 namespace pygalmesh {
 
-void generate_mesh(
+void generate_periodic_mesh(
     const std::shared_ptr<pygalmesh::DomainBase> & domain,
     const std::string & outfile,
-    const std::vector<std::vector<std::array<double, 3>>> & feature_edges = {},
     const double bounding_sphere_radius = 0.0,
     const bool lloyd = false,
     const bool odt = false,
@@ -29,4 +28,4 @@ void generate_mesh(
 
 } // namespace pygalmesh
 
-#endif // GENERATE_HPP
+#endif // GENERATE_PERIODIC_HPP

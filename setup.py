@@ -38,6 +38,7 @@ ext_modules = [
         "_pygalmesh",
         [
             "src/generate.cpp",
+            "src/generate_periodic.cpp",
             "src/generate_from_off.cpp",
             "src/generate_surface_mesh.cpp",
             "src/pybind11.cpp",
