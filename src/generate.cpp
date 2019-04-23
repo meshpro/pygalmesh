@@ -38,11 +38,6 @@ class CgalDomainWrapper
   const std::shared_ptr<DomainBase> domain_;
 };
 
-// typedef CGAL::Mesh_domain_with_polyline_features_3<
-//   CGAL::Implicit_mesh_domain_3<CgalDomainWrapper,K>
-//   >
-//   Mesh_domain;
-
 typedef CGAL::Mesh_domain_with_polyline_features_3<CGAL::Labeled_mesh_domain_3<K>> Mesh_domain;
 
 // Triangulation

@@ -2,16 +2,20 @@
 
 #include "generate_periodic.hpp"
 
+#include <CGAL/Periodic_3_mesh_3/config.h>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
-
+#include <CGAL/make_periodic_3_mesh_3.h>
+#include <CGAL/optimize_periodic_3_mesh_3.h>
 #include <CGAL/Periodic_3_mesh_3/IO/File_medit.h>
 #include <CGAL/Periodic_3_mesh_triangulation_3.h>
+#include <CGAL/Labeled_mesh_domain_3.h>
 #include <CGAL/Mesh_complex_3_in_triangulation_3.h>
 #include <CGAL/Mesh_criteria_3.h>
+#include <CGAL/number_type_config.h> // CGAL_PI
+#include <cmath>
+#include <iostream>
+#include <fstream>
 
-#include <CGAL/Implicit_mesh_domain_3.h>
-#include <CGAL/Mesh_domain_with_polyline_features_3.h>
-#include <CGAL/make_periodic_3_mesh_3.h>
 
 namespace pygalmesh {
 
@@ -50,6 +54,22 @@ typedef CGAL::Mesh_criteria_3<Tr> Mesh_criteria;
 typedef Mesh_criteria::Facet_criteria Facet_criteria;
 typedef Mesh_criteria::Cell_criteria Cell_criteria;
 
+
+typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
+typedef K::FT                                               FT;
+typedef K::Point_3                                          Point;
+typedef K::Iso_cuboid_3                                     Iso_cuboid;
+// Domain
+typedef FT (Function)(const Point&);
+typedef CGAL::Labeled_mesh_domain_3<K>                      Periodic_mesh_domain;
+// Triangulation
+typedef CGAL::Periodic_3_mesh_triangulation_3<Periodic_mesh_domain>::type Tr;
+typedef CGAL::Mesh_complex_3_in_triangulation_3<Tr>                       C3t3;
+// Criteria
+typedef CGAL::Mesh_criteria_3<Tr>                           Periodic_mesh_criteria;
+// To avoid verbose function and named parameters call
+using namespace CGAL::parameters;
+
 void
 generate_periodic_mesh(
     const std::shared_ptr<pygalmesh::DomainBase> & domain,
@@ -65,6 +85,7 @@ generate_periodic_mesh(
     const double facet_distance,
     const double cell_radius_edge_ratio,
     const double cell_size,
+    const int number_of_copies_in_output,
     const bool verbose
     )
 {
@@ -103,7 +124,6 @@ generate_periodic_mesh(
 
   // Output
   std::ofstream medit_file(outfile);
-  const int number_of_copies_in_output = 4;  // can be 1, 2, 4, or 8
   CGAL::output_periodic_mesh_to_medit(medit_file, c3t3, number_of_copies_in_output);
   medit_file.close();
 

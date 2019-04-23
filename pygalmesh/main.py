@@ -70,10 +70,13 @@ def generate_periodic_mesh(
     facet_distance=0.0,
     cell_radius_edge_ratio=0.0,
     cell_size=0.0,
+    number_of_copies_in_output=1,
     verbose=True,
 ):
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
     os.close(fh)
+
+    assert number_of_copies_in_output in [1, 2, 4, 8]
 
     _generate_periodic_mesh(
         domain,
@@ -89,6 +92,7 @@ def generate_periodic_mesh(
         facet_distance=facet_distance,
         cell_radius_edge_ratio=cell_radius_edge_ratio,
         cell_size=cell_size,
+        number_of_copies_in_output=number_of_copies_in_output,
         verbose=verbose,
     )
 

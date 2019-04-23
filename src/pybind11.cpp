@@ -266,6 +266,7 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("facet_distance") = 0.0,
         py::arg("cell_radius_edge_ratio") = 0.0,
         py::arg("cell_size") = 0.0,
+        py::arg("number_of_copies_in_output") = 1,
         py::arg("verbose") = true
         );
     m.def(

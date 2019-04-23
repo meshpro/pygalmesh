@@ -14,10 +14,9 @@ with open(os.path.join(base_dir, "pygalmesh", "__about__.py"), "rb") as handle:
 
 
 class get_pybind_include(object):
-    """Helper class to determine the pybind11 include path
-    The purpose of this class is to postpone importing pybind11
-    until it is actually installed, so that the ``get_include()``
-    method can be invoked.
+    """Helper class to determine the pybind11 include path The purpose of this class is
+    to postpone importing pybind11 until it is actually installed, so that the
+    ``get_include()`` method can be invoked.
     """
 
     def __init__(self, user=False):
@@ -43,7 +42,7 @@ ext_modules = [
             "src/generate_surface_mesh.cpp",
             "src/pybind11.cpp",
         ],
-        language="c++",
+        language="C++",
         include_dirs=[
             "/usr/include/eigen3/",
             # Path to pybind11 headers
@@ -64,6 +63,7 @@ setup(
     url=about["__url__"],
     author=about["__author__"],
     author_email=about["__author_email__"],
+    setup_requires=["pybind11 >= 2.2"],
     install_requires=["meshio", "numpy", "pybind11 >= 2.2", "pipdate"],
     description="Python frontend to CGAL's 3D mesh generation capabilities",
     long_description=read("README.md"),
