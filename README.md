@@ -254,6 +254,7 @@ mesh = pygalmesh.generate_volume_mesh_from_surface_mesh(
 ```
 
 #### Periodic volume meshes
+<img src="https://nschloe.github.io/pygalmesh/periodic.png" width="30%">
 
 pygalmesh also interfaces CGAL's [3D periodic
 mesh generation](https://doc.cgal.org/latest/Periodic_3_mesh_3/index.html). Besides a
