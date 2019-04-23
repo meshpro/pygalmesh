@@ -17,10 +17,8 @@ def test_schwarz():
             z2 = numpy.cos(x[2] * 2 * numpy.pi)
             return x2 + y2 + z2
 
-    d = Schwarz()
-
     mesh = pygalmesh.generate_periodic_mesh(
-        d,
+        Schwarz(),
         [0, 0, 0, 1, 1, 1],
         cell_size=0.05,
         facet_angle=30,
@@ -30,11 +28,14 @@ def test_schwarz():
         number_of_copies_in_output=4,
         # odt=True,
         # lloyd=True,
-        # verbose=True
+        verbose=False
     )
 
-    import meshio
-    meshio.write("out.vtk", mesh)
+    assert len(mesh.cells["triangle"]) == 12784
+    assert len(mesh.cells["tetra"]) == 67120
+
+    # import meshio
+    # meshio.write("out.vtk", mesh)
     return
 
 
