@@ -74,7 +74,7 @@ void
 generate_periodic_mesh(
     const std::shared_ptr<pygalmesh::DomainBase> & domain,
     const std::string & outfile,
-    const double bounding_sphere_radius,
+    const std::array<double, 6> bounding_cuboid,
     const bool lloyd,
     const bool odt,
     const bool perturb,
@@ -89,8 +89,14 @@ generate_periodic_mesh(
     const bool verbose
     )
 {
-  int domain_size = 1;
-  K::Iso_cuboid_3 cuboid(0, 0, 0, domain_size, domain_size, domain_size);
+  K::Iso_cuboid_3 cuboid(
+      bounding_cuboid[0],
+      bounding_cuboid[1],
+      bounding_cuboid[2],
+      bounding_cuboid[3],
+      bounding_cuboid[4],
+      bounding_cuboid[5]
+      );
 
   const auto d = CgalDomainWrapper(domain);
   Periodic_mesh_domain cgal_domain =

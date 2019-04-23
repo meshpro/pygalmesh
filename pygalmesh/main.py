@@ -59,7 +59,7 @@ def generate_mesh(
 
 def generate_periodic_mesh(
     domain,
-    bounding_sphere_radius=0.0,
+    bounding_cuboid,
     lloyd=False,
     odt=False,
     perturb=True,
@@ -81,7 +81,7 @@ def generate_periodic_mesh(
     _generate_periodic_mesh(
         domain,
         outfile,
-        bounding_sphere_radius=bounding_sphere_radius,
+        bounding_cuboid,
         lloyd=lloyd,
         odt=odt,
         perturb=perturb,

@@ -17,13 +17,11 @@ def test_schwarz():
             z2 = numpy.cos(x[2] * 2 * numpy.pi)
             return x2 + y2 + z2
 
-        def get_bounding_sphere_squared_radius(self):
-            return 10.0
-
     d = Schwarz()
 
     mesh = pygalmesh.generate_periodic_mesh(
         d,
+        [0, 0, 0, 1, 1, 1],
         cell_size=0.05,
         facet_angle=30,
         facet_size=0.05,

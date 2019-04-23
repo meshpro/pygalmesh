@@ -12,7 +12,7 @@ namespace pygalmesh {
 void generate_periodic_mesh(
     const std::shared_ptr<pygalmesh::DomainBase> & domain,
     const std::string & outfile,
-    const double bounding_sphere_radius = 0.0,
+    const std::array<double, 6> bounding_cuboid,
     const bool lloyd = false,
     const bool odt = false,
     const bool perturb = true,

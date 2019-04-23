@@ -255,7 +255,7 @@ PYBIND11_MODULE(_pygalmesh, m) {
         "_generate_periodic_mesh", &generate_periodic_mesh,
         py::arg("domain"),
         py::arg("outfile"),
-        py::arg("bounding_sphere_radius") = 0.0,
+        py::arg("bounding_cuboid"),
         py::arg("lloyd") = false,
         py::arg("odt") = false,
         py::arg("perturb") = true,
