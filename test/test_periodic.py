@@ -39,5 +39,6 @@ def test_schwarz():
 
 if __name__ == "__main__":
     import meshio
+
     mesh = test_schwarz()
     meshio.write("out.vtk", mesh)
