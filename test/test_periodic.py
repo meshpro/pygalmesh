@@ -28,7 +28,7 @@ def test_schwarz():
         number_of_copies_in_output=4,
         # odt=True,
         # lloyd=True,
-        verbose=False
+        verbose=False,
     )
 
     assert len(mesh.cells["triangle"]) == 12784
