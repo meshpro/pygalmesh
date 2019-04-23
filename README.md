@@ -8,7 +8,8 @@ capabilities](https://doc.cgal.org/latest/Mesh_3/index.html).
 [![PyPi Version](https://img.shields.io/pypi/v/pygalmesh.svg)](https://pypi.org/project/pygalmesh)
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/pygalmesh.svg?label=Stars&logo=github)](https://github.com/nschloe/pygalmesh)
 
-pygalmesh makes it easy to create high-quality 3D volume and surface meshes.
+pygalmesh makes it easy to create high-quality 3D volume meshes, periodic volume meshes,
+and surface meshes.
 
 ### Background
 
@@ -248,6 +249,41 @@ mesh = pygalmesh.generate_volume_mesh_from_surface_mesh(
     facet_size=0.15,
     facet_distance=0.008,
     cell_radius_edge_ratio=3.0,
+    verbose=False
+)
+```
+
+#### Periodic volume meshes
+
+pygalmesh also interfaces CGAL's [3D periodic
+mesh generation](https://doc.cgal.org/latest/Periodic_3_mesh_3/index.html). Besides a
+domain, one needs to specify a bounding box, and optionally the number of copies in the
+output (1, 2, 4, or 8). Example:
+```python
+import pygalmesh
+
+class Schwarz(pygalmesh.DomainBase):
+    def __init__(self):
+        super(Schwarz, self).__init__()
+        return
+
+    def eval(self, x):
+        x2 = numpy.cos(x[0] * 2 * numpy.pi)
+        y2 = numpy.cos(x[1] * 2 * numpy.pi)
+        z2 = numpy.cos(x[2] * 2 * numpy.pi)
+        return x2 + y2 + z2
+
+mesh = pygalmesh.generate_periodic_mesh(
+    Schwarz(),
+    [0, 0, 0, 1, 1, 1],
+    cell_size=0.05,
+    facet_angle=30,
+    facet_size=0.05,
+    facet_distance=0.025,
+    cell_radius_edge_ratio=2.0,
+    number_of_copies_in_output=4,
+    # odt=True,
+    # lloyd=True,
     verbose=False
 )
 ```

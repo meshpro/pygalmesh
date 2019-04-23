@@ -1,5 +1,6 @@
 #include "domain.hpp"
 #include "generate.hpp"
+#include "generate_periodic.hpp"
 #include "generate_from_off.hpp"
 #include "generate_surface_mesh.hpp"
 #include "polygon2d.hpp"
@@ -238,7 +239,6 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("outfile"),
         py::arg("feature_edges") = std::vector<std::vector<std::array<double, 3>>>(),
         py::arg("bounding_sphere_radius") = 0.0,
-        py::arg("boundary_precision") = 1.0e-4,
         py::arg("lloyd") = false,
         py::arg("odt") = false,
         py::arg("perturb") = true,
@@ -249,6 +249,24 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("facet_distance") = 0.0,
         py::arg("cell_radius_edge_ratio") = 0.0,
         py::arg("cell_size") = 0.0,
+        py::arg("verbose") = true
+        );
+    m.def(
+        "_generate_periodic_mesh", &generate_periodic_mesh,
+        py::arg("domain"),
+        py::arg("outfile"),
+        py::arg("bounding_cuboid"),
+        py::arg("lloyd") = false,
+        py::arg("odt") = false,
+        py::arg("perturb") = true,
+        py::arg("exude") = true,
+        py::arg("edge_size") = 0.0,
+        py::arg("facet_angle") = 0.0,
+        py::arg("facet_size") = 0.0,
+        py::arg("facet_distance") = 0.0,
+        py::arg("cell_radius_edge_ratio") = 0.0,
+        py::arg("cell_size") = 0.0,
+        py::arg("number_of_copies_in_output") = 1,
         py::arg("verbose") = true
         );
     m.def(

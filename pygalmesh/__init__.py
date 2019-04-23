@@ -25,6 +25,7 @@ from _pygalmesh import (
 
 from .main import (
     generate_mesh,
+    generate_periodic_mesh,
     generate_surface_mesh,
     generate_volume_mesh_from_surface_mesh,
 )
@@ -67,7 +68,9 @@ __all__ = [
     "HalfSpace",
     "Polygon2D",
     "RingExtrude",
+    #
     "generate_mesh",
+    "generate_periodic_mesh",
     "generate_surface_mesh",
     "generate_volume_mesh_from_surface_mesh",
 ]

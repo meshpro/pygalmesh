@@ -3,7 +3,7 @@ version: 2
 jobs:
   lint:
     docker:
-      - image: ubuntu:18.04
+      - image: ubuntu:19.04
     steps:
       - checkout
       - run: apt update
@@ -14,15 +14,15 @@ jobs:
   build:
     working_directory: ~/pygalmesh
     docker:
-      - image: ubuntu:18.04
+      - image: ubuntu:19.04
     steps:
       - run: apt-get update
-      - run: apt-get install -y libcgal-dev libeigen3-dev python3-pip clang++-6.0
+      - run: apt-get install -y libcgal-dev libeigen3-dev python3-pip clang
       - run: pip3 install -U pytest pytest-cov pybind11 lxml
       - checkout
       # install
       # Use clang++ for its smaller memory footprint.
-      - run: CC="clang++-6.0" pip3 install .
+      - run: CC="clang++" pip3 install .
       # The actual test
       - run: cd test/ && pytest
 
