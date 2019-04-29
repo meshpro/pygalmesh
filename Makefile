@@ -23,6 +23,9 @@ publish: tag upload
 
 clean:
 	@find . | grep -E "(__pycache__|\.pyc|\.pyo$\)" | xargs rm -rf
+	@rm -rf build/*
+	@rm -rf pygalmesh.egg-info/
+	@rm -rf dist/
 
 black:
 	black setup.py pygalmesh/ test/*.py
