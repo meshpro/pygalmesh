@@ -81,4 +81,9 @@ setup(
         "Topic :: Scientific/Engineering :: Physics",
         "Topic :: Scientific/Engineering :: Visualization",
     ],
+    entry_points={
+        "console_scripts": [
+            "pygalmesh-volume-from-surface = pygalmesh.cli:volume_from_surface"
+        ]
+    },
 )

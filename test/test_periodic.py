@@ -31,6 +31,7 @@ def test_schwarz():
         verbose=False,
     )
 
+    # The RNG in CGAL makes the following assertions fail sometimes.
     # assert len(mesh.cells["triangle"]) == 12784
     # assert len(mesh.cells["tetra"]) == 67120
 
