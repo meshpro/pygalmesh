@@ -5,7 +5,7 @@ import sys
 
 import meshio
 
-from .__about__ import __version__
+from .__about__ import __version__, __copyright__
 from .main import generate_volume_mesh_from_surface_mesh
 
 
@@ -116,11 +116,16 @@ def _get_parser():
         help="quiet mode (default: False)",
     )
 
-    version_text = "pygalmesh {}, Python {}.{}.{}".format(
-        __version__,
-        sys.version_info.major,
-        sys.version_info.minor,
-        sys.version_info.micro,
+    version_text = ",\n".join(
+        [
+            "pygalmesh {}".format(__version__),
+            "Python {}.{}.{}".format(
+                sys.version_info.major,
+                sys.version_info.minor,
+                sys.version_info.micro,
+            ),
+            __copyright__
+        ]
     )
     parser.add_argument("--version", "-v", action="version", version=version_text)
 
