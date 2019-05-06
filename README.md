@@ -239,7 +239,13 @@ options.
 
 If you have a surface mesh at hand (like
 [elephant.vtu](http://nschloe.github.io/pygalmesh/elephant.vtu)), pygalmesh generates a
-volume mesh via
+volume mesh on the command line via
+```
+pygalmesh-volume-from-surface elephant.vtu out.vtk --cell-size 1.0 --odt
+```
+(See `pygalmesh-volume-from-surface -h` for all options.)
+
+In Python, do
 ```python
 import pygalmesh
 
