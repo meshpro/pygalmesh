@@ -120,11 +120,9 @@ def _get_parser():
         [
             "pygalmesh {}".format(__version__),
             "Python {}.{}.{}".format(
-                sys.version_info.major,
-                sys.version_info.minor,
-                sys.version_info.micro,
+                sys.version_info.major, sys.version_info.minor, sys.version_info.micro
             ),
-            __copyright__
+            __copyright__,
         ]
     )
     parser.add_argument("--version", "-v", action="version", version=version_text)
