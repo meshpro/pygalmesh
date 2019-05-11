@@ -7,6 +7,7 @@ import meshio
 
 from .__about__ import __version__, __copyright__
 from .main import generate_volume_mesh_from_surface_mesh
+from _pygalmesh import _get_cgal_version
 
 
 def volume_from_surface(argv=None):
@@ -33,7 +34,8 @@ def volume_from_surface(argv=None):
 
 def _get_parser():
     parser = argparse.ArgumentParser(
-        description="Generate volume mesh from surface mesh."
+        description="Generate volume mesh from surface mesh.",
+        formatter_class=argparse.RawTextHelpFormatter,
     )
 
     parser.add_argument("infile", type=str, help="input mesh file")
@@ -116,11 +118,14 @@ def _get_parser():
         help="quiet mode (default: False)",
     )
 
-    version_text = ",\n".join(
+    version_text = "\n".join(
         [
-            "pygalmesh {}".format(__version__),
-            "Python {}.{}.{}".format(
-                sys.version_info.major, sys.version_info.minor, sys.version_info.micro
+            "pygalmesh {} [Python {}.{}.{}, CGAL {}]".format(
+                __version__,
+                sys.version_info.major,
+                sys.version_info.minor,
+                sys.version_info.micro,
+                _get_cgal_version(),
             ),
             __copyright__,
         ]

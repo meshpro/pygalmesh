@@ -34,9 +34,8 @@ On the other hand, the bounding-plane approach (realized by
 * Intersections of domains can be computed automatically, so domain unions etc.  have
   sharp edges where they belong.
 
-Other Python mesh generators are [pygmsh](https://github.com/nschloe/pygmsh) (a frontend
-to [gmsh](http://gmsh.info/)) and [MeshPy](https://github.com/inducer/meshpy).
-[meshzoo](https://github.com/nschloe/meshzoo) provides some basic canonical meshes.
+See [here](https://github.com/nschloe/awesome-scientific-computing#meshing) for other
+mesh generation tools.
 
 ### Examples
 

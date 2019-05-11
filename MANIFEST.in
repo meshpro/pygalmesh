@@ -5,3 +5,4 @@ include src/generate_periodic.hpp
 include src/generate_surface_mesh.hpp
 include src/polygon2d.hpp
 include src/primitives.hpp
+include src/version.hpp
