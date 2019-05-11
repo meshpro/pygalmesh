@@ -5,6 +5,7 @@
 #include "generate_surface_mesh.hpp"
 #include "polygon2d.hpp"
 #include "primitives.hpp"
+#include "version.hpp"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -294,5 +295,8 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("cell_radius_edge_ratio") = 0.0,
         py::arg("cell_size") = 0.0,
         py::arg("verbose") = true
+        );
+    m.def(
+        "_get_cgal_version", &get_cgal_version
         );
 }
