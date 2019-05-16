@@ -294,6 +294,22 @@ mesh = pygalmesh.generate_periodic_mesh(
 )
 ```
 
+#### Meshes from INR voxel files
+<img src="https://nschloe.github.io/pygalmesh/liver.png" width="30%">
+
+It is also possible to generate meshes from INR voxel files, e.g.,
+[`liver.inr`](https://github.com/nschloe/pygalmesh/raw/gh-pages/liver.inr).
+
+```python
+import pygalmesh
+
+mesh = pygalmesh.generate_from_inr(
+    "liver.inr",
+    cell_size=5.0,
+    verbose=False,
+)
+```
+
 ### Installation
 
 For installation, pygalmesh needs [CGAL](https://www.cgal.org/) and
@@ -329,17 +345,6 @@ To run the pygalmesh unit tests, check out this repository and type
 ```
 pytest
 ```
-
-### Distribution
-
-To create a new release
-
-1. bump the `__version__` number (in `setup.py` _and_ `src/pygalmesh.i`)
-
-2. publish to PyPi and GitHub:
-    ```
-    make publish
-    ```
 
 ### License
 
