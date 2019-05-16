@@ -39,7 +39,6 @@ def compute_triangle_areas(vertices, triangles):
 
 
 def download(name, md5):
-
     filename = os.path.join("/tmp", name)
     if not os.path.exists(filename):
         print("Downloading {}...".format(name))
