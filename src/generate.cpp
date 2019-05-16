@@ -16,28 +16,6 @@ namespace pygalmesh {
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 
-// Wrapper for DomainBase for translating to K::Point_3/FT.
-class CgalDomainWrapper
-{
-  public:
-  explicit CgalDomainWrapper(const std::shared_ptr<DomainBase> & domain):
-    domain_(domain)
-  {
-  }
-
-  virtual ~CgalDomainWrapper() = default;
-
-  virtual
-  K::FT
-  operator()(K::Point_3 p) const
-  {
-    return domain_->eval({p.x(), p.y(), p.z()});
-  }
-
-  private:
-  const std::shared_ptr<DomainBase> domain_;
-};
-
 typedef CGAL::Mesh_domain_with_polyline_features_3<CGAL::Labeled_mesh_domain_3<K>> Mesh_domain;
 
 // Triangulation
@@ -90,7 +68,10 @@ generate_mesh(
     // some wiggle room
     1.01 * domain->get_bounding_sphere_squared_radius();
 
-  const auto d = CgalDomainWrapper(domain);
+  // wrap domain
+  const auto d = [&](K::Point_3 p) {
+    return domain->eval({p.x(), p.y(), p.z()});
+  };
 
   Mesh_domain cgal_domain = Mesh_domain::create_implicit_mesh_domain(
        d,
