@@ -1,7 +1,8 @@
 #include "domain.hpp"
 #include "generate.hpp"
-#include "generate_periodic.hpp"
 #include "generate_from_off.hpp"
+#include "generate_from_inr.hpp"
+#include "generate_periodic.hpp"
 #include "generate_surface_mesh.hpp"
 #include "polygon2d.hpp"
 #include "primitives.hpp"
@@ -289,6 +290,22 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("perturb") = true,
         py::arg("exude") = true,
         py::arg("edge_size") = 0.0,  // std::numeric_limits<double>::max(),
+        py::arg("facet_angle") = 0.0,
+        py::arg("facet_size") = 0.0,
+        py::arg("facet_distance") = 0.0,
+        py::arg("cell_radius_edge_ratio") = 0.0,
+        py::arg("cell_size") = 0.0,
+        py::arg("verbose") = true
+        );
+    m.def(
+        "_generate_from_inr", &generate_from_inr,
+        py::arg("inr_filename"),
+        py::arg("outfile"),
+        py::arg("lloyd") = false,
+        py::arg("odt") = false,
+        py::arg("perturb") = true,
+        py::arg("exude") = true,
+        py::arg("edge_size") = 0.0,
         py::arg("facet_angle") = 0.0,
         py::arg("facet_size") = 0.0,
         py::arg("facet_distance") = 0.0,

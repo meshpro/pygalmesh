@@ -7,9 +7,10 @@ import meshio
 
 from _pygalmesh import (
     _generate_mesh,
+    _generate_from_inr,
+    _generate_from_off,
     _generate_periodic_mesh,
     _generate_surface_mesh,
-    _generate_from_off,
 )
 
 
@@ -168,5 +169,43 @@ def generate_volume_mesh_from_surface_mesh(
 
     mesh = meshio.read(outfile)
     os.remove(off_file)
+    os.remove(outfile)
+    return mesh
+
+
+def generate_from_inr(
+    inr_filename,
+    lloyd=False,
+    odt=False,
+    perturb=True,
+    exude=True,
+    edge_size=0.0,
+    facet_angle=0.0,
+    facet_size=0.0,
+    facet_distance=0.0,
+    cell_radius_edge_ratio=0.0,
+    cell_size=0.0,
+    verbose=True,
+):
+    fh, outfile = tempfile.mkstemp(suffix=".mesh")
+    os.close(fh)
+
+    _generate_from_inr(
+        inr_filename,
+        outfile,
+        lloyd=lloyd,
+        odt=odt,
+        perturb=perturb,
+        exude=exude,
+        edge_size=edge_size,
+        facet_angle=facet_angle,
+        facet_size=facet_size,
+        facet_distance=facet_distance,
+        cell_radius_edge_ratio=cell_radius_edge_ratio,
+        cell_size=cell_size,
+        verbose=verbose,
+    )
+
+    mesh = meshio.read(outfile)
     os.remove(outfile)
     return mesh

@@ -37,8 +37,9 @@ ext_modules = [
         "_pygalmesh",
         [
             "src/generate.cpp",
-            "src/generate_periodic.cpp",
+            "src/generate_from_inr.cpp",
             "src/generate_from_off.cpp",
+            "src/generate_periodic.cpp",
             "src/generate_surface_mesh.cpp",
             "src/version.cpp",
             "src/pybind11.cpp",
@@ -50,8 +51,8 @@ ext_modules = [
             get_pybind_include(),
             get_pybind_include(user=True),
         ],
-        libraries=["CGAL", "gmp", "mpfr"],
-        # extra_compile_args=['-std=c++11']
+        # CGAL_ImageIO for generate_from_inr
+        libraries=["CGAL", "CGAL_ImageIO", "gmp", "mpfr"],
     )
 ]
 

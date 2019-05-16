@@ -21,28 +21,6 @@ namespace pygalmesh {
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 
-// Wrapper for DomainBase for translating to K::Point_3/FT.
-class CgalDomainWrapper
-{
-  public:
-  explicit CgalDomainWrapper(const std::shared_ptr<DomainBase> & domain):
-    domain_(domain)
-  {
-  }
-
-  virtual ~CgalDomainWrapper() = default;
-
-  virtual
-  K::FT
-  operator()(K::Point_3 p) const
-  {
-    return domain_->eval({p.x(), p.y(), p.z()});
-  }
-
-  private:
-  const std::shared_ptr<DomainBase> domain_;
-};
-
 typedef CGAL::Labeled_mesh_domain_3<K> Periodic_mesh_domain;
 
 // Triangulation
@@ -98,7 +76,10 @@ generate_periodic_mesh(
       bounding_cuboid[5]
       );
 
-  const auto d = CgalDomainWrapper(domain);
+  // wrap domain
+  const auto d = [&](K::Point_3 p) {
+    return domain->eval({p.x(), p.y(), p.z()});
+  };
   Periodic_mesh_domain cgal_domain =
     Periodic_mesh_domain::create_implicit_mesh_domain(d, cuboid);
 

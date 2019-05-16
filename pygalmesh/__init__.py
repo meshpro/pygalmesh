@@ -28,6 +28,7 @@ from .main import (
     generate_periodic_mesh,
     generate_surface_mesh,
     generate_volume_mesh_from_surface_mesh,
+    generate_from_inr,
 )
 
 from .__about__ import (
@@ -73,4 +74,5 @@ __all__ = [
     "generate_periodic_mesh",
     "generate_surface_mesh",
     "generate_volume_mesh_from_surface_mesh",
+    "generate_from_inr",
 ]
