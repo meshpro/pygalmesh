@@ -233,31 +233,6 @@ Refer to [CGAL's
 documention](https://doc.cgal.org/latest/Surface_mesher/index.html) for the
 options.
 
-#### Volume meshes from surface meshes
-<img src="https://nschloe.github.io/pygalmesh/elephant.png" width="30%">
-
-If you have a surface mesh at hand (like
-[elephant.vtu](http://nschloe.github.io/pygalmesh/elephant.vtu)), pygalmesh generates a
-volume mesh on the command line via
-```
-pygalmesh-volume-from-surface elephant.vtu out.vtk --cell-size 1.0 --odt
-```
-(See `pygalmesh-volume-from-surface -h` for all options.)
-
-In Python, do
-```python
-import pygalmesh
-
-mesh = pygalmesh.generate_volume_mesh_from_surface_mesh(
-    "elephant.vtu",
-    facet_angle=25.0,
-    facet_size=0.15,
-    facet_distance=0.008,
-    cell_radius_edge_ratio=3.0,
-    verbose=False
-)
-```
-
 #### Periodic volume meshes
 <img src="https://nschloe.github.io/pygalmesh/periodic.png" width="30%">
 
@@ -294,12 +269,41 @@ mesh = pygalmesh.generate_periodic_mesh(
 )
 ```
 
+#### Volume meshes from surface meshes
+<img src="https://nschloe.github.io/pygalmesh/elephant.png" width="30%">
+
+If you have a surface mesh at hand (like
+[elephant.vtu](http://nschloe.github.io/pygalmesh/elephant.vtu)), pygalmesh generates a
+volume mesh on the command line via
+```
+pygalmesh-volume-from-surface elephant.vtu out.vtk --cell-size 1.0 --odt
+```
+(See `pygalmesh-volume-from-surface -h` for all options.)
+
+In Python, do
+```python
+import pygalmesh
+
+mesh = pygalmesh.generate_volume_mesh_from_surface_mesh(
+    "elephant.vtu",
+    facet_angle=25.0,
+    facet_size=0.15,
+    facet_distance=0.008,
+    cell_radius_edge_ratio=3.0,
+    verbose=False
+)
+```
+
 #### Meshes from INR voxel files
 <img src="https://nschloe.github.io/pygalmesh/liver.png" width="30%">
 
 It is also possible to generate meshes from INR voxel files, e.g.,
-[`liver.inr`](https://github.com/nschloe/pygalmesh/raw/gh-pages/liver.inr).
-
+[liver.inr](https://github.com/nschloe/pygalmesh/raw/gh-pages/liver.inr)
+either on the command line
+```
+pygalmesh-from-inr liver.inr out.vtu --cell-size 5.0 --odt
+```
+(see `pygalmesh-from-inr -h` for all options) or from Python
 ```python
 import pygalmesh
 
