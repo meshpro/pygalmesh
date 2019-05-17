@@ -14,7 +14,7 @@ with open(os.path.join(base_dir, "pygalmesh", "__about__.py"), "rb") as handle:
 
 
 class get_pybind_include(object):
-    """Helper class to determine the pybind11 include path The purpose of this class is
+    """Helper class to determine the pybind11 include path. The purpose of this class is
     to postpone importing pybind11 until it is actually installed, so that the
     ``get_include()`` method can be invoked.
     """
@@ -66,7 +66,7 @@ setup(
     author=about["__author__"],
     author_email=about["__author_email__"],
     setup_requires=["pybind11 >= 2.2"],
-    install_requires=["meshio", "numpy", "pybind11 >= 2.2", "pipdate"],
+    install_requires=["meshio", "numpy", "pybind11 >= 2.2"],
     description="Python frontend to CGAL's 3D mesh generation capabilities",
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
@@ -85,7 +85,8 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "pygalmesh-volume-from-surface = pygalmesh.cli:volume_from_surface"
+            "pygalmesh-volume-from-surface = pygalmesh.cli:volume_from_surface",
+            "pygalmesh-from-inr = pygalmesh.cli:inr",
         ]
     },
 )

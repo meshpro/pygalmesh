@@ -23,6 +23,7 @@ jobs:
       # install
       # Use clang++ for its smaller memory footprint.
       - run: CC="clang++" pip3 install .
+      - run: pip3 install -r test_requirements.txt
       # The actual test
       - run: cd test/ && pytest
 
