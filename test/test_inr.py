@@ -19,5 +19,5 @@ def test_inr():
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     ref = 1.759104602743268e06
-    assert abs(vol - ref) < ref * 1.0e-10
+    assert abs(vol - ref) < ref * 1.0e-3
     return
