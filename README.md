@@ -213,6 +213,30 @@ mesh = pygalmesh.generate_mesh(d, cell_size=0.1)
 Note that you need to specify the square of a bounding sphere radius, used as an input
 to CGAL's mesh generator.
 
+
+#### Local refinement
+<img src="https://nschloe.github.io/pygalmesh/ball-local-refinement.png" width="30%">
+
+If you want to have local refinement, you can use
+`generate_with_sizing_field`. It works just like `generate_mesh` except that it takes a
+`SizingFieldBase` object as `cell_size`.
+```python
+# define a cell_size function
+class Field(pygalmesh.SizingFieldBase):
+    def eval(self, x):
+        return abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5 + 0.025
+
+s = pygalmesh.Ball([0.0, 0.0, 0.0], 1.0)
+mesh = pygalmesh.generate_with_sizing_field(
+    s,
+    facet_angle=30,
+    facet_size=0.1,
+    facet_distance=0.025,
+    cell_radius_edge_ratio=2,
+    cell_size=Field(),
+)
+```
+
 #### Surface meshes
 
 If you're only after the surface of a body, pygalmesh has `generate_surface_mesh` for
