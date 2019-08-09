@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # https://github.com/pybind/pybind11/issues/1004
 from _pygalmesh import (
     Ball,
