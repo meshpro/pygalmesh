@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/nschloe/pygalmesh"><img alt="pygalmesh" src="https://nschloe.github.io/pygalmesh/pygalmesh-logo.svg" width="60%"></a>
-  <p align="center">Python frontend to [CGAL](https://www.cgal.org/)'s [3D mesh generation capabilities](https://doc.cgal.org/latest/Mesh_3/index.html).</p>
+  <p align="center">Create high-quality 3D meshes with ease.</p>
 </p>
 
 [![CircleCI](https://img.shields.io/circleci/project/github/nschloe/pygalmesh/master.svg?style=flat-square)](https://circleci.com/gh/nschloe/pygalmesh/tree/master)
@@ -9,6 +9,8 @@
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/pygalmesh.svg?style=flat-square&label=Stars&logo=github)](https://github.com/nschloe/pygalmesh)
 [![PyPi downloads](https://img.shields.io/pypi/dd/pygalmesh.svg?style=flat-square)](https://pypistats.org/packages/pygalmesh)
 
+pygalmesh is a Python frontend to [CGAL](https://www.cgal.org/)'s [3D mesh generation
+capabilities](https://doc.cgal.org/latest/Mesh_3/index.html).
 pygalmesh makes it easy to create high-quality 3D volume meshes, periodic volume meshes,
 and surface meshes.
 
