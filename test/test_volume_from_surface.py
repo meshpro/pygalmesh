@@ -3,9 +3,8 @@ import pygalmesh
 
 
 def test_volume_from_surface():
-    helpers.download("elephant.vtu", "3552eb5b7f549b345d871999b4218dfc")
     mesh = pygalmesh.generate_volume_mesh_from_surface_mesh(
-        "/tmp/elephant.vtu",
+        "meshes/elephant.vtu",
         facet_angle=25.0,
         facet_size=0.15,
         facet_distance=0.008,

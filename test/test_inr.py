@@ -3,8 +3,7 @@ import pygalmesh
 
 
 def test_inr():
-    helpers.download("liver.inr", "c69513a79231881942a86df56d41090e")
-    mesh = pygalmesh.generate_from_inr("/tmp/liver.inr", cell_size=5.0, verbose=False)
+    mesh = pygalmesh.generate_from_inr("meshes/liver.inr", cell_size=5.0, verbose=False)
 
     tol = 1.0e-3
     assert abs(max(mesh.points[:, 0]) - 2.385709228515625e02) < tol
