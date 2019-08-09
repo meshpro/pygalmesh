@@ -2,9 +2,8 @@
 #
 import numpy
 
-import pygalmesh
-
 import helpers
+import pygalmesh
 
 
 def test_ball():

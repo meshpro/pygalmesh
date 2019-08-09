@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-import pygalmesh
-
 import helpers
+import pygalmesh
 
 
 def test_inr():

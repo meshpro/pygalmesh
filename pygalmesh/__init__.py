@@ -2,35 +2,26 @@
 #
 # https://github.com/pybind/pybind11/issues/1004
 from _pygalmesh import (
-    DomainBase,
-    SizingFieldBase,
-    Translate,
-    Rotate,
-    Scale,
-    Stretch,
-    Intersection,
-    Union,
-    Difference,
-    Extrude,
     Ball,
-    Cuboid,
-    Ellipsoid,
-    Tetrahedron,
     Cone,
+    Cuboid,
     Cylinder,
-    Torus,
+    Difference,
+    DomainBase,
+    Ellipsoid,
+    Extrude,
     HalfSpace,
+    Intersection,
     Polygon2D,
     RingExtrude,
-)
-
-from .main import (
-    generate_mesh,
-    generate_with_sizing_field,
-    generate_periodic_mesh,
-    generate_surface_mesh,
-    generate_volume_mesh_from_surface_mesh,
-    generate_from_inr,
+    Rotate,
+    Scale,
+    SizingFieldBase,
+    Stretch,
+    Tetrahedron,
+    Torus,
+    Translate,
+    Union,
 )
 
 from .__about__ import (
@@ -38,9 +29,17 @@ from .__about__ import (
     __author_email__,
     __copyright__,
     __license__,
-    __version__,
     __maintainer__,
     __status__,
+    __version__,
+)
+from .main import (
+    generate_from_inr,
+    generate_mesh,
+    generate_periodic_mesh,
+    generate_surface_mesh,
+    generate_volume_mesh_from_surface_mesh,
+    generate_with_sizing_field,
 )
 
 __all__ = [

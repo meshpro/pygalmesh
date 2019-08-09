@@ -3,16 +3,16 @@
 import os
 import tempfile
 
-import meshio
-
 from _pygalmesh import (
-    _generate_mesh,
-    _generate_with_sizing_field,
     _generate_from_inr,
     _generate_from_off,
+    _generate_mesh,
     _generate_periodic_mesh,
     _generate_surface_mesh,
+    _generate_with_sizing_field,
 )
+
+import meshio
 
 
 def generate_mesh(
