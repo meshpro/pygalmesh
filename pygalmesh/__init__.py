@@ -3,6 +3,7 @@
 # https://github.com/pybind/pybind11/issues/1004
 from _pygalmesh import (
     DomainBase,
+    SizingFieldBase,
     Translate,
     Rotate,
     Scale,
@@ -25,6 +26,7 @@ from _pygalmesh import (
 
 from .main import (
     generate_mesh,
+    generate_with_sizing_field,
     generate_periodic_mesh,
     generate_surface_mesh,
     generate_volume_mesh_from_surface_mesh,
@@ -51,6 +53,7 @@ __all__ = [
     "__status__",
     #
     "DomainBase",
+    "SizingFieldBase",
     "Translate",
     "Rotate",
     "Scale",

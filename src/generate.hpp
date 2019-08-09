@@ -2,6 +2,7 @@
 #define GENERATE_HPP
 
 #include "domain.hpp"
+#include "sizing_field.hpp"
 
 #include <memory>
 #include <string>
@@ -24,6 +25,24 @@ void generate_mesh(
     const double facet_distance = 0.0,
     const double cell_radius_edge_ratio = 0.0,
     const double cell_size = 0.0,
+    const bool verbose = true
+    );
+
+void generate_with_sizing_field(
+    const std::shared_ptr<pygalmesh::DomainBase> & domain,
+    const std::string & outfile,
+    const std::vector<std::vector<std::array<double, 3>>> & feature_edges = {},
+    const double bounding_sphere_radius = 0.0,
+    const bool lloyd = false,
+    const bool odt = false,
+    const bool perturb = true,
+    const bool exude = true,
+    const double edge_size = 0.0,  // std::numeric_limits<double>::max(),
+    const double facet_angle = 0.0,
+    const double facet_size = 0.0,
+    const double facet_distance = 0.0,
+    const double cell_radius_edge_ratio = 0.0,
+    const std::shared_ptr<pygalmesh::SizingFieldBase> & cell_size = nullptr,
     const bool verbose = true
     );
 

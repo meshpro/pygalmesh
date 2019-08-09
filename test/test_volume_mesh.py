@@ -539,3 +539,44 @@ def test_halfspace():
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 1 / 750) < 1.0e-3
     return
+
+
+def test_ball_with_sizing_field():
+    class Field(pygalmesh.SizingFieldBase):
+        def __init__(self):
+            super().__init__()
+            return
+
+        def eval(self, x):
+            # return CGAL::abs(CGAL::sqrt(sq_d_to_origin) - 0.5) / 5. + 0.025;
+            return abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5 + 0.025
+
+    s = pygalmesh.Ball([0.0, 0.0, 0.0], 1.0)
+    mesh = pygalmesh.generate_with_sizing_field(
+        s,
+        facet_angle=30,
+        facet_size=0.1,
+        facet_distance=0.025,
+        cell_radius_edge_ratio=2,
+        cell_size=Field(),
+        verbose=False,
+    )
+
+    import meshio
+
+    meshio.write("out.vtk", mesh)
+
+    # assert abs(max(mesh.points[:, 0]) - 1.0) < 0.02
+    # assert abs(min(mesh.points[:, 0]) + 1.0) < 0.02
+    # assert abs(max(mesh.points[:, 1]) - 1.0) < 0.02
+    # assert abs(min(mesh.points[:, 1]) + 1.0) < 0.02
+    # assert abs(max(mesh.points[:, 2]) - 1.0) < 0.02
+    # assert abs(min(mesh.points[:, 2]) + 1.0) < 0.02
+
+    # vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
+    # assert abs(vol - 4.0 / 3.0 * numpy.pi) < 0.15
+    return
+
+
+if __name__ == "__main__":
+    test_ball_with_sizing_field()
