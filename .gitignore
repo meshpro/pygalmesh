@@ -1,5 +1,4 @@
 *.off
-*.vtu
 *.mesh
 .cache/
 build/
