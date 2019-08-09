@@ -49,7 +49,9 @@ generate_from_inr(
 {
   CGAL::Image_3 image;
   const bool success = image.read(inr_filename.c_str());
-  assert(success);
+  if (!success) {
+    throw "Could not read image file";
+  }
   Mesh_domain cgal_domain = Mesh_domain::create_labeled_image_mesh_domain(image);
 
   Mesh_criteria criteria(

@@ -1,10 +1,7 @@
-# -*- coding: utf-8 -*-
-#
+import codecs
 import os
 
-import codecs
-from setuptools import setup, Extension, find_packages
-
+from setuptools import Extension, find_packages, setup
 
 # https://packaging.python.org/single_source_version/
 base_dir = os.path.abspath(os.path.dirname(__file__))
@@ -67,6 +64,7 @@ setup(
     author_email=about["__author_email__"],
     setup_requires=["pybind11 >= 2.2"],
     install_requires=["meshio", "numpy", "pybind11 >= 2.2"],
+    python_requires=">=3",
     description="Python frontend to CGAL's 3D mesh generation capabilities",
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
@@ -76,7 +74,6 @@ setup(
         about["__license__"],
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Mathematics",

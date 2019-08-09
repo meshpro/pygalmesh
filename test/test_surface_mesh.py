@@ -1,10 +1,7 @@
-# -*- coding: utf-8 -*-
-#
 import numpy
 
-import pygalmesh
-
 import helpers
+import pygalmesh
 
 
 def test_sphere():

@@ -1,13 +1,16 @@
-# pygalmesh
+<p align="center">
+  <a href="https://github.com/nschloe/pygalmesh"><img alt="pygalmesh" src="https://nschloe.github.io/pygalmesh/pygalmesh-logo.svg" width="60%"></a>
+  <p align="center">Create high-quality 3D meshes with ease.</p>
+</p>
 
-A Python frontend to [CGAL](https://www.cgal.org/)'s [3D mesh generation
+[![CircleCI](https://img.shields.io/circleci/project/github/nschloe/pygalmesh/master.svg?style=flat-square)](https://circleci.com/gh/nschloe/pygalmesh/tree/master)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
+[![PyPi Version](https://img.shields.io/pypi/v/pygalmesh.svg?style=flat-square)](https://pypi.org/project/pygalmesh)
+[![GitHub stars](https://img.shields.io/github/stars/nschloe/pygalmesh.svg?style=flat-square&label=Stars&logo=github)](https://github.com/nschloe/pygalmesh)
+[![PyPi downloads](https://img.shields.io/pypi/dd/pygalmesh.svg?style=flat-square)](https://pypistats.org/packages/pygalmesh)
+
+pygalmesh is a Python frontend to [CGAL](https://www.cgal.org/)'s [3D mesh generation
 capabilities](https://doc.cgal.org/latest/Mesh_3/index.html).
-
-[![CircleCI](https://img.shields.io/circleci/project/github/nschloe/pygalmesh/master.svg)](https://circleci.com/gh/nschloe/pygalmesh/tree/master)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
-[![PyPi Version](https://img.shields.io/pypi/v/pygalmesh.svg)](https://pypi.org/project/pygalmesh)
-[![GitHub stars](https://img.shields.io/github/stars/nschloe/pygalmesh.svg?label=Stars&logo=github)](https://github.com/nschloe/pygalmesh)
-
 pygalmesh makes it easy to create high-quality 3D volume meshes, periodic volume meshes,
 and surface meshes.
 
@@ -212,6 +215,29 @@ mesh = pygalmesh.generate_mesh(d, cell_size=0.1)
 ```
 Note that you need to specify the square of a bounding sphere radius, used as an input
 to CGAL's mesh generator.
+
+
+#### Local refinement
+<img src="https://nschloe.github.io/pygalmesh/ball-local-refinement.png" width="30%">
+
+If you want to have local refinement, you can use
+`generate_with_sizing_field`. It works just like `generate_mesh` except that it takes a
+`SizingFieldBase` object as `cell_size`.
+```python
+# define a cell_size function
+class Field(pygalmesh.SizingFieldBase):
+    def eval(self, x):
+        return abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5 + 0.025
+
+mesh = pygalmesh.generate_with_sizing_field(
+    pygalmesh.Ball([0.0, 0.0, 0.0], 1.0),
+    facet_angle=30,
+    facet_size=0.1,
+    facet_distance=0.025,
+    cell_radius_edge_ratio=2,
+    cell_size=Field(),
+)
+```
 
 #### Surface meshes
 

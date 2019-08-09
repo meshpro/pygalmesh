@@ -1,13 +1,12 @@
-# -*- coding: utf-8 -*-
-#
 import argparse
 import sys
 
+from _pygalmesh import _get_cgal_version
+
 import meshio
 
-from .__about__ import __version__, __copyright__
-from .main import generate_volume_mesh_from_surface_mesh, generate_from_inr
-from _pygalmesh import _get_cgal_version
+from .__about__ import __copyright__, __version__
+from .main import generate_from_inr, generate_volume_mesh_from_surface_mesh
 
 
 def _get_version_text():

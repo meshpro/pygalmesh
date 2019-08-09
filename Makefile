@@ -27,9 +27,13 @@ clean:
 	@rm -rf pygalmesh.egg-info/
 	@rm -rf dist/
 
+format:
+	isort -rc .
+	black .
+
 black:
-	black setup.py pygalmesh/ test/*.py
+	black .
 
 lint:
-	black --check setup.py pygalmesh/ test/*.py
+	black --check .
 	flake8 setup.py pygalmesh/ test/*.py

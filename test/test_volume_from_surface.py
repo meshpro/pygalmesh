@@ -1,14 +1,13 @@
-# -*- coding: utf-8 -*-
-#
-import pygalmesh
+import os
 
 import helpers
+import pygalmesh
 
 
 def test_volume_from_surface():
-    helpers.download("elephant.vtu", "3552eb5b7f549b345d871999b4218dfc")
+    this_dir = os.path.dirname(os.path.abspath(__file__))
     mesh = pygalmesh.generate_volume_mesh_from_surface_mesh(
-        "/tmp/elephant.vtu",
+        os.path.join(this_dir, "meshes", "elephant.vtu"),
         facet_angle=25.0,
         facet_size=0.15,
         facet_distance=0.008,

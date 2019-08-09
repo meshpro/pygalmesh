@@ -6,6 +6,7 @@
 #include "generate_surface_mesh.hpp"
 #include "polygon2d.hpp"
 #include "primitives.hpp"
+#include "sizing_field.hpp"
 #include "version.hpp"
 
 #include <pybind11/pybind11.h>
@@ -42,6 +43,18 @@ public:
 };
 
 
+// https://pybind11.readthedocs.io/en/stable/advanced/classes.html#overriding-virtual-functions-in-python
+class PySizingFieldBase: public SizingFieldBase {
+public:
+    using SizingFieldBase::SizingFieldBase;
+
+    double
+    eval(const std::array<double, 3> & x) const override {
+      PYBIND11_OVERLOAD_PURE(double, SizingFieldBase, eval, x);
+    }
+};
+
+
 PYBIND11_MODULE(_pygalmesh, m) {
     // m.doc() = "documentation string";
 
@@ -53,6 +66,13 @@ PYBIND11_MODULE(_pygalmesh, m) {
       .def("eval", &DomainBase::eval)
       .def("get_bounding_sphere_squared_radius", &DomainBase::get_bounding_sphere_squared_radius)
       .def("get_features", &DomainBase::get_features);
+
+    // Sizing field base.
+    // shared_ptr b/c of
+    // <https://github.com/pybind/pybind11/issues/956#issuecomment-317022720>
+    py::class_<SizingFieldBase, PySizingFieldBase, std::shared_ptr<SizingFieldBase>>(m, "SizingFieldBase")
+      .def(py::init<>())
+      .def("eval", &SizingFieldBase::eval);
 
     // Domain transformations
     py::class_<Translate, DomainBase, std::shared_ptr<Translate>>(m, "Translate")
@@ -251,6 +271,24 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("facet_distance") = 0.0,
         py::arg("cell_radius_edge_ratio") = 0.0,
         py::arg("cell_size") = 0.0,
+        py::arg("verbose") = true
+        );
+    m.def(
+        "_generate_with_sizing_field", &generate_with_sizing_field,
+        py::arg("domain"),
+        py::arg("outfile"),
+        py::arg("feature_edges") = std::vector<std::vector<std::array<double, 3>>>(),
+        py::arg("bounding_sphere_radius") = 0.0,
+        py::arg("lloyd") = false,
+        py::arg("odt") = false,
+        py::arg("perturb") = true,
+        py::arg("exude") = true,
+        py::arg("edge_size") = 0.0,
+        py::arg("facet_angle") = 0.0,
+        py::arg("facet_size") = 0.0,
+        py::arg("facet_distance") = 0.0,
+        py::arg("cell_radius_edge_ratio") = 0.0,
+        py::arg("cell_size") = nullptr,
         py::arg("verbose") = true
         );
     m.def(
