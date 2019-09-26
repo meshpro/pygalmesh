@@ -121,7 +121,7 @@ generate_mesh(
 // same but with sizing field in cell_size
 // It'd be nice if we could replace this clumsy class by a simple function wrapper (like
 // domain), but CGAL expects the type FT to be present. :(
-// TODO file issue for that on <https://github.com/CGAL/cgal/issues>
+// https://github.com/CGAL/cgal/issues/4146
 class Sizing_field_wrapper
 {
   public:
@@ -177,6 +177,8 @@ generate_with_sizing_field(
        d,
        K::Sphere_3(CGAL::ORIGIN, bounding_sphere_radius2)
        );
+
+  // cgal_domain.detect_features();
 
   const auto native_features = translate_feature_edges(domain->get_features());
   cgal_domain.add_features(native_features.begin(), native_features.end());

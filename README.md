@@ -6,8 +6,9 @@
 [![CircleCI](https://img.shields.io/circleci/project/github/nschloe/pygalmesh/master.svg?style=flat-square)](https://circleci.com/gh/nschloe/pygalmesh/tree/master)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
 [![PyPi Version](https://img.shields.io/pypi/v/pygalmesh.svg?style=flat-square)](https://pypi.org/project/pygalmesh)
+[![Debian CI](https://badges.debian.net/badges/debian/testing/python3-pygalmesh/version.svg?style=flat-square)](https://tracker.debian.org/pkg/python3-pygalmesh)
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/pygalmesh.svg?style=flat-square&label=Stars&logo=github)](https://github.com/nschloe/pygalmesh)
-[![PyPi downloads](https://img.shields.io/pypi/dd/pygalmesh.svg?style=flat-square)](https://pypistats.org/packages/pygalmesh)
+[![PyPi downloads](https://img.shields.io/pypi/dm/pygalmesh.svg?style=flat-square)](https://pypistats.org/packages/pygalmesh)
 
 pygalmesh is a Python frontend to [CGAL](https://www.cgal.org/)'s [3D mesh generation
 capabilities](https://doc.cgal.org/latest/Mesh_3/index.html).
