@@ -38,8 +38,7 @@ jobs:
         pip install .[all]
         pip install pytest pytest-cov
     - name: Test with pytest
-      run:
-        command: pytest --cov pygalmesh
-        working_directory: test/
-    - name: Submit to codecov
-      run: bash <(curl -s https://codecov.io/bash)
+      run: |
+        cd test && pytest --cov pygalmesh
+    # - name: Submit to codecov
+    #   run: bash <(curl -s https://codecov.io/bash)
