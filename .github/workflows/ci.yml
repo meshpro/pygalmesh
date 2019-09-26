@@ -1,0 +1,45 @@
+name: ci
+
+on: [push]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-python@v1
+      with:
+        python-version: "3.x"
+    - uses: actions/checkout@v1
+    - name: Lint with flake8
+      run: |
+        pip install --upgrade pip
+        pip install flake8
+        flake8 .
+    - name: Lint with black
+      run: |
+        pip install black
+        black --check .
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-python@v1
+      with:
+        python-version: "3.x"
+    - uses: actions/checkout@v1
+    - name: Install dependencies
+      run: |
+        apt-get install -y git-lfs libcgal-dev libeigen3-dev python3-pip clang
+        git lfs pull
+    - name: Install package
+      run: |
+        pip install --upgrade pip
+        pip install -r test_requirements.txt
+        pip install .[all]
+        pip install pytest pytest-cov
+    - name: Test with pytest
+      run:
+        command: pytest --cov pygalmesh
+        working_directory: test/
+    - name: Submit to codecov
+      run: bash <(curl -s https://codecov.io/bash)
