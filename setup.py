@@ -43,7 +43,7 @@ ext_modules = [
         ],
         language="C++",
         include_dirs=[
-            "/usr/include/eigen3/",
+            os.environ.get("EIGEN_INCLUDE_DIR", "/usr/include/eigen3/"),
             # Path to pybind11 headers
             get_pybind_include(),
             get_pybind_include(user=True),
