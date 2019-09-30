@@ -27,10 +27,11 @@ jobs:
       with:
         python-version: "3.x"
     - uses: actions/checkout@v1
+      with:
+        lfs: true
     - name: Install dependencies
       run: |
-        sudo apt-get install -y git-lfs libcgal-dev libeigen3-dev python3-pip clang
-        git lfs pull
+        sudo apt-get install -y libcgal-dev libeigen3-dev python3-pip clang
     - name: Install package
       run: |
         pip install --upgrade pip
