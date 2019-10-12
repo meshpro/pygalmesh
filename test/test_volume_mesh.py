@@ -442,7 +442,7 @@ def test_extrude():
     assert abs(min(mesh.points[:, 0]) + 0.5) < tol
     assert abs(max(mesh.points[:, 1]) - 0.8) < tol
     assert abs(min(mesh.points[:, 1]) + 0.3) < tol
-    assert abs(max(mesh.points[:, 2]) - 1.0) < tol
+    assert abs(max(mesh.points[:, 2]) - 1.0) < 1.1e-3
     assert abs(min(mesh.points[:, 2]) + 0.0) < tol
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
