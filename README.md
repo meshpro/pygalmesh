@@ -325,17 +325,17 @@ mesh = pygalmesh.generate_volume_mesh_from_surface_mesh(
 <img src="https://nschloe.github.io/pygalmesh/liver.png" width="30%">
 
 It is also possible to generate meshes from INR voxel files, e.g.,
-[liver.inr](https://github.com/nschloe/pygalmesh/raw/gh-pages/liver.inr)
+[skull_2.9.inr](https://github.com/nschloe/pygalmesh/raw/gh-pages/skull_2.9.inr)
 either on the command line
 ```
-pygalmesh-from-inr liver.inr out.vtu --cell-size 5.0 --odt
+pygalmesh-from-inr skull_2.9.inr out.vtu --cell-size 5.0 --odt
 ```
 (see `pygalmesh-from-inr -h` for all options) or from Python
 ```python
 import pygalmesh
 
 mesh = pygalmesh.generate_from_inr(
-    "liver.inr",
+    "skull_2.9.inr",
     cell_size=5.0,
     verbose=False,
 )
