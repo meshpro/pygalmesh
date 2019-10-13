@@ -11,14 +11,7 @@ def test_inr():
     )
 
     tol = 1.0e-3
-    ref = [
-        2.031053e+02,
-        3.739508e+01,
-        2.425594e+02,
-        2.558910e+01,
-        2.300883e+02,
-        1.775010e+00,
-    ]
+    ref = [2.031053e02, 3.739508e01, 2.425594e02, 2.558910e01, 2.300883e02, 1.775010e00]
     assert abs(max(mesh.points[:, 0]) - ref[0]) < tol * ref[0]
     assert abs(min(mesh.points[:, 0]) - ref[1]) < tol * ref[1]
     assert abs(max(mesh.points[:, 1]) - ref[2]) < tol * ref[2]
@@ -27,6 +20,6 @@ def test_inr():
     assert abs(min(mesh.points[:, 2]) - ref[5]) < tol * ref[5]
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
-    ref = 2.725335e+06
+    ref = 2.725335e06
     assert abs(vol - ref) < ref * 1.0e-3
     return
