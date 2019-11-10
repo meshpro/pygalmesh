@@ -41,7 +41,7 @@ jobs:
     - name: Install package
       run: |
         pip install --upgrade pip
-        pip install .[all]
+        CC="clang" pip install .[all]
         pip install pytest pytest-cov
     - name: Test with pytest
       run: |
