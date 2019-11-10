@@ -118,32 +118,6 @@ generate_mesh(
   return;
 }
 
-// same but with sizing field in cell_size
-// It'd be nice if we could replace this clumsy class by a simple function wrapper (like
-// domain), but CGAL expects the type FT to be present. :(
-// https://github.com/CGAL/cgal/issues/4146
-class Sizing_field_wrapper
-{
-  public:
-    typedef K::FT FT;
-
-    Sizing_field_wrapper(const std::shared_ptr<pygalmesh::SizingFieldBase> & cell_size):
-      cell_size_(cell_size)
-    {
-    }
-
-    virtual ~Sizing_field_wrapper() = default;
-
-    K::FT operator()(const K::Point_3& p, const int, const Mesh_domain::Index&) const
-    {
-      auto out = cell_size_->eval({p.x(), p.y(), p.z()});
-      return out;
-    }
-
-  private:
-     const std::shared_ptr<pygalmesh::SizingFieldBase> & cell_size_;
-};
-
 void
 generate_with_sizing_field(
     const std::shared_ptr<pygalmesh::DomainBase> & domain,
@@ -192,9 +166,13 @@ generate_with_sizing_field(
     // suppress output
     std::cerr.setstate(std::ios_base::failbit);
   }
+
+  Mesh_criteria criteria;
   if (cell_size) {
-    Sizing_field_wrapper size(cell_size);
-    auto criteria = Mesh_criteria(
+    const auto size = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
+      return cell_size->eval({p.x(), p.y(), p.z()});
+    };
+    criteria = Mesh_criteria(
         CGAL::parameters::edge_size=edge_size,
         CGAL::parameters::facet_angle=facet_angle,
         CGAL::parameters::facet_size=facet_size,
@@ -202,51 +180,33 @@ generate_with_sizing_field(
         CGAL::parameters::cell_radius_edge_ratio=cell_radius_edge_ratio,
         CGAL::parameters::cell_size=size
         );
-
-    // Mesh generation
-    C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
-        cgal_domain,
-        criteria,
-        lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
-        odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
-        perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
-        exude ? CGAL::parameters::exude() : CGAL::parameters::no_exude()
-        );
-    if (!verbose) {
-      std::cerr.clear();
-    }
-
-    // Output
-    std::ofstream medit_file(outfile);
-    c3t3.output_to_medit(medit_file);
-    medit_file.close();
   } else {
-    auto criteria = Mesh_criteria(
+    criteria = Mesh_criteria(
         CGAL::parameters::edge_size=edge_size,
         CGAL::parameters::facet_angle=facet_angle,
         CGAL::parameters::facet_size=facet_size,
         CGAL::parameters::facet_distance=facet_distance,
         CGAL::parameters::cell_radius_edge_ratio=cell_radius_edge_ratio
         );
-
-    // Mesh generation
-    C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
-        cgal_domain,
-        criteria,
-        lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
-        odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
-        perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
-        exude ? CGAL::parameters::exude() : CGAL::parameters::no_exude()
-        );
-    if (!verbose) {
-      std::cerr.clear();
-    }
-
-    // Output
-    std::ofstream medit_file(outfile);
-    c3t3.output_to_medit(medit_file);
-    medit_file.close();
   }
+
+  // Mesh generation
+  C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
+      cgal_domain,
+      criteria,
+      lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
+      odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
+      perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
+      exude ? CGAL::parameters::exude() : CGAL::parameters::no_exude()
+      );
+  if (!verbose) {
+    std::cerr.clear();
+  }
+
+  // Output
+  std::ofstream medit_file(outfile);
+  c3t3.output_to_medit(medit_file);
+  medit_file.close();
   return;
 }
 

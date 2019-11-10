@@ -41,22 +41,21 @@ ext_modules = [
             "src/version.cpp",
             "src/pybind11.cpp",
         ],
-        language="C++",
+        # https://github.com/pypa/setuptools/issues/1732
+        language="c++",
         include_dirs=[
             os.environ.get("EIGEN_INCLUDE_DIR", "/usr/include/eigen3/"),
             # Path to pybind11 headers
             get_pybind_include(),
             get_pybind_include(user=True),
         ],
-        # CGAL_ImageIO for generate_from_inr
-        libraries=["CGAL", "CGAL_ImageIO", "gmp", "mpfr"],
+        # no linked libraries necessary from CGAL 5.0 onwards
     )
 ]
 
 setup(
     name="pygalmesh",
     packages=find_packages(),
-    # cmdclass={'build_ext': BuildExt},
     ext_modules=ext_modules,
     version=about["__version__"],
     url=about["__url__"],
