@@ -31,7 +31,13 @@ jobs:
         lfs: true
     - name: Install dependencies
       run: |
-        sudo apt-get install -y libcgal-dev libeigen3-dev python3-pip clang
+        sudo apt-get install -y libeigen3-dev python3-pip clang
+    - name: install cgal-5 from ppa
+      run: |
+        sudo apt-get install -y software-properties-common
+        sudo apt-add-repository -y ppa:nschloe/cgal-backports
+        sudo apt update
+        sudo apt install -y libcgal-dev
     - name: Install package
       run: |
         pip install --upgrade pip

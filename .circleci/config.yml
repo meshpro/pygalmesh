@@ -19,7 +19,7 @@ jobs:
       - run: sudo apt-get install -y software-properties-common
       - run: sudo apt-add-repository -y ppa:nschloe/cgal-backports
       - run: sudo apt update
-      - run: sudo apt install -y cgal
+      - run: sudo apt install -y libcgal-dev
       #
       - run: pip3 install -U pytest pytest-cov pybind11 lxml --user
       - checkout
