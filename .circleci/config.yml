@@ -17,6 +17,7 @@ jobs:
       - run: sudo apt-get install -y git-lfs libcgal-dev libeigen3-dev clang
       # install cgal 5 from ppa
       - run: sudo apt-get install -y software-properties-common
+      - run: sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ECD154D280FEB8AC
       - run: sudo apt-add-repository -y ppa:nschloe/cgal-backports
       - run: sudo apt update
       - run: sudo apt install -y libcgal-dev
