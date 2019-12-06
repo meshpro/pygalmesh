@@ -26,8 +26,8 @@ jobs:
       - checkout
       - run: git lfs pull
       # install
-      # Use clang++ for its smaller memory footprint.
-      - run: CC="clang++" pip3 install . --user
+      # Use clang for its smaller memory footprint.
+      - run: CC="clang" pip3 install . --user --verbose
       # The actual test
       - run: 
           command: pytest
