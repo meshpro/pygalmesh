@@ -49,7 +49,7 @@ ext_modules = [
             get_pybind_include(user=True),
         ],
         # no CGAL libraries necessary from CGAL 5.0 onwards
-        libraries=["gmp", "mpfr"],
+        libraries=["stdc++", "gmp", "mpfr"],
     )
 ]
 
