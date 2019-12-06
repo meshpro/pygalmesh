@@ -118,32 +118,6 @@ generate_mesh(
   return;
 }
 
-// same but with sizing field in cell_size
-// It'd be nice if we could replace this clumsy class by a simple function wrapper (like
-// domain), but CGAL expects the type FT to be present. :(
-// https://github.com/CGAL/cgal/issues/4146
-class Sizing_field_wrapper
-{
-  public:
-    typedef K::FT FT;
-
-    Sizing_field_wrapper(const std::shared_ptr<pygalmesh::SizingFieldBase> & cell_size):
-      cell_size_(cell_size)
-    {
-    }
-
-    virtual ~Sizing_field_wrapper() = default;
-
-    K::FT operator()(const K::Point_3& p, const int, const Mesh_domain::Index&) const
-    {
-      auto out = cell_size_->eval({p.x(), p.y(), p.z()});
-      return out;
-    }
-
-  private:
-     const std::shared_ptr<pygalmesh::SizingFieldBase> & cell_size_;
-};
-
 void
 generate_with_sizing_field(
     const std::shared_ptr<pygalmesh::DomainBase> & domain,
@@ -193,7 +167,9 @@ generate_with_sizing_field(
     std::cerr.setstate(std::ios_base::failbit);
   }
   if (cell_size) {
-    Sizing_field_wrapper size(cell_size);
+    const auto size = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
+        return cell_size->eval({p.x(), p.y(), p.z()});
+    };
     auto criteria = Mesh_criteria(
         CGAL::parameters::edge_size=edge_size,
         CGAL::parameters::facet_angle=facet_angle,
