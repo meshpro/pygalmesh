@@ -48,8 +48,8 @@ ext_modules = [
             get_pybind_include(),
             get_pybind_include(user=True),
         ],
-        # CGAL_ImageIO for generate_from_inr
-        libraries=["CGAL", "CGAL_ImageIO", "gmp", "mpfr"],
+        # no CGAL libraries necessary from CGAL 5.0 onwards
+        libraries=["stdc++", "gmp", "mpfr"],
     )
 ]
 

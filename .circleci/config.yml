@@ -7,20 +7,27 @@ jobs:
     steps:
       - checkout
       - run: pip3 install -U black flake8 --user
-      - run: LC_ALL=C.UTF-8 black --check .
+      - run: black --check .
       - run: flake8 .
   build:
     working_directory: ~/work
     docker:
       - image: circleci/python:3
     steps:
-      - run: sudo apt-get install -y git-lfs libcgal-dev libeigen3-dev python3-pip clang
+      - run: sudo apt-get install -y git-lfs libeigen3-dev clang
+      # install cgal 5 from ppa
+      - run: sudo apt-get install -y software-properties-common
+      - run: sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ECD154D280FEB8AC
+      - run: sudo apt-add-repository -y ppa:nschloe/cgal-backports
+      - run: sudo apt update
+      - run: sudo apt install -y libcgal-dev
+      #
       - run: pip3 install -U pytest pytest-cov pybind11 lxml --user
       - checkout
       - run: git lfs pull
       # install
-      # Use clang++ for its smaller memory footprint.
-      - run: CC="clang++" pip3 install . --user
+      # Use clang for its smaller memory footprint.
+      - run: CC="clang" pip3 install . --user --verbose
       # The actual test
       - run: 
           command: pytest
