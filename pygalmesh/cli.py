@@ -43,7 +43,6 @@ def volume_from_surface(argv=None):
         verbose=not args.quiet,
     )
     meshio.write(args.outfile, mesh)
-    return
 
 
 def _get_volume_from_surface_parser():
@@ -157,7 +156,6 @@ def inr(argv=None):
         verbose=not args.quiet,
     )
     meshio.write(args.outfile, mesh)
-    return
 
 
 def _get_inr_parser():

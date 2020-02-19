@@ -22,4 +22,3 @@ def test_sphere():
     areas = helpers.compute_triangle_areas(mesh.points, mesh.cells["triangle"])
     surface_area = sum(areas)
     assert abs(surface_area - 4 * numpy.pi * radius ** 2) < 0.1
-    return

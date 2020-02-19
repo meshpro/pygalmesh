@@ -201,8 +201,7 @@ e.g.,
 import pygalmesh
 class Heart(pygalmesh.DomainBase):
     def __init__(self):
-        super(Heart, self).__init__()
-        return
+        super().__init__()
 
     def eval(self, x):
         return (x[0]**2 + 9.0/4.0 * x[1]**2 + x[2]**2 - 1)**3 \
@@ -272,8 +271,7 @@ import pygalmesh
 
 class Schwarz(pygalmesh.DomainBase):
     def __init__(self):
-        super(Schwarz, self).__init__()
-        return
+        super().__init__()
 
     def eval(self, x):
         x2 = numpy.cos(x[0] * 2 * numpy.pi)

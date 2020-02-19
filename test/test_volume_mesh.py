@@ -17,7 +17,6 @@ def test_ball():
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 4.0 / 3.0 * numpy.pi) < 0.15
-    return
 
 
 def test_balls_union():
@@ -55,8 +54,6 @@ def test_balls_union():
 
     assert abs(vol - ref_vol) < 0.1
 
-    return
-
 
 def test_balls_intersection():
     radius = 1.0
@@ -90,8 +87,6 @@ def test_balls_intersection():
     ref_vol = 2 * (h * numpy.pi / 6.0 * (3 * a ** 2 + h ** 2))
 
     assert abs(vol - ref_vol) < 0.1
-
-    return
 
 
 def test_balls_difference():
@@ -137,8 +132,6 @@ def test_balls_difference():
 
     assert abs(vol - ref_vol) < 0.05
 
-    return
-
 
 def test_cuboids_intersection():
     c0 = pygalmesh.Cuboid([0, 0, -0.5], [3, 3, 0.5])
@@ -172,8 +165,6 @@ def test_cuboids_intersection():
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 1.0) < 0.05
 
-    return
-
 
 def test_cuboids_union():
     c0 = pygalmesh.Cuboid([0, 0, -0.5], [3, 3, 0.5])
@@ -195,7 +186,6 @@ def test_cuboids_union():
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 12.0) < 0.1
-    return
 
 
 def test_cuboid():
@@ -212,7 +202,6 @@ def test_cuboid():
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 6.0) < tol
-    return
 
 
 def test_cone():
@@ -235,7 +224,6 @@ def test_cone():
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     ref_vol = numpy.pi * base_radius * base_radius / 3.0 * height
     assert abs(vol - ref_vol) < tol
-    return
 
 
 def test_cylinder():
@@ -259,7 +247,6 @@ def test_cylinder():
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     ref_vol = numpy.pi * radius * radius * (z1 - z0)
     assert abs(vol - ref_vol) < tol
-    return
 
 
 def test_tetrahedron():
@@ -278,7 +265,6 @@ def test_tetrahedron():
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 1.0 / 6.0) < tol
-    return
 
 
 def test_torus():
@@ -299,18 +285,16 @@ def test_torus():
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     ref_vol = (numpy.pi * minor_radius * minor_radius) * (2 * numpy.pi * major_radius)
     assert abs(vol - ref_vol) < 1.0e-1
-    return
 
 
 def test_custom_function():
     class Hyperboloid(pygalmesh.DomainBase):
         def __init__(self, edge_size):
-            super(Hyperboloid, self).__init__()
+            super().__init__()
             self.z0 = -1.0
             self.z1 = 1.0
             self.waist_radius = 0.5
             self.edge_size = edge_size
-            return
 
         def eval(self, x):
             if self.z0 < x[2] and x[2] < self.z1:
@@ -364,7 +348,6 @@ def test_custom_function():
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 2 * numpy.pi * 47.0 / 60.0) < 0.16
-    return
 
 
 def test_scaling():
@@ -382,7 +365,6 @@ def test_scaling():
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 6.0 * alpha ** 3) < tol
-    return
 
 
 def test_stretch():
@@ -401,8 +383,6 @@ def test_stretch():
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 12.0) < tol
 
-    return
-
 
 def test_rotation():
     s0 = pygalmesh.Rotate(
@@ -413,7 +393,6 @@ def test_rotation():
     tol = 1.0e-2
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 6.0) < tol
-    return
 
 
 def test_translation():
@@ -429,7 +408,6 @@ def test_translation():
     assert abs(min(mesh.points[:, 2]) + 0.0) < tol
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 6.0) < tol
-    return
 
 
 def test_extrude():
@@ -448,7 +426,6 @@ def test_extrude():
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 0.4) < tol
-    return
 
 
 def test_extrude_rotate():
@@ -469,7 +446,6 @@ def test_extrude_rotate():
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 0.4) < 0.05
-    return
 
 
 def test_ring_extrude():
@@ -490,14 +466,12 @@ def test_ring_extrude():
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 2 * numpy.pi * 0.4) < 0.05
-    return
 
 
 def test_heart():
     class Heart(pygalmesh.DomainBase):
         def __init__(self, edge_size):
-            super(Heart, self).__init__()
-            return
+            super().__init__()
 
         def eval(self, x):
             return (
@@ -524,7 +498,6 @@ def test_heart():
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     ref = 3.3180194961823872
     assert abs(vol - ref) < 1.0e-3 * ref
-    return
 
 
 def test_halfspace():
@@ -536,7 +509,6 @@ def test_halfspace():
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 1 / 750) < 1.0e-3
-    return
 
 
 def test_ball_with_sizing_field():
@@ -563,7 +535,6 @@ def test_ball_with_sizing_field():
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     assert abs(vol - 4.0 / 3.0 * numpy.pi) < 0.15
-    return
 
 
 if __name__ == "__main__":

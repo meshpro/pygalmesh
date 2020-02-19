@@ -6,8 +6,7 @@ import pygalmesh
 def test_schwarz():
     class Schwarz(pygalmesh.DomainBase):
         def __init__(self):
-            super(Schwarz, self).__init__()
-            return
+            super().__init__()
 
         def eval(self, x):
             x2 = numpy.cos(x[0] * 2 * numpy.pi)
