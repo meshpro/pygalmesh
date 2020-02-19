@@ -21,5 +21,6 @@ def test_inr():
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
     ref = 2.725335e06
-    # Debian needs 2.0e-3 here.
-    assert abs(vol - ref) < ref * 2.0e-3
+    # Debian needs 2.0e-2 here.
+    # <https://github.com/nschloe/pygalmesh/issues/60>
+    assert abs(vol - ref) < ref * 2.0e-2
