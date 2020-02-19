@@ -1,8 +1,9 @@
 import argparse
 import sys
 
-import meshio
 from _pygalmesh import _get_cgal_version
+
+import meshio
 
 from .__about__ import __copyright__, __version__
 from .main import generate_from_inr, generate_volume_mesh_from_surface_mesh

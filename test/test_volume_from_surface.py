@@ -23,5 +23,5 @@ def test_volume_from_surface():
     assert abs(max(mesh.points[:, 2]) - 0.298780230629) < tol
     assert abs(min(mesh.points[:, 2]) + 0.300472866512) < tol
 
-    vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
+    vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
     assert abs(vol - 0.044164693065) < tol
