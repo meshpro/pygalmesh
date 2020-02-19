@@ -19,7 +19,8 @@ def test_inr():
     assert abs(max(mesh.points[:, 2]) - ref[4]) < tol * ref[4]
     assert abs(min(mesh.points[:, 2]) - ref[5]) < tol * ref[5]
 
-    vol = sum(helpers.compute_volumes(mesh.points, mesh.cells["tetra"]))
+    vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
     ref = 2.725335e06
-    assert abs(vol - ref) < ref * 1.0e-3
-    return
+    # Debian needs 2.0e-2 here.
+    # <https://github.com/nschloe/pygalmesh/issues/60>
+    assert abs(vol - ref) < ref * 2.0e-2

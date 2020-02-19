@@ -10,7 +10,7 @@ with open(os.path.join(base_dir, "pygalmesh", "__about__.py"), "rb") as handle:
     exec(handle.read(), about)
 
 
-class get_pybind_include(object):
+class get_pybind_include:
     """Helper class to determine the pybind11 include path. The purpose of this class is
     to postpone importing pybind11 until it is actually installed, so that the
     ``get_include()`` method can be invoked.
@@ -63,7 +63,7 @@ setup(
     author=about["__author__"],
     author_email=about["__author_email__"],
     setup_requires=["pybind11 >= 2.2"],
-    install_requires=["meshio", "numpy", "pybind11 >= 2.2"],
+    install_requires=["meshio >= 4.0.0, < 5.0.0", "numpy", "pybind11 >= 2.2"],
     python_requires=">=3",
     description="Python frontend to CGAL's 3D mesh generation capabilities",
     long_description=read("README.md"),
@@ -73,8 +73,10 @@ setup(
         about["__status__"],
         about["__license__"],
         "Operating System :: OS Independent",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Mathematics",
         "Topic :: Scientific/Engineering :: Physics",

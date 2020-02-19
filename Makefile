@@ -8,6 +8,7 @@ tag:
 	@echo "Tagging v$(VERSION)..."
 	git tag v$(VERSION)
 	git push --tags
+	curl -H "Authorization: token `cat $(HOME)/.github-access-token`" -d '{"tag_name": "$(VERSION)"}' https://api.github.com/repos/nschloe/pygalmesh/releases
 
 upload: setup.py
 	# Make sure we're on the master branch
