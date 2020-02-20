@@ -2,6 +2,7 @@
 #include "generate.hpp"
 #include "generate_from_off.hpp"
 #include "generate_from_inr.hpp"
+#include "remesh_surface.hpp"
 #include "generate_periodic.hpp"
 #include "generate_surface_mesh.hpp"
 #include "polygon2d.hpp"
@@ -349,6 +350,16 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("facet_distance") = 0.0,
         py::arg("cell_radius_edge_ratio") = 0.0,
         py::arg("cell_size") = 0.0,
+        py::arg("verbose") = true
+        );
+    m.def(
+        "_remesh_surface", &remesh_surface,
+        py::arg("infile"),
+        py::arg("outfile"),
+        py::arg("edge_size") = 0.0,
+        py::arg("facet_angle") = 0.0,
+        py::arg("facet_size") = 0.0,
+        py::arg("facet_distance") = 0.0,
         py::arg("verbose") = true
         );
     m.def(

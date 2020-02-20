@@ -341,6 +341,30 @@ mesh = pygalmesh.generate_from_inr(
 )
 ```
 
+#### Surface remeshing
+<img src="https://nschloe.github.io/pygalmesh/lion-head.png" width="30%">
+
+pygalmesh can help remeshing an existing surface mesh, e.g.,
+[`lion-head.off`](https://github.com/nschloe/pygalmesh/raw/gh-pages/lion-head.off). On
+the command line, use
+
+```
+pygalmesh-remesh-surface lion-head.off out.vtu -e 0.025 -a 25 -s 0.1 -d 0.001
+```
+(see `pygalmesh-remesh-surface -h` for all options) or from Python
+```python
+import pygalmesh
+
+mesh = pygalmesh.remesh_surface(
+    "lion-head.off",
+    edge_size=0.025,
+    facet_angle=25,
+    facet_size=0.1,
+    facet_distance=0.001,
+    verbose=False,
+)
+```
+
 ### Installation
 
 For installation, pygalmesh needs [CGAL](https://www.cgal.org/) and
