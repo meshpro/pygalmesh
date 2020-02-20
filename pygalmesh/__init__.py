@@ -38,6 +38,7 @@ from .main import (
     generate_surface_mesh,
     generate_volume_mesh_from_surface_mesh,
     generate_with_sizing_field,
+    remesh_surface,
 )
 
 __all__ = [
@@ -76,4 +77,5 @@ __all__ = [
     "generate_surface_mesh",
     "generate_volume_mesh_from_surface_mesh",
     "generate_from_inr",
+    "remesh_surface",
 ]
