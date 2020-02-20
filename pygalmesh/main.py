@@ -8,6 +8,7 @@ from _pygalmesh import (
     _generate_periodic_mesh,
     _generate_surface_mesh,
     _generate_with_sizing_field,
+    _remesh_surface,
 )
 
 import meshio
@@ -250,5 +251,38 @@ def generate_from_inr(
     )
 
     mesh = meshio.read(outfile)
+    os.remove(outfile)
+    return mesh
+
+
+def remesh_surface(
+    filename,
+    edge_size=0.0,
+    facet_angle=0.0,
+    facet_size=0.0,
+    facet_distance=0.0,
+    verbose=True,
+):
+    mesh = meshio.read(filename)
+
+    fh, off_file = tempfile.mkstemp(suffix=".off")
+    os.close(fh)
+    meshio.write(off_file, mesh)
+
+    fh, outfile = tempfile.mkstemp(suffix=".off")
+    os.close(fh)
+
+    _remesh_surface(
+        off_file,
+        outfile,
+        edge_size=edge_size,
+        facet_angle=facet_angle,
+        facet_size=facet_size,
+        facet_distance=facet_distance,
+        verbose=verbose,
+    )
+
+    mesh = meshio.read(outfile)
+    os.remove(off_file)
     os.remove(outfile)
     return mesh

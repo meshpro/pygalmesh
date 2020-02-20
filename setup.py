@@ -38,6 +38,7 @@ ext_modules = [
             "src/generate_from_off.cpp",
             "src/generate_periodic.cpp",
             "src/generate_surface_mesh.cpp",
+            "src/remesh_surface.cpp",
             "src/version.cpp",
             "src/pybind11.cpp",
         ],
@@ -84,8 +85,9 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "pygalmesh-volume-from-surface = pygalmesh.cli:volume_from_surface",
-            "pygalmesh-from-inr = pygalmesh.cli:inr",
+            "pygalmesh-volume-from-surface = pygalmesh._cli:volume_from_surface",
+            "pygalmesh-remesh-surface = pygalmesh._cli:remesh_surface",
+            "pygalmesh-from-inr = pygalmesh._cli:inr",
         ]
     },
 )
