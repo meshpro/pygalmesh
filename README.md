@@ -404,3 +404,5 @@ pytest
 ### License
 
 pygalmesh is published under the [MIT license](https://en.wikipedia.org/wiki/MIT_License).
+
+CGAL's licenses can be obtained [here](https://www.cgal.org/license.html).

@@ -1,4 +1,3 @@
-import codecs
 import os
 
 from setuptools import Extension, find_packages, setup
@@ -23,10 +22,6 @@ class get_pybind_include:
         import pybind11
 
         return pybind11.get_include(self.user)
-
-
-def read(fname):
-    return codecs.open(os.path.join(base_dir, fname), encoding="utf-8").read()
 
 
 ext_modules = [
@@ -65,15 +60,16 @@ setup(
     author_email=about["__author_email__"],
     setup_requires=["pybind11 >= 2.2"],
     install_requires=["meshio >= 4.0.0, < 5.0.0", "numpy", "pybind11 >= 2.2"],
-    python_requires=">=3",
+    python_requires=">=3.5",
     description="Python frontend to CGAL's 3D mesh generation capabilities",
-    long_description=read("README.md"),
+    long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     license=about["__license__"],
     classifiers=[
         about["__status__"],
         about["__license__"],
         "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
