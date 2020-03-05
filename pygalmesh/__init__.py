@@ -22,15 +22,7 @@ from _pygalmesh import (
     Union,
 )
 
-from .__about__ import (
-    __author__,
-    __author_email__,
-    __copyright__,
-    __license__,
-    __maintainer__,
-    __status__,
-    __version__,
-)
+from .__about__ import __version__
 from .main import (
     generate_from_inr,
     generate_mesh,
@@ -42,13 +34,7 @@ from .main import (
 )
 
 __all__ = [
-    "__author__",
-    "__author_email__",
-    "__copyright__",
-    "__license__",
     "__version__",
-    "__maintainer__",
-    "__status__",
     #
     "DomainBase",
     "SizingFieldBase",
