@@ -1,4 +1,4 @@
-VERSION=$(shell python3 -c "import pygalmesh; print(pygalmesh.__version__)")
+VERSION=$(shell python3 -c "from configparser import ConfigParser; p = ConfigParser(); p.read('setup.cfg'); print(p['metadata']['version'])")
 
 default:
 	@echo "\"make publish\"?"
