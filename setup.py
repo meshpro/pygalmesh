@@ -1,12 +1,6 @@
 import os
 
-from setuptools import Extension, find_packages, setup
-
-# https://packaging.python.org/single_source_version/
-base_dir = os.path.abspath(os.path.dirname(__file__))
-about = {}
-with open(os.path.join(base_dir, "pygalmesh", "__about__.py"), "rb") as handle:
-    exec(handle.read(), about)
+from setuptools import Extension, setup
 
 
 class get_pybind_include:
@@ -49,41 +43,8 @@ ext_modules = [
     )
 ]
 
-setup(
-    name="pygalmesh",
-    packages=find_packages(),
-    # cmdclass={'build_ext': BuildExt},
-    ext_modules=ext_modules,
-    version=about["__version__"],
-    url=about["__url__"],
-    author=about["__author__"],
-    author_email=about["__author_email__"],
-    setup_requires=["pybind11 >= 2.2"],
-    install_requires=["meshio >= 4.0.0, < 5.0.0", "numpy", "pybind11 >= 2.2"],
-    python_requires=">=3.5",
-    description="Python frontend to CGAL's 3D mesh generation capabilities",
-    long_description=open("README.md").read(),
-    long_description_content_type="text/markdown",
-    license=about["__license__"],
-    classifiers=[
-        about["__status__"],
-        about["__license__"],
-        "Operating System :: OS Independent",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Topic :: Scientific/Engineering",
-        "Topic :: Scientific/Engineering :: Mathematics",
-        "Topic :: Scientific/Engineering :: Physics",
-        "Topic :: Scientific/Engineering :: Visualization",
-    ],
-    entry_points={
-        "console_scripts": [
-            "pygalmesh-volume-from-surface = pygalmesh._cli:volume_from_surface",
-            "pygalmesh-remesh-surface = pygalmesh._cli:remesh_surface",
-            "pygalmesh-from-inr = pygalmesh._cli:inr",
-        ]
-    },
-)
+if __name__ == "__main__":
+    setup(
+        # cmdclass={'build_ext': BuildExt},
+        ext_modules=ext_modules,
+    )

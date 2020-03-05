@@ -6,7 +6,7 @@ jobs:
       - image: circleci/python:3
     steps:
       - checkout
-      - run: pip3 install -U black flake8 --user
+      - run: pip3 install black flake8
       - run: black --check .
       - run: flake8 .
   build:
@@ -22,12 +22,12 @@ jobs:
       - run: sudo apt update
       - run: sudo apt install -y libcgal-dev
       #
-      - run: pip3 install -U pytest pytest-cov pybind11 lxml --user
+      - run: pip install pytest pytest-cov pybind11
       - checkout
       - run: git lfs pull
       # install
       # Use clang for its smaller memory footprint.
-      - run: CC="clang" pip3 install . --user --verbose
+      - run: CC="clang" pip install . --verbose
       # The actual test
       - run: 
           command: pytest
