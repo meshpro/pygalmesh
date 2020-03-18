@@ -10,7 +10,8 @@
 [![Debian CI](https://badges.debian.net/badges/debian/testing/python3-pygalmesh/version.svg?style=flat-square)](https://tracker.debian.org/pkg/python3-pygalmesh)
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/pygalmesh.svg?style=flat-square&label=Stars&logo=github)](https://github.com/nschloe/pygalmesh)
 [![PyPi downloads](https://img.shields.io/pypi/dm/pygalmesh.svg?style=flat-square)](https://pypistats.org/packages/pygalmesh)
-[![Slack](https://img.shields.io/static/v1?logo=slack&label=chat&message=on%20slack&color=4a154b&style=flat-square)](https://app.slack.com/client/TTL6Q54A3/CTLHRPYLF)
+[![Slack](https://img.shields.io/static/v1?logo=slack&label=chat&message=on%20slack&color=4a154b&style=flat-square)](https://join.slack.com/t/nschloe/shared_invite/zt-cofhrwm8-BgdrXAtVkOjnDmADROKD7A
+)
 
 pygalmesh is a Python frontend to [CGAL](https://www.cgal.org/)'s [3D mesh generation
 capabilities](https://doc.cgal.org/latest/Mesh_3/index.html).
@@ -403,6 +404,4 @@ pytest
 
 ### License
 
-pygalmesh is published under the [MIT license](https://en.wikipedia.org/wiki/MIT_License).
-
-CGAL's licenses can be obtained [here](https://www.cgal.org/license.html).
+pygalmesh is published under the [GPLv3+ license](https://www.gnu.org/licenses/gpl-3.0.en.html).
