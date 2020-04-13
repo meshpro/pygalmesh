@@ -41,8 +41,10 @@ void generate_from_off(const std::string& infile, const std::string& outfile,
   std::ifstream input(infile);
   input >> polyhedron;
   if (!input.good()) {
+    // Even if the mesh exists, it may not be valid, see
+    // <https://github.com/CGAL/cgal/issues/4632>
     std::stringstream msg;
-    msg << "Cannot read input file \"" << infile << "\"" << std::endl;
+    msg << "Invalid input file \"" << infile << "\"" << std::endl;
     throw std::runtime_error(msg.str());
   }
   input.close();

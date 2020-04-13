@@ -404,4 +404,4 @@ pytest
 
 ### License
 
-pygalmesh is published under the [GPLv3+ license](https://www.gnu.org/licenses/gpl-3.0.en.html).
+pygalmesh is published under the [GPLv3 license](https://www.gnu.org/licenses/gpl-3.0.en.html).
