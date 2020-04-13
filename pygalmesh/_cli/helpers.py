@@ -15,6 +15,6 @@ def _get_version_text():
                 sys.version_info.micro,
                 _get_cgal_version(),
             ),
-            "Copyright (c) 2016-2020, Nico Schlömer <nico.schloemer@gmail.com>"
+            "Copyright (c) 2016-2020, Nico Schlömer <nico.schloemer@gmail.com>",
         ]
     )
