@@ -5,6 +5,6 @@ except ImportError:
     import importlib_metadata as metadata
 
 try:
-    __version__ = metadata.version("optimesh")
+    __version__ = metadata.version("pygalmesh")
 except Exception:
     __version__ = "unknown"
