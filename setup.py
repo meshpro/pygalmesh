@@ -38,7 +38,7 @@ ext_modules = [
             get_pybind_include(),
             get_pybind_include(user=True),
         ],
-        extra_compile_args = ['-std=c++14'],
+        extra_compile_args=['-std=c++11'],
         # no CGAL libraries necessary from CGAL 5.0 onwards
         libraries=["stdc++", "gmp", "mpfr"],
     )
