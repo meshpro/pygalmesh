@@ -71,5 +71,5 @@ __all__ = [
     "generate_from_inr",
     "generate_from_inr_with_subdomain_sizing",
     "remesh_surface",
-    "saveinr"
+    "saveinr",
 ]
