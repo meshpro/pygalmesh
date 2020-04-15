@@ -66,6 +66,10 @@ __all__ = [
     "generate_periodic_mesh",
     "generate_surface_mesh",
     "generate_volume_mesh_from_surface_mesh",
+    "generate_from_array",
+    "generate_from_array_with_subdomain_sizing",
     "generate_from_inr",
+    "generate_from_inr_with_subdomain_sizing",
     "remesh_surface",
+    "saveinr"
 ]
