@@ -37,7 +37,7 @@ def test_from_array():
 
 def test_from_array_with_subdomain_sizing():
 
-    n = 500
+    n = 200
     shape = (n, n, n)
     h = [1.0 / s for s in shape]
     vol = np.zeros(shape, dtype=np.uint16)
