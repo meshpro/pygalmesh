@@ -342,6 +342,42 @@ mesh = pygalmesh.generate_from_inr(
 )
 ```
 
+## Meshes from numpy array representing 3D images
+<img src="https://nschloe.github.io/pygalmesh/phantom.png" width="30%">
+
+pygalmesh can help generating unstructed meshes from 3D numpy arrays.
+
+The code below creates a mesh from the 3D breast phantom from [Lou et al](http://biomedicaloptics.spiedigitallibrary.org/article.aspx?articleid=2600985) available [here](https://wustl.app.box.com/s/rqivtin0xcofjwlkz43acou8jknsbfx8/file/127108205145).
+The phantom comprises four tissue types (background, fat, fibrograndular, skin, vascular tissues). The generated mesh conforms to tissues interfaces.
+
+```python
+import pygalmesh
+import meshio
+
+Nx = 722
+Ny = 411
+Nz = 284
+h = [0.2]*3
+    
+with open('MergedPhantom.DAT', 'rb') as fid:
+    vol = np.fromfile(fid, dtype=np.uint8)
+
+vol = vol.reshape((Nx,Ny,Nz))
+
+       
+mesh = pygalmesh.generate_from_array(vol, h, facet_distance=.2, cell_size=1.)
+meshio.write('breast.vtk',mesh)
+```
+
+In addition, we can specify different mesh sizes for each tissue type. The code below sets the mesh size to  *1 mm* for the skin tissue (label `4`), *0.5 mm* for the vascular tissue (label `5`), and *2 mm* for all other tissues (`default`).
+
+```python
+cell_sizes_map = {'default': 2., 4: 1., 5: .5}
+mesh = pygalmesh.generate_from_array_with_subdomain_sizing(
+           vol, h, facet_distance=.2, cell_sizes_map=cell_sizes_map)
+meshio.write('breast_adapted.vtk',mesh)
+```
+
 #### Surface remeshing
 <img src="https://nschloe.github.io/pygalmesh/lion-head.png" width="30%">
 
