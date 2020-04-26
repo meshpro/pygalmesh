@@ -343,7 +343,8 @@ mesh = pygalmesh.generate_from_inr(
 ```
 
 #### Surface remeshing
-<img src="https://nschloe.github.io/pygalmesh/lion-head.png" width="30%">
+| <img src="https://nschloe.github.io/pygalmesh/lion-head0.png" width="100%"> | <img src="https://nschloe.github.io/pygalmesh/lion-head1.png" width="100%"> |
+|:=====:|:=====:|
 
 pygalmesh can help remeshing an existing surface mesh, e.g.,
 [`lion-head.off`](https://github.com/nschloe/pygalmesh/raw/gh-pages/lion-head.off). On
