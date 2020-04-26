@@ -349,7 +349,25 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("facet_size") = 0.0,
         py::arg("facet_distance") = 0.0,
         py::arg("cell_radius_edge_ratio") = 0.0,
-        py::arg("cell_size") = 0.0,
+		py::arg("cell_size") = 0.0,
+        py::arg("verbose") = true
+        );
+    m.def(
+        "_generate_from_inr_with_subdomain_sizing", &generate_from_inr_with_subdomain_sizing,
+        py::arg("inr_filename"),
+        py::arg("outfile"),
+        py::arg("default_cell_size"),
+		py::arg("cell_sizes"),
+		py::arg("cell_labels"),
+        py::arg("lloyd") = false,
+        py::arg("odt") = false,
+        py::arg("perturb") = true,
+        py::arg("exude") = true,
+        py::arg("edge_size") = 0.0,
+        py::arg("facet_angle") = 0.0,
+        py::arg("facet_size") = 0.0,
+        py::arg("facet_distance") = 0.0,
+        py::arg("cell_radius_edge_ratio") = 0.0,
         py::arg("verbose") = true
         );
     m.def(
