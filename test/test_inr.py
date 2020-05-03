@@ -10,7 +10,7 @@ def test_inr():
         os.path.join(this_dir, "meshes", "skull_2.9.inr"), cell_size=5.0, verbose=False
     )
 
-    tol = 1.0e-3
+    tol = 2.0e-3
     ref = [2.031053e02, 3.739508e01, 2.425594e02, 2.558910e01, 2.300883e02, 1.775010e00]
     assert abs(max(mesh.points[:, 0]) - ref[0]) < tol * ref[0]
     assert abs(min(mesh.points[:, 0]) - ref[1]) < tol * ref[1]
