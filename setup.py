@@ -31,7 +31,7 @@ ext_modules = [
             "src/version.cpp",
             "src/pybind11.cpp",
         ],
-        language="C++",
+        language="c++",
         include_dirs=[
             os.environ.get("EIGEN_INCLUDE_DIR", "/usr/include/eigen3/"),
             # Path to pybind11 headers
@@ -40,7 +40,7 @@ ext_modules = [
         ],
         extra_compile_args=["-std=c++14"],
         # no CGAL libraries necessary from CGAL 5.0 onwards
-        libraries=["stdc++", "gmp", "mpfr"],
+        libraries=["gmp", "mpfr"],
     )
 ]
 
