@@ -15,7 +15,7 @@ def test_volume_from_surface():
         verbose=False,
     )
 
-    tol = 2.0e-3
+    tol = 2.0e-2
     assert abs(max(mesh.points[:, 0]) - 0.357612477657) < tol
     assert abs(min(mesh.points[:, 0]) + 0.358747130015) < tol
     assert abs(max(mesh.points[:, 1]) - 0.496137874959) < tol
