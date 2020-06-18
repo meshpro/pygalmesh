@@ -47,9 +47,12 @@ generate_from_inr(
     const double facet_distance,
     const double cell_radius_edge_ratio,
     const double cell_size,
-    const bool verbose
+    const bool verbose,
+    const int seed
     )
 {
+  CGAL::get_default_random() = CGAL::Random(seed);
+
   CGAL::Image_3 image;
   const bool success = image.read(inr_filename.c_str());
   if (!success) {

@@ -39,7 +39,8 @@ generate_from_inr_with_subdomain_sizing(
     const double facet_size = 0.0,
     const double facet_distance = 0.0,
     const double cell_radius_edge_ratio = 0.0,
-    const bool verbose  = true
+    const bool verbose  = true,
+    const int seed = 0
     );
 
 } // namespace pygalmesh

@@ -442,6 +442,7 @@ def generate_from_array_with_subdomain_sizing(
     facet_distance=0.0,
     cell_radius_edge_ratio=0.0,
     verbose=True,
+    seed=0,
 ):
     assert vol.dtype in ["uint8", "uint16"]
     fh, inr_filename = tempfile.mkstemp(suffix=".inr")
@@ -460,6 +461,7 @@ def generate_from_array_with_subdomain_sizing(
         facet_distance,
         cell_radius_edge_ratio,
         verbose,
+        seed,
     )
     os.remove(inr_filename)
     return mesh
