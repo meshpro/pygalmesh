@@ -272,7 +272,8 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("facet_distance") = 0.0,
         py::arg("cell_radius_edge_ratio") = 0.0,
         py::arg("cell_size") = 0.0,
-        py::arg("verbose") = true
+        py::arg("verbose") = true,
+        py::arg("seed") = 0
         );
     m.def(
         "_generate_with_sizing_field", &generate_with_sizing_field,
@@ -290,7 +291,8 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("facet_distance") = 0.0,
         py::arg("cell_radius_edge_ratio") = 0.0,
         py::arg("cell_size") = nullptr,
-        py::arg("verbose") = true
+        py::arg("verbose") = true,
+        py::arg("seed") = 0
         );
     m.def(
         "_generate_periodic_mesh", &generate_periodic_mesh,
@@ -308,7 +310,8 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("cell_radius_edge_ratio") = 0.0,
         py::arg("cell_size") = 0.0,
         py::arg("number_of_copies_in_output") = 1,
-        py::arg("verbose") = true
+        py::arg("verbose") = true,
+        py::arg("seed") = 0
         );
     m.def(
         "_generate_surface_mesh", &generate_surface_mesh,
@@ -318,7 +321,8 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("angle_bound") = 0.0,
         py::arg("radius_bound") = 0.0,
         py::arg("distance_bound") = 0.0,
-        py::arg("verbose") = true
+        py::arg("verbose") = true,
+        py::arg("seed") = 0
         );
     m.def(
         "_generate_from_off", &generate_from_off,
@@ -334,7 +338,8 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("facet_distance") = 0.0,
         py::arg("cell_radius_edge_ratio") = 0.0,
         py::arg("cell_size") = 0.0,
-        py::arg("verbose") = true
+        py::arg("verbose") = true,
+        py::arg("seed") = 0
         );
     m.def(
         "_generate_from_inr", &generate_from_inr,
@@ -349,16 +354,17 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("facet_size") = 0.0,
         py::arg("facet_distance") = 0.0,
         py::arg("cell_radius_edge_ratio") = 0.0,
-		py::arg("cell_size") = 0.0,
-        py::arg("verbose") = true
+        py::arg("cell_size") = 0.0,
+        py::arg("verbose") = true,
+        py::arg("seed") = 0
         );
     m.def(
         "_generate_from_inr_with_subdomain_sizing", &generate_from_inr_with_subdomain_sizing,
         py::arg("inr_filename"),
         py::arg("outfile"),
         py::arg("default_cell_size"),
-		py::arg("cell_sizes"),
-		py::arg("cell_labels"),
+        py::arg("cell_sizes"),
+        py::arg("cell_labels"),
         py::arg("lloyd") = false,
         py::arg("odt") = false,
         py::arg("perturb") = true,
@@ -368,7 +374,8 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("facet_size") = 0.0,
         py::arg("facet_distance") = 0.0,
         py::arg("cell_radius_edge_ratio") = 0.0,
-        py::arg("verbose") = true
+        py::arg("verbose") = true,
+        py::arg("seed") = 0
         );
     m.def(
         "_remesh_surface", &remesh_surface,
@@ -378,7 +385,8 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("facet_angle") = 0.0,
         py::arg("facet_size") = 0.0,
         py::arg("facet_distance") = 0.0,
-        py::arg("verbose") = true
+        py::arg("verbose") = true,
+        py::arg("seed") = 0
         );
     m.def(
         "_get_cgal_version", &get_cgal_version
