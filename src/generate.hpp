@@ -25,7 +25,8 @@ void generate_mesh(
     const double facet_distance = 0.0,
     const double cell_radius_edge_ratio = 0.0,
     const double cell_size = 0.0,
-    const bool verbose = true
+    const bool verbose = true,
+    const int seed = 0
     );
 
 void generate_with_sizing_field(
@@ -43,7 +44,8 @@ void generate_with_sizing_field(
     const double facet_distance = 0.0,
     const double cell_radius_edge_ratio = 0.0,
     const std::shared_ptr<pygalmesh::SizingFieldBase> & cell_size = nullptr,
-    const bool verbose = true
+    const bool verbose = true,
+    const int seed = 0
     );
 
 } // namespace pygalmesh

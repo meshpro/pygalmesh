@@ -64,9 +64,12 @@ generate_periodic_mesh(
     const double cell_radius_edge_ratio,
     const double cell_size,
     const int number_of_copies_in_output,
-    const bool verbose
+    const bool verbose,
+    const int seed
     )
 {
+  CGAL::get_default_random() = CGAL::Random(seed);
+
   K::Iso_cuboid_3 cuboid(
       bounding_cuboid[0],
       bounding_cuboid[1],

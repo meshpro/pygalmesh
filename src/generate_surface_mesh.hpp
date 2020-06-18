@@ -15,7 +15,8 @@ void generate_surface_mesh(
     const double angle_bound = 0.0,
     const double radius_bound = 0.0,
     const double distance_bound = 0.0,
-    const bool verbose = true
+    const bool verbose = true,
+    const int seed = 0
     );
 
 } // namespace pygalmesh

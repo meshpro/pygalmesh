@@ -24,7 +24,8 @@ void generate_periodic_mesh(
     const double cell_radius_edge_ratio = 0.0,
     const double cell_size = 0.0,
     const int number_of_copies_in_output = 1,
-    const bool verbose = true
+    const bool verbose = true,
+    const int seed = 0
     );
 
 } // namespace pygalmesh

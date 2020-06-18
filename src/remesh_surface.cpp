@@ -31,9 +31,12 @@ remesh_surface(
     const double facet_angle,
     const double facet_size,
     const double facet_distance,
-    const bool verbose
+    const bool verbose,
+    const int seed
     )
 {
+  CGAL::get_default_random() = CGAL::Random(seed);
+
   // Load a polyhedron
   Polyhedron poly;
   std::ifstream input(infile.c_str());

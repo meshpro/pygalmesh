@@ -49,9 +49,12 @@ generate_surface_mesh(
     const double angle_bound,
     const double radius_bound,
     const double distance_bound,
-    const bool verbose
+    const bool verbose,
+    const int seed
     )
 {
+  CGAL::get_default_random() = CGAL::Random(seed);
+
   const double bounding_sphere_radius2 = bounding_sphere_radius > 0 ?
     bounding_sphere_radius*bounding_sphere_radius :
     // add a little wiggle room
