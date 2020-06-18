@@ -1,7 +1,6 @@
 import os
 import tempfile
 
-import meshio
 from _pygalmesh import (
     _generate_from_inr,
     _generate_from_inr_with_subdomain_sizing,
@@ -12,6 +11,8 @@ from _pygalmesh import (
     _generate_with_sizing_field,
     _remesh_surface,
 )
+
+import meshio
 
 
 def generate_mesh(
@@ -29,7 +30,7 @@ def generate_mesh(
     cell_radius_edge_ratio=0.0,
     cell_size=0.0,
     verbose=True,
-    seed=0
+    seed=0,
 ):
     feature_edges = [] if feature_edges is None else feature_edges
 
@@ -52,7 +53,7 @@ def generate_mesh(
         cell_radius_edge_ratio=cell_radius_edge_ratio,
         cell_size=cell_size,
         verbose=verbose,
-        seed=seed
+        seed=seed,
     )
 
     mesh = meshio.read(outfile)
