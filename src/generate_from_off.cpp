@@ -29,13 +29,24 @@ typedef CGAL::Mesh_criteria_3<Tr> Mesh_criteria;
 // To avoid verbose function and named parameters call
 using namespace CGAL::parameters;
 
-void generate_from_off(const std::string& infile, const std::string& outfile,
-                       const bool lloyd, const bool odt, const bool perturb,
-                       const bool exude, const double edge_size,
-                       const double facet_angle, const double facet_size,
-                       const double facet_distance,
-                       const double cell_radius_edge_ratio,
-                       const double cell_size, const bool verbose) {
+void generate_from_off(
+    const std::string& infile,
+    const std::string& outfile,
+    const bool lloyd,
+    const bool odt,
+    const bool perturb,
+    const bool exude,
+    const double edge_size,
+    const double facet_angle,
+    const double facet_size,
+    const double facet_distance,
+    const double cell_radius_edge_ratio,
+    const double cell_size,
+    const bool verbose,
+    const int seed
+) {
+  CGAL::get_default_random() = CGAL::Random(seed);
+
   // Create input polyhedron
   Polyhedron polyhedron;
   std::ifstream input(infile);

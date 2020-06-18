@@ -1,7 +1,6 @@
 import os
 import tempfile
 
-import meshio
 from _pygalmesh import (
     _generate_from_inr,
     _generate_from_inr_with_subdomain_sizing,
@@ -12,6 +11,8 @@ from _pygalmesh import (
     _generate_with_sizing_field,
     _remesh_surface,
 )
+
+import meshio
 
 
 def generate_mesh(
@@ -29,6 +30,7 @@ def generate_mesh(
     cell_radius_edge_ratio=0.0,
     cell_size=0.0,
     verbose=True,
+    seed=0,
 ):
     feature_edges = [] if feature_edges is None else feature_edges
 
@@ -51,6 +53,7 @@ def generate_mesh(
         cell_radius_edge_ratio=cell_radius_edge_ratio,
         cell_size=cell_size,
         verbose=verbose,
+        seed=seed,
     )
 
     mesh = meshio.read(outfile)
@@ -73,6 +76,7 @@ def generate_with_sizing_field(
     cell_radius_edge_ratio=0.0,
     cell_size=None,
     verbose=True,
+    seed=0,
 ):
     feature_edges = [] if feature_edges is None else feature_edges
 
@@ -95,6 +99,7 @@ def generate_with_sizing_field(
         cell_radius_edge_ratio=cell_radius_edge_ratio,
         cell_size=cell_size,
         verbose=verbose,
+        seed=seed,
     )
 
     mesh = meshio.read(outfile)
@@ -117,6 +122,7 @@ def generate_periodic_mesh(
     cell_size=0.0,
     number_of_copies_in_output=1,
     verbose=True,
+    seed=0,
 ):
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
     os.close(fh)
@@ -139,6 +145,7 @@ def generate_periodic_mesh(
         cell_size=cell_size,
         number_of_copies_in_output=number_of_copies_in_output,
         verbose=verbose,
+        seed=seed,
     )
 
     mesh = meshio.read(outfile)
@@ -153,6 +160,7 @@ def generate_surface_mesh(
     radius_bound=0.0,
     distance_bound=0.0,
     verbose=True,
+    seed=0,
 ):
     fh, outfile = tempfile.mkstemp(suffix=".off")
     os.close(fh)
@@ -165,6 +173,7 @@ def generate_surface_mesh(
         radius_bound=radius_bound,
         distance_bound=distance_bound,
         verbose=verbose,
+        seed=seed,
     )
 
     mesh = meshio.read(outfile)
@@ -185,6 +194,7 @@ def generate_volume_mesh_from_surface_mesh(
     cell_radius_edge_ratio=0.0,
     cell_size=0.0,
     verbose=True,
+    seed=0,
 ):
     mesh = meshio.read(filename)
 
@@ -209,6 +219,7 @@ def generate_volume_mesh_from_surface_mesh(
         cell_radius_edge_ratio=cell_radius_edge_ratio,
         cell_size=cell_size,
         verbose=verbose,
+        seed=seed,
     )
 
     mesh = meshio.read(outfile)
@@ -230,6 +241,7 @@ def generate_from_inr(
     cell_radius_edge_ratio=0.0,
     cell_size=0.0,
     verbose=True,
+    seed=0,
 ):
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
     os.close(fh)
@@ -248,6 +260,7 @@ def generate_from_inr(
         cell_radius_edge_ratio=cell_radius_edge_ratio,
         cell_size=cell_size,
         verbose=verbose,
+        seed=seed,
     )
 
     mesh = meshio.read(outfile)
@@ -268,6 +281,7 @@ def generate_from_inr_with_subdomain_sizing(
     facet_distance=0.0,
     cell_radius_edge_ratio=0.0,
     verbose=True,
+    seed=0,
 ):
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
     os.close(fh)
@@ -296,6 +310,7 @@ def generate_from_inr_with_subdomain_sizing(
         facet_distance=facet_distance,
         cell_radius_edge_ratio=cell_radius_edge_ratio,
         verbose=verbose,
+        seed=seed,
     )
 
     mesh = meshio.read(outfile)
@@ -310,6 +325,7 @@ def remesh_surface(
     facet_size=0.0,
     facet_distance=0.0,
     verbose=True,
+    seed=0,
 ):
     mesh = meshio.read(filename)
 
@@ -328,6 +344,7 @@ def remesh_surface(
         facet_size=facet_size,
         facet_distance=facet_distance,
         verbose=verbose,
+        seed=seed,
     )
 
     mesh = meshio.read(outfile)
@@ -425,6 +442,7 @@ def generate_from_array_with_subdomain_sizing(
     facet_distance=0.0,
     cell_radius_edge_ratio=0.0,
     verbose=True,
+    seed=0,
 ):
     assert vol.dtype in ["uint8", "uint16"]
     fh, inr_filename = tempfile.mkstemp(suffix=".inr")
@@ -443,6 +461,7 @@ def generate_from_array_with_subdomain_sizing(
         facet_distance,
         cell_radius_edge_ratio,
         verbose,
+        seed,
     )
     os.remove(inr_filename)
     return mesh

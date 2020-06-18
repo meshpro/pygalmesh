@@ -58,11 +58,12 @@ mesh = pygalmesh.generate_mesh(s, cell_size=0.2)
 
 # mesh.points, mesh.cells, ...
 ```
-You can write the mesh using [meshio](https://github.com/nschloe/meshio), e.g.,
+You can write the mesh with
 ```python
-import meshio
-meshio.write("out.vtk", mesh)
+mesh.write("out.vtk")
 ```
+You can use any format supported by [meshio](https://github.com/nschloe/meshio).
+
 The mesh generation comes with many more options, described
 [here](https://doc.cgal.org/latest/Mesh_3/). Try, for example,
 ```python
@@ -367,7 +368,7 @@ vol = vol.reshape((Nx,Ny,Nz))
 
        
 mesh = pygalmesh.generate_from_array(vol, h, facet_distance=.2, cell_size=1.)
-meshio.write('breast.vtk',mesh)
+mesh.write('breast.vtk')
 ```
 
 In addition, we can specify different mesh sizes for each tissue type. The code below sets the mesh size to  *1 mm* for the skin tissue (label `4`), *0.5 mm* for the vascular tissue (label `5`), and *2 mm* for all other tissues (`default`).
@@ -376,7 +377,7 @@ In addition, we can specify different mesh sizes for each tissue type. The code 
 cell_sizes_map = {'default': 2., 4: 1., 5: .5}
 mesh = pygalmesh.generate_from_array_with_subdomain_sizing(
            vol, h, facet_distance=.2, cell_sizes_map=cell_sizes_map)
-meshio.write('breast_adapted.vtk',mesh)
+mesh.write('breast_adapted.vtk')
 ```
 
 #### Surface remeshing

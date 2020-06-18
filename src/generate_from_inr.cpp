@@ -47,9 +47,12 @@ generate_from_inr(
     const double facet_distance,
     const double cell_radius_edge_ratio,
     const double cell_size,
-    const bool verbose
+    const bool verbose,
+    const int seed
     )
 {
+  CGAL::get_default_random() = CGAL::Random(seed);
+
   CGAL::Image_3 image;
   const bool success = image.read(inr_filename.c_str());
   if (!success) {
@@ -95,9 +98,9 @@ void
 generate_from_inr_with_subdomain_sizing(
     const std::string & inr_filename,
     const std::string & outfile,
-	const double default_cell_size,
+    const double default_cell_size,
     const std::vector<double> & cell_sizes,
-	const std::vector<int> & cell_labels,
+    const std::vector<int> & cell_labels,
     const bool lloyd,
     const bool odt,
     const bool perturb,
@@ -107,9 +110,12 @@ generate_from_inr_with_subdomain_sizing(
     const double facet_size,
     const double facet_distance,
     const double cell_radius_edge_ratio,
-    const bool verbose
+    const bool verbose,
+    const int seed
     )
 {
+  CGAL::get_default_random() = CGAL::Random(seed);
+
   CGAL::Image_3 image;
   const bool success = image.read(inr_filename.c_str());
   if (!success) {
@@ -120,7 +126,7 @@ generate_from_inr_with_subdomain_sizing(
   Sizing_field_cell cell_size(default_cell_size);
   const int ndimensions = 3;
   for(std::vector<double>::size_type i(0); i < cell_sizes.size(); ++i)
-	  cell_size.set_size(cell_sizes[i], ndimensions, cgal_domain.index_from_subdomain_index(cell_labels[i]));
+    cell_size.set_size(cell_sizes[i], ndimensions, cgal_domain.index_from_subdomain_index(cell_labels[i]));
 
   Mesh_criteria criteria(
       CGAL::parameters::edge_size=edge_size,

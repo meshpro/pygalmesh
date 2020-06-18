@@ -19,16 +19,17 @@ void generate_from_inr(
     const double facet_distance = 0.0,
     const double cell_radius_edge_ratio = 0.0,
     const double cell_size = 0.0,
-    const bool verbose = true
+    const bool verbose = true,
+    const int seed = 0
     );
 
 void
 generate_from_inr_with_subdomain_sizing(
     const std::string & inr_filename,
     const std::string & outfile,
-	const double default_cell_size,
+    const double default_cell_size,
     const std::vector<double> & cell_sizes,
-	const std::vector<int> & cell_labels,
+    const std::vector<int> & cell_labels,
     const bool lloyd = false,
     const bool odt = false,
     const bool perturb  = true,
@@ -38,7 +39,8 @@ generate_from_inr_with_subdomain_sizing(
     const double facet_size = 0.0,
     const double facet_distance = 0.0,
     const double cell_radius_edge_ratio = 0.0,
-    const bool verbose  = true
+    const bool verbose  = true,
+    const int seed = 0
     );
 
 } // namespace pygalmesh

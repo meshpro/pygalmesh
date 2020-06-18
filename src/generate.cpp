@@ -60,9 +60,12 @@ generate_mesh(
     const double facet_distance,
     const double cell_radius_edge_ratio,
     const double cell_size,
-    const bool verbose
+    const bool verbose,
+    const int seed
     )
 {
+  CGAL::get_default_random() = CGAL::Random(seed);
+
   const double bounding_sphere_radius2 = bounding_sphere_radius > 0 ?
     bounding_sphere_radius*bounding_sphere_radius :
     // some wiggle room
@@ -134,9 +137,12 @@ generate_with_sizing_field(
     const double facet_distance,
     const double cell_radius_edge_ratio,
     const std::shared_ptr<pygalmesh::SizingFieldBase> & cell_size,
-    const bool verbose
+    const bool verbose,
+    const int seed
     )
 {
+  CGAL::get_default_random() = CGAL::Random(seed);
+
   const double bounding_sphere_radius2 = bounding_sphere_radius > 0 ?
     bounding_sphere_radius*bounding_sphere_radius :
     // some wiggle room
