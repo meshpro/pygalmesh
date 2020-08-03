@@ -59,6 +59,7 @@ void generate_from_off(
   Polyhedron polyhedron;
   // fix the orientation of the faces of the input file
   if (reorient) {
+    std::stringstream msg;
     msg << "fixing face orientation for \"" << infile <<"\""<< std::endl;
     std::vector<K::Point_3> points;
     std::vector<std::vector<std::size_t> > polygons;
