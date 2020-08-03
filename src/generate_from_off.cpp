@@ -83,7 +83,7 @@ void generate_from_off(
       // <https://github.com/CGAL/cgal/issues/4632>
       std::stringstream msg;
       msg << "Invalid input file \"" << infile << "\"" << std::endl;
-      msg << "If this is due to wrong face orientation, retry with the option reorient=True \"" << std::endl;
+      msg << "If this is due to wrong face orientation, retry with the option --reorient \"" << std::endl;
       throw std::runtime_error(msg.str());
     }
   }
