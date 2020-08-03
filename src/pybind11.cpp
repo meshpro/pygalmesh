@@ -339,6 +339,7 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("cell_radius_edge_ratio") = 0.0,
         py::arg("cell_size") = 0.0,
         py::arg("verbose") = true,
+        py::arg("reorient") = true,
         py::arg("seed") = 0
         );
     m.def(

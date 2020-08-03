@@ -11,6 +11,13 @@
 // IO
 #include <CGAL/IO/Polyhedron_iostream.h>
 
+// for re-orientation
+#include <CGAL/Polygon_mesh_processing/orient_polygon_soup.h>
+#include <CGAL/Polygon_mesh_processing/polygon_soup_to_polygon_mesh.h>
+#include <CGAL/Polygon_mesh_processing/orientation.h>
+#include <CGAL/IO/OFF_reader.h>
+
+
 namespace pygalmesh {
 
 // Domain
@@ -43,22 +50,49 @@ void generate_from_off(
     const double cell_radius_edge_ratio,
     const double cell_size,
     const bool verbose,
+    const bool reorient,
     const int seed
 ) {
   CGAL::get_default_random() = CGAL::Random(seed);
 
-  // Create input polyhedron
-  Polyhedron polyhedron;
   std::ifstream input(infile);
-  input >> polyhedron;
-  if (!input.good()) {
-    // Even if the mesh exists, it may not be valid, see
-    // <https://github.com/CGAL/cgal/issues/4632>
-    std::stringstream msg;
-    msg << "Invalid input file \"" << infile << "\"" << std::endl;
-    throw std::runtime_error(msg.str());
+  Polyhedron polyhedron;
+  // fix the orientation of the faces of the input file
+  if (reorient) {
+    msg << "fixing face orientation for \"" << infile <<"\""<< std::endl;
+    std::vector<K::Point_3> points;
+    std::vector<std::vector<std::size_t> > polygons;
+
+    if(!input || !CGAL::read_OFF(input, points, polygons) || points.empty())
+    {
+      std::stringstream msg;
+      msg << "Cannot read .off file \"" << infile <<"\""<< std::endl;
+      throw std::runtime_error(msg.str());
+    }
+    // orient the polygons
+    CGAL::Polygon_mesh_processing::orient_polygon_soup(points, polygons);
+    // create the polyhedron
+    CGAL::Polygon_mesh_processing::polygon_soup_to_polygon_mesh(points, polygons, polyhedron);
+ 
+  } else {
+ 
+    // Create input polyhedron
+    input >> polyhedron;
+    if (!input.good()) {
+      // Even if the mesh exists, it may not be valid, see
+      // <https://github.com/CGAL/cgal/issues/4632>
+      std::stringstream msg;
+      msg << "Invalid input file \"" << infile << "\"" << std::endl;
+      msg << "If this is due to wrong face orientation, retry with the option reorient=True \"" << std::endl;
+      throw std::runtime_error(msg.str());
+    }
   }
+
   input.close();
+
+  // NB: cgal has a check here to see if the input geometry is triangulated
+  // do we want it here?
+  // ...
 
   // Create domain
   Mesh_domain cgal_domain(polyhedron);

@@ -22,6 +22,7 @@ def volume_from_surface(argv=None):
         facet_distance=args.facet_distance,
         cell_radius_edge_ratio=args.cell_radius_edge_ratio,
         cell_size=args.cell_size,
+        reorient=args.reorient,
         verbose=not args.quiet,
     )
     meshio.write(args.outfile, mesh)
@@ -99,6 +100,14 @@ def _get_volume_from_surface_parser():
         type=float,
         default=0.0,
         help="cell radius/edge ratio (default: 0.0)",
+    )
+
+    parser.add_argument(
+        "--reorient",
+        "-t",
+        action="store_true",
+        default=False,
+        help="automatically fix face orientation (default: False)",
     )
 
     parser.add_argument(
