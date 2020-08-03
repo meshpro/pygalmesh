@@ -17,6 +17,8 @@
 #include <CGAL/Polygon_mesh_processing/orientation.h>
 #include <CGAL/IO/OFF_reader.h>
 
+// for sharp features
+//#include <CGAL/Polyhedral_mesh_domain_with_features_3.h>
 
 namespace pygalmesh {
 
@@ -24,6 +26,9 @@ namespace pygalmesh {
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 typedef CGAL::Polyhedron_3<K> Polyhedron;
 typedef CGAL::Polyhedral_mesh_domain_3<Polyhedron, K> Mesh_domain;
+// for sharp features
+//typedef CGAL::Polyhedral_mesh_domain_with_features_3<K> Mesh_domain;
+//typedef CGAL::Mesh_polyhedron_3<K>::type Polyhedron;
 
 // Triangulation
 typedef CGAL::Mesh_triangulation_3<Mesh_domain>::type Tr;
@@ -74,7 +79,7 @@ void generate_from_off(
     CGAL::Polygon_mesh_processing::orient_polygon_soup(points, polygons);
     // create the polyhedron
     CGAL::Polygon_mesh_processing::polygon_soup_to_polygon_mesh(points, polygons, polyhedron);
- 
+
   } else {
  
     // Create input polyhedron
@@ -91,12 +96,12 @@ void generate_from_off(
 
   input.close();
 
-  // NB: cgal has a check here to see if the input geometry is triangulated
-  // do we want it here?
-  // ...
-
   // Create domain
   Mesh_domain cgal_domain(polyhedron);
+
+  // Get sharp features
+  // cgal_domain.detect_features();
+
 
   // Mesh criteria
   Mesh_criteria criteria(

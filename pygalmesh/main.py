@@ -194,7 +194,7 @@ def generate_volume_mesh_from_surface_mesh(
     cell_radius_edge_ratio=0.0,
     cell_size=0.0,
     verbose=True,
-    reorient=True,
+    reorient=False,
     seed=0,
 ):
     mesh = meshio.read(filename)
