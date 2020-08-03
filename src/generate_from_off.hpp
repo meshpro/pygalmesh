@@ -21,6 +21,7 @@ generate_from_off(
     const double cell_radius_edge_ratio = 0.0,
     const double cell_size = 0.0,
     const bool verbose = true,
+    const bool reorient = false,
     const int seed = 0
     );
 

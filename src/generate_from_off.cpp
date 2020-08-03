@@ -11,12 +11,24 @@
 // IO
 #include <CGAL/IO/Polyhedron_iostream.h>
 
+// for re-orientation
+#include <CGAL/Polygon_mesh_processing/orient_polygon_soup.h>
+#include <CGAL/Polygon_mesh_processing/polygon_soup_to_polygon_mesh.h>
+#include <CGAL/Polygon_mesh_processing/orientation.h>
+#include <CGAL/IO/OFF_reader.h>
+
+// for sharp features
+//#include <CGAL/Polyhedral_mesh_domain_with_features_3.h>
+
 namespace pygalmesh {
 
 // Domain
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 typedef CGAL::Polyhedron_3<K> Polyhedron;
 typedef CGAL::Polyhedral_mesh_domain_3<Polyhedron, K> Mesh_domain;
+// for sharp features
+//typedef CGAL::Polyhedral_mesh_domain_with_features_3<K> Mesh_domain;
+//typedef CGAL::Mesh_polyhedron_3<K>::type Polyhedron;
 
 // Triangulation
 typedef CGAL::Mesh_triangulation_3<Mesh_domain>::type Tr;
@@ -43,25 +55,53 @@ void generate_from_off(
     const double cell_radius_edge_ratio,
     const double cell_size,
     const bool verbose,
+    const bool reorient,
     const int seed
 ) {
   CGAL::get_default_random() = CGAL::Random(seed);
 
-  // Create input polyhedron
-  Polyhedron polyhedron;
   std::ifstream input(infile);
-  input >> polyhedron;
-  if (!input.good()) {
-    // Even if the mesh exists, it may not be valid, see
-    // <https://github.com/CGAL/cgal/issues/4632>
+  Polyhedron polyhedron;
+  // fix the orientation of the faces of the input file
+  if (reorient) {
     std::stringstream msg;
-    msg << "Invalid input file \"" << infile << "\"" << std::endl;
-    throw std::runtime_error(msg.str());
+    msg << "fixing face orientation for \"" << infile <<"\""<< std::endl;
+    std::vector<K::Point_3> points;
+    std::vector<std::vector<std::size_t> > polygons;
+
+    if(!input || !CGAL::read_OFF(input, points, polygons) || points.empty())
+    {
+      std::stringstream msg;
+      msg << "Cannot read .off file \"" << infile <<"\""<< std::endl;
+      throw std::runtime_error(msg.str());
+    }
+    // orient the polygons
+    CGAL::Polygon_mesh_processing::orient_polygon_soup(points, polygons);
+    // create the polyhedron
+    CGAL::Polygon_mesh_processing::polygon_soup_to_polygon_mesh(points, polygons, polyhedron);
+
+  } else {
+ 
+    // Create input polyhedron
+    input >> polyhedron;
+    if (!input.good()) {
+      // Even if the mesh exists, it may not be valid, see
+      // <https://github.com/CGAL/cgal/issues/4632>
+      std::stringstream msg;
+      msg << "Invalid input file \"" << infile << "\"" << std::endl;
+      msg << "If this is due to wrong face orientation, retry with the option --reorient \"" << std::endl;
+      throw std::runtime_error(msg.str());
+    }
   }
+
   input.close();
 
   // Create domain
   Mesh_domain cgal_domain(polyhedron);
+
+  // Get sharp features
+  // cgal_domain.detect_features();
+
 
   // Mesh criteria
   Mesh_criteria criteria(
