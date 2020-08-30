@@ -1,6 +1,7 @@
 import os
 import tempfile
 
+import meshio
 from _pygalmesh import (
     _generate_from_inr,
     _generate_from_inr_with_subdomain_sizing,
@@ -11,8 +12,6 @@ from _pygalmesh import (
     _generate_with_sizing_field,
     _remesh_surface,
 )
-
-import meshio
 
 
 def generate_mesh(

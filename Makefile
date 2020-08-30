@@ -5,15 +5,11 @@ default:
 
 tag:
 	@if [ "$(shell git rev-parse --abbrev-ref HEAD)" != "master" ]; then exit 1; fi
-	# @echo "Tagging v$(VERSION)..."
-	# git tag v$(VERSION)
-	# git push --tags
 	curl -H "Authorization: token `cat $(HOME)/.github-access-token`" -d '{"tag_name": "v$(VERSION)"}' https://api.github.com/repos/nschloe/pygalmesh/releases
 
-upload:
+upload: clean
 	# Make sure we're on the master branch
 	@if [ "$(shell git rev-parse --abbrev-ref HEAD)" != "master" ]; then exit 1; fi
-	rm -rf dist/*
 	python3 setup.py sdist
 	twine upload dist/*.tar.gz
 	# HTTPError: 400 Client Error: Binary wheel 'pygalmesh-0.2.0-cp27-cp27mu-linux_x86_64.whl' has an unsupported platform tag 'linux_x86_64'. for url: https://upload.pypi.org/legacy/
@@ -29,11 +25,9 @@ clean:
 	@rm -rf dist/
 
 format:
-	isort -rc .
+	isort .
 	black .
-
-black:
-	black .
+	blacken-docs README.md
 
 lint:
 	black --check .
