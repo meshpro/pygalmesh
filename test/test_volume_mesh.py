@@ -1,6 +1,6 @@
+import helpers
 import numpy
 
-import helpers
 import pygalmesh
 
 

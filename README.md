@@ -3,15 +3,18 @@
   <p align="center">Create high-quality 3D meshes with ease.</p>
 </p>
 
-[![CircleCI](https://img.shields.io/circleci/project/github/nschloe/pygalmesh/master.svg?style=flat-square)](https://circleci.com/gh/nschloe/pygalmesh/tree/master)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
-[![PyPI pyversions](https://img.shields.io/pypi/pyversions/pygalmesh.svg?style=flat-square)](https://pypi.org/pypi/pygalmesh/)
 [![PyPi Version](https://img.shields.io/pypi/v/pygalmesh.svg?style=flat-square)](https://pypi.org/project/pygalmesh)
 [![Anaconda Cloud](https://anaconda.org/conda-forge/pygalmesh/badges/version.svg?=style=flat-square)](https://anaconda.org/conda-forge/pygalmesh/)
 [![Debian CI](https://badges.debian.net/badges/debian/testing/python3-pygalmesh/version.svg?style=flat-square)](https://tracker.debian.org/pkg/python3-pygalmesh)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/pygalmesh.svg?style=flat-square)](https://pypi.org/pypi/pygalmesh/)
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/pygalmesh.svg?style=flat-square&label=Stars&logo=github)](https://github.com/nschloe/pygalmesh)
 [![PyPi downloads](https://img.shields.io/pypi/dm/pygalmesh.svg?style=flat-square)](https://pypistats.org/packages/pygalmesh)
+
 [![Slack](https://img.shields.io/static/v1?logo=slack&label=chat&message=on%20slack&color=4a154b&style=flat-square)](https://join.slack.com/t/nschloe/shared_invite/zt-cofhrwm8-BgdrXAtVkOjnDmADROKD7A
+
+[![CircleCI](https://img.shields.io/circleci/project/github/nschloe/pygalmesh/master.svg?style=flat-square)](https://circleci.com/gh/nschloe/pygalmesh/tree/master)
+[![LGTM](https://img.shields.io/lgtm/grade/python/github/nschloe/pygalmesh.svg?style=flat-square)](https://lgtm.com/projects/g/nschloe/pygalmesh)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
 )
 
 pygalmesh is a Python frontend to [CGAL](https://www.cgal.org/)'s [3D mesh generation
@@ -68,12 +71,7 @@ The mesh generation comes with many more options, described
 [here](https://doc.cgal.org/latest/Mesh_3/). Try, for example,
 ```python
 mesh = pygalmesh.generate_mesh(
-    s,
-    cell_size=0.2,
-    edge_size=0.1,
-    odt=True,
-    lloyd=True,
-    verbose=False
+    s, cell_size=0.2, edge_size=0.1, odt=True, lloyd=True, verbose=False
 )
 ```
 
@@ -86,10 +84,7 @@ cylinders, and tetrahedra. Try for example
 import pygalmesh
 
 s0 = pygalmesh.Tetrahedron(
-    [0.0, 0.0, 0.0],
-    [1.0, 0.0, 0.0],
-    [0.0, 1.0, 0.0],
-    [0.0, 0.0, 1.0]
+    [0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]
 )
 mesh = pygalmesh.generate_mesh(s0, cell_size=0.1, edge_size=0.1)
 ```
@@ -111,16 +106,13 @@ u = pygalmesh.Difference(s0, s1)
 ```
 To sharpen the intersection circle, add it as a feature edge polygon line, e.g.,
 ```python
-a = numpy.sqrt(radius**2 - displacement**2)
+a = numpy.sqrt(radius ** 2 - displacement ** 2)
 edge_size = 0.15
-n = int(2*numpy.pi*a / edge_size)
+n = int(2 * numpy.pi * a / edge_size)
 circ = [
-    [
-        0.0,
-        a * numpy.cos(i * 2*numpy.pi / n),
-        a * numpy.sin(i * 2*numpy.pi / n)
-    ] for i in range(n)
-    ]
+    [0.0, a * numpy.cos(i * 2 * numpy.pi / n), a * numpy.sin(i * 2 * numpy.pi / n)]
+    for i in range(n)
+]
 circ.append(circ[0])
 
 mesh = pygalmesh.generate_mesh(
@@ -130,7 +122,7 @@ mesh = pygalmesh.generate_mesh(
     edge_size=edge_size,
     facet_angle=25,
     facet_size=0.15,
-    cell_radius_edge_ratio=2.0
+    cell_radius_edge_ratio=2.0,
 )
 ```
 Note that the length of the polygon legs are kept in sync with the `edge_size` of the
@@ -143,10 +135,7 @@ You can of course translate, rotate, scale, and stretch any domain. Try, for exa
 ```python
 import pygalmesh
 
-s = pygalmesh.Stretch(
-    pygalmesh.Ball([0, 0, 0], 1.0),
-    [1.0, 2.0, 0.0]
-)
+s = pygalmesh.Stretch(pygalmesh.Ball([0, 0, 0], 1.0), [1.0, 2.0, 0.0])
 
 mesh = pygalmesh.generate_mesh(s, cell_size=0.1)
 ```
@@ -161,17 +150,9 @@ import pygalmesh
 
 p = pygalmesh.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
 edge_size = 0.1
-domain = pygalmesh.Extrude(
-    p,
-    [0.0, 0.0, 1.0],
-    0.5 * 3.14159265359,
-    edge_size
-)
+domain = pygalmesh.Extrude(p, [0.0, 0.0, 1.0], 0.5 * 3.14159265359, edge_size)
 mesh = pygalmesh.generate_mesh(
-    domain,
-    cell_size=0.1,
-    edge_size=edge_size,
-    verbose=False
+    domain, cell_size=0.1, edge_size=edge_size, verbose=False
 )
 ```
 Feature edges are automatically preserved here, which is why an edge length needs to be
@@ -189,10 +170,7 @@ p = pygalmesh.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
 edge_size = 0.1
 domain = pygalmesh.RingExtrude(p, edge_size)
 mesh = pygalmesh.generate_mesh(
-    domain,
-    cell_size=0.1,
-    edge_size=edge_size,
-    verbose=False
+    domain, cell_size=0.1, edge_size=edge_size, verbose=False
 )
 ```
 
@@ -204,16 +182,22 @@ function. You simply need to subclass `pygalmesh.DomainBase` and specify a funct
 e.g.,
 ```python
 import pygalmesh
+
+
 class Heart(pygalmesh.DomainBase):
     def __init__(self):
         super().__init__()
 
     def eval(self, x):
-        return (x[0]**2 + 9.0/4.0 * x[1]**2 + x[2]**2 - 1)**3 \
-            - x[0]**2 * x[2]**3 - 9.0/80.0 * x[1]**2 * x[2]**3
+        return (
+            (x[0] ** 2 + 9.0 / 4.0 * x[1] ** 2 + x[2] ** 2 - 1) ** 3
+            - x[0] ** 2 * x[2] ** 3
+            - 9.0 / 80.0 * x[1] ** 2 * x[2] ** 3
+        )
 
     def get_bounding_sphere_squared_radius(self):
         return 10.0
+
 
 d = Heart()
 mesh = pygalmesh.generate_mesh(d, cell_size=0.1)
@@ -233,6 +217,7 @@ If you want to have local refinement, you can use
 class Field(pygalmesh.SizingFieldBase):
     def eval(self, x):
         return abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5 + 0.025
+
 
 mesh = pygalmesh.generate_with_sizing_field(
     pygalmesh.Ball([0.0, 0.0, 0.0], 1.0),
@@ -254,10 +239,7 @@ import pygalmesh
 
 s = pygalmesh.Ball([0, 0, 0], 1.0)
 mesh = pygalmesh.generate_surface_mesh(
-    s,
-    angle_bound=30,
-    radius_bound=0.1,
-    distance_bound=0.1
+    s, angle_bound=30, radius_bound=0.1, distance_bound=0.1
 )
 ```
 Refer to [CGAL's
@@ -274,6 +256,7 @@ output (1, 2, 4, or 8). Example:
 ```python
 import pygalmesh
 
+
 class Schwarz(pygalmesh.DomainBase):
     def __init__(self):
         super().__init__()
@@ -283,6 +266,7 @@ class Schwarz(pygalmesh.DomainBase):
         y2 = numpy.cos(x[1] * 2 * numpy.pi)
         z2 = numpy.cos(x[2] * 2 * numpy.pi)
         return x2 + y2 + z2
+
 
 mesh = pygalmesh.generate_periodic_mesh(
     Schwarz(),
@@ -295,7 +279,7 @@ mesh = pygalmesh.generate_periodic_mesh(
     number_of_copies_in_output=4,
     # odt=True,
     # lloyd=True,
-    verbose=False
+    verbose=False,
 )
 ```
 
@@ -320,7 +304,7 @@ mesh = pygalmesh.generate_volume_mesh_from_surface_mesh(
     facet_size=0.15,
     facet_distance=0.008,
     cell_radius_edge_ratio=3.0,
-    verbose=False
+    verbose=False,
 )
 ```
 
@@ -359,25 +343,26 @@ import meshio
 Nx = 722
 Ny = 411
 Nz = 284
-h = [0.2]*3
-    
-with open('MergedPhantom.DAT', 'rb') as fid:
+h = [0.2] * 3
+
+with open("MergedPhantom.DAT", "rb") as fid:
     vol = np.fromfile(fid, dtype=np.uint8)
 
-vol = vol.reshape((Nx,Ny,Nz))
+vol = vol.reshape((Nx, Ny, Nz))
 
-       
-mesh = pygalmesh.generate_from_array(vol, h, facet_distance=.2, cell_size=1.)
-mesh.write('breast.vtk')
+
+mesh = pygalmesh.generate_from_array(vol, h, facet_distance=0.2, cell_size=1.0)
+mesh.write("breast.vtk")
 ```
 
 In addition, we can specify different mesh sizes for each tissue type. The code below sets the mesh size to  *1 mm* for the skin tissue (label `4`), *0.5 mm* for the vascular tissue (label `5`), and *2 mm* for all other tissues (`default`).
 
 ```python
-cell_sizes_map = {'default': 2., 4: 1., 5: .5}
+cell_sizes_map = {"default": 2.0, 4: 1.0, 5: 0.5}
 mesh = pygalmesh.generate_from_array_with_subdomain_sizing(
-           vol, h, facet_distance=.2, cell_sizes_map=cell_sizes_map)
-mesh.write('breast_adapted.vtk')
+    vol, h, facet_distance=0.2, cell_sizes_map=cell_sizes_map
+)
+mesh.write("breast_adapted.vtk")
 ```
 
 #### Surface remeshing
