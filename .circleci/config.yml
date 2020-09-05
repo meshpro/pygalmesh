@@ -30,8 +30,10 @@ jobs:
       - run: CC="clang" pip install . --verbose
       # The actual test
       - run: 
-          command: pytest
+          command: pytest  --cov pygalmesh
           working_directory: test/
+      # submit to codecov
+      - run: bash <(curl -s https://codecov.io/bash)
 
 workflows:
   version: 2
