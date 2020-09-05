@@ -37,12 +37,9 @@ jobs:
         sudo apt-add-repository -y ppa:nschloe/cgal-backports
         sudo apt update
         sudo apt install -y libcgal-dev
-    - name: Install package
+    - name: Test with tox
       run: |
-        CC="clang" pip install .[all]
-        pip install pytest pytest-cov
-    - name: Test with pytest
-      run: |
-        cd test && pytest --cov pygalmesh
+        pip install tox
+        CC="clang" tox
     - name: Submit to codecov
       run: bash <(curl -s https://codecov.io/bash)
