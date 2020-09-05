@@ -328,7 +328,7 @@ mesh = pygalmesh.generate_from_inr(
 )
 ```
 
-## Meshes from numpy array representing 3D images
+#### Meshes from numpy arrays representing 3D images
 <img src="https://nschloe.github.io/pygalmesh/phantom.png" width="30%">
 
 pygalmesh can help generating unstructed meshes from 3D numpy arrays.
