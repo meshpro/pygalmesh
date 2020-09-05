@@ -2,11 +2,16 @@ import os
 import tempfile
 
 import meshio
-from _pygalmesh import (_generate_from_inr,
-                        _generate_from_inr_with_subdomain_sizing,
-                        _generate_from_off, _generate_mesh,
-                        _generate_periodic_mesh, _generate_surface_mesh,
-                        _generate_with_sizing_field, _remesh_surface)
+from _pygalmesh import (
+    _generate_from_inr,
+    _generate_from_inr_with_subdomain_sizing,
+    _generate_from_off,
+    _generate_mesh,
+    _generate_periodic_mesh,
+    _generate_surface_mesh,
+    _generate_with_sizing_field,
+    _remesh_surface,
+)
 
 
 def generate_mesh(
