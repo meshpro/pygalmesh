@@ -111,6 +111,8 @@ To sharpen the intersection circle, add it as a feature edge polygon line, e.g.,
 import numpy
 import pygalmesh
 
+radius = 1.0
+displacement = 0.5
 a = numpy.sqrt(radius ** 2 - displacement ** 2)
 edge_size = 0.15
 n = int(2 * numpy.pi * a / edge_size)
