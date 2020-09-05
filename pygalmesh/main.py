@@ -354,7 +354,7 @@ def remesh_surface(
     return mesh
 
 
-def saveinr(vol, h, fname):
+def save_inr(vol, h, fname):
     """
     Save a volume (described as a numpy array) to INR format.
     Code inspired by iso2mesh (http://iso2mesh.sf.net) by Q. Fang
@@ -363,24 +363,14 @@ def saveinr(vol, h, fname):
     - h: voxel sizes as list or numpy array
     - fname: filename for saving the inr file
     """
-
     fid = open(fname, "wb")
-    vol_type = vol.dtype
 
-    if vol_type == "uint8":
-        btype = "unsigned fixed"
-        bitlen = 8
-    elif vol_type == "uint16":
-        btype = "unsigned fixed"
-        bitlen = 16
-    elif vol_type == "float32":
-        btype = "float"
-        bitlen = 32
-    elif vol_type == "float64":
-        btype = "float"
-        bitlen = 64
-    else:
-        raise (vol_type)
+    btype, bitlen = {
+        "uint8": ("unsigned fixed", 8),
+        "uint16": ("unsigned fixed", 16),
+        "float32": ("float", 32),
+        "float64": ("float", 64),
+    }[vol.dtype]
 
     header = (
         "#INRIMAGE-4#{8:s}\nXDIM={0:d}\nYDIM={1:d}\nZDIM={2:d}\nVDIM=1\nTYPE={3:s}\n"
@@ -410,7 +400,7 @@ def generate_from_array(
 ):
     fh, inr_filename = tempfile.mkstemp(suffix=".inr")
     os.close(fh)
-    saveinr(vol, h, inr_filename)
+    save_inr(vol, h, inr_filename)
     mesh = generate_from_inr(
         inr_filename,
         lloyd,
@@ -448,7 +438,7 @@ def generate_from_array_with_subdomain_sizing(
     assert vol.dtype in ["uint8", "uint16"]
     fh, inr_filename = tempfile.mkstemp(suffix=".inr")
     os.close(fh)
-    saveinr(vol, h, inr_filename)
+    save_inr(vol, h, inr_filename)
     mesh = generate_from_inr_with_subdomain_sizing(
         inr_filename,
         cell_sizes_map,

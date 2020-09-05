@@ -34,7 +34,7 @@ from .main import (
     generate_volume_mesh_from_surface_mesh,
     generate_with_sizing_field,
     remesh_surface,
-    saveinr,
+    save_inr,
 )
 
 __all__ = [
@@ -71,5 +71,5 @@ __all__ = [
     "generate_from_inr",
     "generate_from_inr_with_subdomain_sizing",
     "remesh_surface",
-    "saveinr",
+    "save_inr",
 ]
