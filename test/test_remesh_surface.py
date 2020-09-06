@@ -1,4 +1,4 @@
-import os
+import pathlib
 
 import helpers
 
@@ -6,9 +6,9 @@ import pygalmesh
 
 
 def test_inr():
-    this_dir = os.path.dirname(os.path.abspath(__file__))
+    this_dir = pathlib.Path(__file__).resolve().parent
     mesh = pygalmesh.remesh_surface(
-        os.path.join(this_dir, "meshes", "lion-head.off"),
+        this_dir / "meshes" / "lion-head.off",
         edge_size=0.025,
         facet_angle=25,
         facet_size=0.1,

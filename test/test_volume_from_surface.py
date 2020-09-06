@@ -1,4 +1,4 @@
-import os
+import pathlib
 
 import helpers
 
@@ -6,9 +6,9 @@ import pygalmesh
 
 
 def test_volume_from_surface():
-    this_dir = os.path.dirname(os.path.abspath(__file__))
+    this_dir = pathlib.Path(__file__).resolve().parent
     mesh = pygalmesh.generate_volume_mesh_from_surface_mesh(
-        os.path.join(this_dir, "meshes", "elephant.vtu"),
+        this_dir / "meshes" / "elephant.vtu",
         facet_angle=25.0,
         facet_size=0.15,
         facet_distance=0.008,

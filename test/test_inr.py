@@ -1,4 +1,4 @@
-import os
+import pathlib
 
 import helpers
 
@@ -6,9 +6,9 @@ import pygalmesh
 
 
 def test_inr():
-    this_dir = os.path.dirname(os.path.abspath(__file__))
+    this_dir = pathlib.Path(__file__).resolve().parent
     mesh = pygalmesh.generate_from_inr(
-        os.path.join(this_dir, "meshes", "skull_2.9.inr"), cell_size=5.0, verbose=False
+        this_dir / "meshes", "skull_2.9.inr", cell_size=5.0, verbose=False
     )
 
     tol = 2.0e-3
