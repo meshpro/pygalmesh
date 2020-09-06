@@ -8,7 +8,7 @@ import pygalmesh
 def test_inr():
     this_dir = pathlib.Path(__file__).resolve().parent
     mesh = pygalmesh.generate_from_inr(
-        this_dir / "meshes", "skull_2.9.inr", cell_size=5.0, verbose=False
+        this_dir / "meshes" / "skull_2.9.inr", cell_size=5.0, verbose=False
     )
 
     tol = 2.0e-3
