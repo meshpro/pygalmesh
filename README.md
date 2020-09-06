@@ -222,9 +222,7 @@ to CGAL's mesh generator.
 #### Local refinement
 <img src="https://nschloe.github.io/pygalmesh/ball-local-refinement.png" width="30%">
 
-If you want to have local refinement, you can use
-`generate_with_sizing_field`. It works just like `generate_mesh` except that it takes a
-`SizingFieldBase` object as `cell_size`.
+Use `generate_mesh` with a `SizingFieldBase` object as `cell_size`.
 ```python
 import numpy
 import pygalmesh
@@ -235,7 +233,7 @@ class Field(pygalmesh.SizingFieldBase):
         return abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5 + 0.025
 
 
-mesh = pygalmesh.generate_with_sizing_field(
+mesh = pygalmesh.generate_mesh(
     pygalmesh.Ball([0.0, 0.0, 0.0], 1.0),
     facet_angle=30,
     facet_size=0.1,
