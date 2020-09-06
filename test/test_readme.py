@@ -1,7 +1,9 @@
 import pathlib
 
-import exdown
 import pytest
+
+# exdown not yet available on conda-forge
+exdown = pytest.importorskip("exdown")
 
 this_dir = pathlib.Path(__file__).resolve().parent
 
