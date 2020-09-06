@@ -204,12 +204,11 @@ def generate_from_inr(
     cell_size=0.0,
     verbose=True,
     seed=0,
-    cell_sizes_map=None,
 ):
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
     os.close(fh)
 
-    if cell_sizes_map is None:
+    if isinstance(cell_size, float):
         _generate_from_inr(
             inr_filename,
             outfile,
@@ -227,13 +226,14 @@ def generate_from_inr(
             seed=seed,
         )
     else:
-        if "default" in cell_sizes_map.keys():
-            default_cell_size = cell_sizes_map.pop("default")
+        assert isinstance(cell_size, dict)
+        if "default" in cell_size.keys():
+            default_cell_size = cell_size.pop("default")
         else:
             default_cell_size = 0.0
 
-        cell_sizes = [cell_sizes_map[k] for k in cell_sizes_map.keys()]
-        subdomain_labels = list(cell_sizes_map.keys())
+        cell_sizes = list(cell_size.values())
+        subdomain_labels = list(cell_size.keys())
 
         _generate_from_inr_with_subdomain_sizing(
             inr_filename,
@@ -333,11 +333,11 @@ def generate_from_array(
     edge_size=0.0,
     facet_angle=0.0,
     facet_size=0.0,
+    cell_size=0.0,
     facet_distance=0.0,
     cell_radius_edge_ratio=0.0,
     verbose=True,
     seed=0,
-    cell_sizes_map=None,
 ):
     assert vol.dtype in ["uint8", "uint16"]
     fh, inr_filename = tempfile.mkstemp(suffix=".inr")
@@ -354,9 +354,9 @@ def generate_from_array(
         facet_size,
         facet_distance,
         cell_radius_edge_ratio,
+        cell_size,
         verbose,
         seed,
-        cell_sizes_map=cell_sizes_map,
     )
     os.remove(inr_filename)
     return mesh
