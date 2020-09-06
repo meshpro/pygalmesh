@@ -432,9 +432,6 @@ pip install -U pygalmesh
 ```
 you can install/upgrade.
 
-[meshio](https://github.com/nschloe/meshio) (`pip install meshio`)
-can be helpful in processing the meshes.
-
 #### Manual installation
 
 For manual installation (if you're a developer or just really keen on getting
