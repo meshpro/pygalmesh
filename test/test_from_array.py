@@ -5,7 +5,6 @@ import pygalmesh
 
 
 def test_from_array():
-
     n = 200
     shape = (n, n, n)
     h = [1.0 / s for s in shape]
@@ -36,7 +35,6 @@ def test_from_array():
 
 
 def test_from_array_with_subdomain_sizing():
-
     n = 200
     shape = (n, n, n)
     h = [1.0 / s for s in shape]
@@ -46,10 +44,12 @@ def test_from_array_with_subdomain_sizing():
     vol[ii * ii + jj * jj + kk * kk < n ** 2] = 1
     vol[ii * ii + jj * jj + kk * kk < (0.5 * n) ** 2] = 2
 
-    cell_sizes_map = {1: 100 * min(h), 2: 10 * min(h)}
-
-    mesh = pygalmesh.generate_from_array_with_subdomain_sizing(
-        vol, h, cell_sizes_map=cell_sizes_map, facet_distance=min(h), verbose=False
+    mesh = pygalmesh.generate_from_array(
+        vol,
+        h,
+        cell_size={1: 100 * min(h), 2: 10 * min(h)},
+        facet_distance=min(h),
+        verbose=False,
     )
 
     tol = min(h)

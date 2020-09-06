@@ -3,6 +3,7 @@ import tempfile
 
 import meshio
 from _pygalmesh import (
+    SizingFieldBase,
     _generate_from_inr,
     _generate_from_inr_with_subdomain_sizing,
     _generate_from_off,
@@ -36,53 +37,13 @@ def generate_mesh(
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
     os.close(fh)
 
-    _generate_mesh(
-        domain,
-        outfile,
-        feature_edges=feature_edges,
-        bounding_sphere_radius=bounding_sphere_radius,
-        lloyd=lloyd,
-        odt=odt,
-        perturb=perturb,
-        exude=exude,
-        edge_size=edge_size,
-        facet_angle=facet_angle,
-        facet_size=facet_size,
-        facet_distance=facet_distance,
-        cell_radius_edge_ratio=cell_radius_edge_ratio,
-        cell_size=cell_size,
-        verbose=verbose,
-        seed=seed,
-    )
+    if isinstance(cell_size, float):
+        genfun = _generate_mesh
+    else:
+        assert isinstance(cell_size, SizingFieldBase)
+        genfun = _generate_with_sizing_field
 
-    mesh = meshio.read(outfile)
-    os.remove(outfile)
-    return mesh
-
-
-def generate_with_sizing_field(
-    domain,
-    feature_edges=None,
-    bounding_sphere_radius=0.0,
-    lloyd=False,
-    odt=False,
-    perturb=True,
-    exude=True,
-    edge_size=0.0,
-    facet_angle=0.0,
-    facet_size=0.0,
-    facet_distance=0.0,
-    cell_radius_edge_ratio=0.0,
-    cell_size=None,
-    verbose=True,
-    seed=0,
-):
-    feature_edges = [] if feature_edges is None else feature_edges
-
-    fh, outfile = tempfile.mkstemp(suffix=".mesh")
-    os.close(fh)
-
-    _generate_with_sizing_field(
+    genfun(
         domain,
         outfile,
         feature_edges=feature_edges,
@@ -247,72 +208,51 @@ def generate_from_inr(
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
     os.close(fh)
 
-    _generate_from_inr(
-        inr_filename,
-        outfile,
-        lloyd=lloyd,
-        odt=odt,
-        perturb=perturb,
-        exude=exude,
-        edge_size=edge_size,
-        facet_angle=facet_angle,
-        facet_size=facet_size,
-        facet_distance=facet_distance,
-        cell_radius_edge_ratio=cell_radius_edge_ratio,
-        cell_size=cell_size,
-        verbose=verbose,
-        seed=seed,
-    )
-
-    mesh = meshio.read(outfile)
-    os.remove(outfile)
-    return mesh
-
-
-def generate_from_inr_with_subdomain_sizing(
-    inr_filename,
-    cell_sizes_map,
-    lloyd=False,
-    odt=False,
-    perturb=True,
-    exude=True,
-    edge_size=0.0,
-    facet_angle=0.0,
-    facet_size=0.0,
-    facet_distance=0.0,
-    cell_radius_edge_ratio=0.0,
-    verbose=True,
-    seed=0,
-):
-    fh, outfile = tempfile.mkstemp(suffix=".mesh")
-    os.close(fh)
-
-    if "default" in cell_sizes_map.keys():
-        default_cell_size = cell_sizes_map.pop("default")
+    if isinstance(cell_size, float):
+        _generate_from_inr(
+            inr_filename,
+            outfile,
+            lloyd=lloyd,
+            odt=odt,
+            perturb=perturb,
+            exude=exude,
+            edge_size=edge_size,
+            facet_angle=facet_angle,
+            facet_size=facet_size,
+            facet_distance=facet_distance,
+            cell_radius_edge_ratio=cell_radius_edge_ratio,
+            cell_size=cell_size,
+            verbose=verbose,
+            seed=seed,
+        )
     else:
-        default_cell_size = 0.0
+        assert isinstance(cell_size, dict)
+        if "default" in cell_size.keys():
+            default_cell_size = cell_size.pop("default")
+        else:
+            default_cell_size = 0.0
 
-    cell_sizes = [cell_sizes_map[k] for k in cell_sizes_map.keys()]
-    subdomain_labels = list(cell_sizes_map.keys())
+        cell_sizes = list(cell_size.values())
+        subdomain_labels = list(cell_size.keys())
 
-    _generate_from_inr_with_subdomain_sizing(
-        inr_filename,
-        outfile,
-        default_cell_size,
-        cell_sizes,
-        subdomain_labels,
-        lloyd=lloyd,
-        odt=odt,
-        perturb=perturb,
-        exude=exude,
-        edge_size=edge_size,
-        facet_angle=facet_angle,
-        facet_size=facet_size,
-        facet_distance=facet_distance,
-        cell_radius_edge_ratio=cell_radius_edge_ratio,
-        verbose=verbose,
-        seed=seed,
-    )
+        _generate_from_inr_with_subdomain_sizing(
+            inr_filename,
+            outfile,
+            default_cell_size,
+            cell_sizes,
+            subdomain_labels,
+            lloyd=lloyd,
+            odt=odt,
+            perturb=perturb,
+            exude=exude,
+            edge_size=edge_size,
+            facet_angle=facet_angle,
+            facet_size=facet_size,
+            facet_distance=facet_distance,
+            cell_radius_edge_ratio=cell_radius_edge_ratio,
+            verbose=verbose,
+            seed=seed,
+        )
 
     mesh = meshio.read(outfile)
     os.remove(outfile)
@@ -354,7 +294,7 @@ def remesh_surface(
     return mesh
 
 
-def saveinr(vol, h, fname):
+def save_inr(vol, h, fname):
     """
     Save a volume (described as a numpy array) to INR format.
     Code inspired by iso2mesh (http://iso2mesh.sf.net) by Q. Fang
@@ -363,24 +303,14 @@ def saveinr(vol, h, fname):
     - h: voxel sizes as list or numpy array
     - fname: filename for saving the inr file
     """
-
     fid = open(fname, "wb")
-    vol_type = vol.dtype
 
-    if vol_type == "uint8":
-        btype = "unsigned fixed"
-        bitlen = 8
-    elif vol_type == "uint16":
-        btype = "unsigned fixed"
-        bitlen = 16
-    elif vol_type == "float32":
-        btype = "float"
-        bitlen = 32
-    elif vol_type == "float64":
-        btype = "float"
-        bitlen = 64
-    else:
-        raise (vol_type)
+    btype, bitlen = {
+        "uint8": ("unsigned fixed", 8),
+        "uint16": ("unsigned fixed", 16),
+        "float32": ("float", 32),
+        "float64": ("float", 64),
+    }[vol.dtype.name]
 
     header = (
         "#INRIMAGE-4#{8:s}\nXDIM={0:d}\nYDIM={1:d}\nZDIM={2:d}\nVDIM=1\nTYPE={3:s}\n"
@@ -403,14 +333,16 @@ def generate_from_array(
     edge_size=0.0,
     facet_angle=0.0,
     facet_size=0.0,
+    cell_size=0.0,
     facet_distance=0.0,
     cell_radius_edge_ratio=0.0,
-    cell_size=0.0,
     verbose=True,
+    seed=0,
 ):
+    assert vol.dtype in ["uint8", "uint16"]
     fh, inr_filename = tempfile.mkstemp(suffix=".inr")
     os.close(fh)
-    saveinr(vol, h, inr_filename)
+    save_inr(vol, h, inr_filename)
     mesh = generate_from_inr(
         inr_filename,
         lloyd,
@@ -423,44 +355,6 @@ def generate_from_array(
         facet_distance,
         cell_radius_edge_ratio,
         cell_size,
-        verbose,
-    )
-    os.remove(inr_filename)
-    return mesh
-
-
-def generate_from_array_with_subdomain_sizing(
-    vol,
-    h,
-    cell_sizes_map,
-    lloyd=False,
-    odt=False,
-    perturb=True,
-    exude=True,
-    edge_size=0.0,
-    facet_angle=0.0,
-    facet_size=0.0,
-    facet_distance=0.0,
-    cell_radius_edge_ratio=0.0,
-    verbose=True,
-    seed=0,
-):
-    assert vol.dtype in ["uint8", "uint16"]
-    fh, inr_filename = tempfile.mkstemp(suffix=".inr")
-    os.close(fh)
-    saveinr(vol, h, inr_filename)
-    mesh = generate_from_inr_with_subdomain_sizing(
-        inr_filename,
-        cell_sizes_map,
-        lloyd,
-        odt,
-        perturb,
-        exude,
-        edge_size,
-        facet_angle,
-        facet_size,
-        facet_distance,
-        cell_radius_edge_ratio,
         verbose,
         seed,
     )

@@ -5,7 +5,7 @@
 
 [![PyPi Version](https://img.shields.io/pypi/v/pygalmesh.svg?style=flat-square)](https://pypi.org/project/pygalmesh)
 [![Anaconda Cloud](https://anaconda.org/conda-forge/pygalmesh/badges/version.svg?=style=flat-square)](https://anaconda.org/conda-forge/pygalmesh/)
-[![Debian CI](https://badges.debian.net/badges/debian/testing/python3-pygalmesh/version.svg?style=flat-square)](https://tracker.debian.org/pkg/python3-pygalmesh)
+[![Packaging status](https://repology.org/badge/tiny-repos/pygalmesh.svg)](https://repology.org/project/pygalmesh/versions)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/pygalmesh.svg?style=flat-square)](https://pypi.org/pypi/pygalmesh/)
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/pygalmesh.svg?style=flat-square&label=Stars&logo=github)](https://github.com/nschloe/pygalmesh)
 [![PyPi downloads](https://img.shields.io/pypi/dm/pygalmesh.svg?style=flat-square)](https://pypistats.org/packages/pygalmesh)
@@ -13,7 +13,8 @@
 [![Slack](https://img.shields.io/static/v1?logo=slack&label=chat&message=on%20slack&color=4a154b&style=flat-square)](https://join.slack.com/t/nschloe/shared_invite/zt-cofhrwm8-BgdrXAtVkOjnDmADROKD7A
 )
 
-[![CircleCI](https://img.shields.io/circleci/project/github/nschloe/pygalmesh/master.svg?style=flat-square)](https://circleci.com/gh/nschloe/pygalmesh/tree/master)
+[![gh-actions](https://img.shields.io/github/workflow/status/nschloe/pygalmesh/ci?style=flat-square)](https://github.com/nschloe/pygalmesh/actions?query=workflow%3Aci)
+[![codecov](https://img.shields.io/codecov/c/github/nschloe/pygalmesh.svg?style=flat-square)](https://codecov.io/gh/nschloe/pygalmesh)
 [![LGTM](https://img.shields.io/lgtm/grade/python/github/nschloe/pygalmesh.svg?style=flat-square)](https://lgtm.com/projects/g/nschloe/pygalmesh)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
 
@@ -62,6 +63,7 @@ mesh = pygalmesh.generate_mesh(s, cell_size=0.2)
 # mesh.points, mesh.cells, ...
 ```
 You can write the mesh with
+<!--exdown-skip-->
 ```python
 mesh.write("out.vtk")
 ```
@@ -69,6 +71,7 @@ You can use any format supported by [meshio](https://github.com/nschloe/meshio).
 
 The mesh generation comes with many more options, described
 [here](https://doc.cgal.org/latest/Mesh_3/). Try, for example,
+<!--exdown-skip-->
 ```python
 mesh = pygalmesh.generate_mesh(
     s, cell_size=0.2, edge_size=0.1, odt=True, lloyd=True, verbose=False
@@ -106,6 +109,16 @@ u = pygalmesh.Difference(s0, s1)
 ```
 To sharpen the intersection circle, add it as a feature edge polygon line, e.g.,
 ```python
+import numpy
+import pygalmesh
+
+radius = 1.0
+displacement = 0.5
+s0 = pygalmesh.Ball([displacement, 0, 0], radius)
+s1 = pygalmesh.Ball([-displacement, 0, 0], radius)
+u = pygalmesh.Difference(s0, s1)
+
+# add circle
 a = numpy.sqrt(radius ** 2 - displacement ** 2)
 edge_size = 0.15
 n = int(2 * numpy.pi * a / edge_size)
@@ -209,17 +222,18 @@ to CGAL's mesh generator.
 #### Local refinement
 <img src="https://nschloe.github.io/pygalmesh/ball-local-refinement.png" width="30%">
 
-If you want to have local refinement, you can use
-`generate_with_sizing_field`. It works just like `generate_mesh` except that it takes a
-`SizingFieldBase` object as `cell_size`.
+Use `generate_mesh` with a `SizingFieldBase` object as `cell_size`.
 ```python
+import numpy
+import pygalmesh
+
 # define a cell_size function
 class Field(pygalmesh.SizingFieldBase):
     def eval(self, x):
         return abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5 + 0.025
 
 
-mesh = pygalmesh.generate_with_sizing_field(
+mesh = pygalmesh.generate_mesh(
     pygalmesh.Ball([0.0, 0.0, 0.0], 1.0),
     facet_angle=30,
     facet_size=0.1,
@@ -254,6 +268,7 @@ mesh generation](https://doc.cgal.org/latest/Periodic_3_mesh_3/index.html). Besi
 domain, one needs to specify a bounding box, and optionally the number of copies in the
 output (1, 2, 4, or 8). Example:
 ```python
+import numpy
 import pygalmesh
 
 
@@ -295,6 +310,7 @@ pygalmesh-volume-from-surface elephant.vtu out.vtk --cell-size 1.0 --odt
 (See `pygalmesh-volume-from-surface -h` for all options.)
 
 In Python, do
+<!--exdown-skip-->
 ```python
 import pygalmesh
 
@@ -318,6 +334,7 @@ either on the command line
 pygalmesh-from-inr skull_2.9.inr out.vtu --cell-size 5.0 --odt
 ```
 (see `pygalmesh-from-inr -h` for all options) or from Python
+<!--exdown-skip-->
 ```python
 import pygalmesh
 
@@ -328,14 +345,18 @@ mesh = pygalmesh.generate_from_inr(
 )
 ```
 
-## Meshes from numpy array representing 3D images
+#### Meshes from numpy arrays representing 3D images
 <img src="https://nschloe.github.io/pygalmesh/phantom.png" width="30%">
 
 pygalmesh can help generating unstructed meshes from 3D numpy arrays.
 
-The code below creates a mesh from the 3D breast phantom from [Lou et al](http://biomedicaloptics.spiedigitallibrary.org/article.aspx?articleid=2600985) available [here](https://wustl.app.box.com/s/rqivtin0xcofjwlkz43acou8jknsbfx8/file/127108205145).
-The phantom comprises four tissue types (background, fat, fibrograndular, skin, vascular tissues). The generated mesh conforms to tissues interfaces.
-
+The code below creates a mesh from the 3D breast phantom from [Lou et
+al](http://biomedicaloptics.spiedigitallibrary.org/article.aspx?articleid=2600985)
+available
+[here](https://wustl.app.box.com/s/rqivtin0xcofjwlkz43acou8jknsbfx8/file/127108205145).
+The phantom comprises four tissue types (background, fat, fibrograndular, skin, vascular
+tissues). The generated mesh conforms to tissues interfaces.
+<!--exdown-skip-->
 ```python
 import pygalmesh
 import meshio
@@ -350,17 +371,18 @@ with open("MergedPhantom.DAT", "rb") as fid:
 
 vol = vol.reshape((Nx, Ny, Nz))
 
-
 mesh = pygalmesh.generate_from_array(vol, h, facet_distance=0.2, cell_size=1.0)
 mesh.write("breast.vtk")
 ```
 
-In addition, we can specify different mesh sizes for each tissue type. The code below sets the mesh size to  *1 mm* for the skin tissue (label `4`), *0.5 mm* for the vascular tissue (label `5`), and *2 mm* for all other tissues (`default`).
+In addition, we can specify different mesh sizes for each tissue type. The code below
+sets the mesh size to  *1 mm* for the skin tissue (label `4`), *0.5 mm* for the vascular
+tissue (label `5`), and *2 mm* for all other tissues (`default`).
 
+<!--exdown-skip-->
 ```python
-cell_sizes_map = {"default": 2.0, 4: 1.0, 5: 0.5}
-mesh = pygalmesh.generate_from_array_with_subdomain_sizing(
-    vol, h, facet_distance=0.2, cell_sizes_map=cell_sizes_map
+mesh = pygalmesh.generate_from_array(
+    vol, h, facet_distance=0.2, cell_size={"default": 2.0, 4: 1.0, 5: 0.5}
 )
 mesh.write("breast_adapted.vtk")
 ```
@@ -377,6 +399,7 @@ the command line, use
 pygalmesh-remesh-surface lion-head.off out.vtu -e 0.025 -a 25 -s 0.1 -d 0.001
 ```
 (see `pygalmesh-remesh-surface -h` for all options) or from Python
+<!--exdown-skip-->
 ```python
 import pygalmesh
 
@@ -405,9 +428,6 @@ Index](https://pypi.org/project/pygalmesh/), so with
 pip install -U pygalmesh
 ```
 you can install/upgrade.
-
-[meshio](https://github.com/nschloe/meshio) (`pip install meshio`)
-can be helpful in processing the meshes.
 
 #### Manual installation
 

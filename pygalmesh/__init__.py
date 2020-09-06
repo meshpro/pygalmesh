@@ -25,16 +25,13 @@ from _pygalmesh import (
 from .__about__ import __version__
 from .main import (
     generate_from_array,
-    generate_from_array_with_subdomain_sizing,
     generate_from_inr,
-    generate_from_inr_with_subdomain_sizing,
     generate_mesh,
     generate_periodic_mesh,
     generate_surface_mesh,
     generate_volume_mesh_from_surface_mesh,
-    generate_with_sizing_field,
     remesh_surface,
-    saveinr,
+    save_inr,
 )
 
 __all__ = [
@@ -62,14 +59,11 @@ __all__ = [
     "RingExtrude",
     #
     "generate_mesh",
-    "generate_with_sizing_field",
     "generate_periodic_mesh",
     "generate_surface_mesh",
     "generate_volume_mesh_from_surface_mesh",
     "generate_from_array",
-    "generate_from_array_with_subdomain_sizing",
     "generate_from_inr",
-    "generate_from_inr_with_subdomain_sizing",
     "remesh_surface",
-    "saveinr",
+    "save_inr",
 ]
