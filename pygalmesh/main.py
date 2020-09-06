@@ -3,6 +3,7 @@ import tempfile
 
 import meshio
 from _pygalmesh import (
+    SizingFieldBase,
     _generate_from_inr,
     _generate_from_inr_with_subdomain_sizing,
     _generate_from_off,
@@ -36,53 +37,13 @@ def generate_mesh(
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
     os.close(fh)
 
-    _generate_mesh(
-        domain,
-        outfile,
-        feature_edges=feature_edges,
-        bounding_sphere_radius=bounding_sphere_radius,
-        lloyd=lloyd,
-        odt=odt,
-        perturb=perturb,
-        exude=exude,
-        edge_size=edge_size,
-        facet_angle=facet_angle,
-        facet_size=facet_size,
-        facet_distance=facet_distance,
-        cell_radius_edge_ratio=cell_radius_edge_ratio,
-        cell_size=cell_size,
-        verbose=verbose,
-        seed=seed,
-    )
+    if isinstance(cell_size, float):
+        genfun = _generate_mesh
+    else:
+        assert isinstance(cell_size, SizingFieldBase)
+        genfun = _generate_with_sizing_field
 
-    mesh = meshio.read(outfile)
-    os.remove(outfile)
-    return mesh
-
-
-def generate_with_sizing_field(
-    domain,
-    feature_edges=None,
-    bounding_sphere_radius=0.0,
-    lloyd=False,
-    odt=False,
-    perturb=True,
-    exude=True,
-    edge_size=0.0,
-    facet_angle=0.0,
-    facet_size=0.0,
-    facet_distance=0.0,
-    cell_radius_edge_ratio=0.0,
-    cell_size=None,
-    verbose=True,
-    seed=0,
-):
-    feature_edges = [] if feature_edges is None else feature_edges
-
-    fh, outfile = tempfile.mkstemp(suffix=".mesh")
-    os.close(fh)
-
-    _generate_with_sizing_field(
+    genfun(
         domain,
         outfile,
         feature_edges=feature_edges,
@@ -243,76 +204,55 @@ def generate_from_inr(
     cell_size=0.0,
     verbose=True,
     seed=0,
+    cell_sizes_map=None,
 ):
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
     os.close(fh)
 
-    _generate_from_inr(
-        inr_filename,
-        outfile,
-        lloyd=lloyd,
-        odt=odt,
-        perturb=perturb,
-        exude=exude,
-        edge_size=edge_size,
-        facet_angle=facet_angle,
-        facet_size=facet_size,
-        facet_distance=facet_distance,
-        cell_radius_edge_ratio=cell_radius_edge_ratio,
-        cell_size=cell_size,
-        verbose=verbose,
-        seed=seed,
-    )
-
-    mesh = meshio.read(outfile)
-    os.remove(outfile)
-    return mesh
-
-
-def generate_from_inr_with_subdomain_sizing(
-    inr_filename,
-    cell_sizes_map,
-    lloyd=False,
-    odt=False,
-    perturb=True,
-    exude=True,
-    edge_size=0.0,
-    facet_angle=0.0,
-    facet_size=0.0,
-    facet_distance=0.0,
-    cell_radius_edge_ratio=0.0,
-    verbose=True,
-    seed=0,
-):
-    fh, outfile = tempfile.mkstemp(suffix=".mesh")
-    os.close(fh)
-
-    if "default" in cell_sizes_map.keys():
-        default_cell_size = cell_sizes_map.pop("default")
+    if cell_sizes_map is None:
+        _generate_from_inr(
+            inr_filename,
+            outfile,
+            lloyd=lloyd,
+            odt=odt,
+            perturb=perturb,
+            exude=exude,
+            edge_size=edge_size,
+            facet_angle=facet_angle,
+            facet_size=facet_size,
+            facet_distance=facet_distance,
+            cell_radius_edge_ratio=cell_radius_edge_ratio,
+            cell_size=cell_size,
+            verbose=verbose,
+            seed=seed,
+        )
     else:
-        default_cell_size = 0.0
+        if "default" in cell_sizes_map.keys():
+            default_cell_size = cell_sizes_map.pop("default")
+        else:
+            default_cell_size = 0.0
 
-    cell_sizes = [cell_sizes_map[k] for k in cell_sizes_map.keys()]
-    subdomain_labels = list(cell_sizes_map.keys())
+        cell_sizes = [cell_sizes_map[k] for k in cell_sizes_map.keys()]
+        subdomain_labels = list(cell_sizes_map.keys())
 
-    _generate_from_inr_with_subdomain_sizing(
-        inr_filename,
-        outfile,
-        default_cell_size,
-        cell_sizes,
-        subdomain_labels,
-        lloyd=lloyd,
-        odt=odt,
-        perturb=perturb,
-        exude=exude,
-        edge_size=edge_size,
-        facet_angle=facet_angle,
-        facet_size=facet_size,
-        facet_distance=facet_distance,
-        cell_radius_edge_ratio=cell_radius_edge_ratio,
-        verbose=verbose,
-        seed=seed,
-    )
+        _generate_from_inr_with_subdomain_sizing(
+            inr_filename,
+            outfile,
+            default_cell_size,
+            cell_sizes,
+            subdomain_labels,
+            lloyd=lloyd,
+            odt=odt,
+            perturb=perturb,
+            exude=exude,
+            edge_size=edge_size,
+            facet_angle=facet_angle,
+            facet_size=facet_size,
+            facet_distance=facet_distance,
+            cell_radius_edge_ratio=cell_radius_edge_ratio,
+            verbose=verbose,
+            seed=seed,
+        )
 
     mesh = meshio.read(outfile)
     os.remove(outfile)
@@ -395,9 +335,11 @@ def generate_from_array(
     facet_size=0.0,
     facet_distance=0.0,
     cell_radius_edge_ratio=0.0,
-    cell_size=0.0,
     verbose=True,
+    seed=0,
+    cell_sizes_map=None,
 ):
+    assert vol.dtype in ["uint8", "uint16"]
     fh, inr_filename = tempfile.mkstemp(suffix=".inr")
     os.close(fh)
     save_inr(vol, h, inr_filename)
@@ -412,47 +354,9 @@ def generate_from_array(
         facet_size,
         facet_distance,
         cell_radius_edge_ratio,
-        cell_size,
-        verbose,
-    )
-    os.remove(inr_filename)
-    return mesh
-
-
-def generate_from_array_with_subdomain_sizing(
-    vol,
-    h,
-    cell_sizes_map,
-    lloyd=False,
-    odt=False,
-    perturb=True,
-    exude=True,
-    edge_size=0.0,
-    facet_angle=0.0,
-    facet_size=0.0,
-    facet_distance=0.0,
-    cell_radius_edge_ratio=0.0,
-    verbose=True,
-    seed=0,
-):
-    assert vol.dtype in ["uint8", "uint16"]
-    fh, inr_filename = tempfile.mkstemp(suffix=".inr")
-    os.close(fh)
-    save_inr(vol, h, inr_filename)
-    mesh = generate_from_inr_with_subdomain_sizing(
-        inr_filename,
-        cell_sizes_map,
-        lloyd,
-        odt,
-        perturb,
-        exude,
-        edge_size,
-        facet_angle,
-        facet_size,
-        facet_distance,
-        cell_radius_edge_ratio,
         verbose,
         seed,
+        cell_sizes_map=cell_sizes_map,
     )
     os.remove(inr_filename)
     return mesh

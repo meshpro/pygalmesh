@@ -384,7 +384,7 @@ tissue (label `5`), and *2 mm* for all other tissues (`default`).
 <!--exdown-skip-->
 ```python
 cell_sizes_map = {"default": 2.0, 4: 1.0, 5: 0.5}
-mesh = pygalmesh.generate_from_array_with_subdomain_sizing(
+mesh = pygalmesh.generate_from_array(
     vol, h, facet_distance=0.2, cell_sizes_map=cell_sizes_map
 )
 mesh.write("breast_adapted.vtk")
