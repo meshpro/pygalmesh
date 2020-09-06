@@ -310,7 +310,7 @@ def save_inr(vol, h, fname):
         "uint16": ("unsigned fixed", 16),
         "float32": ("float", 32),
         "float64": ("float", 64),
-    }[vol.dtype]
+    }[vol.dtype.name]
 
     header = (
         "#INRIMAGE-4#{8:s}\nXDIM={0:d}\nYDIM={1:d}\nZDIM={2:d}\nVDIM=1\nTYPE={3:s}\n"
