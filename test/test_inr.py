@@ -1,15 +1,29 @@
-import os
+import pathlib
+import tempfile
 
 import helpers
+import meshio
 
 import pygalmesh
 
 
 def test_inr():
-    this_dir = os.path.dirname(os.path.abspath(__file__))
-    mesh = pygalmesh.generate_from_inr(
-        os.path.join(this_dir, "meshes", "skull_2.9.inr"), cell_size=5.0, verbose=False
-    )
+    this_dir = pathlib.Path(__file__).resolve().parent
+    # mesh = pygalmesh.generate_from_inr(
+    #     this_dir / "meshes" / "skull_2.9.inr", cell_size=5.0, verbose=False
+    # )
+    with tempfile.TemporaryDirectory() as tmp:
+        out_filename = str(pathlib.Path(tmp) / "out.vtk")
+        pygalmesh._cli.inr(
+            [
+                str(this_dir / "meshes" / "skull_2.9.inr"),
+                out_filename,
+                "--cell-size",
+                "5.0",
+                "--quiet",
+            ]
+        )
+        mesh = meshio.read(out_filename)
 
     tol = 2.0e-3
     ref = [2.031053e02, 3.739508e01, 2.425594e02, 2.558910e01, 2.300883e02, 1.775010e00]

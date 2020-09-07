@@ -22,6 +22,7 @@ from _pygalmesh import (
     Union,
 )
 
+from . import _cli
 from .__about__ import __version__
 from .main import (
     generate_from_array,
@@ -36,6 +37,8 @@ from .main import (
 
 __all__ = [
     "__version__",
+    #
+    "_cli",
     #
     "DomainBase",
     "SizingFieldBase",
