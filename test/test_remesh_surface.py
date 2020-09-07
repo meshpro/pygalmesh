@@ -1,4 +1,3 @@
-import os
 import pathlib
 import tempfile
 
@@ -18,25 +17,24 @@ def test_inr():
     #     facet_distance=0.001,
     #     verbose=False,
     # )
-    fh, out_filename = tempfile.mkstemp(suffix=".vtk")
-    os.close(fh)
-    pygalmesh._cli.remesh_surface(
-        [
-            str(this_dir / "meshes" / "lion-head.off"),
-            out_filename,
-            "--edge-size",
-            "0.025",
-            "--facet-angle",
-            "25",
-            "--facet-size",
-            "0.1",
-            "--facet-distance",
-            "0.001",
-            "--quiet",
-        ]
-    )
-    mesh = meshio.read(out_filename)
-    os.remove(out_filename)
+    with tempfile.TemporaryDirectory() as tmp:
+        out_filename = str(pathlib.Path(tmp) / "out.vtk")
+        pygalmesh._cli.remesh_surface(
+            [
+                str(this_dir / "meshes" / "lion-head.off"),
+                out_filename,
+                "--edge-size",
+                "0.025",
+                "--facet-angle",
+                "25",
+                "--facet-size",
+                "0.1",
+                "--facet-distance",
+                "0.001",
+                "--quiet",
+            ]
+        )
+        mesh = meshio.read(out_filename)
 
     tol = 1.0e-3
     ref = [

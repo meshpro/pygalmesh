@@ -1,4 +1,3 @@
-import os
 import pathlib
 import tempfile
 
@@ -13,19 +12,18 @@ def test_inr():
     # mesh = pygalmesh.generate_from_inr(
     #     this_dir / "meshes" / "skull_2.9.inr", cell_size=5.0, verbose=False
     # )
-    fh, vtk_filename = tempfile.mkstemp(suffix=".vtk")
-    os.close(fh)
-    pygalmesh._cli.inr(
-        [
-            str(this_dir / "meshes" / "skull_2.9.inr"),
-            vtk_filename,
-            "--cell-size",
-            "5.0",
-            "--quiet",
-        ]
-    )
-    mesh = meshio.read(vtk_filename)
-    os.remove(vtk_filename)
+    with tempfile.TemporaryDirectory() as tmp:
+        out_filename = str(pathlib.Path(tmp) / "out.vtk")
+        pygalmesh._cli.inr(
+            [
+                str(this_dir / "meshes" / "skull_2.9.inr"),
+                out_filename,
+                "--cell-size",
+                "5.0",
+                "--quiet",
+            ]
+        )
+        mesh = meshio.read(out_filename)
 
     tol = 2.0e-3
     ref = [2.031053e02, 3.739508e01, 2.425594e02, 2.558910e01, 2.300883e02, 1.775010e00]

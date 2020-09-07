@@ -1,4 +1,3 @@
-import os
 import pathlib
 import tempfile
 
@@ -18,25 +17,24 @@ def test_volume_from_surface():
     #     cell_radius_edge_ratio=3.0,
     #     verbose=False,
     # )
-    fh, out_filename = tempfile.mkstemp(suffix=".vtk")
-    os.close(fh)
-    pygalmesh._cli.volume_from_surface(
-        [
-            str(this_dir / "meshes" / "elephant.vtu"),
-            out_filename,
-            "--facet-angle",
-            "0.5",
-            "--facet-size",
-            "0.15",
-            "--facet-distance",
-            "0.008",
-            "--cell-radius-edge-ratio",
-            "3.0",
-            "--quiet",
-        ]
-    )
-    mesh = meshio.read(out_filename)
-    os.remove(out_filename)
+    with tempfile.TemporaryDirectory() as tmp:
+        out_filename = str(pathlib.Path(tmp) / "out.vtk")
+        pygalmesh._cli.volume_from_surface(
+            [
+                str(this_dir / "meshes" / "elephant.vtu"),
+                out_filename,
+                "--facet-angle",
+                "0.5",
+                "--facet-size",
+                "0.15",
+                "--facet-distance",
+                "0.008",
+                "--cell-radius-edge-ratio",
+                "3.0",
+                "--quiet",
+            ]
+        )
+        mesh = meshio.read(out_filename)
 
     tol = 2.0e-2
     assert abs(max(mesh.points[:, 0]) - 0.357612477657) < tol
