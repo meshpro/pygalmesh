@@ -1,3 +1,4 @@
+import math
 import os
 import tempfile
 
@@ -68,8 +69,8 @@ def generate_mesh(
     return mesh
 
 
-def generate_2d(points, constraints):
-    _generate_2d(points, constraints)
+def generate_2d(points, constraints, B=math.sqrt(2), cell_size=0.0):
+    _generate_2d(points, constraints, B, cell_size)
     return
 
 
