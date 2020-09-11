@@ -3,6 +3,7 @@ include src/generate_from_inr.hpp
 include src/generate_from_off.hpp
 include src/generate_periodic.hpp
 include src/generate.hpp
+include src/generate_2d.hpp
 include src/generate_surface_mesh.hpp
 include src/polygon2d.hpp
 include src/primitives.hpp

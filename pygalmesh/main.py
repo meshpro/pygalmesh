@@ -8,6 +8,7 @@ from _pygalmesh import (
     _generate_from_inr_with_subdomain_sizing,
     _generate_from_off,
     _generate_mesh,
+    _generate_2d,
     _generate_periodic_mesh,
     _generate_surface_mesh,
     _generate_with_sizing_field,
@@ -65,6 +66,12 @@ def generate_mesh(
     mesh = meshio.read(outfile)
     os.remove(outfile)
     return mesh
+
+
+def generate_2d(points, constraints):
+    _generate_2d(points, constraints)
+    return
+
 
 
 def generate_periodic_mesh(
