@@ -20,7 +20,7 @@ typedef CGAL::Delaunay_mesh_size_criteria_2<CDT> Criteria;
 typedef CDT::Vertex_handle Vertex_handle;
 typedef CDT::Point Point;
 
-void
+std::tuple<std::vector<std::array<double, 2>>, std::vector<std::array<int, 3>>>
 generate_2d(
   const std::vector<std::array<double, 2>> & points,
   const std::vector<std::array<int, 2>> & constraints,
@@ -40,14 +40,13 @@ generate_2d(
   int k = 0;
   for (auto pt: points) {
     vertices[k] = cdt.insert(Point(pt[0], pt[1]));
-    k += 1;
+    k++;
   }
   for (auto c: constraints) {
     cdt.insert_constraint(vertices[c[0]], vertices[c[1]]);
   }
 
-  std::cout << "Number of vertices before: "
-            << cdt.number_of_vertices() << std::endl;
+  // create proper mesh
   CGAL::refine_Delaunay_mesh_2(
       cdt,
       Criteria(
@@ -55,18 +54,28 @@ generate_2d(
         cell_size
        )
       );
-  std::cout << "Number of vertices after refine_Delaunay_mesh_2: "
-            << cdt.number_of_vertices() << std::endl;
 
-  // // make it conforming Delaunay
-  // CGAL::make_conforming_Delaunay_2(cdt);
-  // std::cout << "Number of vertices after make_conforming_Delaunay_2: "
-  //           << cdt.number_of_vertices() << std::endl;
-  // // then make it conforming Gabriel
-  // CGAL::make_conforming_Gabriel_2(cdt);
-  // std::cout << "Number of vertices after make_conforming_Gabriel_2: "
-  //           << cdt.number_of_vertices() << std::endl;
+  // convert points to vector of arrays
+  std::map<Vertex_handle, int> vertex_index;
+  std::vector<std::array<double, 2>> out_points(cdt.number_of_vertices());
+  k = 0;
+  for (auto vit = cdt.vertices_begin(); vit!= cdt.vertices_end(); ++vit) {
+    out_points[k][0] = vit->point()[0];
+    out_points[k][1] = vit->point()[1];
+    vertex_index[vit] = k;
+    k++;
+  }
+
+  std::vector<std::array<int, 3>> out_cells(cdt.number_of_faces());
+  k = 0;
+  for (auto fit = cdt.faces_begin(); fit!= cdt.faces_end(); ++fit) {
+    out_cells[k][0] = vertex_index[fit->vertex(0)];
+    out_cells[k][1] = vertex_index[fit->vertex(1)];
+    out_cells[k][2] = vertex_index[fit->vertex(2)];
+    k++;
+  }
+
+  return std::make_tuple(out_points, out_cells);
 }
-
 
 } // namespace pygalmesh

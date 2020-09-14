@@ -6,7 +6,7 @@
 
 namespace pygalmesh {
 
-void
+std::tuple<std::vector<std::array<double, 2>>, std::vector<std::array<int, 3>>>
 generate_2d(
   const std::vector<std::array<double, 2>> & points,
   const std::vector<std::array<int, 2>> & constraints,

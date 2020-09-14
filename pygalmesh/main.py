@@ -3,6 +3,7 @@ import os
 import tempfile
 
 import meshio
+import numpy
 from _pygalmesh import (
     SizingFieldBase,
     _generate_from_inr,
@@ -70,9 +71,8 @@ def generate_mesh(
 
 
 def generate_2d(points, constraints, B=math.sqrt(2), cell_size=0.0):
-    _generate_2d(points, constraints, B, cell_size)
-    return
-
+    points, cells = _generate_2d(points, constraints, B, cell_size)
+    return numpy.array(points), numpy.array(cells)
 
 
 def generate_periodic_mesh(
