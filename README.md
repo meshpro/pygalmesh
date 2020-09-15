@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/nschloe/pygalmesh"><img alt="pygalmesh" src="https://nschloe.github.io/pygalmesh/pygalmesh-logo.svg" width="60%"></a>
-  <p align="center">Create high-quality 3D meshes with ease.</p>
+  <p align="center">Create high-quality meshes with ease.</p>
 </p>
 
 [![PyPi Version](https://img.shields.io/pypi/v/pygalmesh.svg?style=flat-square)](https://pypi.org/project/pygalmesh)
@@ -18,38 +18,29 @@
 [![LGTM](https://img.shields.io/lgtm/grade/python/github/nschloe/pygalmesh.svg?style=flat-square)](https://lgtm.com/projects/g/nschloe/pygalmesh)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
 
-pygalmesh is a Python frontend to [CGAL](https://www.cgal.org/)'s [3D mesh generation
-capabilities](https://doc.cgal.org/latest/Mesh_3/index.html).
-pygalmesh makes it easy to create high-quality 3D volume meshes, periodic volume meshes,
-and surface meshes.
-
-### Background
-
-CGAL offers two different approaches for mesh generation:
-
-1. Meshes defined implicitly by level sets of functions.
-2. Meshes defined by a set of bounding planes.
-
-pygalmesh provides a front-end to the first approach, which has the following advantages
-and disadvantages:
-
-* All boundary points are guaranteed to be in the level set within any specified
-  residual. This results in smooth curved surfaces.
-* Sharp intersections of subdomains (e.g., in unions or differences of sets) need to be
-  specified manually (via feature edges, see below), which can be tedious.
-
-On the other hand, the bounding-plane approach (realized by
-[mshr](https://bitbucket.org/fenics-project/mshr)), has the following properties:
-
-* Smooth, curved domains are approximated by a set of bounding planes, resulting in more
-  of less visible edges.
-* Intersections of domains can be computed automatically, so domain unions etc.  have
-  sharp edges where they belong.
-
-See [here](https://github.com/nschloe/awesome-scientific-computing#meshing) for other
-mesh generation tools.
+pygalmesh is a Python frontend to [CGAL](https://www.cgal.org/)'s
+[2D](https://doc.cgal.org/latest/Mesh_2/index.html) and [3D mesh generation
+capabilities](https://doc.cgal.org/latest/Mesh_3/index.html).  pygalmesh makes it easy
+to create high-quality 2D, 3D volume meshes, periodic volume meshes, and surface meshes.
 
 ### Examples
+
+#### 2D meshes
+<img src="https://nschloe.github.io/pygalmesh/rect.svg" width="30%">
+
+CGAL generates 2D meshes from linear contraints. 
+```python
+import numpy
+import pygalmesh
+
+points = numpy.array([[0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0]])
+constraints = [[0, 1], [1, 2], [2, 3], [3, 0]]
+
+mesh = pygalmesh.generate_2d(points, constraints, cell_size=1.0e-1, num_lloyd_steps=10)
+# mesh.points, mesh.cells
+```
+The quality of the mesh isn't very good, but can be improved with
+[optimesh](https://github.com/nschloe/optimesh).
 
 #### A simple ball
 <img src="https://nschloe.github.io/pygalmesh/ball.png" width="30%">
@@ -445,6 +436,34 @@ To run the pygalmesh unit tests, check out this repository and type
 ```
 pytest
 ```
+
+
+### Background
+
+CGAL offers two different approaches for mesh generation:
+
+1. Meshes defined implicitly by level sets of functions.
+2. Meshes defined by a set of bounding planes.
+
+pygalmesh provides a front-end to the first approach, which has the following advantages
+and disadvantages:
+
+* All boundary points are guaranteed to be in the level set within any specified
+  residual. This results in smooth curved surfaces.
+* Sharp intersections of subdomains (e.g., in unions or differences of sets) need to be
+  specified manually (via feature edges, see below), which can be tedious.
+
+On the other hand, the bounding-plane approach (realized by
+[mshr](https://bitbucket.org/fenics-project/mshr)), has the following properties:
+
+* Smooth, curved domains are approximated by a set of bounding planes, resulting in more
+  of less visible edges.
+* Intersections of domains can be computed automatically, so domain unions etc.  have
+  sharp edges where they belong.
+
+See [here](https://github.com/nschloe/awesome-scientific-computing#meshing) for other
+mesh generation tools.
+
 
 ### License
 
