@@ -1,5 +1,6 @@
 #include "domain.hpp"
 #include "generate.hpp"
+#include "generate_2d.hpp"
 #include "generate_from_off.hpp"
 #include "generate_from_inr.hpp"
 #include "remesh_surface.hpp"
@@ -274,6 +275,14 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("cell_size") = 0.0,
         py::arg("verbose") = true,
         py::arg("seed") = 0
+        );
+    m.def(
+        "_generate_2d", &generate_2d,
+        py::arg("points"),
+        py::arg("constraints"),
+        py::arg("max_circumradius_shortest_edge_ratio") = 1.41421356237,
+        py::arg("cell_size") = 0.0,
+        py::arg("num_lloyd_steps") = 0
         );
     m.def(
         "_generate_with_sizing_field", &generate_with_sizing_field,

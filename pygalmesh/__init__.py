@@ -25,6 +25,7 @@ from _pygalmesh import (
 from . import _cli
 from .__about__ import __version__
 from .main import (
+    generate_2d,
     generate_from_array,
     generate_from_inr,
     generate_mesh,
@@ -62,6 +63,7 @@ __all__ = [
     "RingExtrude",
     #
     "generate_mesh",
+    "generate_2d",
     "generate_periodic_mesh",
     "generate_surface_mesh",
     "generate_volume_mesh_from_surface_mesh",
