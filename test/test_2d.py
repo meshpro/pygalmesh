@@ -12,7 +12,7 @@ def test_2d():
     )
 
     assert mesh.points.shape == (276, 2)
-    assert mesh.cells["triangle"].shape == (486, 3)
+    assert mesh.get_cells_type("triangle").shape == (486, 3)
 
     # # show mesh
     # import matplotlib.pyplot as plt
