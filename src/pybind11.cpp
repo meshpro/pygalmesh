@@ -281,7 +281,8 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("points"),
         py::arg("constraints"),
         py::arg("max_circumradius_shortest_edge_ratio") = 1.41421356237,
-        py::arg("cell_size") = 0.0
+        py::arg("cell_size") = 0.0,
+        py::arg("num_lloyd_steps") = 0
         );
     m.def(
         "_generate_with_sizing_field", &generate_with_sizing_field,

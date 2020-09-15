@@ -6,13 +6,14 @@
 #include <CGAL/Constrained_Delaunay_triangulation_2.h>
 #include <CGAL/Delaunay_mesher_2.h>
 #include <CGAL/Delaunay_mesh_face_base_2.h>
+#include <CGAL/Delaunay_mesh_vertex_base_2.h>
 #include <CGAL/Delaunay_mesh_size_criteria_2.h>
-#include <iostream>
+#include <CGAL/lloyd_optimize_mesh_2.h>
 
 namespace pygalmesh {
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
-typedef CGAL::Triangulation_vertex_base_2<K> Vb;
+typedef CGAL::Delaunay_mesh_vertex_base_2<K> Vb;
 typedef CGAL::Delaunay_mesh_face_base_2<K> Fb;
 typedef CGAL::Triangulation_data_structure_2<Vb, Fb> Tds;
 typedef CGAL::Constrained_Delaunay_triangulation_2<K, Tds> CDT;
@@ -31,7 +32,8 @@ generate_2d(
   //   relates to the smallest angle via sin(alpha_min) = 1 / (2B)
   // cell_size is "size",
   const double max_circumradius_shortest_edge_ratio,
-  const double cell_size
+  const double cell_size,
+  const int num_lloyd_steps
 )
 {
   CDT cdt;
@@ -54,6 +56,13 @@ generate_2d(
         cell_size
        )
       );
+
+  if (num_lloyd_steps > 0) {
+    CGAL::lloyd_optimize_mesh_2(
+      cdt,
+      CGAL::parameters::max_iteration_number = num_lloyd_steps
+    );
+  }
 
   // convert points to vector of arrays
   std::map<Vertex_handle, int> vertex_index;

@@ -6,11 +6,11 @@ import meshio
 import numpy
 from _pygalmesh import (
     SizingFieldBase,
+    _generate_2d,
     _generate_from_inr,
     _generate_from_inr_with_subdomain_sizing,
     _generate_from_off,
     _generate_mesh,
-    _generate_2d,
     _generate_periodic_mesh,
     _generate_surface_mesh,
     _generate_with_sizing_field,
@@ -70,8 +70,8 @@ def generate_mesh(
     return mesh
 
 
-def generate_2d(points, constraints, B=math.sqrt(2), cell_size=0.0):
-    points, cells = _generate_2d(points, constraints, B, cell_size)
+def generate_2d(points, constraints, B=math.sqrt(2), cell_size=0.0, num_lloyd_steps=0):
+    points, cells = _generate_2d(points, constraints, B, cell_size, num_lloyd_steps)
     return numpy.array(points), numpy.array(cells)
 
 
