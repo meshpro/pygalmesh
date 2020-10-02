@@ -258,6 +258,14 @@ PYBIND11_MODULE(_pygalmesh, m) {
 
     // functions
     m.def(
+        "_generate_2d", &generate_2d,
+        py::arg("points"),
+        py::arg("constraints"),
+        py::arg("max_circumradius_shortest_edge_ratio") = 1.41421356237,
+        py::arg("cell_size") = 0.0,
+        py::arg("num_lloyd_steps") = 0
+        );
+    m.def(
         "_generate_mesh", &generate_mesh,
         py::arg("domain"),
         py::arg("outfile"),
@@ -267,39 +275,16 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("odt") = false,
         py::arg("perturb") = true,
         py::arg("exude") = true,
-        py::arg("edge_size") = 0.0,
+        py::arg("edge_size_value") = 0.0,
+        py::arg("edge_size_field") = nullptr,
         py::arg("facet_angle") = 0.0,
-        py::arg("facet_size") = 0.0,
-        py::arg("facet_distance") = 0.0,
+        py::arg("facet_size_value") = 0.0,
+        py::arg("facet_size_field") = nullptr,
+        py::arg("facet_distance_value") = 0.0,
+        py::arg("facet_distance_field") = nullptr,
         py::arg("cell_radius_edge_ratio") = 0.0,
-        py::arg("cell_size") = 0.0,
-        py::arg("verbose") = true,
-        py::arg("seed") = 0
-        );
-    m.def(
-        "_generate_2d", &generate_2d,
-        py::arg("points"),
-        py::arg("constraints"),
-        py::arg("max_circumradius_shortest_edge_ratio") = 1.41421356237,
-        py::arg("cell_size") = 0.0,
-        py::arg("num_lloyd_steps") = 0
-        );
-    m.def(
-        "_generate_with_sizing_field", &generate_with_sizing_field,
-        py::arg("domain"),
-        py::arg("outfile"),
-        py::arg("feature_edges") = std::vector<std::vector<std::array<double, 3>>>(),
-        py::arg("bounding_sphere_radius") = 0.0,
-        py::arg("lloyd") = false,
-        py::arg("odt") = false,
-        py::arg("perturb") = true,
-        py::arg("exude") = true,
-        py::arg("edge_size") = 0.0,
-        py::arg("facet_angle") = 0.0,
-        py::arg("facet_size") = 0.0,
-        py::arg("facet_distance") = 0.0,
-        py::arg("cell_radius_edge_ratio") = 0.0,
-        py::arg("cell_size") = nullptr,
+        py::arg("cell_size_value") = 0.0,
+        py::arg("cell_size_field") = nullptr,
         py::arg("verbose") = true,
         py::arg("seed") = 0
         );

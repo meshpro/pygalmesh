@@ -15,6 +15,8 @@ class SizingFieldBase
   virtual
   double
   eval(const std::array<double, 3> & x) const = 0;
+
+  double val = -1.0;
 };
 
 } // namespace pygalmesh

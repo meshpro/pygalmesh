@@ -13,7 +13,6 @@ from _pygalmesh import (
     _generate_mesh,
     _generate_periodic_mesh,
     _generate_surface_mesh,
-    _generate_with_sizing_field,
     _remesh_surface,
 )
 
@@ -40,13 +39,18 @@ def generate_mesh(
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
     os.close(fh)
 
-    if isinstance(cell_size, float):
-        genfun = _generate_mesh
-    else:
-        assert isinstance(cell_size, SizingFieldBase)
-        genfun = _generate_with_sizing_field
+    def _select(obj):
+        if isinstance(obj, float):
+            return obj, None
+        assert isinstance(obj, SizingFieldBase)
+        return -1.0, obj
 
-    genfun(
+    edge_size_value, edge_size_field = _select(edge_size)
+    facet_size_value, facet_size_field = _select(facet_size)
+    facet_distance_value, facet_distance_field = _select(facet_distance)
+    cell_size_value, cell_size_field = _select(cell_size)
+
+    _generate_mesh(
         domain,
         outfile,
         feature_edges=feature_edges,
@@ -55,12 +59,16 @@ def generate_mesh(
         odt=odt,
         perturb=perturb,
         exude=exude,
-        edge_size=edge_size,
+        edge_size_value=edge_size_value,
+        edge_size_field=edge_size_field,
         facet_angle=facet_angle,
-        facet_size=facet_size,
-        facet_distance=facet_distance,
+        facet_size_value=facet_size_value,
+        facet_size_field=facet_size_field,
+        facet_distance_value=facet_distance_value,
+        facet_distance_field=facet_distance_field,
         cell_radius_edge_ratio=cell_radius_edge_ratio,
-        cell_size=cell_size,
+        cell_size_value=cell_size_value,
+        cell_size_field=cell_size_field,
         verbose=verbose,
         seed=seed,
     )

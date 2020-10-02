@@ -54,89 +54,23 @@ generate_mesh(
     const bool odt,
     const bool perturb,
     const bool exude,
-    const double edge_size,
+    //
+    const double edge_size_value,
+    const std::shared_ptr<pygalmesh::SizingFieldBase> & edge_size_field,
+    //
     const double facet_angle,
-    const double facet_size,
-    const double facet_distance,
+    //
+    const double facet_size_value,
+    const std::shared_ptr<pygalmesh::SizingFieldBase> & facet_size_field,
+    //
+    const double facet_distance_value,
+    const std::shared_ptr<pygalmesh::SizingFieldBase> & facet_distance_field,
+    //
     const double cell_radius_edge_ratio,
-    const double cell_size,
-    const bool verbose,
-    const int seed
-    )
-{
-  CGAL::get_default_random() = CGAL::Random(seed);
-
-  const double bounding_sphere_radius2 = bounding_sphere_radius > 0 ?
-    bounding_sphere_radius*bounding_sphere_radius :
-    // some wiggle room
-    1.01 * domain->get_bounding_sphere_squared_radius();
-
-  // wrap domain
-  const auto d = [&](K::Point_3 p) {
-    return domain->eval({p.x(), p.y(), p.z()});
-  };
-
-  Mesh_domain cgal_domain = Mesh_domain::create_implicit_mesh_domain(
-       d,
-       K::Sphere_3(CGAL::ORIGIN, bounding_sphere_radius2)
-       );
-
-  const auto native_features = translate_feature_edges(domain->get_features());
-  cgal_domain.add_features(native_features.begin(), native_features.end());
-
-  const auto polylines = translate_feature_edges(feature_edges);
-  cgal_domain.add_features(polylines.begin(), polylines.end());
-
-  Mesh_criteria criteria(
-      CGAL::parameters::edge_size=edge_size,
-      CGAL::parameters::facet_angle=facet_angle,
-      CGAL::parameters::facet_size=facet_size,
-      CGAL::parameters::facet_distance=facet_distance,
-      CGAL::parameters::cell_radius_edge_ratio=cell_radius_edge_ratio,
-      CGAL::parameters::cell_size=cell_size
-      );
-
-  // Mesh generation
-  if (!verbose) {
-    // suppress output
-    std::cerr.setstate(std::ios_base::failbit);
-  }
-  C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
-      cgal_domain,
-      criteria,
-      lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
-      odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
-      perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
-      exude ? CGAL::parameters::exude() : CGAL::parameters::no_exude()
-      );
-  if (!verbose) {
-    std::cerr.clear();
-  }
-
-  // Output
-  std::ofstream medit_file(outfile);
-  c3t3.output_to_medit(medit_file);
-  medit_file.close();
-
-  return;
-}
-
-void
-generate_with_sizing_field(
-    const std::shared_ptr<pygalmesh::DomainBase> & domain,
-    const std::string & outfile,
-    const std::vector<std::vector<std::array<double, 3>>> & feature_edges,
-    const double bounding_sphere_radius,
-    const bool lloyd,
-    const bool odt,
-    const bool perturb,
-    const bool exude,
-    const double edge_size,
-    const double facet_angle,
-    const double facet_size,
-    const double facet_distance,
-    const double cell_radius_edge_ratio,
-    const std::shared_ptr<pygalmesh::SizingFieldBase> & cell_size,
+    //
+    const double cell_size_value,
+    const std::shared_ptr<pygalmesh::SizingFieldBase> & cell_size_field,
+    //
     const bool verbose,
     const int seed
     )
@@ -172,63 +106,90 @@ generate_with_sizing_field(
     // suppress output
     std::cerr.setstate(std::ios_base::failbit);
   }
-  if (cell_size) {
-    const auto size = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
-        return cell_size->eval({p.x(), p.y(), p.z()});
+
+  std::cout << "edge_size       " << edge_size_value << " " << edge_size_field << std::endl;
+  std::cout << "facet_size      " << facet_size_value << " " << facet_size_field << std::endl;
+  std::cout << "facet_distance  " << facet_distance_value << " " << facet_distance_field << std::endl;
+  std::cout << "cell_size       " << cell_size_value << " " << cell_size_field << std::endl;
+
+  // Wrap into CGAL-conform functions
+  std::function<double(K::Point_3, const int, const Mesh_domain::Index&)> edge_size;
+  if (edge_size_field) {
+    edge_size = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
+      return edge_size_field->eval({p.x(), p.y(), p.z()});
     };
-    auto criteria = Mesh_criteria(
-        CGAL::parameters::edge_size=edge_size,
-        CGAL::parameters::facet_angle=facet_angle,
-        CGAL::parameters::facet_size=facet_size,
-        CGAL::parameters::facet_distance=facet_distance,
-        CGAL::parameters::cell_radius_edge_ratio=cell_radius_edge_ratio,
-        CGAL::parameters::cell_size=size
-        );
-
-    // Mesh generation
-    C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
-        cgal_domain,
-        criteria,
-        lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
-        odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
-        perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
-        exude ? CGAL::parameters::exude() : CGAL::parameters::no_exude()
-        );
-    if (!verbose) {
-      std::cerr.clear();
-    }
-
-    // Output
-    std::ofstream medit_file(outfile);
-    c3t3.output_to_medit(medit_file);
-    medit_file.close();
   } else {
-    auto criteria = Mesh_criteria(
-        CGAL::parameters::edge_size=edge_size,
-        CGAL::parameters::facet_angle=facet_angle,
-        CGAL::parameters::facet_size=facet_size,
-        CGAL::parameters::facet_distance=facet_distance,
-        CGAL::parameters::cell_radius_edge_ratio=cell_radius_edge_ratio
-        );
-
-    // Mesh generation
-    C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
-        cgal_domain,
-        criteria,
-        lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
-        odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
-        perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
-        exude ? CGAL::parameters::exude() : CGAL::parameters::no_exude()
-        );
-    if (!verbose) {
-      std::cerr.clear();
-    }
-
-    // Output
-    std::ofstream medit_file(outfile);
-    c3t3.output_to_medit(medit_file);
-    medit_file.close();
+    edge_size = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
+      return edge_size_value;
+    };
   }
+  //
+  std::function<double(K::Point_3, const int, const Mesh_domain::Index&)> facet_size;
+  if (facet_size_field) {
+    std::cout << "facet size: field chosen, value  " << facet_size_field << std::endl;
+    facet_size = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
+      return facet_size_field->eval({p.x(), p.y(), p.z()});
+    };
+  } else {
+    std::cout << "facet size: constant chosen, value  " << facet_size_value << std::endl;
+    facet_size = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
+      return facet_size_value;
+    };
+  }
+  //
+  std::function<double(K::Point_3, const int, const Mesh_domain::Index&)> facet_distance;
+  if (facet_distance_field) {
+    std::cout << "facet distance: field chosen, value  " << facet_size_field << std::endl;
+    facet_distance = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
+      return facet_distance_field->eval({p.x(), p.y(), p.z()});
+    };
+  } else {
+    std::cout << "facet distance: constant chosen, value  " << facet_size_value << std::endl;
+    facet_distance = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
+      return facet_distance_value;
+    };
+  }
+  //
+  std::function<double(K::Point_3, const int, const Mesh_domain::Index&)> cell_size;
+  if (cell_size_field) {
+    cell_size = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
+      return cell_size_field->eval({p.x(), p.y(), p.z()});
+    };
+  } else {
+    cell_size = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
+      return cell_size_value;
+    };
+  }
+
+  const auto criteria = Mesh_criteria(
+      CGAL::parameters::edge_size=edge_size, // ok
+      CGAL::parameters::facet_angle=facet_angle, // ok
+      // CGAL::parameters::facet_size=facet_size, // NOT ok
+      // CGAL::parameters::facet_distance=facet_distance, NOT ok
+      CGAL::parameters::facet_size=facet_size,
+      CGAL::parameters::cell_radius_edge_ratio=cell_radius_edge_ratio, // ok
+      //
+      CGAL::parameters::cell_size=cell_size // ok
+      );
+
+  // Mesh generation
+  C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
+      cgal_domain,
+      criteria,
+      lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
+      odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
+      perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
+      exude ? CGAL::parameters::exude() : CGAL::parameters::no_exude()
+      );
+  if (!verbose) {
+    std::cerr.clear();
+  }
+
+  // Output
+  std::ofstream medit_file(outfile);
+  c3t3.output_to_medit(medit_file);
+  medit_file.close();
+
   return;
 }
 

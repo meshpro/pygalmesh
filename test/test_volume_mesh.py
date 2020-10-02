@@ -538,4 +538,5 @@ def test_ball_with_sizing_field():
 
 
 if __name__ == "__main__":
-    test_ball_with_sizing_field()
+    test_ball()
+    # test_ball_with_sizing_field()
