@@ -46,9 +46,11 @@ def generate_mesh(
         return -1.0, obj
 
     edge_size_value, edge_size_field = _select(edge_size)
-    facet_size_value, facet_size_field = _select(facet_size)
-    facet_distance_value, facet_distance_field = _select(facet_distance)
     cell_size_value, cell_size_field = _select(cell_size)
+    assert isinstance(facet_size, float)
+    assert isinstance(facet_distance, float)
+    # facet_size_value, facet_size_field = _select(facet_size)
+    # facet_distance_value, facet_distance_field = _select(facet_distance)
 
     _generate_mesh(
         domain,
@@ -62,10 +64,8 @@ def generate_mesh(
         edge_size_value=edge_size_value,
         edge_size_field=edge_size_field,
         facet_angle=facet_angle,
-        facet_size_value=facet_size_value,
-        facet_size_field=facet_size_field,
-        facet_distance_value=facet_distance_value,
-        facet_distance_field=facet_distance_field,
+        facet_size=facet_size,
+        facet_distance=facet_distance,
         cell_radius_edge_ratio=cell_radius_edge_ratio,
         cell_size_value=cell_size_value,
         cell_size_field=cell_size_field,
