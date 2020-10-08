@@ -24,6 +24,7 @@ typedef CGAL::Mesh_complex_3_in_triangulation_3<Tr> C3t3;
 
 // Mesh Criteria
 typedef CGAL::Mesh_criteria_3<Tr> Mesh_criteria;
+typedef Mesh_criteria::Edge_criteria Edge_criteria;
 typedef Mesh_criteria::Facet_criteria Facet_criteria;
 typedef Mesh_criteria::Cell_criteria Cell_criteria;
 
@@ -61,10 +62,10 @@ generate_mesh(
     const double facet_angle,
     //
     const double facet_size_value,
-    // const std::shared_ptr<pygalmesh::SizingFieldBase> & facet_size_field,
+    const std::shared_ptr<pygalmesh::SizingFieldBase> & facet_size_field,
     //
     const double facet_distance_value,
-    // const std::shared_ptr<pygalmesh::SizingFieldBase> & facet_distance_field,
+    const std::shared_ptr<pygalmesh::SizingFieldBase> & facet_distance_field,
     //
     const double cell_radius_edge_ratio,
     //
@@ -107,65 +108,56 @@ generate_mesh(
     std::cerr.setstate(std::ios_base::failbit);
   }
 
-  // Wrap into CGAL-conform functions
-  std::function<double(K::Point_3, const int, const Mesh_domain::Index&)> edge_size;
-  if (edge_size_field) {
-    edge_size = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
-      return edge_size_field->eval({p.x(), p.y(), p.z()});
-    };
-  } else {
-    edge_size = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
-      return edge_size_value;
-    };
-  }
-  // If facet_size and facet_distance are functions, their values are taken literally,
-  // even if constant 0, see
-  // <https://github.com/CGAL/cgal/issues/5044#issuecomment-702755297>.
-  // Waiting for a Mesh_criteria.add() method. (nschloe, oct 2020)
-  //
-  // std::function<double(K::Point_3, const int, const Mesh_domain::Index&)> facet_size;
-  // if (facet_size_field) {
-  //   facet_size = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
-  //     return facet_size_field->eval({p.x(), p.y(), p.z()});
-  //   };
-  // } else {
-  //   facet_size = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
-  //     return facet_size_value;
-  //   };
-  // }
-  //
-  // std::function<double(K::Point_3, const int, const Mesh_domain::Index&)> facet_distance;
-  // if (facet_distance_field) {
-  //   facet_distance = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
-  //     return facet_distance_field->eval({p.x(), p.y(), p.z()});
-  //   };
-  // } else {
-  //   facet_distance = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
-  //     return facet_distance_value;
-  //   };
-  // }
-  //
-  std::function<double(K::Point_3, const int, const Mesh_domain::Index&)> cell_size;
-  if (cell_size_field) {
-    cell_size = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
-      return cell_size_field->eval({p.x(), p.y(), p.z()});
-    };
-  } else {
-    cell_size = [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
-      return cell_size_value;
-    };
-  }
+  // Build the float/field values according to
+  // <https://github.com/CGAL/cgal/issues/5044#issuecomment-705526982>.
 
-  const auto criteria = Mesh_criteria(
-      CGAL::parameters::edge_size=edge_size,
-      CGAL::parameters::facet_angle=facet_angle,
-      //
-      CGAL::parameters::facet_size=facet_size_value,
-      CGAL::parameters::facet_distance=facet_distance_value,
-      //
-      CGAL::parameters::cell_radius_edge_ratio=cell_radius_edge_ratio,
-      CGAL::parameters::cell_size=cell_size
-      );
+  // nested ternary operator
+  const auto facet_criteria = facet_size_field ? (
+      facet_distance_field ?
+      Facet_criteria(
+        facet_angle,
+         [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
+           return facet_size_field->eval({p.x(), p.y(), p.z()});
+         },
+         [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
+           return facet_distance_field->eval({p.x(), p.y(), p.z()});
+         }
+      ) : Facet_criteria(
+        facet_angle,
+         [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
+           return facet_size_field->eval({p.x(), p.y(), p.z()});
+         },
+         facet_distance_value
+      )
+    ) : (
+      facet_distance_field ?
+      Facet_criteria(
+        facet_angle,
+        facet_size_value,
+         [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
+           return facet_distance_field->eval({p.x(), p.y(), p.z()});
+         }
+      ) : Facet_criteria(
+        facet_angle,
+        facet_size_value,
+        facet_distance_value
+      )
+    );
+
+  const auto edge_criteria = edge_size_field ?
+     Edge_criteria(
+         [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
+           return edge_size_field->eval({p.x(), p.y(), p.z()});
+          }) : Edge_criteria(edge_size_value);
+
+  const auto cell_criteria = cell_size_field ?
+     Cell_criteria(
+         cell_radius_edge_ratio,
+         [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
+           return cell_size_field->eval({p.x(), p.y(), p.z()});
+          }) : Cell_criteria(cell_radius_edge_ratio, cell_size_value);
+
+  const auto criteria = Mesh_criteria(edge_criteria, facet_criteria, cell_criteria);
 
   // Mesh generation
   C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(

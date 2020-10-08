@@ -27,10 +27,10 @@ void generate_mesh(
     const double facet_angle = 0.0,
     //
     const double facet_size_value = 0.0,
-    // const std::shared_ptr<pygalmesh::SizingFieldBase> & facet_size_field = nullptr,
+    const std::shared_ptr<pygalmesh::SizingFieldBase> & facet_size_field = nullptr,
     //
     const double facet_distance_value = 0.0,
-    // const std::shared_ptr<pygalmesh::SizingFieldBase> & facet_distance_field = nullptr,
+    const std::shared_ptr<pygalmesh::SizingFieldBase> & facet_distance_field = nullptr,
     //
     const double cell_radius_edge_ratio = 0.0,
     //
