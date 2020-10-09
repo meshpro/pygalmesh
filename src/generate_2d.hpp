@@ -2,6 +2,7 @@
 #define GENERATE_2D_HPP
 
 #include <memory>
+#include <pthread.h>
 #include <vector>
 
 namespace pygalmesh {
@@ -11,7 +12,11 @@ generate_2d(
   const std::vector<std::array<double, 2>> & points,
   const std::vector<std::array<int, 2>> & constraints,
   const double max_circumradius_shortest_edge_ratio,
-  const double cell_size,
+  // https://github.com/CGAL/cgal/issues/5061#issuecomment-705520984
+  // the "default" size criterion for a triangle in the 2D mesh generator refers to its
+  // edges lengths. In the output mesh, all segments of all triangles must be shorter
+  // than the given bound.pthread_mutexattr_getprotocol
+  const double edge_size,
   const int num_lloyd_steps
 );
 

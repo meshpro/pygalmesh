@@ -36,7 +36,7 @@ import pygalmesh
 points = numpy.array([[0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0]])
 constraints = [[0, 1], [1, 2], [2, 3], [3, 0]]
 
-mesh = pygalmesh.generate_2d(points, constraints, cell_size=1.0e-1, num_lloyd_steps=10)
+mesh = pygalmesh.generate_2d(points, constraints, edge_size=1.0e-1, num_lloyd_steps=10)
 # mesh.points, mesh.cells
 ```
 The quality of the mesh isn't very good, but can be improved with
