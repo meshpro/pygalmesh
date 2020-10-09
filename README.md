@@ -213,16 +213,11 @@ to CGAL's mesh generator.
 #### Local refinement
 <img src="https://nschloe.github.io/pygalmesh/ball-local-refinement.png" width="30%">
 
-Use `generate_mesh` with a `SizingFieldBase` object as `cell_size`.
+Use `generate_mesh` with a function (regular or lambda) as `cell_size`. The same goes
+for `edge_size`, `facet_size`, and `facet_distance`.
 ```python
 import numpy
 import pygalmesh
-
-# define a cell_size function
-class Field(pygalmesh.SizingFieldBase):
-    def eval(self, x):
-        return abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5 + 0.025
-
 
 mesh = pygalmesh.generate_mesh(
     pygalmesh.Ball([0.0, 0.0, 0.0], 1.0),
@@ -230,7 +225,7 @@ mesh = pygalmesh.generate_mesh(
     facet_size=0.1,
     facet_distance=0.025,
     cell_radius_edge_ratio=2,
-    cell_size=Field(),
+    cell_size=lambda x: abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5 + 0.025,
 )
 ```
 

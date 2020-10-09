@@ -17,6 +17,15 @@ from _pygalmesh import (
 )
 
 
+class Wrapper(SizingFieldBase):
+    def __init__(self, f):
+        self.f = f
+        super().__init__()
+
+    def eval(self, x):
+        return self.f(x)
+
+
 def generate_mesh(
     domain,
     feature_edges=None,
@@ -42,8 +51,8 @@ def generate_mesh(
     def _select(obj):
         if isinstance(obj, float):
             return obj, None
-        assert isinstance(obj, SizingFieldBase)
-        return -1.0, obj
+        assert callable(obj)
+        return -1.0, Wrapper(obj)
 
     edge_size_value, edge_size_field = _select(edge_size)
     cell_size_value, cell_size_field = _select(cell_size)
