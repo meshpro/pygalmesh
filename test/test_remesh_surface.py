@@ -52,6 +52,7 @@ def test_inr():
     assert abs(max(mesh.points[:, 2]) - ref[4]) < tol * abs(ref[4])
     assert abs(min(mesh.points[:, 2]) - ref[5]) < tol * abs(ref[5])
 
+    print(helpers.compute_triangle_areas(mesh.points, mesh.get_cells_type("triangle")))
     vol = sum(
         helpers.compute_triangle_areas(mesh.points, mesh.get_cells_type("triangle"))
     )

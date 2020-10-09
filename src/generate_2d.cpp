@@ -68,16 +68,22 @@ generate_2d(
   std::map<Vertex_handle, int> vertex_index;
   std::vector<std::array<double, 2>> out_points(cdt.number_of_vertices());
   k = 0;
-  for (auto vit = cdt.vertices_begin(); vit!= cdt.vertices_end(); ++vit) {
+  for (auto vit: cdt.finite_vertex_handles()) {
     out_points[k][0] = vit->point()[0];
     out_points[k][1] = vit->point()[1];
     vertex_index[vit] = k;
     k++;
   }
 
-  std::vector<std::array<int, 3>> out_cells(cdt.number_of_faces());
+  // https://github.com/CGAL/cgal/issues/5068#issuecomment-706213606
+  auto nb_faces = 0u;
+  for (auto fit: cdt.finite_face_handles()) {
+    if(fit->is_in_domain()) ++nb_faces;
+  }
+  std::vector<std::array<int, 3>> out_cells(nb_faces);
   k = 0;
-  for (auto fit = cdt.faces_begin(); fit!= cdt.faces_end(); ++fit) {
+  for (auto fit: cdt.finite_face_handles()) {
+    if(!fit->is_in_domain()) continue;
     out_cells[k][0] = vertex_index[fit->vertex(0)];
     out_cells[k][1] = vertex_index[fit->vertex(1)];
     out_cells[k][2] = vertex_index[fit->vertex(2)];
