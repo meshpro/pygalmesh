@@ -9,7 +9,8 @@
 #include "polygon2d.hpp"
 #include "primitives.hpp"
 #include "sizing_field.hpp"
-#include "version.hpp"
+
+#include <CGAL/version.h>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -383,7 +384,5 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("verbose") = true,
         py::arg("seed") = 0
         );
-    m.def(
-        "_get_cgal_version", &get_cgal_version
-        );
+    m.attr("_CGAL_VERSION_STR") = CGAL_VERSION_STR;
 }
