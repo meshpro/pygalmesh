@@ -9,7 +9,6 @@ include src/polygon2d.hpp
 include src/primitives.hpp
 include src/remesh_surface.hpp
 include src/sizing_field.hpp
-include src/version.hpp
 
 include test/helpers.py
 recursive-include test/meshes *

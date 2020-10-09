@@ -22,7 +22,7 @@ from _pygalmesh import (
 )
 
 from . import _cli
-from .__about__ import __version__
+from .__about__ import __cgal_version__, __version__
 from .main import (
     generate_2d,
     generate_from_array,
@@ -37,6 +37,7 @@ from .main import (
 
 __all__ = [
     "__version__",
+    "__cgal_version__",
     #
     "_cli",
     #
