@@ -8,7 +8,7 @@ def test_2d():
     constraints = [[0, 1], [1, 2], [2, 3], [3, 0]]
 
     mesh = pygalmesh.generate_2d(
-        points, constraints, cell_size=1.0e-1, num_lloyd_steps=10
+        points, constraints, edge_size=1.0e-1, num_lloyd_steps=10
     )
 
     assert mesh.points.shape == (276, 2)

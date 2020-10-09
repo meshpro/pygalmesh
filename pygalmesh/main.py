@@ -13,9 +13,17 @@ from _pygalmesh import (
     _generate_mesh,
     _generate_periodic_mesh,
     _generate_surface_mesh,
-    _generate_with_sizing_field,
     _remesh_surface,
 )
+
+
+class Wrapper(SizingFieldBase):
+    def __init__(self, f):
+        self.f = f
+        super().__init__()
+
+    def eval(self, x):
+        return self.f(x)
 
 
 def generate_mesh(
@@ -40,13 +48,18 @@ def generate_mesh(
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
     os.close(fh)
 
-    if isinstance(cell_size, float):
-        genfun = _generate_mesh
-    else:
-        assert isinstance(cell_size, SizingFieldBase)
-        genfun = _generate_with_sizing_field
+    def _select(obj):
+        if isinstance(obj, float):
+            return obj, None
+        assert callable(obj)
+        return -1.0, Wrapper(obj)
 
-    genfun(
+    edge_size_value, edge_size_field = _select(edge_size)
+    cell_size_value, cell_size_field = _select(cell_size)
+    facet_size_value, facet_size_field = _select(facet_size)
+    facet_distance_value, facet_distance_field = _select(facet_distance)
+
+    _generate_mesh(
         domain,
         outfile,
         feature_edges=feature_edges,
@@ -55,12 +68,16 @@ def generate_mesh(
         odt=odt,
         perturb=perturb,
         exude=exude,
-        edge_size=edge_size,
+        edge_size_value=edge_size_value,
+        edge_size_field=edge_size_field,
         facet_angle=facet_angle,
-        facet_size=facet_size,
-        facet_distance=facet_distance,
+        facet_size_value=facet_size_value,
+        facet_size_field=facet_size_field,
+        facet_distance_value=facet_distance_value,
+        facet_distance_field=facet_distance_field,
         cell_radius_edge_ratio=cell_radius_edge_ratio,
-        cell_size=cell_size,
+        cell_size_value=cell_size_value,
+        cell_size_field=cell_size_field,
         verbose=verbose,
         seed=seed,
     )
@@ -70,7 +87,7 @@ def generate_mesh(
     return mesh
 
 
-def generate_2d(points, constraints, B=math.sqrt(2), cell_size=0.0, num_lloyd_steps=0):
+def generate_2d(points, constraints, B=math.sqrt(2), edge_size=0.0, num_lloyd_steps=0):
     # some sanity checks
     points = numpy.asarray(points)
     constraints = numpy.asarray(constraints)
@@ -82,7 +99,7 @@ def generate_2d(points, constraints, B=math.sqrt(2), cell_size=0.0, num_lloyd_st
     if numpy.any(length2 < 1.0e-15):
         raise RuntimeError("Constraint of (near)-zero length.")
 
-    points, cells = _generate_2d(points, constraints, B, cell_size, num_lloyd_steps)
+    points, cells = _generate_2d(points, constraints, B, edge_size, num_lloyd_steps)
     return meshio.Mesh(numpy.array(points), {"triangle": numpy.array(cells)})
 
 

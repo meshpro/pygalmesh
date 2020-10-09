@@ -14,7 +14,6 @@ from _pygalmesh import (
     RingExtrude,
     Rotate,
     Scale,
-    SizingFieldBase,
     Stretch,
     Tetrahedron,
     Torus,
@@ -42,7 +41,6 @@ __all__ = [
     "_cli",
     #
     "DomainBase",
-    "SizingFieldBase",
     "Translate",
     "Rotate",
     "Scale",

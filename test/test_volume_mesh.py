@@ -512,17 +512,13 @@ def test_halfspace():
 
 
 def test_ball_with_sizing_field():
-    class Field(pygalmesh.SizingFieldBase):
-        def eval(self, x):
-            return abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5 + 0.025
-
     mesh = pygalmesh.generate_mesh(
         pygalmesh.Ball([0.0, 0.0, 0.0], 1.0),
         facet_angle=30,
         facet_size=0.1,
         facet_distance=0.025,
         cell_radius_edge_ratio=2,
-        cell_size=Field(),
+        cell_size=lambda x: abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5 + 0.025,
         verbose=False,
     )
 
@@ -538,4 +534,5 @@ def test_ball_with_sizing_field():
 
 
 if __name__ == "__main__":
-    test_ball_with_sizing_field()
+    test_ball()
+    # test_ball_with_sizing_field()
