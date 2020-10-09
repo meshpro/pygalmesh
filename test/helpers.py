@@ -24,7 +24,13 @@ def compute_triangle_areas(vertices, triangles):
     e0 = vertices[triangles[:, 1]] - vertices[triangles[:, 0]]
     e1 = vertices[triangles[:, 2]] - vertices[triangles[:, 1]]
 
-    e0_cross_e1 = numpy.cross(e0, e1)
-    areas = 0.5 * numpy.sqrt(_row_dot(e0_cross_e1, e0_cross_e1))
+    assert e0.shape == e1.shape
+    if e0.shape[1] == 2:
+        z_component_of_e0_cross_e1 = numpy.cross(e0, e1)
+        cross_magnitude = z_component_of_e0_cross_e1
+    else:
+        assert e0.shape[1] == 3
+        e0_cross_e1 = numpy.cross(e0, e1)
+        cross_magnitude = numpy.sqrt(_row_dot(e0_cross_e1, e0_cross_e1))
 
-    return areas
+    return 0.5 * cross_magnitude
