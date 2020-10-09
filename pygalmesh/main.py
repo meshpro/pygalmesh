@@ -87,7 +87,7 @@ def generate_mesh(
     return mesh
 
 
-def generate_2d(points, constraints, B=math.sqrt(2), cell_size=0.0, num_lloyd_steps=0):
+def generate_2d(points, constraints, B=math.sqrt(2), edge_size=0.0, num_lloyd_steps=0):
     # some sanity checks
     points = numpy.asarray(points)
     constraints = numpy.asarray(constraints)
@@ -99,7 +99,7 @@ def generate_2d(points, constraints, B=math.sqrt(2), cell_size=0.0, num_lloyd_st
     if numpy.any(length2 < 1.0e-15):
         raise RuntimeError("Constraint of (near)-zero length.")
 
-    points, cells = _generate_2d(points, constraints, B, cell_size, num_lloyd_steps)
+    points, cells = _generate_2d(points, constraints, B, edge_size, num_lloyd_steps)
     return meshio.Mesh(numpy.array(points), {"triangle": numpy.array(cells)})
 
 
