@@ -91,7 +91,6 @@ mesh = pygalmesh.generate_mesh(
     max_edge_size_at_feature_edges=0.1,
 )
 ```
-The `max_edge_size_at_feature_edges` argument enforces a edge length bound around feature edges.
 
 #### Domain combinations
 <img src="https://nschloe.github.io/pygalmesh/ball-difference.png" width="30%">
@@ -139,8 +138,9 @@ mesh = pygalmesh.generate_mesh(
     max_cell_radius_edge_ratio=2.0,
 )
 ```
-Note that the length of the polygon legs are kept in sync with the `max_edge_size_at_feature_edges` of the
-mesh generation. This makes sure that it fits in nicely with the rest of the mesh.
+Note that the length of the polygon legs are kept in sync with
+`max_edge_size_at_feature_edges` of the mesh generation. This makes sure that it fits in
+nicely with the rest of the mesh.
 
 #### Domain deformations
 <img src="https://nschloe.github.io/pygalmesh/egg.png" width="30%">
@@ -234,18 +234,19 @@ to CGAL's mesh generator.
 #### Local refinement
 <img src="https://nschloe.github.io/pygalmesh/ball-local-refinement.png" width="30%">
 
-Use `generate_mesh` with a function (regular or lambda) as `max_cell_circumradius`. The same goes
-for `max_edge_size_at_feature_edges`, `max_radius_surface_delaunay_ball`, and `max_facet_distance`.
+Use `generate_mesh` with a function (regular or lambda) as `max_cell_circumradius`. The
+same goes for `max_edge_size_at_feature_edges`, `max_radius_surface_delaunay_ball`, and
+`max_facet_distance`.
 ```python
 import numpy
 import pygalmesh
 
 mesh = pygalmesh.generate_mesh(
     pygalmesh.Ball([0.0, 0.0, 0.0], 1.0),
-    min_facet_angle=30,
+    min_facet_angle=30.0,
     max_radius_surface_delaunay_ball=0.1,
     max_facet_distance=0.025,
-    max_cell_radius_edge_ratio=2,
+    max_cell_radius_edge_ratio=2.0,
     max_cell_circumradius=lambda x: abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5 + 0.025,
 )
 ```
@@ -253,8 +254,8 @@ mesh = pygalmesh.generate_mesh(
 #### Surface meshes
 
 If you're only after the surface of a body, pygalmesh has `generate_surface_mesh` for
-you. It offers fewer options (obviously, `max_cell_circumradius` is gone), but otherwise works the
-same way:
+you. It offers fewer options (obviously, `max_cell_circumradius` is gone), but otherwise
+works the same way:
 ```python
 import pygalmesh
 
