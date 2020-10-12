@@ -71,27 +71,35 @@ def _get_volume_from_surface_parser():
     )
 
     parser.add_argument(
-        "--edge-size", "-e", type=float, default=0.0, help="edge size (default: 0.0)"
+        "--max-edge-size-at-feature-edges",
+        "-e",
+        type=float,
+        default=0.0,
+        help="maximum edge size at feature edges (default: 0.0)",
     )
 
     parser.add_argument(
-        "--facet-angle",
+        "--min-facet-angle",
         "-a",
         type=float,
         default=0.0,
-        help="facet angle (default: 0.0)",
+        help="minimum facet angle (default: 0.0)",
     )
 
     parser.add_argument(
-        "--facet-size", "-s", type=float, default=0.0, help="facet size (default: 0.0)"
+        "--max-radius-surface-delaunay-ball",
+        "-s",
+        type=float,
+        default=0.0,
+        help="maximum radius of the surface facet Delaunay ball (default: 0.0)",
     )
 
     parser.add_argument(
-        "--facet-distance",
+        "--max-facet-distance",
         "-d",
         type=float,
         default=0.0,
-        help="facet distance (default: 0.0)",
+        help="maximum facet distance (default: 0.0)",
     )
 
     parser.add_argument(
@@ -103,15 +111,19 @@ def _get_volume_from_surface_parser():
     )
 
     parser.add_argument(
+        "--max-cell-circumradius",
+        "-c",
+        type=float,
+        default=0.0,
+        help="maximum cell circumradius (default: 0.0)",
+    )
+
+    parser.add_argument(
         "--reorient",
         "-t",
         action="store_true",
         default=False,
         help="automatically fix face orientation (default: False)",
-    )
-
-    parser.add_argument(
-        "--cell-size", "-c", type=float, default=0.0, help="cell size (default: 0.0)"
     )
 
     parser.add_argument(
