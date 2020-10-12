@@ -313,9 +313,9 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("domain"),
         py::arg("outfile"),
         py::arg("bounding_sphere_radius") = 0.0,
-        py::arg("angle_bound") = 0.0,
-        py::arg("radius_bound") = 0.0,
-        py::arg("distance_bound") = 0.0,
+        py::arg("min_facet_angle") = 0.0,
+        py::arg("max_radius_surface_delaunay_ball") = 0.0,
+        py::arg("max_facet_distance") = 0.0,
         py::arg("verbose") = true,
         py::arg("seed") = 0
         );

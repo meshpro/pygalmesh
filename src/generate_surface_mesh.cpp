@@ -46,9 +46,9 @@ generate_surface_mesh(
     const std::shared_ptr<pygalmesh::DomainBase> & domain,
     const std::string & outfile,
     const double bounding_sphere_radius,
-    const double angle_bound,
-    const double radius_bound,
-    const double distance_bound,
+    const double min_facet_angle,
+    const double max_radius_surface_delaunay_ball,
+    const double max_facet_distance,
     const bool verbose,
     const int seed
     )
@@ -70,9 +70,9 @@ generate_surface_mesh(
       );
 
   CGAL::Surface_mesh_default_criteria_3<Tr> criteria(
-      angle_bound,
-      radius_bound,
-      distance_bound
+      min_facet_angle,
+      max_radius_surface_delaunay_ball,
+      max_facet_distance
       );
 
   if (!verbose) {

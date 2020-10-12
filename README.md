@@ -261,7 +261,10 @@ import pygalmesh
 
 s = pygalmesh.Ball([0, 0, 0], 1.0)
 mesh = pygalmesh.generate_surface_mesh(
-    s, angle_bound=30, radius_bound=0.1, distance_bound=0.1
+    s,
+    min_facet_angle=30.0,
+    max_radius_surface_delaunay_ball=0.1,
+    max_facet_distance=0.1,
 )
 ```
 Refer to [CGAL's

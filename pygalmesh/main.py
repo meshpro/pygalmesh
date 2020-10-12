@@ -205,9 +205,9 @@ def generate_periodic_mesh(
 def generate_surface_mesh(
     domain,
     bounding_sphere_radius=0.0,
-    angle_bound=0.0,
-    radius_bound=0.0,
-    distance_bound=0.0,
+    min_facet_angle=0.0,
+    max_radius_surface_delaunay_ball=0.0,
+    max_facet_distance=0.0,
     verbose=True,
     seed=0,
 ):
@@ -218,9 +218,9 @@ def generate_surface_mesh(
         domain,
         outfile,
         bounding_sphere_radius=bounding_sphere_radius,
-        angle_bound=angle_bound,
-        radius_bound=radius_bound,
-        distance_bound=distance_bound,
+        min_facet_angle=min_facet_angle,
+        max_radius_surface_delaunay_ball=max_radius_surface_delaunay_ball,
+        max_facet_distance=max_facet_distance,
         verbose=verbose,
         seed=seed,
     )
