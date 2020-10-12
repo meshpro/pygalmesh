@@ -1,8 +1,7 @@
 import numpy
+from helpers import compute_triangle_areas
 
 import pygalmesh
-
-from helpers import compute_triangle_areas
 
 
 def test_rectangle():

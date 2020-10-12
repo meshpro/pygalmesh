@@ -64,9 +64,7 @@ The mesh generation comes with many more options, described
 [here](https://doc.cgal.org/latest/Mesh_3/). Try, for example,
 <!--exdown-skip-->
 ```python
-mesh = pygalmesh.generate_mesh(
-    s, cell_size=0.2, edge_size=0.1, odt=True, lloyd=True, verbose=False
-)
+mesh = pygalmesh.generate_mesh(s, cell_size=0.2, odt=True, lloyd=True, verbose=False)
 ```
 
 #### Other primitive shapes
@@ -82,6 +80,7 @@ s0 = pygalmesh.Tetrahedron(
 )
 mesh = pygalmesh.generate_mesh(s0, cell_size=0.1, edge_size=0.1)
 ```
+The `edge_size` argument enforces a edge length bound around feature edges.
 
 #### Domain combinations
 <img src="https://nschloe.github.io/pygalmesh/ball-difference.png" width="30%">

@@ -1,6 +1,7 @@
 import math
 import os
 import tempfile
+import warnings
 
 import meshio
 import numpy
@@ -43,6 +44,28 @@ def generate_mesh(
     verbose=True,
     seed=0,
 ):
+    """
+    From <https://doc.cgal.org/latest/Mesh_3/classCGAL_1_1Mesh__criteria__3.html>:
+
+    edge_size:
+        a scalar field (resp. a constant) providing a space varying (resp. a uniform)
+        upper bound for the lengths of curve edges. This parameter has to be set to a
+        positive value when 1-dimensional features protection is used.
+    facet_angle:
+        a lower bound for the angles (in degrees) of the surface mesh facets.
+    facet_size:
+        a scalar field (resp. a constant) describing a space varying (resp. a uniform)
+        upper-bound or for the radii of the surface Delaunay balls.
+    facet_distance:
+        a scalar field (resp. a constant) describing a space varying (resp. a uniform)
+        upper bound for the distance between the facet circumcenter and the center of
+        its surface Delaunay ball.
+    cell_radius_edge_ratio:
+        an upper bound for the radius-edge ratio of the mesh tetrahedra.
+    cell_size:
+        a scalar field (resp. a constant) describing a space varying (resp. a uniform)
+        upper-bound for the circumradii of the mesh tetrahedra.
+    """
     feature_edges = [] if feature_edges is None else feature_edges
 
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
@@ -58,6 +81,14 @@ def generate_mesh(
     cell_size_value, cell_size_field = _select(cell_size)
     facet_size_value, facet_size_field = _select(facet_size)
     facet_distance_value, facet_distance_field = _select(facet_distance)
+
+    if feature_edges:
+        if edge_size == 0.0:
+            raise ValueError(
+                "Need a positive edge_size bound if feature_edges are present."
+            )
+    elif edge_size != 0.0:
+        warnings.warn("No feature edges. The edge_size argument has no effect.")
 
     _generate_mesh(
         domain,
