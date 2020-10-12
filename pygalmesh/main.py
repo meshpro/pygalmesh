@@ -35,7 +35,7 @@ def generate_mesh(
     odt=False,
     perturb=True,
     exude=True,
-    max_edge_size_at_feature_edges_at_feature_edges=0.0,
+    max_edge_size_at_feature_edges=0.0,
     min_facet_angle=0.0,
     max_radius_surface_delaunay_ball=0.0,
     max_facet_distance=0.0,
@@ -47,7 +47,7 @@ def generate_mesh(
     """
     From <https://doc.cgal.org/latest/Mesh_3/classCGAL_1_1Mesh__criteria__3.html>:
 
-    max_edge_size_at_feature_edges_at_feature_edges:
+    max_edge_size_at_feature_edges:
         a scalar field (resp. a constant) providing a space varying (resp. a uniform)
         upper bound for the lengths of curve edges. This parameter has to be set to a
         positive value when 1-dimensional features protection is used.
@@ -78,9 +78,9 @@ def generate_mesh(
         return -1.0, Wrapper(obj)
 
     (
-        max_edge_size_at_feature_edges_at_feature_edges_value,
-        max_edge_size_at_feature_edges_at_feature_edges_field,
-    ) = _select(max_edge_size_at_feature_edges_at_feature_edges)
+        max_edge_size_at_feature_edges_value,
+        max_edge_size_at_feature_edges_field,
+    ) = _select(max_edge_size_at_feature_edges)
     max_cell_circumradius_value, max_cell_circumradius_field = _select(
         max_cell_circumradius
     )
@@ -91,13 +91,13 @@ def generate_mesh(
     max_facet_distance_value, max_facet_distance_field = _select(max_facet_distance)
 
     if feature_edges:
-        if max_edge_size_at_feature_edges_at_feature_edges == 0.0:
+        if max_edge_size_at_feature_edges == 0.0:
             raise ValueError(
-                "Need a positive max_edge_size_at_feature_edges_at_feature_edges bound if feature_edges are present."
+                "Need a positive max_edge_size_at_feature_edges bound if feature_edges are present."
             )
-    elif max_edge_size_at_feature_edges_at_feature_edges != 0.0:
+    elif max_edge_size_at_feature_edges != 0.0:
         warnings.warn(
-            "No feature edges. The max_edge_size_at_feature_edges_at_feature_edges argument has no effect."
+            "No feature edges. The max_edge_size_at_feature_edges argument has no effect."
         )
 
     _generate_mesh(
@@ -109,8 +109,8 @@ def generate_mesh(
         odt=odt,
         perturb=perturb,
         exude=exude,
-        max_edge_size_at_feature_edges_at_feature_edges_value=max_edge_size_at_feature_edges_at_feature_edges_value,
-        max_edge_size_at_feature_edges_at_feature_edges_field=max_edge_size_at_feature_edges_at_feature_edges_field,
+        max_edge_size_at_feature_edges_value=max_edge_size_at_feature_edges_value,
+        max_edge_size_at_feature_edges_field=max_edge_size_at_feature_edges_field,
         min_facet_angle=min_facet_angle,
         max_radius_surface_delaunay_ball_value=max_radius_surface_delaunay_ball_value,
         max_radius_surface_delaunay_ball_field=max_radius_surface_delaunay_ball_field,
@@ -132,7 +132,7 @@ def generate_2d(
     points,
     constraints,
     B=math.sqrt(2),
-    max_edge_size_at_feature_edges_at_feature_edges=0.0,
+    max_edge_size_at_feature_edges=0.0,
     num_lloyd_steps=0,
 ):
     # some sanity checks
@@ -150,7 +150,7 @@ def generate_2d(
         points,
         constraints,
         B,
-        max_edge_size_at_feature_edges_at_feature_edges,
+        max_edge_size_at_feature_edges,
         num_lloyd_steps,
     )
     return meshio.Mesh(numpy.array(points), {"triangle": numpy.array(cells)})
@@ -163,7 +163,7 @@ def generate_periodic_mesh(
     odt=False,
     perturb=True,
     exude=True,
-    max_edge_size_at_feature_edges_at_feature_edges=0.0,
+    max_edge_size_at_feature_edges=0.0,
     min_facet_angle=0.0,
     max_radius_surface_delaunay_ball=0.0,
     max_facet_distance=0.0,
@@ -186,7 +186,7 @@ def generate_periodic_mesh(
         odt=odt,
         perturb=perturb,
         exude=exude,
-        max_edge_size_at_feature_edges_at_feature_edges=max_edge_size_at_feature_edges_at_feature_edges,
+        max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
         min_facet_angle=min_facet_angle,
         max_radius_surface_delaunay_ball=max_radius_surface_delaunay_ball,
         max_facet_distance=max_facet_distance,
@@ -236,7 +236,7 @@ def generate_volume_mesh_from_surface_mesh(
     odt=False,
     perturb=True,
     exude=True,
-    max_edge_size_at_feature_edges_at_feature_edges=0.0,
+    max_edge_size_at_feature_edges=0.0,
     min_facet_angle=0.0,
     max_radius_surface_delaunay_ball=0.0,
     max_facet_distance=0.0,
@@ -262,7 +262,7 @@ def generate_volume_mesh_from_surface_mesh(
         odt=odt,
         perturb=perturb,
         exude=exude,
-        max_edge_size_at_feature_edges_at_feature_edges=max_edge_size_at_feature_edges_at_feature_edges,
+        max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
         min_facet_angle=min_facet_angle,
         max_radius_surface_delaunay_ball=max_radius_surface_delaunay_ball,
         max_facet_distance=max_facet_distance,
@@ -285,7 +285,7 @@ def generate_from_inr(
     odt=False,
     perturb=True,
     exude=True,
-    max_edge_size_at_feature_edges_at_feature_edges=0.0,
+    max_edge_size_at_feature_edges=0.0,
     min_facet_angle=0.0,
     max_radius_surface_delaunay_ball=0.0,
     max_facet_distance=0.0,
@@ -305,7 +305,7 @@ def generate_from_inr(
             odt=odt,
             perturb=perturb,
             exude=exude,
-            max_edge_size_at_feature_edges_at_feature_edges=max_edge_size_at_feature_edges_at_feature_edges,
+            max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
             min_facet_angle=min_facet_angle,
             max_radius_surface_delaunay_ball=max_radius_surface_delaunay_ball,
             max_facet_distance=max_facet_distance,
@@ -334,7 +334,7 @@ def generate_from_inr(
             odt=odt,
             perturb=perturb,
             exude=exude,
-            max_edge_size_at_feature_edges_at_feature_edges=max_edge_size_at_feature_edges_at_feature_edges,
+            max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
             min_facet_angle=min_facet_angle,
             max_radius_surface_delaunay_ball=max_radius_surface_delaunay_ball,
             max_facet_distance=max_facet_distance,
@@ -350,7 +350,7 @@ def generate_from_inr(
 
 def remesh_surface(
     filename,
-    max_edge_size_at_feature_edges_at_feature_edges=0.0,
+    max_edge_size_at_feature_edges=0.0,
     min_facet_angle=0.0,
     max_radius_surface_delaunay_ball=0.0,
     max_facet_distance=0.0,
@@ -369,7 +369,7 @@ def remesh_surface(
     _remesh_surface(
         off_file,
         outfile,
-        max_edge_size_at_feature_edges_at_feature_edges=max_edge_size_at_feature_edges_at_feature_edges,
+        max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
         min_facet_angle=min_facet_angle,
         max_radius_surface_delaunay_ball=max_radius_surface_delaunay_ball,
         max_facet_distance=max_facet_distance,
@@ -419,7 +419,7 @@ def generate_from_array(
     odt=False,
     perturb=True,
     exude=True,
-    max_edge_size_at_feature_edges_at_feature_edges=0.0,
+    max_edge_size_at_feature_edges=0.0,
     min_facet_angle=0.0,
     max_radius_surface_delaunay_ball=0.0,
     max_cell_circumradius=0.0,
@@ -438,7 +438,7 @@ def generate_from_array(
         odt,
         perturb,
         exude,
-        max_edge_size_at_feature_edges_at_feature_edges,
+        max_edge_size_at_feature_edges,
         min_facet_angle,
         max_radius_surface_delaunay_ball,
         max_facet_distance,

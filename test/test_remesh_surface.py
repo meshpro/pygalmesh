@@ -11,7 +11,7 @@ def test_inr():
     this_dir = pathlib.Path(__file__).resolve().parent
     # mesh = pygalmesh.remesh_surface(
     #     this_dir / "meshes" / "lion-head.off",
-    #     max_edge_size_at_feature_edges_at_feature_edges=0.025,
+    #     max_edge_size_at_feature_edges=0.025,
     #     min_facet_angle=25,
     #     max_radius_surface_delaunay_ball=0.1,
     #     max_facet_distance=0.001,

@@ -39,7 +39,7 @@ constraints = [[0, 1], [1, 2], [2, 3], [3, 0]]
 mesh = pygalmesh.generate_2d(
     points,
     constraints,
-    max_edge_size_at_feature_edges_at_feature_edges=1.0e-1,
+    max_edge_size_at_feature_edges=1.0e-1,
     num_lloyd_steps=10,
 )
 # mesh.points, mesh.cells
@@ -88,10 +88,10 @@ s0 = pygalmesh.Tetrahedron(
 mesh = pygalmesh.generate_mesh(
     s0,
     max_cell_circumradius=0.1,
-    max_edge_size_at_feature_edges_at_feature_edges=0.1,
+    max_edge_size_at_feature_edges=0.1,
 )
 ```
-The `max_edge_size_at_feature_edges_at_feature_edges` argument enforces a edge length bound around feature edges.
+The `max_edge_size_at_feature_edges` argument enforces a edge length bound around feature edges.
 
 #### Domain combinations
 <img src="https://nschloe.github.io/pygalmesh/ball-difference.png" width="30%">
@@ -121,8 +121,8 @@ u = pygalmesh.Difference(s0, s1)
 
 # add circle
 a = numpy.sqrt(radius ** 2 - displacement ** 2)
-max_edge_size_at_feature_edges_at_feature_edges = 0.15
-n = int(2 * numpy.pi * a / max_edge_size_at_feature_edges_at_feature_edges)
+max_edge_size_at_feature_edges = 0.15
+n = int(2 * numpy.pi * a / max_edge_size_at_feature_edges)
 circ = [
     [0.0, a * numpy.cos(i * 2 * numpy.pi / n), a * numpy.sin(i * 2 * numpy.pi / n)]
     for i in range(n)
@@ -133,13 +133,13 @@ mesh = pygalmesh.generate_mesh(
     u,
     feature_edges=[circ],
     max_cell_circumradius=0.15,
-    max_edge_size_at_feature_edges_at_feature_edges=max_edge_size_at_feature_edges_at_feature_edges,
+    max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
     min_facet_angle=25,
     max_radius_surface_delaunay_ball=0.15,
     max_cell_radius_edge_ratio=2.0,
 )
 ```
-Note that the length of the polygon legs are kept in sync with the `max_edge_size_at_feature_edges_at_feature_edges` of the
+Note that the length of the polygon legs are kept in sync with the `max_edge_size_at_feature_edges` of the
 mesh generation. This makes sure that it fits in nicely with the rest of the mesh.
 
 #### Domain deformations
@@ -163,17 +163,17 @@ alongside!
 import pygalmesh
 
 p = pygalmesh.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
-max_edge_size_at_feature_edges_at_feature_edges = 0.1
+max_edge_size_at_feature_edges = 0.1
 domain = pygalmesh.Extrude(
     p,
     [0.0, 0.0, 1.0],
     0.5 * 3.14159265359,
-    max_edge_size_at_feature_edges_at_feature_edges,
+    max_edge_size_at_feature_edges,
 )
 mesh = pygalmesh.generate_mesh(
     domain,
     max_cell_circumradius=0.1,
-    max_edge_size_at_feature_edges_at_feature_edges=max_edge_size_at_feature_edges_at_feature_edges,
+    max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
     verbose=False,
 )
 ```
@@ -189,12 +189,12 @@ body.
 import pygalmesh
 
 p = pygalmesh.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
-max_edge_size_at_feature_edges_at_feature_edges = 0.1
-domain = pygalmesh.RingExtrude(p, max_edge_size_at_feature_edges_at_feature_edges)
+max_edge_size_at_feature_edges = 0.1
+domain = pygalmesh.RingExtrude(p, max_edge_size_at_feature_edges)
 mesh = pygalmesh.generate_mesh(
     domain,
     max_cell_circumradius=0.1,
-    max_edge_size_at_feature_edges_at_feature_edges=max_edge_size_at_feature_edges_at_feature_edges,
+    max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
     verbose=False,
 )
 ```
@@ -235,7 +235,7 @@ to CGAL's mesh generator.
 <img src="https://nschloe.github.io/pygalmesh/ball-local-refinement.png" width="30%">
 
 Use `generate_mesh` with a function (regular or lambda) as `max_cell_circumradius`. The same goes
-for `max_edge_size_at_feature_edges_at_feature_edges`, `max_radius_surface_delaunay_ball`, and `max_facet_distance`.
+for `max_edge_size_at_feature_edges`, `max_radius_surface_delaunay_ball`, and `max_facet_distance`.
 ```python
 import numpy
 import pygalmesh
@@ -417,7 +417,7 @@ import pygalmesh
 
 mesh = pygalmesh.remesh_surface(
     "lion-head.off",
-    max_edge_size_at_feature_edges_at_feature_edges=0.025,
+    max_edge_size_at_feature_edges=0.025,
     min_facet_angle=25,
     max_radius_surface_delaunay_ball=0.1,
     max_facet_distance=0.001,

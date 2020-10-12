@@ -11,7 +11,7 @@ def test_rectangle():
     mesh = pygalmesh.generate_2d(
         points,
         constraints,
-        max_edge_size_at_feature_edges_at_feature_edges=1.0e-1,
+        max_edge_size_at_feature_edges=1.0e-1,
         num_lloyd_steps=10,
     )
 
@@ -47,7 +47,7 @@ def test_disk():
     mesh = pygalmesh.generate_2d(
         points,
         constraints,
-        max_edge_size_at_feature_edges_at_feature_edges=h,
+        max_edge_size_at_feature_edges=h,
         num_lloyd_steps=0,
     )
     areas = compute_triangle_areas(mesh.points, mesh.get_cells_type("triangle"))
