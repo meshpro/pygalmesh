@@ -132,7 +132,7 @@ def generate_2d(
     points,
     constraints,
     B=math.sqrt(2),
-    max_edge_size_at_feature_edges=0.0,
+    max_edge_size=0.0,
     num_lloyd_steps=0,
 ):
     # some sanity checks
@@ -150,7 +150,7 @@ def generate_2d(
         points,
         constraints,
         B,
-        max_edge_size_at_feature_edges,
+        max_edge_size,
         num_lloyd_steps,
     )
     return meshio.Mesh(numpy.array(points), {"triangle": numpy.array(cells)})

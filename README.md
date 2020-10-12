@@ -39,7 +39,7 @@ constraints = [[0, 1], [1, 2], [2, 3], [3, 0]]
 mesh = pygalmesh.generate_2d(
     points,
     constraints,
-    max_edge_size_at_feature_edges=1.0e-1,
+    max_edge_size=1.0e-1,
     num_lloyd_steps=10,
 )
 # mesh.points, mesh.cells

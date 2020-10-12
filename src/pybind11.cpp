@@ -263,7 +263,7 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("points"),
         py::arg("constraints"),
         py::arg("max_circumradius_shortest_edge_ratio") = 1.41421356237,
-        py::arg("max_edge_size_at_feature_edges") = 0.0,
+        py::arg("max_edge_size") = 0.0,
         py::arg("num_lloyd_steps") = 0
         );
     m.def(
