@@ -16,12 +16,12 @@ def remesh_surface(argv=None):
         # odt=args.odt,
         # perturb=args.perturb,
         # exude=args.exude,
-        edge_size=args.edge_size,
-        facet_angle=args.facet_angle,
-        facet_size=args.facet_size,
-        facet_distance=args.facet_distance,
-        # cell_radius_edge_ratio=args.cell_radius_edge_ratio,
-        # cell_size=args.cell_size,
+        max_edge_size_at_feature_edges_at_feature_edges=args.max_edge_size_at_feature_edges_at_feature_edges,
+        min_facet_angle=args.min_facet_angle,
+        max_radius_surface_delaunay_ball=args.max_radius_surface_delaunay_ball,
+        max_facet_distance=args.max_facet_distance,
+        # max_cell_radius_edge_ratio=args.max_cell_radius_edge_ratio,
+        # max_cell_circumradius=args.max_cell_circumradius,
         verbose=not args.quiet,
     )
     meshio.write(args.outfile, mesh)

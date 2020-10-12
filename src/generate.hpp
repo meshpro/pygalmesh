@@ -21,21 +21,21 @@ void generate_mesh(
     const bool perturb = true,
     const bool exude = true,
     //
-    const double edge_size_value = 0.0,  // std::numeric_limits<double>::max(),
-    const std::shared_ptr<pygalmesh::SizingFieldBase> & edge_size_field = nullptr,
+    const double max_edge_size_at_feature_edges_value = 0.0,  // std::numeric_limits<double>::max(),
+    const std::shared_ptr<pygalmesh::SizingFieldBase> & max_edge_size_at_feature_edges_field = nullptr,
     //
-    const double facet_angle = 0.0,
+    const double min_facet_angle = 0.0,
     //
-    const double facet_size_value = 0.0,
-    const std::shared_ptr<pygalmesh::SizingFieldBase> & facet_size_field = nullptr,
+    const double max_radius_surface_delaunay_ball_value = 0.0,
+    const std::shared_ptr<pygalmesh::SizingFieldBase> & max_radius_surface_delaunay_ball_field = nullptr,
     //
-    const double facet_distance_value = 0.0,
-    const std::shared_ptr<pygalmesh::SizingFieldBase> & facet_distance_field = nullptr,
+    const double max_facet_distance_value = 0.0,
+    const std::shared_ptr<pygalmesh::SizingFieldBase> & max_facet_distance_field = nullptr,
     //
     const double cell_radius_edge_ratio = 0.0,
     //
-    const double cell_size_value = 0.0,
-    const std::shared_ptr<pygalmesh::SizingFieldBase> & cell_size_field = nullptr,
+    const double max_cell_circumradius_value = 0.0,
+    const std::shared_ptr<pygalmesh::SizingFieldBase> & max_cell_circumradius_field = nullptr,
     //
     const bool verbose = true,
     const int seed = 0

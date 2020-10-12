@@ -57,12 +57,12 @@ generate_periodic_mesh(
     const bool odt,
     const bool perturb,
     const bool exude,
-    const double edge_size,
-    const double facet_angle,
-    const double facet_size,
-    const double facet_distance,
+    const double max_edge_size_at_feature_edges,
+    const double min_facet_angle,
+    const double max_radius_surface_delaunay_ball,
+    const double max_facet_distance,
     const double cell_radius_edge_ratio,
-    const double cell_size,
+    const double max_cell_circumradius,
     const int number_of_copies_in_output,
     const bool verbose,
     const int seed
@@ -87,12 +87,12 @@ generate_periodic_mesh(
     Periodic_mesh_domain::create_implicit_mesh_domain(d, cuboid);
 
   Mesh_criteria criteria(
-      CGAL::parameters::edge_size=edge_size,
-      CGAL::parameters::facet_angle=facet_angle,
-      CGAL::parameters::facet_size=facet_size,
-      CGAL::parameters::facet_distance=facet_distance,
+      CGAL::parameters::edge_size=max_edge_size_at_feature_edges,
+      CGAL::parameters::facet_angle=min_facet_angle,
+      CGAL::parameters::facet_size=max_radius_surface_delaunay_ball,
+      CGAL::parameters::facet_distance=max_facet_distance,
       CGAL::parameters::cell_radius_edge_ratio=cell_radius_edge_ratio,
-      CGAL::parameters::cell_size=cell_size
+      CGAL::parameters::cell_size=max_cell_circumradius
       );
 
   // Mesh generation

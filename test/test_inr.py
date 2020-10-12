@@ -10,7 +10,7 @@ import pygalmesh
 def test_inr():
     this_dir = pathlib.Path(__file__).resolve().parent
     # mesh = pygalmesh.generate_from_inr(
-    #     this_dir / "meshes" / "skull_2.9.inr", cell_size=5.0, verbose=False
+    #     this_dir / "meshes" / "skull_2.9.inr", max_cell_circumradius=5.0, verbose=False
     # )
     with tempfile.TemporaryDirectory() as tmp:
         out_filename = str(pathlib.Path(tmp) / "out.vtk")

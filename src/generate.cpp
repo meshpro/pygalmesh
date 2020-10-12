@@ -56,21 +56,21 @@ generate_mesh(
     const bool perturb,
     const bool exude,
     //
-    const double edge_size_value,
-    const std::shared_ptr<pygalmesh::SizingFieldBase> & edge_size_field,
+    const double max_edge_size_at_feature_edges_value,
+    const std::shared_ptr<pygalmesh::SizingFieldBase> & max_edge_size_at_feature_edges_field,
     //
-    const double facet_angle,
+    const double min_facet_angle,
     //
-    const double facet_size_value,
-    const std::shared_ptr<pygalmesh::SizingFieldBase> & facet_size_field,
+    const double max_radius_surface_delaunay_ball_value,
+    const std::shared_ptr<pygalmesh::SizingFieldBase> & max_radius_surface_delaunay_ball_field,
     //
-    const double facet_distance_value,
-    const std::shared_ptr<pygalmesh::SizingFieldBase> & facet_distance_field,
+    const double max_facet_distance_value,
+    const std::shared_ptr<pygalmesh::SizingFieldBase> & max_facet_distance_field,
     //
     const double cell_radius_edge_ratio,
     //
-    const double cell_size_value,
-    const std::shared_ptr<pygalmesh::SizingFieldBase> & cell_size_field,
+    const double max_cell_circumradius_value,
+    const std::shared_ptr<pygalmesh::SizingFieldBase> & max_cell_circumradius_field,
     //
     const bool verbose,
     const int seed
@@ -112,50 +112,50 @@ generate_mesh(
   // <https://github.com/CGAL/cgal/issues/5044#issuecomment-705526982>.
 
   // nested ternary operator
-  const auto facet_criteria = facet_size_field ? (
-      facet_distance_field ?
+  const auto facet_criteria = max_radius_surface_delaunay_ball_field ? (
+      max_facet_distance_field ?
       Facet_criteria(
-        facet_angle,
+        min_facet_angle,
          [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
-           return facet_size_field->eval({p.x(), p.y(), p.z()});
+           return max_radius_surface_delaunay_ball_field->eval({p.x(), p.y(), p.z()});
          },
          [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
-           return facet_distance_field->eval({p.x(), p.y(), p.z()});
+           return max_facet_distance_field->eval({p.x(), p.y(), p.z()});
          }
       ) : Facet_criteria(
-        facet_angle,
+        min_facet_angle,
          [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
-           return facet_size_field->eval({p.x(), p.y(), p.z()});
+           return max_radius_surface_delaunay_ball_field->eval({p.x(), p.y(), p.z()});
          },
-         facet_distance_value
+         max_facet_distance_value
       )
     ) : (
-      facet_distance_field ?
+      max_facet_distance_field ?
       Facet_criteria(
-        facet_angle,
-        facet_size_value,
+        min_facet_angle,
+        max_radius_surface_delaunay_ball_value,
          [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
-           return facet_distance_field->eval({p.x(), p.y(), p.z()});
+           return max_facet_distance_field->eval({p.x(), p.y(), p.z()});
          }
       ) : Facet_criteria(
-        facet_angle,
-        facet_size_value,
-        facet_distance_value
+        min_facet_angle,
+        max_radius_surface_delaunay_ball_value,
+        max_facet_distance_value
       )
     );
 
-  const auto edge_criteria = edge_size_field ?
+  const auto edge_criteria = max_edge_size_at_feature_edges_field ?
      Edge_criteria(
          [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
-           return edge_size_field->eval({p.x(), p.y(), p.z()});
-          }) : Edge_criteria(edge_size_value);
+           return max_edge_size_at_feature_edges_field->eval({p.x(), p.y(), p.z()});
+          }) : Edge_criteria(max_edge_size_at_feature_edges_value);
 
-  const auto cell_criteria = cell_size_field ?
+  const auto cell_criteria = max_cell_circumradius_field ?
      Cell_criteria(
          cell_radius_edge_ratio,
          [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
-           return cell_size_field->eval({p.x(), p.y(), p.z()});
-          }) : Cell_criteria(cell_radius_edge_ratio, cell_size_value);
+           return max_cell_circumradius_field->eval({p.x(), p.y(), p.z()});
+          }) : Cell_criteria(cell_radius_edge_ratio, max_cell_circumradius_value);
 
   const auto criteria = Mesh_criteria(edge_criteria, facet_criteria, cell_criteria);
 

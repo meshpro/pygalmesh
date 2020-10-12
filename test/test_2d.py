@@ -9,7 +9,10 @@ def test_rectangle():
     constraints = [[0, 1], [1, 2], [2, 3], [3, 0]]
 
     mesh = pygalmesh.generate_2d(
-        points, constraints, edge_size=1.0e-1, num_lloyd_steps=10
+        points,
+        constraints,
+        max_edge_size_at_feature_edges_at_feature_edges=1.0e-1,
+        num_lloyd_steps=10,
     )
 
     assert mesh.points.shape == (276, 2)
@@ -41,7 +44,12 @@ def test_disk():
         ]
     )
     constraints = [[k, k + 1] for k in range(n)] + [[n, 0]]
-    mesh = pygalmesh.generate_2d(points, constraints, edge_size=h, num_lloyd_steps=0)
+    mesh = pygalmesh.generate_2d(
+        points,
+        constraints,
+        max_edge_size_at_feature_edges_at_feature_edges=h,
+        num_lloyd_steps=0,
+    )
     areas = compute_triangle_areas(mesh.points, mesh.get_cells_type("triangle"))
     assert numpy.all(areas > 1.0e-5)
 

@@ -11,10 +11,10 @@ def test_inr():
     this_dir = pathlib.Path(__file__).resolve().parent
     # mesh = pygalmesh.remesh_surface(
     #     this_dir / "meshes" / "lion-head.off",
-    #     edge_size=0.025,
-    #     facet_angle=25,
-    #     facet_size=0.1,
-    #     facet_distance=0.001,
+    #     max_edge_size_at_feature_edges_at_feature_edges=0.025,
+    #     min_facet_angle=25,
+    #     max_radius_surface_delaunay_ball=0.1,
+    #     max_facet_distance=0.001,
     #     verbose=False,
     # )
     with tempfile.TemporaryDirectory() as tmp:

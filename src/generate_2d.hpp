@@ -16,7 +16,7 @@ generate_2d(
   // the "default" size criterion for a triangle in the 2D mesh generator refers to its
   // edges lengths. In the output mesh, all segments of all triangles must be shorter
   // than the given bound.pthread_mutexattr_getprotocol
-  const double edge_size,
+  const double max_edge_size_at_feature_edges,
   const int num_lloyd_steps
 );
 

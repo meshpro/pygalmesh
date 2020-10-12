@@ -41,12 +41,12 @@ generate_from_inr(
     const bool odt,
     const bool perturb,
     const bool exude,
-    const double edge_size,
-    const double facet_angle,
-    const double facet_size,
-    const double facet_distance,
+    const double max_edge_size_at_feature_edges,
+    const double min_facet_angle,
+    const double max_radius_surface_delaunay_ball,
+    const double max_facet_distance,
     const double cell_radius_edge_ratio,
-    const double cell_size,
+    const double max_cell_circumradius,
     const bool verbose,
     const int seed
     )
@@ -61,12 +61,12 @@ generate_from_inr(
   Mesh_domain cgal_domain = Mesh_domain::create_labeled_image_mesh_domain(image);
 
   Mesh_criteria criteria(
-      CGAL::parameters::edge_size=edge_size,
-      CGAL::parameters::facet_angle=facet_angle,
-      CGAL::parameters::facet_size=facet_size,
-      CGAL::parameters::facet_distance=facet_distance,
+      CGAL::parameters::edge_size=max_edge_size_at_feature_edges,
+      CGAL::parameters::facet_angle=min_facet_angle,
+      CGAL::parameters::facet_size=max_radius_surface_delaunay_ball,
+      CGAL::parameters::facet_distance=max_facet_distance,
       CGAL::parameters::cell_radius_edge_ratio=cell_radius_edge_ratio,
-      CGAL::parameters::cell_size=cell_size
+      CGAL::parameters::cell_size=max_cell_circumradius
       );
 
   // Mesh generation
@@ -98,17 +98,17 @@ void
 generate_from_inr_with_subdomain_sizing(
     const std::string & inr_filename,
     const std::string & outfile,
-    const double default_cell_size,
-    const std::vector<double> & cell_sizes,
+    const double default_max_cell_circumradius,
+    const std::vector<double> & max_cell_circumradiuss,
     const std::vector<int> & cell_labels,
     const bool lloyd,
     const bool odt,
     const bool perturb,
     const bool exude,
-    const double edge_size,
-    const double facet_angle,
-    const double facet_size,
-    const double facet_distance,
+    const double max_edge_size_at_feature_edges,
+    const double min_facet_angle,
+    const double max_radius_surface_delaunay_ball,
+    const double max_facet_distance,
     const double cell_radius_edge_ratio,
     const bool verbose,
     const int seed
@@ -123,18 +123,18 @@ generate_from_inr_with_subdomain_sizing(
   }
   Mesh_domain cgal_domain = Mesh_domain::create_labeled_image_mesh_domain(image);
 
-  Sizing_field_cell cell_size(default_cell_size);
+  Sizing_field_cell max_cell_circumradius(default_max_cell_circumradius);
   const int ndimensions = 3;
-  for(std::vector<double>::size_type i(0); i < cell_sizes.size(); ++i)
-    cell_size.set_size(cell_sizes[i], ndimensions, cgal_domain.index_from_subdomain_index(cell_labels[i]));
+  for(std::vector<double>::size_type i(0); i < max_cell_circumradiuss.size(); ++i)
+    max_cell_circumradius.set_size(max_cell_circumradiuss[i], ndimensions, cgal_domain.index_from_subdomain_index(cell_labels[i]));
 
   Mesh_criteria criteria(
-      CGAL::parameters::edge_size=edge_size,
-      CGAL::parameters::facet_angle=facet_angle,
-      CGAL::parameters::facet_size=facet_size,
-      CGAL::parameters::facet_distance=facet_distance,
+      CGAL::parameters::edge_size=max_edge_size_at_feature_edges,
+      CGAL::parameters::facet_angle=min_facet_angle,
+      CGAL::parameters::facet_size=max_radius_surface_delaunay_ball,
+      CGAL::parameters::facet_distance=max_facet_distance,
       CGAL::parameters::cell_radius_edge_ratio=cell_radius_edge_ratio,
-      CGAL::parameters::cell_size=cell_size
+      CGAL::parameters::cell_size=max_cell_circumradius
       );
 
   // Mesh generation
