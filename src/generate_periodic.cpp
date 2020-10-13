@@ -91,7 +91,7 @@ generate_periodic_mesh(
       CGAL::parameters::facet_angle=min_facet_angle,
       CGAL::parameters::facet_size=max_radius_surface_delaunay_ball,
       CGAL::parameters::facet_distance=max_facet_distance,
-      CGAL::parameters::max_circumradius_edge_ratio=max_circumradius_edge_ratio,
+      CGAL::parameters::cell_radius_edge_ratio=max_circumradius_edge_ratio,
       CGAL::parameters::cell_size=max_cell_circumradius
       );
 
