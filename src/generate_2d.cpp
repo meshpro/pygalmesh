@@ -32,7 +32,7 @@ generate_2d(
   //   relates to the smallest angle via sin(alpha_min) = 1 / (2B)
   // edge_size S: "all segments of all triangles must be shorter than a bound S."
   const double max_circumradius_shortest_edge_ratio,
-  const double edge_size,
+  const double max_edge_size,
   const int num_lloyd_steps
 )
 {
@@ -53,7 +53,7 @@ generate_2d(
       cdt,
       Criteria(
         0.25 / (max_circumradius_shortest_edge_ratio * max_circumradius_shortest_edge_ratio),
-        edge_size
+        max_edge_size
        )
       );
 

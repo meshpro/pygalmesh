@@ -36,7 +36,12 @@ import pygalmesh
 points = numpy.array([[0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0]])
 constraints = [[0, 1], [1, 2], [2, 3], [3, 0]]
 
-mesh = pygalmesh.generate_2d(points, constraints, edge_size=1.0e-1, num_lloyd_steps=10)
+mesh = pygalmesh.generate_2d(
+    points,
+    constraints,
+    max_edge_size=1.0e-1,
+    num_lloyd_steps=10,
+)
 # mesh.points, mesh.cells
 ```
 The quality of the mesh isn't very good, but can be improved with
@@ -49,7 +54,7 @@ The quality of the mesh isn't very good, but can be improved with
 import pygalmesh
 
 s = pygalmesh.Ball([0, 0, 0], 1.0)
-mesh = pygalmesh.generate_mesh(s, cell_size=0.2)
+mesh = pygalmesh.generate_mesh(s, max_cell_circumradius=0.2)
 
 # mesh.points, mesh.cells, ...
 ```
@@ -65,7 +70,7 @@ The mesh generation comes with many more options, described
 <!--exdown-skip-->
 ```python
 mesh = pygalmesh.generate_mesh(
-    s, cell_size=0.2, edge_size=0.1, odt=True, lloyd=True, verbose=False
+    s, max_cell_circumradius=0.2, odt=True, lloyd=True, verbose=False
 )
 ```
 
@@ -80,7 +85,11 @@ import pygalmesh
 s0 = pygalmesh.Tetrahedron(
     [0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]
 )
-mesh = pygalmesh.generate_mesh(s0, cell_size=0.1, edge_size=0.1)
+mesh = pygalmesh.generate_mesh(
+    s0,
+    max_cell_circumradius=0.1,
+    max_edge_size_at_feature_edges=0.1,
+)
 ```
 
 #### Domain combinations
@@ -111,8 +120,8 @@ u = pygalmesh.Difference(s0, s1)
 
 # add circle
 a = numpy.sqrt(radius ** 2 - displacement ** 2)
-edge_size = 0.15
-n = int(2 * numpy.pi * a / edge_size)
+max_edge_size_at_feature_edges = 0.15
+n = int(2 * numpy.pi * a / max_edge_size_at_feature_edges)
 circ = [
     [0.0, a * numpy.cos(i * 2 * numpy.pi / n), a * numpy.sin(i * 2 * numpy.pi / n)]
     for i in range(n)
@@ -122,15 +131,16 @@ circ.append(circ[0])
 mesh = pygalmesh.generate_mesh(
     u,
     feature_edges=[circ],
-    cell_size=0.15,
-    edge_size=edge_size,
-    facet_angle=25,
-    facet_size=0.15,
-    cell_radius_edge_ratio=2.0,
+    max_cell_circumradius=0.15,
+    max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
+    min_facet_angle=25,
+    max_radius_surface_delaunay_ball=0.15,
+    max_circumradius_edge_ratio=2.0,
 )
 ```
-Note that the length of the polygon legs are kept in sync with the `edge_size` of the
-mesh generation. This makes sure that it fits in nicely with the rest of the mesh.
+Note that the length of the polygon legs are kept in sync with
+`max_edge_size_at_feature_edges` of the mesh generation. This makes sure that it fits in
+nicely with the rest of the mesh.
 
 #### Domain deformations
 <img src="https://nschloe.github.io/pygalmesh/egg.png" width="30%">
@@ -141,7 +151,7 @@ import pygalmesh
 
 s = pygalmesh.Stretch(pygalmesh.Ball([0, 0, 0], 1.0), [1.0, 2.0, 0.0])
 
-mesh = pygalmesh.generate_mesh(s, cell_size=0.1)
+mesh = pygalmesh.generate_mesh(s, max_cell_circumradius=0.1)
 ```
 
 #### Extrusion of 2D polygons
@@ -153,10 +163,18 @@ alongside!
 import pygalmesh
 
 p = pygalmesh.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
-edge_size = 0.1
-domain = pygalmesh.Extrude(p, [0.0, 0.0, 1.0], 0.5 * 3.14159265359, edge_size)
+max_edge_size_at_feature_edges = 0.1
+domain = pygalmesh.Extrude(
+    p,
+    [0.0, 0.0, 1.0],
+    0.5 * 3.14159265359,
+    max_edge_size_at_feature_edges,
+)
 mesh = pygalmesh.generate_mesh(
-    domain, cell_size=0.1, edge_size=edge_size, verbose=False
+    domain,
+    max_cell_circumradius=0.1,
+    max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
+    verbose=False,
 )
 ```
 Feature edges are automatically preserved here, which is why an edge length needs to be
@@ -171,10 +189,13 @@ body.
 import pygalmesh
 
 p = pygalmesh.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
-edge_size = 0.1
-domain = pygalmesh.RingExtrude(p, edge_size)
+max_edge_size_at_feature_edges = 0.1
+domain = pygalmesh.RingExtrude(p, max_edge_size_at_feature_edges)
 mesh = pygalmesh.generate_mesh(
-    domain, cell_size=0.1, edge_size=edge_size, verbose=False
+    domain,
+    max_cell_circumradius=0.1,
+    max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
+    verbose=False,
 )
 ```
 
@@ -204,7 +225,7 @@ class Heart(pygalmesh.DomainBase):
 
 
 d = Heart()
-mesh = pygalmesh.generate_mesh(d, cell_size=0.1)
+mesh = pygalmesh.generate_mesh(d, max_cell_circumradius=0.1)
 ```
 Note that you need to specify the square of a bounding sphere radius, used as an input
 to CGAL's mesh generator.
@@ -213,33 +234,37 @@ to CGAL's mesh generator.
 #### Local refinement
 <img src="https://nschloe.github.io/pygalmesh/ball-local-refinement.png" width="30%">
 
-Use `generate_mesh` with a function (regular or lambda) as `cell_size`. The same goes
-for `edge_size`, `facet_size`, and `facet_distance`.
+Use `generate_mesh` with a function (regular or lambda) as `max_cell_circumradius`. The
+same goes for `max_edge_size_at_feature_edges`, `max_radius_surface_delaunay_ball`, and
+`max_facet_distance`.
 ```python
 import numpy
 import pygalmesh
 
 mesh = pygalmesh.generate_mesh(
     pygalmesh.Ball([0.0, 0.0, 0.0], 1.0),
-    facet_angle=30,
-    facet_size=0.1,
-    facet_distance=0.025,
-    cell_radius_edge_ratio=2,
-    cell_size=lambda x: abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5 + 0.025,
+    min_facet_angle=30.0,
+    max_radius_surface_delaunay_ball=0.1,
+    max_facet_distance=0.025,
+    max_circumradius_edge_ratio=2.0,
+    max_cell_circumradius=lambda x: abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5 + 0.025,
 )
 ```
 
 #### Surface meshes
 
 If you're only after the surface of a body, pygalmesh has `generate_surface_mesh` for
-you. It offers fewer options (obviously, `cell_size` is gone), but otherwise works the
-same way:
+you. It offers fewer options (obviously, `max_cell_circumradius` is gone), but otherwise
+works the same way:
 ```python
 import pygalmesh
 
 s = pygalmesh.Ball([0, 0, 0], 1.0)
 mesh = pygalmesh.generate_surface_mesh(
-    s, angle_bound=30, radius_bound=0.1, distance_bound=0.1
+    s,
+    min_facet_angle=30.0,
+    max_radius_surface_delaunay_ball=0.1,
+    max_facet_distance=0.1,
 )
 ```
 Refer to [CGAL's
@@ -272,11 +297,11 @@ class Schwarz(pygalmesh.DomainBase):
 mesh = pygalmesh.generate_periodic_mesh(
     Schwarz(),
     [0, 0, 0, 1, 1, 1],
-    cell_size=0.05,
-    facet_angle=30,
-    facet_size=0.05,
-    facet_distance=0.025,
-    cell_radius_edge_ratio=2.0,
+    max_cell_circumradius=0.05,
+    min_facet_angle=30,
+    max_radius_surface_delaunay_ball=0.05,
+    max_facet_distance=0.025,
+    max_circumradius_edge_ratio=2.0,
     number_of_copies_in_output=4,
     # odt=True,
     # lloyd=True,
@@ -302,10 +327,10 @@ import pygalmesh
 
 mesh = pygalmesh.generate_volume_mesh_from_surface_mesh(
     "elephant.vtu",
-    facet_angle=25.0,
-    facet_size=0.15,
-    facet_distance=0.008,
-    cell_radius_edge_ratio=3.0,
+    min_facet_angle=25.0,
+    max_radius_surface_delaunay_ball=0.15,
+    max_facet_distance=0.008,
+    max_circumradius_edge_ratio=3.0,
     verbose=False,
 )
 ```
@@ -326,7 +351,7 @@ import pygalmesh
 
 mesh = pygalmesh.generate_from_inr(
     "skull_2.9.inr",
-    cell_size=5.0,
+    max_cell_circumradius=5.0,
     verbose=False,
 )
 ```
@@ -357,7 +382,9 @@ with open("MergedPhantom.DAT", "rb") as fid:
 
 vol = vol.reshape((Nx, Ny, Nz))
 
-mesh = pygalmesh.generate_from_array(vol, h, facet_distance=0.2, cell_size=1.0)
+mesh = pygalmesh.generate_from_array(
+    vol, h, max_facet_distance=0.2, max_cell_circumradius=1.0
+)
 mesh.write("breast.vtk")
 ```
 
@@ -368,7 +395,10 @@ tissue (label `5`), and *2 mm* for all other tissues (`default`).
 <!--exdown-skip-->
 ```python
 mesh = pygalmesh.generate_from_array(
-    vol, h, facet_distance=0.2, cell_size={"default": 2.0, 4: 1.0, 5: 0.5}
+    vol,
+    h,
+    max_facet_distance=0.2,
+    max_cell_circumradius={"default": 2.0, 4: 1.0, 5: 0.5},
 )
 mesh.write("breast_adapted.vtk")
 ```
@@ -391,10 +421,10 @@ import pygalmesh
 
 mesh = pygalmesh.remesh_surface(
     "lion-head.off",
-    edge_size=0.025,
-    facet_angle=25,
-    facet_size=0.1,
-    facet_distance=0.001,
+    max_edge_size_at_feature_edges=0.025,
+    min_facet_angle=25,
+    max_radius_surface_delaunay_ball=0.1,
+    max_facet_distance=0.001,
     verbose=False,
 )
 ```

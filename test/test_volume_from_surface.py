@@ -11,10 +11,10 @@ def test_volume_from_surface():
     this_dir = pathlib.Path(__file__).resolve().parent
     # mesh = pygalmesh.generate_volume_mesh_from_surface_mesh(
     #     this_dir / "meshes" / "elephant.vtu",
-    #     facet_angle=25.0,
-    #     facet_size=0.15,
-    #     facet_distance=0.008,
-    #     cell_radius_edge_ratio=3.0,
+    #     min_facet_angle=25.0,
+    #     max_radius_surface_delaunay_ball=0.15,
+    #     max_facet_distance=0.008,
+    #     max_circumradius_edge_ratio=3.0,
     #     verbose=False,
     # )
     with tempfile.TemporaryDirectory() as tmp:
@@ -23,13 +23,13 @@ def test_volume_from_surface():
             [
                 str(this_dir / "meshes" / "elephant.vtu"),
                 out_filename,
-                "--facet-angle",
+                "--min-facet-angle",
                 "0.5",
-                "--facet-size",
+                "--max-radius-surface-delaunay-ball",
                 "0.15",
-                "--facet-distance",
+                "--max-facet-distance",
                 "0.008",
-                "--cell-radius-edge-ratio",
+                "--max-circumradius-edge-ratio",
                 "3.0",
                 "--quiet",
             ]

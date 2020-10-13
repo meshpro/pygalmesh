@@ -61,12 +61,12 @@ class Extrude: public pygalmesh::DomainBase {
       const std::shared_ptr<pygalmesh::Polygon2D> & poly,
       const std::array<double, 3> & direction,
       const double alpha = 0.0,
-      const double edge_size = 0.0
+      const double max_edge_size_at_feature_edges = 0.0
       ):
     poly_(poly),
     direction_(direction),
     alpha_(alpha),
-    edge_size_(edge_size)
+    max_edge_size_at_feature_edges_(max_edge_size_at_feature_edges)
   {
   }
 
@@ -189,7 +189,7 @@ class Extrude: public pygalmesh::DomainBase {
       }
     } else {
       // Alright, we need to chop the lines on which the polygon corners are
-      // sitting into pieces. How long? About edge_size. For the starting point
+      // sitting into pieces. How long? About max_edge_size_at_feature_edges. For the starting point
       // (x0, y0, z0) height h and angle alpha, the lines are given by
       //
       // f(beta) = (
@@ -205,8 +205,8 @@ class Extrude: public pygalmesh::DomainBase {
       const double height = direction_[2];
       for (const auto & pt: poly_->points) {
         const double l = sqrt(alpha_*alpha_ * (pt.x()*pt.x() + pt.y()*pt.y()) + height*height);
-        assert(edge_size_ > 0.0);
-        const size_t n = int(l / edge_size_ - 0.5) + 1;
+        assert(max_edge_size_at_feature_edges_ > 0.0);
+        const size_t n = int(l / max_edge_size_at_feature_edges_ - 0.5) + 1;
         std::vector<std::array<double, 3>> line = {
           {pt.x(), pt.y(), 0.0},
         };
@@ -231,7 +231,7 @@ class Extrude: public pygalmesh::DomainBase {
   const std::shared_ptr<pygalmesh::Polygon2D> poly_;
   const std::array<double, 3> direction_;
   const double alpha_;
-  const double edge_size_;
+  const double max_edge_size_at_feature_edges_;
 };
 
 
@@ -239,12 +239,12 @@ class ring_extrude: public pygalmesh::DomainBase {
   public:
   ring_extrude(
       const std::shared_ptr<pygalmesh::Polygon2D> & poly,
-      const double edge_size
+      const double max_edge_size_at_feature_edges
       ):
     poly_(poly),
-    edge_size_(edge_size)
+    max_edge_size_at_feature_edges_(max_edge_size_at_feature_edges)
   {
-    assert(edge_size > 0.0);
+    assert(max_edge_size_at_feature_edges > 0.0);
   }
 
   virtual ~ring_extrude() = default;
@@ -282,7 +282,7 @@ class ring_extrude: public pygalmesh::DomainBase {
     for (const auto & pt: poly_->points) {
       const double r = pt.x();
       const double circ = 2 * 3.14159265359 * r;
-      const size_t n = int(circ / edge_size_ - 0.5) + 1;
+      const size_t n = int(circ / max_edge_size_at_feature_edges_ - 0.5) + 1;
       std::vector<std::array<double, 3>> line;
       for (size_t i=0; i < n; i++) {
         const double alpha = (2 * 3.14159265359 * i) / n;
@@ -300,7 +300,7 @@ class ring_extrude: public pygalmesh::DomainBase {
 
   private:
   const std::shared_ptr<pygalmesh::Polygon2D> poly_;
-  const double edge_size_;
+  const double max_edge_size_at_feature_edges_;
 };
 
 } // namespace pygalmesh

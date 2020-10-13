@@ -16,12 +16,12 @@ def inr(argv=None):
         odt=args.odt,
         perturb=args.perturb,
         exude=args.exude,
-        edge_size=args.edge_size,
-        facet_angle=args.facet_angle,
-        facet_size=args.facet_size,
-        facet_distance=args.facet_distance,
-        cell_radius_edge_ratio=args.cell_radius_edge_ratio,
-        cell_size=args.cell_size,
+        max_edge_size_at_feature_edges=args.max_edge_size_at_feature_edges,
+        min_facet_angle=args.min_facet_angle,
+        max_radius_surface_delaunay_ball=args.max_radius_surface_delaunay_ball,
+        max_facet_distance=args.max_facet_distance,
+        max_circumradius_edge_ratio=args.max_circumradius_edge_ratio,
+        max_cell_circumradius=args.max_cell_circumradius,
         verbose=not args.quiet,
     )
     meshio.write(args.outfile, mesh)
@@ -70,31 +70,39 @@ def _get_inr_parser():
     )
 
     parser.add_argument(
-        "--edge-size", "-e", type=float, default=0.0, help="edge size (default: 0.0)"
+        "--max-edge-size-at-feature-edges",
+        "-e",
+        type=float,
+        default=0.0,
+        help="maximum edge size at feature edges (default: 0.0)",
     )
 
     parser.add_argument(
-        "--facet-angle",
+        "--min-facet-angle",
         "-a",
         type=float,
         default=0.0,
-        help="facet angle (default: 0.0)",
+        help="minimum facet angle (default: 0.0)",
     )
 
     parser.add_argument(
-        "--facet-size", "-s", type=float, default=0.0, help="facet size (default: 0.0)"
+        "--max-radius-surface-delaunay-ball",
+        "-s",
+        type=float,
+        default=0.0,
+        help="maximum radius of the surface facet Delaunay ball (default: 0.0)",
     )
 
     parser.add_argument(
-        "--facet-distance",
+        "--max-facet-distance",
         "-d",
         type=float,
         default=0.0,
-        help="facet distance (default: 0.0)",
+        help="maximum facet distance (default: 0.0)",
     )
 
     parser.add_argument(
-        "--cell-radius-edge-ratio",
+        "--max-circumradius-edge-ratio",
         "-r",
         type=float,
         default=0.0,
@@ -102,7 +110,11 @@ def _get_inr_parser():
     )
 
     parser.add_argument(
-        "--cell-size", "-c", type=float, default=0.0, help="cell size (default: 0.0)"
+        "--max-cell-circumradius",
+        "-c",
+        type=float,
+        default=0.0,
+        help="maximum cell circumradius (default: 0.0)",
     )
 
     parser.add_argument(

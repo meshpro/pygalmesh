@@ -6,7 +6,7 @@ import pygalmesh
 
 def test_ball():
     s = pygalmesh.Ball([0.0, 0.0, 0.0], 1.0)
-    mesh = pygalmesh.generate_mesh(s, cell_size=0.2, verbose=False)
+    mesh = pygalmesh.generate_mesh(s, max_cell_circumradius=0.2, verbose=False)
 
     assert abs(max(mesh.points[:, 0]) - 1.0) < 0.02
     assert abs(min(mesh.points[:, 0]) + 1.0) < 0.02
@@ -27,8 +27,8 @@ def test_balls_union():
     u = pygalmesh.Union([s0, s1])
 
     a = numpy.sqrt(radius ** 2 - displacement ** 2)
-    edge_size = 0.1
-    n = int(2 * numpy.pi * a / edge_size)
+    max_edge_size_at_feature_edges = 0.1
+    n = int(2 * numpy.pi * a / max_edge_size_at_feature_edges)
     circ = [
         [0.0, a * numpy.cos(i * 2 * numpy.pi / n), a * numpy.sin(i * 2 * numpy.pi / n)]
         for i in range(n)
@@ -36,7 +36,11 @@ def test_balls_union():
     circ.append(circ[0])
 
     mesh = pygalmesh.generate_mesh(
-        u, feature_edges=[circ], cell_size=0.15, edge_size=edge_size, verbose=False
+        u,
+        feature_edges=[circ],
+        max_cell_circumradius=0.15,
+        max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
+        verbose=False,
     )
 
     assert abs(max(mesh.points[:, 0]) - (radius + displacement)) < 0.02
@@ -63,8 +67,8 @@ def test_balls_intersection():
     u = pygalmesh.Intersection([s0, s1])
 
     a = numpy.sqrt(radius ** 2 - displacement ** 2)
-    edge_size = 0.1
-    n = int(2 * numpy.pi * a / edge_size)
+    max_edge_size_at_feature_edges = 0.1
+    n = int(2 * numpy.pi * a / max_edge_size_at_feature_edges)
     circ = [
         [0.0, a * numpy.cos(i * 2 * numpy.pi / n), a * numpy.sin(i * 2 * numpy.pi / n)]
         for i in range(n)
@@ -72,7 +76,11 @@ def test_balls_intersection():
     circ.append(circ[0])
 
     mesh = pygalmesh.generate_mesh(
-        u, feature_edges=[circ], cell_size=0.15, edge_size=edge_size, verbose=False
+        u,
+        feature_edges=[circ],
+        max_cell_circumradius=0.15,
+        max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
+        verbose=False,
     )
 
     assert abs(max(mesh.points[:, 0]) - (radius - displacement)) < 0.02
@@ -97,8 +105,8 @@ def test_balls_difference():
     u = pygalmesh.Difference(s0, s1)
 
     a = numpy.sqrt(radius ** 2 - displacement ** 2)
-    edge_size = 0.15
-    n = int(2 * numpy.pi * a / edge_size)
+    max_edge_size_at_feature_edges = 0.15
+    n = int(2 * numpy.pi * a / max_edge_size_at_feature_edges)
     circ = [
         [0.0, a * numpy.cos(i * 2 * numpy.pi / n), a * numpy.sin(i * 2 * numpy.pi / n)]
         for i in range(n)
@@ -108,11 +116,11 @@ def test_balls_difference():
     mesh = pygalmesh.generate_mesh(
         u,
         feature_edges=[circ],
-        cell_size=0.15,
-        edge_size=edge_size,
-        facet_angle=25,
-        facet_size=0.15,
-        cell_radius_edge_ratio=2.0,
+        max_cell_circumradius=0.15,
+        max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
+        min_facet_angle=25,
+        max_radius_surface_delaunay_ball=0.15,
+        max_circumradius_edge_ratio=2.0,
         verbose=False,
     )
 
@@ -149,7 +157,12 @@ def test_cuboids_intersection():
     #         [[2.0 - eps, 1.0, 0.5], [1.0 + eps, 1.0, 0.5]],
     #         ]
 
-    mesh = pygalmesh.generate_mesh(u, cell_size=0.1, edge_size=0.1, verbose=False)
+    mesh = pygalmesh.generate_mesh(
+        u,
+        max_cell_circumradius=0.1,
+        max_edge_size_at_feature_edges=0.1,
+        verbose=False,
+    )
 
     # filter the vertices that belong to cells
     verts = mesh.points[numpy.unique(mesh.get_cells_type("tetra"))]
@@ -171,7 +184,12 @@ def test_cuboids_union():
     c1 = pygalmesh.Cuboid([1, 1, -2], [2, 2, 2])
     u = pygalmesh.Union([c0, c1])
 
-    mesh = pygalmesh.generate_mesh(u, cell_size=0.2, edge_size=0.2, verbose=False)
+    mesh = pygalmesh.generate_mesh(
+        u,
+        max_cell_circumradius=0.2,
+        max_edge_size_at_feature_edges=0.2,
+        verbose=False,
+    )
 
     # filter the vertices that belong to cells
     verts = mesh.points[numpy.unique(mesh.get_cells_type("tetra"))]
@@ -190,7 +208,9 @@ def test_cuboids_union():
 
 def test_cuboid():
     s0 = pygalmesh.Cuboid([0, 0, 0], [1, 2, 3])
-    mesh = pygalmesh.generate_mesh(s0, edge_size=0.1, verbose=False)
+    mesh = pygalmesh.generate_mesh(
+        s0, max_edge_size_at_feature_edges=0.1, verbose=False
+    )
 
     tol = 1.0e-3
     assert abs(max(mesh.points[:, 0]) - 1.0) < tol
@@ -207,10 +227,13 @@ def test_cuboid():
 def test_cone():
     base_radius = 1.0
     height = 2.0
-    edge_size = 0.1
-    s0 = pygalmesh.Cone(base_radius, height, edge_size)
+    max_edge_size_at_feature_edges = 0.1
+    s0 = pygalmesh.Cone(base_radius, height, max_edge_size_at_feature_edges)
     mesh = pygalmesh.generate_mesh(
-        s0, cell_size=0.1, edge_size=edge_size, verbose=False
+        s0,
+        max_cell_circumradius=0.1,
+        max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
+        verbose=False,
     )
 
     tol = 2.0e-1
@@ -233,7 +256,10 @@ def test_cylinder():
     edge_length = 0.1
     s0 = pygalmesh.Cylinder(z0, z1, radius, edge_length)
     mesh = pygalmesh.generate_mesh(
-        s0, cell_size=0.1, edge_size=edge_length, verbose=False
+        s0,
+        max_cell_circumradius=0.1,
+        max_edge_size_at_feature_edges=edge_length,
+        verbose=False,
     )
 
     tol = 1.0e-1
@@ -253,7 +279,12 @@ def test_tetrahedron():
     s0 = pygalmesh.Tetrahedron(
         [0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]
     )
-    mesh = pygalmesh.generate_mesh(s0, cell_size=0.1, edge_size=0.1, verbose=False)
+    mesh = pygalmesh.generate_mesh(
+        s0,
+        max_cell_circumradius=0.1,
+        max_edge_size_at_feature_edges=0.1,
+        verbose=False,
+    )
 
     tol = 1.0e-3
     assert abs(max(mesh.points[:, 0]) - 1.0) < tol
@@ -271,7 +302,7 @@ def test_torus():
     major_radius = 1.0
     minor_radius = 0.5
     s0 = pygalmesh.Torus(major_radius, minor_radius)
-    mesh = pygalmesh.generate_mesh(s0, cell_size=0.1, verbose=False)
+    mesh = pygalmesh.generate_mesh(s0, max_cell_circumradius=0.1, verbose=False)
 
     tol = 1.0e-2
     radii_sum = major_radius + minor_radius
@@ -289,12 +320,12 @@ def test_torus():
 
 def test_custom_function():
     class Hyperboloid(pygalmesh.DomainBase):
-        def __init__(self, edge_size):
+        def __init__(self, max_edge_size_at_feature_edges):
             super().__init__()
             self.z0 = -1.0
             self.z1 = 1.0
             self.waist_radius = 0.5
-            self.edge_size = edge_size
+            self.max_edge_size_at_feature_edges = max_edge_size_at_feature_edges
 
         def eval(self, x):
             if self.z0 < x[2] and x[2] < self.z1:
@@ -308,7 +339,7 @@ def test_custom_function():
 
         def get_features(self):
             radius0 = self.z0 ** 2 + self.waist_radius
-            n0 = int(2 * numpy.pi * radius0 / self.edge_size)
+            n0 = int(2 * numpy.pi * radius0 / self.max_edge_size_at_feature_edges)
             circ0 = [
                 [
                     radius0 * numpy.cos((2 * numpy.pi * k) / n0),
@@ -320,7 +351,7 @@ def test_custom_function():
             circ0.append(circ0[0])
 
             radius1 = self.z1 ** 2 + self.waist_radius
-            n1 = int(2 * numpy.pi * radius1 / self.edge_size)
+            n1 = int(2 * numpy.pi * radius1 / self.max_edge_size_at_feature_edges)
             circ1 = [
                 [
                     radius1 * numpy.cos((2 * numpy.pi * k) / n1),
@@ -332,10 +363,15 @@ def test_custom_function():
             circ1.append(circ1[0])
             return [circ0, circ1]
 
-    edge_size = 0.12
-    d = Hyperboloid(edge_size)
+    max_edge_size_at_feature_edges = 0.12
+    d = Hyperboloid(max_edge_size_at_feature_edges)
 
-    mesh = pygalmesh.generate_mesh(d, cell_size=0.1, edge_size=edge_size, verbose=False)
+    mesh = pygalmesh.generate_mesh(
+        d,
+        max_cell_circumradius=0.1,
+        max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
+        verbose=False,
+    )
 
     # TODO check the reference values
     tol = 1.0e-1
@@ -353,7 +389,12 @@ def test_custom_function():
 def test_scaling():
     alpha = 1.3
     s = pygalmesh.Scale(pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]), alpha)
-    mesh = pygalmesh.generate_mesh(s, cell_size=0.2, edge_size=0.1, verbose=False)
+    mesh = pygalmesh.generate_mesh(
+        s,
+        max_cell_circumradius=0.2,
+        max_edge_size_at_feature_edges=0.1,
+        verbose=False,
+    )
 
     tol = 1.0e-2
     assert abs(max(mesh.points[:, 0]) - 1 * alpha) < tol
@@ -370,7 +411,12 @@ def test_scaling():
 def test_stretch():
     alpha = 2.0
     s = pygalmesh.Stretch(pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]), [alpha, 0.0, 0.0])
-    mesh = pygalmesh.generate_mesh(s, cell_size=0.2, edge_size=0.2, verbose=False)
+    mesh = pygalmesh.generate_mesh(
+        s,
+        max_cell_circumradius=0.2,
+        max_edge_size_at_feature_edges=0.2,
+        verbose=False,
+    )
 
     tol = 1.0e-2
     assert abs(max(mesh.points[:, 0]) - alpha) < tol
@@ -388,7 +434,12 @@ def test_rotation():
     s0 = pygalmesh.Rotate(
         pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]), [1.0, 0.0, 0.0], numpy.pi / 12.0
     )
-    mesh = pygalmesh.generate_mesh(s0, cell_size=0.1, edge_size=0.1, verbose=False)
+    mesh = pygalmesh.generate_mesh(
+        s0,
+        max_cell_circumradius=0.1,
+        max_edge_size_at_feature_edges=0.1,
+        verbose=False,
+    )
 
     tol = 1.0e-2
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
@@ -397,7 +448,12 @@ def test_rotation():
 
 def test_translation():
     s0 = pygalmesh.Translate(pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]), [1.0, 0.0, 0.0])
-    mesh = pygalmesh.generate_mesh(s0, cell_size=0.1, edge_size=0.1, verbose=False)
+    mesh = pygalmesh.generate_mesh(
+        s0,
+        max_cell_circumradius=0.1,
+        max_edge_size_at_feature_edges=0.1,
+        verbose=False,
+    )
 
     tol = 1.0e-2
     assert abs(max(mesh.points[:, 0]) - 2.0) < tol
@@ -413,7 +469,12 @@ def test_translation():
 def test_extrude():
     p = pygalmesh.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
     domain = pygalmesh.Extrude(p, [0.0, 0.3, 1.0])
-    mesh = pygalmesh.generate_mesh(domain, cell_size=0.1, edge_size=0.1, verbose=False)
+    mesh = pygalmesh.generate_mesh(
+        domain,
+        max_cell_circumradius=0.1,
+        max_edge_size_at_feature_edges=0.1,
+        verbose=False,
+    )
 
     tol = 1.0e-3
     assert abs(max(mesh.points[:, 0]) - 0.5) < tol
@@ -430,10 +491,18 @@ def test_extrude():
 
 def test_extrude_rotate():
     p = pygalmesh.Polygon2D([[-0.5, -0.3], [0.5, -0.3], [0.0, 0.5]])
-    edge_size = 0.1
-    domain = pygalmesh.Extrude(p, [0.0, 0.0, 1.0], 0.5 * 3.14159265359, edge_size)
+    max_edge_size_at_feature_edges = 0.1
+    domain = pygalmesh.Extrude(
+        p,
+        [0.0, 0.0, 1.0],
+        0.5 * 3.14159265359,
+        max_edge_size_at_feature_edges,
+    )
     mesh = pygalmesh.generate_mesh(
-        domain, cell_size=0.1, edge_size=edge_size, verbose=False
+        domain,
+        max_cell_circumradius=0.1,
+        max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
+        verbose=False,
     )
 
     tol = 1.0e-3
@@ -450,10 +519,13 @@ def test_extrude_rotate():
 
 def test_ring_extrude():
     p = pygalmesh.Polygon2D([[0.5, -0.3], [1.5, -0.3], [1.0, 0.5]])
-    edge_size = 0.1
-    domain = pygalmesh.RingExtrude(p, edge_size)
+    max_edge_size_at_feature_edges = 0.1
+    domain = pygalmesh.RingExtrude(p, max_edge_size_at_feature_edges)
     mesh = pygalmesh.generate_mesh(
-        domain, cell_size=0.1, edge_size=edge_size, verbose=False
+        domain,
+        max_cell_circumradius=0.1,
+        max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
+        verbose=False,
     )
 
     tol = 1.0e-2
@@ -470,7 +542,7 @@ def test_ring_extrude():
 
 def test_heart():
     class Heart(pygalmesh.DomainBase):
-        def __init__(self, edge_size):
+        def __init__(self, max_edge_size_at_feature_edges):
             super().__init__()
 
         def eval(self, x):
@@ -483,13 +555,13 @@ def test_heart():
         def get_bounding_sphere_squared_radius(self):
             return 10.0
 
-    edge_size = 0.1
-    d = Heart(edge_size)
+    max_edge_size_at_feature_edges = 0.1
+    d = Heart(max_edge_size_at_feature_edges)
 
     mesh = pygalmesh.generate_mesh(
         d,
-        cell_size=0.1,
-        edge_size=edge_size,
+        max_cell_circumradius=0.1,
+        max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
         # odt=True,
         # lloyd=True,
         # verbose=True
@@ -505,7 +577,12 @@ def test_halfspace():
     s = pygalmesh.HalfSpace([1.0, 2.0, 3.0], 1.0, 2.0)
     u = pygalmesh.Intersection([c, s])
 
-    mesh = pygalmesh.generate_mesh(u, cell_size=0.2, edge_size=0.2, verbose=False)
+    mesh = pygalmesh.generate_mesh(
+        u,
+        max_cell_circumradius=0.2,
+        max_edge_size_at_feature_edges=0.2,
+        verbose=False,
+    )
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
     assert abs(vol - 1 / 750) < 1.0e-3
@@ -514,11 +591,12 @@ def test_halfspace():
 def test_ball_with_sizing_field():
     mesh = pygalmesh.generate_mesh(
         pygalmesh.Ball([0.0, 0.0, 0.0], 1.0),
-        facet_angle=30,
-        facet_size=0.1,
-        facet_distance=0.025,
-        cell_radius_edge_ratio=2,
-        cell_size=lambda x: abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5 + 0.025,
+        min_facet_angle=30.0,
+        max_radius_surface_delaunay_ball=0.1,
+        max_facet_distance=0.025,
+        max_circumradius_edge_ratio=2.0,
+        max_cell_circumradius=lambda x: abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5
+        + 0.025,
         verbose=False,
     )
 

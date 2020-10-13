@@ -7,14 +7,14 @@ import meshio
 import pygalmesh
 
 
-def test_inr():
+def test_remesh_surface():
     this_dir = pathlib.Path(__file__).resolve().parent
     # mesh = pygalmesh.remesh_surface(
     #     this_dir / "meshes" / "lion-head.off",
-    #     edge_size=0.025,
-    #     facet_angle=25,
-    #     facet_size=0.1,
-    #     facet_distance=0.001,
+    #     max_edge_size_at_feature_edges=0.025,
+    #     min_facet_angle=25,
+    #     max_radius_surface_delaunay_ball=0.1,
+    #     max_facet_distance=0.001,
     #     verbose=False,
     # )
     with tempfile.TemporaryDirectory() as tmp:
@@ -23,13 +23,13 @@ def test_inr():
             [
                 str(this_dir / "meshes" / "lion-head.off"),
                 out_filename,
-                "--edge-size",
+                "--max-edge-size-at-feature-edges",
                 "0.025",
-                "--facet-angle",
+                "--min-facet-angle",
                 "25",
-                "--facet-size",
+                "--max-radius-surface-delaunay-ball",
                 "0.1",
-                "--facet-distance",
+                "--max-facet-distance",
                 "0.001",
                 "--quiet",
             ]

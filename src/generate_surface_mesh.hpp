@@ -12,9 +12,9 @@ void generate_surface_mesh(
     const std::shared_ptr<pygalmesh::DomainBase> & domain,
     const std::string & outfile,
     const double bounding_sphere_radius = 0.0,
-    const double angle_bound = 0.0,
-    const double radius_bound = 0.0,
-    const double distance_bound = 0.0,
+    const double min_facet_angle = 0.0,
+    const double max_radius_surface_delaunay_ball = 0.0,
+    const double max_facet_distance = 0.0,
     const bool verbose = true,
     const int seed = 0
     );

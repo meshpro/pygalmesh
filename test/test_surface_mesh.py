@@ -8,7 +8,11 @@ def test_sphere():
     radius = 1.0
     s = pygalmesh.Ball([0.0, 0.0, 0.0], radius)
     mesh = pygalmesh.generate_surface_mesh(
-        s, angle_bound=30, radius_bound=0.1, distance_bound=0.1, verbose=False
+        s,
+        min_facet_angle=30.0,
+        max_radius_surface_delaunay_ball=0.1,
+        max_facet_distance=0.1,
+        verbose=False,
     )
 
     tol = 1.0e-2

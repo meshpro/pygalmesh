@@ -15,7 +15,11 @@ def test_from_array():
     vol[ii * ii + jj * jj + kk * kk < (0.5 * n) ** 2] = 2
 
     mesh = pygalmesh.generate_from_array(
-        vol, h, cell_size=100 * min(h), facet_distance=min(h), verbose=False
+        vol,
+        h,
+        max_cell_circumradius=100 * min(h),
+        max_facet_distance=min(h),
+        verbose=False,
     )
 
     tol = min(h)
@@ -47,8 +51,8 @@ def test_from_array_with_subdomain_sizing():
     mesh = pygalmesh.generate_from_array(
         vol,
         h,
-        cell_size={1: 100 * min(h), 2: 10 * min(h)},
-        facet_distance=min(h),
+        max_cell_circumradius={1: 100 * min(h), 2: 10 * min(h)},
+        max_facet_distance=min(h),
         verbose=False,
     )
 

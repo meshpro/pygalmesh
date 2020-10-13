@@ -14,9 +14,9 @@ generate_2d(
   const double max_circumradius_shortest_edge_ratio,
   // https://github.com/CGAL/cgal/issues/5061#issuecomment-705520984
   // the "default" size criterion for a triangle in the 2D mesh generator refers to its
-  // edges lengths. In the output mesh, all segments of all triangles must be shorter
-  // than the given bound.pthread_mutexattr_getprotocol
-  const double edge_size,
+  // edge lengths. In the output mesh, all segments of all triangles must be shorter
+  // than the given bound.
+  const double max_edge_size,
   const int num_lloyd_steps
 );
 
