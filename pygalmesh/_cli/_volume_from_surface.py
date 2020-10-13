@@ -103,7 +103,7 @@ def _get_volume_from_surface_parser():
     )
 
     parser.add_argument(
-        "--cell-radius-edge-ratio",
+        "--max-circumradius-edge-ratio",
         "-r",
         type=float,
         default=0.0,

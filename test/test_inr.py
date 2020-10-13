@@ -18,7 +18,7 @@ def test_inr():
             [
                 str(this_dir / "meshes" / "skull_2.9.inr"),
                 out_filename,
-                "--cell-size",
+                "--max-cell-circumradius",
                 "5.0",
                 "--quiet",
             ]

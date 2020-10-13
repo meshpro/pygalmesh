@@ -23,13 +23,13 @@ def test_volume_from_surface():
             [
                 str(this_dir / "meshes" / "elephant.vtu"),
                 out_filename,
-                "--facet-angle",
+                "--min-facet-angle",
                 "0.5",
-                "--facet-size",
+                "--max-radius-surface-delaunay-ball",
                 "0.15",
-                "--facet-distance",
+                "--max-facet-distance",
                 "0.008",
-                "--cell-radius-edge-ratio",
+                "--max-circumradius-edge-ratio",
                 "3.0",
                 "--quiet",
             ]
