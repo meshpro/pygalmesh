@@ -20,7 +20,7 @@ def inr(argv=None):
         min_facet_angle=args.min_facet_angle,
         max_radius_surface_delaunay_ball=args.max_radius_surface_delaunay_ball,
         max_facet_distance=args.max_facet_distance,
-        max_cell_radius_edge_ratio=args.max_cell_radius_edge_ratio,
+        max_circumradius_edge_ratio=args.max_circumradius_edge_ratio,
         max_cell_circumradius=args.max_cell_circumradius,
         verbose=not args.quiet,
     )

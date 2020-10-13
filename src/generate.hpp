@@ -32,7 +32,7 @@ void generate_mesh(
     const double max_facet_distance_value = 0.0,
     const std::shared_ptr<pygalmesh::SizingFieldBase> & max_facet_distance_field = nullptr,
     //
-    const double cell_radius_edge_ratio = 0.0,
+    const double max_circumradius_edge_ratio = 0.0,
     //
     const double max_cell_circumradius_value = 0.0,
     const std::shared_ptr<pygalmesh::SizingFieldBase> & max_cell_circumradius_field = nullptr,

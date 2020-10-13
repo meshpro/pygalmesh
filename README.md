@@ -135,7 +135,7 @@ mesh = pygalmesh.generate_mesh(
     max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
     min_facet_angle=25,
     max_radius_surface_delaunay_ball=0.15,
-    max_cell_radius_edge_ratio=2.0,
+    max_circumradius_edge_ratio=2.0,
 )
 ```
 Note that the length of the polygon legs are kept in sync with
@@ -246,7 +246,7 @@ mesh = pygalmesh.generate_mesh(
     min_facet_angle=30.0,
     max_radius_surface_delaunay_ball=0.1,
     max_facet_distance=0.025,
-    max_cell_radius_edge_ratio=2.0,
+    max_circumradius_edge_ratio=2.0,
     max_cell_circumradius=lambda x: abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5 + 0.025,
 )
 ```
@@ -301,7 +301,7 @@ mesh = pygalmesh.generate_periodic_mesh(
     min_facet_angle=30,
     max_radius_surface_delaunay_ball=0.05,
     max_facet_distance=0.025,
-    max_cell_radius_edge_ratio=2.0,
+    max_circumradius_edge_ratio=2.0,
     number_of_copies_in_output=4,
     # odt=True,
     # lloyd=True,
@@ -330,7 +330,7 @@ mesh = pygalmesh.generate_volume_mesh_from_surface_mesh(
     min_facet_angle=25.0,
     max_radius_surface_delaunay_ball=0.15,
     max_facet_distance=0.008,
-    max_cell_radius_edge_ratio=3.0,
+    max_circumradius_edge_ratio=3.0,
     verbose=False,
 )
 ```

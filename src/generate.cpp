@@ -67,7 +67,7 @@ generate_mesh(
     const double max_facet_distance_value,
     const std::shared_ptr<pygalmesh::SizingFieldBase> & max_facet_distance_field,
     //
-    const double cell_radius_edge_ratio,
+    const double max_circumradius_edge_ratio,
     //
     const double max_cell_circumradius_value,
     const std::shared_ptr<pygalmesh::SizingFieldBase> & max_cell_circumradius_field,
@@ -152,10 +152,10 @@ generate_mesh(
 
   const auto cell_criteria = max_cell_circumradius_field ?
      Cell_criteria(
-         cell_radius_edge_ratio,
+         max_circumradius_edge_ratio,
          [&](K::Point_3 p, const int, const Mesh_domain::Index&) {
            return max_cell_circumradius_field->eval({p.x(), p.y(), p.z()});
-          }) : Cell_criteria(cell_radius_edge_ratio, max_cell_circumradius_value);
+          }) : Cell_criteria(max_circumradius_edge_ratio, max_cell_circumradius_value);
 
   const auto criteria = Mesh_criteria(edge_criteria, facet_criteria, cell_criteria);
 

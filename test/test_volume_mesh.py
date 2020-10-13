@@ -120,7 +120,7 @@ def test_balls_difference():
         max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
         min_facet_angle=25,
         max_radius_surface_delaunay_ball=0.15,
-        max_cell_radius_edge_ratio=2.0,
+        max_circumradius_edge_ratio=2.0,
         verbose=False,
     )
 
@@ -591,10 +591,10 @@ def test_halfspace():
 def test_ball_with_sizing_field():
     mesh = pygalmesh.generate_mesh(
         pygalmesh.Ball([0.0, 0.0, 0.0], 1.0),
-        min_facet_angle=30,
+        min_facet_angle=30.0,
         max_radius_surface_delaunay_ball=0.1,
         max_facet_distance=0.025,
-        max_cell_radius_edge_ratio=2,
+        max_circumradius_edge_ratio=2.0,
         max_cell_circumradius=lambda x: abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5
         + 0.025,
         verbose=False,

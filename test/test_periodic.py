@@ -21,7 +21,7 @@ def test_schwarz():
         min_facet_angle=30,
         max_radius_surface_delaunay_ball=0.05,
         max_facet_distance=0.025,
-        max_cell_radius_edge_ratio=2.0,
+        max_circumradius_edge_ratio=2.0,
         number_of_copies_in_output=4,
         # odt=True,
         # lloyd=True,

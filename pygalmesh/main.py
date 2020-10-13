@@ -39,7 +39,7 @@ def generate_mesh(
     min_facet_angle=0.0,
     max_radius_surface_delaunay_ball=0.0,
     max_facet_distance=0.0,
-    max_cell_radius_edge_ratio=0.0,
+    max_circumradius_edge_ratio=0.0,
     max_cell_circumradius=0.0,
     verbose=True,
     seed=0,
@@ -60,7 +60,7 @@ def generate_mesh(
         a scalar field (resp. a constant) describing a space varying (resp. a uniform)
         upper bound for the distance between the facet circumcenter and the center of
         its surface Delaunay ball.
-    max_cell_radius_edge_ratio:
+    max_circumradius_edge_ratio:
         an upper bound for the radius-edge ratio of the mesh tetrahedra.
     max_cell_circumradius:
         a scalar field (resp. a constant) describing a space varying (resp. a uniform)
@@ -116,7 +116,7 @@ def generate_mesh(
         max_radius_surface_delaunay_ball_field=max_radius_surface_delaunay_ball_field,
         max_facet_distance_value=max_facet_distance_value,
         max_facet_distance_field=max_facet_distance_field,
-        max_cell_radius_edge_ratio=max_cell_radius_edge_ratio,
+        max_circumradius_edge_ratio=max_circumradius_edge_ratio,
         max_cell_circumradius_value=max_cell_circumradius_value,
         max_cell_circumradius_field=max_cell_circumradius_field,
         verbose=verbose,
@@ -167,7 +167,7 @@ def generate_periodic_mesh(
     min_facet_angle=0.0,
     max_radius_surface_delaunay_ball=0.0,
     max_facet_distance=0.0,
-    max_cell_radius_edge_ratio=0.0,
+    max_circumradius_edge_ratio=0.0,
     max_cell_circumradius=0.0,
     number_of_copies_in_output=1,
     verbose=True,
@@ -190,7 +190,7 @@ def generate_periodic_mesh(
         min_facet_angle=min_facet_angle,
         max_radius_surface_delaunay_ball=max_radius_surface_delaunay_ball,
         max_facet_distance=max_facet_distance,
-        max_cell_radius_edge_ratio=max_cell_radius_edge_ratio,
+        max_circumradius_edge_ratio=max_circumradius_edge_ratio,
         max_cell_circumradius=max_cell_circumradius,
         number_of_copies_in_output=number_of_copies_in_output,
         verbose=verbose,
@@ -240,7 +240,7 @@ def generate_volume_mesh_from_surface_mesh(
     min_facet_angle=0.0,
     max_radius_surface_delaunay_ball=0.0,
     max_facet_distance=0.0,
-    max_cell_radius_edge_ratio=0.0,
+    max_circumradius_edge_ratio=0.0,
     max_cell_circumradius=0.0,
     verbose=True,
     reorient=False,
@@ -266,7 +266,7 @@ def generate_volume_mesh_from_surface_mesh(
         min_facet_angle=min_facet_angle,
         max_radius_surface_delaunay_ball=max_radius_surface_delaunay_ball,
         max_facet_distance=max_facet_distance,
-        max_cell_radius_edge_ratio=max_cell_radius_edge_ratio,
+        max_circumradius_edge_ratio=max_circumradius_edge_ratio,
         max_cell_circumradius=max_cell_circumradius,
         verbose=verbose,
         reorient=reorient,
@@ -289,7 +289,7 @@ def generate_from_inr(
     min_facet_angle=0.0,
     max_radius_surface_delaunay_ball=0.0,
     max_facet_distance=0.0,
-    max_cell_radius_edge_ratio=0.0,
+    max_circumradius_edge_ratio=0.0,
     max_cell_circumradius=0.0,
     verbose=True,
     seed=0,
@@ -309,7 +309,7 @@ def generate_from_inr(
             min_facet_angle=min_facet_angle,
             max_radius_surface_delaunay_ball=max_radius_surface_delaunay_ball,
             max_facet_distance=max_facet_distance,
-            max_cell_radius_edge_ratio=max_cell_radius_edge_ratio,
+            max_circumradius_edge_ratio=max_circumradius_edge_ratio,
             max_cell_circumradius=max_cell_circumradius,
             verbose=verbose,
             seed=seed,
@@ -338,7 +338,7 @@ def generate_from_inr(
             min_facet_angle=min_facet_angle,
             max_radius_surface_delaunay_ball=max_radius_surface_delaunay_ball,
             max_facet_distance=max_facet_distance,
-            max_cell_radius_edge_ratio=max_cell_radius_edge_ratio,
+            max_circumradius_edge_ratio=max_circumradius_edge_ratio,
             verbose=verbose,
             seed=seed,
         )
@@ -424,7 +424,7 @@ def generate_from_array(
     max_radius_surface_delaunay_ball=0.0,
     max_cell_circumradius=0.0,
     max_facet_distance=0.0,
-    max_cell_radius_edge_ratio=0.0,
+    max_circumradius_edge_ratio=0.0,
     verbose=True,
     seed=0,
 ):
@@ -442,7 +442,7 @@ def generate_from_array(
         min_facet_angle,
         max_radius_surface_delaunay_ball,
         max_facet_distance,
-        max_cell_radius_edge_ratio,
+        max_circumradius_edge_ratio,
         max_cell_circumradius,
         verbose,
         seed,

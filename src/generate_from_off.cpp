@@ -52,7 +52,7 @@ void generate_from_off(
     const double min_facet_angle,
     const double max_radius_surface_delaunay_ball,
     const double max_facet_distance,
-    const double cell_radius_edge_ratio,
+    const double max_circumradius_edge_ratio,
     const double max_cell_circumradius,
     const bool verbose,
     const bool reorient,
@@ -109,7 +109,7 @@ void generate_from_off(
       CGAL::parameters::facet_angle = min_facet_angle,
       CGAL::parameters::facet_size = max_radius_surface_delaunay_ball,
       CGAL::parameters::facet_distance = max_facet_distance,
-      CGAL::parameters::cell_radius_edge_ratio = cell_radius_edge_ratio,
+      CGAL::parameters::max_circumradius_edge_ratio = max_circumradius_edge_ratio,
       CGAL::parameters::cell_size = max_cell_circumradius);
 
   // Mesh generation

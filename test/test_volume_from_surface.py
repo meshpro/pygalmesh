@@ -14,7 +14,7 @@ def test_volume_from_surface():
     #     min_facet_angle=25.0,
     #     max_radius_surface_delaunay_ball=0.15,
     #     max_facet_distance=0.008,
-    #     max_cell_radius_edge_ratio=3.0,
+    #     max_circumradius_edge_ratio=3.0,
     #     verbose=False,
     # )
     with tempfile.TemporaryDirectory() as tmp:

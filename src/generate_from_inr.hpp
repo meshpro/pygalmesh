@@ -17,7 +17,7 @@ void generate_from_inr(
     const double min_facet_angle = 0.0,
     const double max_radius_surface_delaunay_ball = 0.0,
     const double max_facet_distance = 0.0,
-    const double cell_radius_edge_ratio = 0.0,
+    const double max_circumradius_edge_ratio = 0.0,
     const double max_cell_circumradius = 0.0,
     const bool verbose = true,
     const int seed = 0
@@ -38,7 +38,7 @@ generate_from_inr_with_subdomain_sizing(
     const double min_facet_angle = 0.0,
     const double max_radius_surface_delaunay_ball = 0.0,
     const double max_facet_distance = 0.0,
-    const double cell_radius_edge_ratio = 0.0,
+    const double max_circumradius_edge_ratio = 0.0,
     const bool verbose  = true,
     const int seed = 0
     );
