@@ -1,7 +1,6 @@
 import math
 import os
 import tempfile
-import warnings
 
 import meshio
 import numpy
