@@ -90,15 +90,15 @@ def generate_mesh(
     ) = _select(max_radius_surface_delaunay_ball)
     max_facet_distance_value, max_facet_distance_field = _select(max_facet_distance)
 
-    if feature_edges:
-        if max_edge_size_at_feature_edges == 0.0:
-            raise ValueError(
-                "Need a positive max_edge_size_at_feature_edges bound if feature_edges are present."
-            )
-    elif max_edge_size_at_feature_edges != 0.0:
-        warnings.warn(
-            "No feature edges. The max_edge_size_at_feature_edges argument has no effect."
-        )
+    # if feature_edges:
+    #     if max_edge_size_at_feature_edges == 0.0:
+    #         raise ValueError(
+    #             "Need a positive max_edge_size_at_feature_edges bound if feature_edges are present."
+    #         )
+    # elif max_edge_size_at_feature_edges != 0.0:
+    #     warnings.warn(
+    #         "No feature edges. The max_edge_size_at_feature_edges argument has no effect."
+    #     )
 
     _generate_mesh(
         domain,
