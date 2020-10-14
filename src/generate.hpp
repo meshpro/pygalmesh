@@ -14,7 +14,7 @@ namespace pygalmesh {
 void generate_mesh(
     const std::shared_ptr<pygalmesh::DomainBase> & domain,
     const std::string & outfile,
-    const std::vector<std::vector<std::array<double, 3>>> & feature_edges = {},
+    const std::vector<std::vector<std::array<double, 3>>> & extra_feature_edges = {},
     const double bounding_sphere_radius = 0.0,
     const bool lloyd = false,
     const bool odt = false,

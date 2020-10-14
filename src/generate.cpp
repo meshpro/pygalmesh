@@ -49,7 +49,7 @@ void
 generate_mesh(
     const std::shared_ptr<pygalmesh::DomainBase> & domain,
     const std::string & outfile,
-    const std::vector<std::vector<std::array<double, 3>>> & feature_edges,
+    const std::vector<std::vector<std::array<double, 3>>> & extra_feature_edges,
     const double bounding_sphere_radius,
     const bool lloyd,
     const bool odt,
@@ -98,7 +98,7 @@ generate_mesh(
   const auto native_features = translate_feature_edges(domain->get_features());
   cgal_domain.add_features(native_features.begin(), native_features.end());
 
-  const auto polylines = translate_feature_edges(feature_edges);
+  const auto polylines = translate_feature_edges(extra_feature_edges);
   cgal_domain.add_features(polylines.begin(), polylines.end());
 
   // perhaps there's a more elegant solution here
