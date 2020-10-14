@@ -130,7 +130,7 @@ circ.append(circ[0])
 
 mesh = pygalmesh.generate_mesh(
     u,
-    feature_edges=[circ],
+    extra_feature_edges=[circ],
     max_cell_circumradius=0.15,
     max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
     min_facet_angle=25,

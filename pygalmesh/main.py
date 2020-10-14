@@ -1,7 +1,6 @@
 import math
 import os
 import tempfile
-import warnings
 
 import meshio
 import numpy
@@ -29,7 +28,7 @@ class Wrapper(SizingFieldBase):
 
 def generate_mesh(
     domain,
-    feature_edges=None,
+    extra_feature_edges=None,
     bounding_sphere_radius=0.0,
     lloyd=False,
     odt=False,
@@ -66,7 +65,7 @@ def generate_mesh(
         a scalar field (resp. a constant) describing a space varying (resp. a uniform)
         upper-bound for the circumradii of the mesh tetrahedra.
     """
-    feature_edges = [] if feature_edges is None else feature_edges
+    extra_feature_edges = [] if extra_feature_edges is None else extra_feature_edges
 
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
     os.close(fh)
@@ -90,20 +89,20 @@ def generate_mesh(
     ) = _select(max_radius_surface_delaunay_ball)
     max_facet_distance_value, max_facet_distance_field = _select(max_facet_distance)
 
-    if feature_edges:
-        if max_edge_size_at_feature_edges == 0.0:
-            raise ValueError(
-                "Need a positive max_edge_size_at_feature_edges bound if feature_edges are present."
-            )
-    elif max_edge_size_at_feature_edges != 0.0:
-        warnings.warn(
-            "No feature edges. The max_edge_size_at_feature_edges argument has no effect."
-        )
+    # if feature_edges:
+    #     if max_edge_size_at_feature_edges == 0.0:
+    #         raise ValueError(
+    #             "Need a positive max_edge_size_at_feature_edges bound if feature_edges are present."
+    #         )
+    # elif max_edge_size_at_feature_edges != 0.0:
+    #     warnings.warn(
+    #         "No feature edges. The max_edge_size_at_feature_edges argument has no effect."
+    #     )
 
     _generate_mesh(
         domain,
         outfile,
-        feature_edges=feature_edges,
+        extra_feature_edges=extra_feature_edges,
         bounding_sphere_radius=bounding_sphere_radius,
         lloyd=lloyd,
         odt=odt,

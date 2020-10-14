@@ -1,3 +1,14 @@
+// Note:
+// One could also implement the primitives as Python classes and have much more readable
+// code. Unfortunately, this approach would be a lot slower. The reason is that CGAL
+// calls the eval() method with individual points, and this many CPP-to-Python calls are
+// very expensive. It would be a lot better if CGAL called the method with batches of X
+// at once, which would also enable users to employ some optimization, but this isn't
+// the case yet. It's not clear if the mesh building algorithm allows for such
+// optimziation at all.
+// The corresponding issue hasn't gained much traction
+// <https://github.com/CGAL/cgal/issues/3874>.
+//
 #ifndef PRIMITIVES_HPP
 #define PRIMITIVES_HPP
 
