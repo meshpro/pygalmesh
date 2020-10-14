@@ -270,7 +270,7 @@ PYBIND11_MODULE(_pygalmesh, m) {
         "_generate_mesh", &generate_mesh,
         py::arg("domain"),
         py::arg("outfile"),
-        py::arg("feature_edges") = std::vector<std::vector<std::array<double, 3>>>(),
+        py::arg("extra_feature_edges") = std::vector<std::vector<std::array<double, 3>>>(),
         py::arg("bounding_sphere_radius") = 0.0,
         py::arg("lloyd") = false,
         py::arg("odt") = false,
