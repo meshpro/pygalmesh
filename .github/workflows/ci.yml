@@ -47,5 +47,4 @@ jobs:
       run: |
         pip install tox
         CC="clang" tox
-    - name: Submit to codecov
-      run: bash <(curl -s https://codecov.io/bash)
+    - uses: codecov/codecov-action@v1
