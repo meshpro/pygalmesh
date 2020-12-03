@@ -8,10 +8,9 @@ from setuptools.command.build_ext import build_ext
 
 # <https://github.com/pybind/python_example/blob/master/setup.py>
 class get_pybind_include(object):
-    """Helper class to determine the pybind11 include path
-    The purpose of this class is to postpone importing pybind11
-    until it is actually installed, so that the ``get_include()``
-    method can be invoked."""
+    """Helper class to determine the pybind11 include path The purpose of this class is
+    to postpone importing pybind11 until it is actually installed, so that the
+    ``get_include()`` method can be invoked."""
 
     def __str__(self):
         import pybind11
@@ -21,10 +20,9 @@ class get_pybind_include(object):
 
 # cf http://bugs.python.org/issue26689
 def has_flag(compiler, flagname):
-    """Return a boolean indicating whether a flag name is supported on
-    the specified compiler.
+    """Return a boolean indicating whether a flag name is supported on the specified
+    compiler.
     """
-    import os
     import tempfile
 
     with tempfile.NamedTemporaryFile("w", suffix=".cpp", delete=False) as f:
