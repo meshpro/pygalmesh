@@ -29,19 +29,19 @@ class Wrapper(SizingFieldBase):
 def generate_mesh(
     domain,
     extra_feature_edges=None,
-    bounding_sphere_radius: float=0.0,
+    bounding_sphere_radius: float = 0.0,
     lloyd=False,
     odt=False,
     perturb=True,
     exude=True,
-    max_edge_size_at_feature_edges: float=0.0,
-    min_facet_angle: float=0.0,
-    max_radius_surface_delaunay_ball: float=0.0,
-    max_facet_distance: float=0.0,
-    max_circumradius_edge_ratio: float=0.0,
-    max_cell_circumradius: float=0.0,
-    verbose: bool=True,
-    seed: int=0,
+    max_edge_size_at_feature_edges: float = 0.0,
+    min_facet_angle: float = 0.0,
+    max_radius_surface_delaunay_ball: float = 0.0,
+    max_facet_distance: float = 0.0,
+    max_circumradius_edge_ratio: float = 0.0,
+    max_cell_circumradius: float = 0.0,
+    verbose: bool = True,
+    seed: int = 0,
 ):
     """
     From <https://doc.cgal.org/latest/Mesh_3/classCGAL_1_1Mesh__criteria__3.html>:
