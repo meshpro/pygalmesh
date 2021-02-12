@@ -306,43 +306,62 @@ class Tetrahedron: public pygalmesh::DomainBase
         const std::array<double, 3> & x2,
         const std::array<double, 3> & x3
         ):
-      x0_(Eigen::Vector3d(x0[0], x0[1], x0[2])),
-      x1_(Eigen::Vector3d(x1[0], x1[1], x1[2])),
-      x2_(Eigen::Vector3d(x2[0], x2[1], x2[2])),
-      x3_(Eigen::Vector3d(x3[0], x3[1], x3[2]))
+      x0_(Eigen::Vector3d(x0.data())),
+      x1_(Eigen::Vector3d(x1.data())),
+      x2_(Eigen::Vector3d(x2.data())),
+      x3_(Eigen::Vector3d(x3.data())),
+      A_(constructA(x0, x1, x2, x3))
     {
+    }
+
+    Eigen::Matrix4d constructA(
+        const std::array<double, 3> & x0,
+        const std::array<double, 3> & x1,
+        const std::array<double, 3> & x2,
+        const std::array<double, 3> & x3
+    ) {
+      Eigen::Matrix4d A;
+      A << x0[0], x1[0], x2[0], x3[0],
+           x0[1], x1[1], x2[1], x3[1],
+           x0[2], x1[2], x2[2], x3[2],
+           1.0,   1.0,   1.0,   1.0;
+      return A;
     }
 
     virtual ~Tetrahedron() = default;
 
-    bool isOnSameSide(
-        const Eigen::Vector3d & v0,
-        const Eigen::Vector3d & v1,
-        const Eigen::Vector3d & v2,
-        const Eigen::Vector3d & v3,
-        const Eigen::Vector3d & p
-        ) const
-    {
-      const auto normal = (v1 - v0).cross(v2 - v0);
-      const double dot_v3 = normal.dot(v3 - v0);
-      const double dot_p = normal.dot(p - v0);
-      return (
-          (dot_v3 > 0 && dot_p > 0) || (dot_v3 < 0 && dot_p < 0)
-          );
-    }
+    // bool isOnSameSide(
+    //     const Eigen::Vector3d & v0,
+    //     const Eigen::Vector3d & v1,
+    //     const Eigen::Vector3d & v2,
+    //     const Eigen::Vector3d & v3,
+    //     const Eigen::Vector3d & p
+    //     ) const
+    // {
+    //   const auto normal = (v1 - v0).cross(v2 - v0);
+    //   const double dot_v3 = normal.dot(v3 - v0);
+    //   const double dot_p = normal.dot(p - v0);
+    //   return (
+    //       (dot_v3 > 0 && dot_p > 0) || (dot_v3 < 0 && dot_p < 0)
+    //       );
+    // }
 
     virtual
     double
     eval(const std::array<double, 3> & x) const
     {
-      // TODO continuous expression
-      Eigen::Vector3d pvec(x.data());
-      const bool a =
-        isOnSameSide(x0_, x1_, x2_, x3_, pvec) &&
-        isOnSameSide(x1_, x2_, x3_, x0_, pvec) &&
-        isOnSameSide(x2_, x3_, x0_, x1_, pvec) &&
-        isOnSameSide(x3_, x0_, x1_, x2_, pvec);
-      return a ? -1.0 : 1.0;
+      Eigen::Vector4d b;
+      b << x[0], x[1], x[2], 1.0;
+      Eigen::Vector4d bary = A_.partialPivLu().solve(b);
+      return -bary.minCoeff();
+
+      // Eigen::Vector3d pvec(x.data());
+      // const bool a =
+      //   isOnSameSide(x0_, x1_, x2_, x3_, pvec) &&
+      //   isOnSameSide(x1_, x2_, x3_, x0_, pvec) &&
+      //   isOnSameSide(x2_, x3_, x0_, x1_, pvec) &&
+      //   isOnSameSide(x3_, x0_, x1_, x2_, pvec);
+      // return a ? -1.0 : 1.0;
     }
 
     virtual
@@ -382,6 +401,7 @@ class Tetrahedron: public pygalmesh::DomainBase
     const Eigen::Vector3d x1_;
     const Eigen::Vector3d x2_;
     const Eigen::Vector3d x3_;
+    const Eigen::Matrix4d A_;
 };
 
 
