@@ -29,19 +29,19 @@ class Wrapper(SizingFieldBase):
 def generate_mesh(
     domain,
     extra_feature_edges=None,
-    bounding_sphere_radius=0.0,
-    lloyd=False,
-    odt=False,
-    perturb=True,
-    exude=True,
-    max_edge_size_at_feature_edges=0.0,
-    min_facet_angle=0.0,
-    max_radius_surface_delaunay_ball=0.0,
-    max_facet_distance=0.0,
-    max_circumradius_edge_ratio=0.0,
-    max_cell_circumradius=0.0,
-    verbose=True,
-    seed=0,
+    bounding_sphere_radius: float = 0.0,
+    lloyd: bool = False,
+    odt: bool = False,
+    perturb: bool = True,
+    exude: bool = True,
+    max_edge_size_at_feature_edges: float = 0.0,
+    min_facet_angle: float = 0.0,
+    max_radius_surface_delaunay_ball: float = 0.0,
+    max_facet_distance: float = 0.0,
+    max_circumradius_edge_ratio: float = 0.0,
+    max_cell_circumradius: float = 0.0,
+    verbose: bool = True,
+    seed: int = 0,
 ):
     """
     From <https://doc.cgal.org/latest/Mesh_3/classCGAL_1_1Mesh__criteria__3.html>:
@@ -130,9 +130,9 @@ def generate_mesh(
 def generate_2d(
     points,
     constraints,
-    B=math.sqrt(2),
-    max_edge_size=0.0,
-    num_lloyd_steps=0,
+    B: float = math.sqrt(2),
+    max_edge_size: float = 0.0,
+    num_lloyd_steps: int = 0,
 ):
     # some sanity checks
     points = numpy.asarray(points)
@@ -158,19 +158,19 @@ def generate_2d(
 def generate_periodic_mesh(
     domain,
     bounding_cuboid,
-    lloyd=False,
-    odt=False,
-    perturb=True,
-    exude=True,
-    max_edge_size_at_feature_edges=0.0,
-    min_facet_angle=0.0,
-    max_radius_surface_delaunay_ball=0.0,
-    max_facet_distance=0.0,
-    max_circumradius_edge_ratio=0.0,
-    max_cell_circumradius=0.0,
-    number_of_copies_in_output=1,
-    verbose=True,
-    seed=0,
+    lloyd: bool = False,
+    odt: bool = False,
+    perturb: bool = True,
+    exude: bool = True,
+    max_edge_size_at_feature_edges: float = 0.0,
+    min_facet_angle: float = 0.0,
+    max_radius_surface_delaunay_ball: float = 0.0,
+    max_facet_distance: float = 0.0,
+    max_circumradius_edge_ratio: float = 0.0,
+    max_cell_circumradius: float = 0.0,
+    number_of_copies_in_output: int = 1,
+    verbose: bool = True,
+    seed: int = 0,
 ):
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
     os.close(fh)
@@ -203,12 +203,12 @@ def generate_periodic_mesh(
 
 def generate_surface_mesh(
     domain,
-    bounding_sphere_radius=0.0,
-    min_facet_angle=0.0,
-    max_radius_surface_delaunay_ball=0.0,
-    max_facet_distance=0.0,
-    verbose=True,
-    seed=0,
+    bounding_sphere_radius: float = 0.0,
+    min_facet_angle: float = 0.0,
+    max_radius_surface_delaunay_ball: float = 0.0,
+    max_facet_distance: float = 0.0,
+    verbose: bool = True,
+    seed: int = 0,
 ):
     fh, outfile = tempfile.mkstemp(suffix=".off")
     os.close(fh)
@@ -230,20 +230,20 @@ def generate_surface_mesh(
 
 
 def generate_volume_mesh_from_surface_mesh(
-    filename,
-    lloyd=False,
-    odt=False,
-    perturb=True,
-    exude=True,
-    max_edge_size_at_feature_edges=0.0,
-    min_facet_angle=0.0,
-    max_radius_surface_delaunay_ball=0.0,
-    max_facet_distance=0.0,
-    max_circumradius_edge_ratio=0.0,
-    max_cell_circumradius=0.0,
-    verbose=True,
-    reorient=False,
-    seed=0,
+    filename: str,
+    lloyd: bool = False,
+    odt: bool = False,
+    perturb: bool = True,
+    exude: bool = True,
+    max_edge_size_at_feature_edges: float = 0.0,
+    min_facet_angle: float = 0.0,
+    max_radius_surface_delaunay_ball: float = 0.0,
+    max_facet_distance: float = 0.0,
+    max_circumradius_edge_ratio: float = 0.0,
+    max_cell_circumradius: float = 0.0,
+    verbose: bool = True,
+    reorient: bool = False,
+    seed: int = 0,
 ):
     mesh = meshio.read(filename)
 
@@ -279,19 +279,19 @@ def generate_volume_mesh_from_surface_mesh(
 
 
 def generate_from_inr(
-    inr_filename,
-    lloyd=False,
-    odt=False,
-    perturb=True,
-    exude=True,
-    max_edge_size_at_feature_edges=0.0,
-    min_facet_angle=0.0,
-    max_radius_surface_delaunay_ball=0.0,
-    max_facet_distance=0.0,
-    max_circumradius_edge_ratio=0.0,
-    max_cell_circumradius=0.0,
-    verbose=True,
-    seed=0,
+    inr_filename: str,
+    lloyd: bool = False,
+    odt: bool = False,
+    perturb: bool = True,
+    exude: bool = True,
+    max_edge_size_at_feature_edges: float = 0.0,
+    min_facet_angle: float = 0.0,
+    max_radius_surface_delaunay_ball: float = 0.0,
+    max_facet_distance: float = 0.0,
+    max_circumradius_edge_ratio: float = 0.0,
+    max_cell_circumradius: float = 0.0,
+    verbose: bool = True,
+    seed: int = 0,
 ):
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
     os.close(fh)
@@ -348,13 +348,13 @@ def generate_from_inr(
 
 
 def remesh_surface(
-    filename,
-    max_edge_size_at_feature_edges=0.0,
-    min_facet_angle=0.0,
-    max_radius_surface_delaunay_ball=0.0,
-    max_facet_distance=0.0,
-    verbose=True,
-    seed=0,
+    filename: str,
+    max_edge_size_at_feature_edges: float = 0.0,
+    min_facet_angle: float = 0.0,
+    max_radius_surface_delaunay_ball: float = 0.0,
+    max_facet_distance: float = 0.0,
+    verbose: bool = True,
+    seed: int = 0,
 ):
     mesh = meshio.read(filename)
 
@@ -382,7 +382,7 @@ def remesh_surface(
     return mesh
 
 
-def save_inr(vol, h, fname):
+def save_inr(vol, h, fname: str):
     """
     Save a volume (described as a numpy array) to INR format.
     Code inspired by iso2mesh (http://iso2mesh.sf.net) by Q. Fang
@@ -414,18 +414,18 @@ def save_inr(vol, h, fname):
 def generate_from_array(
     vol,
     h,
-    lloyd=False,
-    odt=False,
-    perturb=True,
-    exude=True,
-    max_edge_size_at_feature_edges=0.0,
-    min_facet_angle=0.0,
-    max_radius_surface_delaunay_ball=0.0,
-    max_cell_circumradius=0.0,
-    max_facet_distance=0.0,
-    max_circumradius_edge_ratio=0.0,
-    verbose=True,
-    seed=0,
+    lloyd: bool = False,
+    odt: bool = False,
+    perturb: bool = True,
+    exude: bool = True,
+    max_edge_size_at_feature_edges: float = 0.0,
+    min_facet_angle: float = 0.0,
+    max_radius_surface_delaunay_ball: float = 0.0,
+    max_cell_circumradius: float = 0.0,
+    max_facet_distance: float = 0.0,
+    max_circumradius_edge_ratio: float = 0.0,
+    verbose: bool = True,
+    seed: int = 0,
 ):
     assert vol.dtype in ["uint8", "uint16"]
     fh, inr_filename = tempfile.mkstemp(suffix=".inr")
