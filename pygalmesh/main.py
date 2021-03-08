@@ -1,6 +1,7 @@
 import math
 import os
 import tempfile
+from typing import Tuple
 
 import meshio
 import numpy
@@ -382,13 +383,13 @@ def remesh_surface(
     return mesh
 
 
-def save_inr(vol, h, fname: str):
+def save_inr(vol, voxel_size: Tuple[float, float, float], fname: str):
     """
     Save a volume (described as a numpy array) to INR format.
     Code inspired by iso2mesh (http://iso2mesh.sf.net) by Q. Fang
     INPUTS:
-    - vol: volume as numpy array
-    - h: voxel sizes as list or numpy array
+    - vol: volume as a 3D numpy array
+    - h: voxel sizes
     - fname: filename for saving the inr file
     """
     fid = open(fname, "wb")
@@ -400,12 +401,24 @@ def save_inr(vol, h, fname: str):
         "float64": ("float", 64),
     }[vol.dtype.name]
 
-    header = (
-        "#INRIMAGE-4#{8:s}\nXDIM={0:d}\nYDIM={1:d}\nZDIM={2:d}\nVDIM=1\nTYPE={3:s}\n"
-        + "PIXSIZE={4:d} bits\nCPU=decm\nVX={5:f}\nVY={6:f}\nVZ={7:f}\n"
-    ).format(*vol.shape, btype, bitlen, h[0], h[1], h[2], "{")
+    xdim, ydim, zdim = vol.shape
+    header = "\n".join(
+        [
+            "#INRIMAGE-4#{",
+            f"XDIM={xdim}",
+            f"YDIM={ydim}",
+            f"ZDIM={zdim}",
+            "VDIM=1",
+            f"TYPE={btype}",
+            f"PIXSIZE={bitlen} bits",
+            "CPU=decm",
+            f"VX={voxel_size[0]:f}",
+            f"VY={voxel_size[1]:f}",
+            f"VZ={voxel_size[2]:f}",
+        ]
+    )
 
-    header = header + "\n" * (256 - 4 - len(header)) + "##}\n"
+    header = header + "\n\n" * (256 - 4 - len(header)) + "##}\n"
 
     fid.write(header.encode("ascii"))
     fid.write(vol.tobytes(order="F"))
@@ -413,7 +426,7 @@ def save_inr(vol, h, fname: str):
 
 def generate_from_array(
     vol,
-    h,
+    voxel_size: Tuple[float, float, float],
     lloyd: bool = False,
     odt: bool = False,
     perturb: bool = True,
@@ -430,7 +443,7 @@ def generate_from_array(
     assert vol.dtype in ["uint8", "uint16"]
     fh, inr_filename = tempfile.mkstemp(suffix=".inr")
     os.close(fh)
-    save_inr(vol, h, inr_filename)
+    save_inr(vol, voxel_size, inr_filename)
     mesh = generate_from_inr(
         inr_filename,
         lloyd,

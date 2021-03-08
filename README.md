@@ -28,7 +28,7 @@ to create high-quality 2D, 3D volume meshes, periodic volume meshes, and surface
 #### 2D meshes
 <img src="https://nschloe.github.io/pygalmesh/rect.svg" width="30%">
 
-CGAL generates 2D meshes from linear contraints. 
+CGAL generates 2D meshes from linear constraints.
 ```python
 import numpy
 import pygalmesh
@@ -375,7 +375,7 @@ import meshio
 Nx = 722
 Ny = 411
 Nz = 284
-h = [0.2] * 3
+voxel_size = [0.2, 0.2, 0.2]
 
 with open("MergedPhantom.DAT", "rb") as fid:
     vol = np.fromfile(fid, dtype=np.uint8)
@@ -383,7 +383,7 @@ with open("MergedPhantom.DAT", "rb") as fid:
 vol = vol.reshape((Nx, Ny, Nz))
 
 mesh = pygalmesh.generate_from_array(
-    vol, h, max_facet_distance=0.2, max_cell_circumradius=1.0
+    vol, voxel_size, max_facet_distance=0.2, max_cell_circumradius=1.0
 )
 mesh.write("breast.vtk")
 ```
