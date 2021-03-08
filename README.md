@@ -357,9 +357,32 @@ mesh = pygalmesh.generate_from_inr(
 ```
 
 #### Meshes from numpy arrays representing 3D images
-<img src="https://nschloe.github.io/pygalmesh/phantom.png" width="30%">
+<img src="https://nschloe.github.io/pygalmesh/voxel-ball.png" width="70%"> |  <img src="https://nschloe.github.io/pygalmesh/phantom.png" width="70%">
+:---:|:---:|
 
-pygalmesh can help generating unstructed meshes from 3D numpy arrays.
+pygalmesh can help generating unstructed meshes from 3D numpy int arrays specifying the
+subdomains. Subdomains with key `0` are not meshed.
+```python
+import pygalmesh
+import numpy as np
+
+x_ = np.linspace(-1.0, 1.0, 50)
+y_ = np.linspace(-1.0, 1.0, 50)
+z_ = np.linspace(-1.0, 1.0, 50)
+x, y, z = np.meshgrid(x_, y_, z_)
+
+vol = np.empty((50, 50, 50), dtype=np.uint8)
+idx = x ** 2 + y ** 2 + z ** 2 < 0.5 ** 2
+vol[idx] = 1
+vol[~idx] = 0
+
+voxel_size = (0.1, 0.1, 0.1)
+
+mesh = pygalmesh.generate_from_array(
+    vol, voxel_size, max_facet_distance=0.2, max_cell_circumradius=0.1
+)
+mesh.write("ball.vtk")
+```
 
 The code below creates a mesh from the 3D breast phantom from [Lou et
 al](http://biomedicaloptics.spiedigitallibrary.org/article.aspx?articleid=2600985)
@@ -396,7 +419,7 @@ tissue (label `5`), and *2 mm* for all other tissues (`default`).
 ```python
 mesh = pygalmesh.generate_from_array(
     vol,
-    h,
+    voxel_size,
     max_facet_distance=0.2,
     max_cell_circumradius={"default": 2.0, 4: 1.0, 5: 0.5},
 )
