@@ -417,8 +417,9 @@ def save_inr(vol, voxel_size: Tuple[float, float, float], fname: str):
             f"VZ={voxel_size[2]:f}",
         ]
     )
+    header += "\n"
 
-    header = header + "\n\n" * (256 - 4 - len(header)) + "##}\n"
+    header = header + "\n" * (256 - 4 - len(header)) + "##}\n"
 
     fid.write(header.encode("ascii"))
     fid.write(vol.tobytes(order="F"))
