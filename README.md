@@ -10,8 +10,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/pygalmesh.svg?style=flat-square&label=Stars&logo=github)](https://github.com/nschloe/pygalmesh)
 [![PyPi downloads](https://img.shields.io/pypi/dm/pygalmesh.svg?style=flat-square)](https://pypistats.org/packages/pygalmesh)
 
-[![Slack](https://img.shields.io/static/v1?logo=slack&label=chat&message=on%20slack&color=4a154b&style=flat-square)](https://join.slack.com/t/nschloe/shared_invite/zt-cofhrwm8-BgdrXAtVkOjnDmADROKD7A
-)
+[![Discord](https://img.shields.io/static/v1?logo=discord&label=chat&message=on%20discord&color=7289da&style=flat-square)](https://discord.gg/hnTJ5MRX2Y)
 
 [![gh-actions](https://img.shields.io/github/workflow/status/nschloe/pygalmesh/ci?style=flat-square)](https://github.com/nschloe/pygalmesh/actions?query=workflow%3Aci)
 [![codecov](https://img.shields.io/codecov/c/github/nschloe/pygalmesh.svg?style=flat-square)](https://codecov.io/gh/nschloe/pygalmesh)
@@ -395,15 +394,11 @@ tissues). The generated mesh conforms to tissues interfaces.
 import pygalmesh
 import meshio
 
-Nx = 722
-Ny = 411
-Nz = 284
-voxel_size = [0.2, 0.2, 0.2]
-
 with open("MergedPhantom.DAT", "rb") as fid:
     vol = np.fromfile(fid, dtype=np.uint8)
 
-vol = vol.reshape((Nx, Ny, Nz))
+vol = vol.reshape((722, 411, 284))
+voxel_size = (0.2, 0.2, 0.2)
 
 mesh = pygalmesh.generate_from_array(
     vol, voxel_size, max_facet_distance=0.2, max_cell_circumradius=1.0
