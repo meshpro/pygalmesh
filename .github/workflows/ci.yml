@@ -47,5 +47,5 @@ jobs:
     - name: Test with tox
       run: |
         pip install tox
-        CC="clang" tox
+        CC="clang" tox -- --cov pygalmesh --cov-report xml --cov-report term
     - uses: codecov/codecov-action@v1
