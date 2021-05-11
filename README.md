@@ -10,7 +10,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/pygalmesh.svg?style=flat-square&label=Stars&logo=github)](https://github.com/nschloe/pygalmesh)
 [![PyPi downloads](https://img.shields.io/pypi/dm/pygalmesh.svg?style=flat-square)](https://pypistats.org/packages/pygalmesh)
 
-[![Discord](https://img.shields.io/static/v1?logo=discord&label=chat&message=on%20discord&color=7289da&style=flat-square)](https://discord.gg/hnTJ5MRX2Y)
+[![Discord](https://img.shields.io/static/v1?logo=discord&label=chat&message=on%20discord&color=7289da&style=flat-square)](https://discord.gg/Z6DMsJh4Hr)
 
 [![gh-actions](https://img.shields.io/github/workflow/status/nschloe/pygalmesh/ci?style=flat-square)](https://github.com/nschloe/pygalmesh/actions?query=workflow%3Aci)
 [![codecov](https://img.shields.io/codecov/c/github/nschloe/pygalmesh.svg?style=flat-square)](https://codecov.io/gh/nschloe/pygalmesh)
@@ -58,7 +58,7 @@ mesh = pygalmesh.generate_mesh(s, max_cell_circumradius=0.2)
 # mesh.points, mesh.cells, ...
 ```
 You can write the mesh with
-<!--exdown-skip-->
+<!--pytest-codeblocks:skip-->
 ```python
 mesh.write("out.vtk")
 ```
@@ -66,7 +66,7 @@ You can use any format supported by [meshio](https://github.com/nschloe/meshio).
 
 The mesh generation comes with many more options, described
 [here](https://doc.cgal.org/latest/Mesh_3/). Try, for example,
-<!--exdown-skip-->
+<!--pytest-codeblocks:skip-->
 ```python
 mesh = pygalmesh.generate_mesh(
     s, max_cell_circumradius=0.2, odt=True, lloyd=True, verbose=False
@@ -320,7 +320,7 @@ pygalmesh-volume-from-surface elephant.vtu out.vtk --cell-size 1.0 --odt
 (See `pygalmesh-volume-from-surface -h` for all options.)
 
 In Python, do
-<!--exdown-skip-->
+<!--pytest-codeblocks:skip-->
 ```python
 import pygalmesh
 
@@ -344,7 +344,7 @@ either on the command line
 pygalmesh-from-inr skull_2.9.inr out.vtu --cell-size 5.0 --odt
 ```
 (see `pygalmesh-from-inr -h` for all options) or from Python
-<!--exdown-skip-->
+<!--pytest-codeblocks:skip-->
 ```python
 import pygalmesh
 
@@ -389,7 +389,7 @@ available
 [here](https://wustl.app.box.com/s/rqivtin0xcofjwlkz43acou8jknsbfx8/file/127108205145).
 The phantom comprises four tissue types (background, fat, fibrograndular, skin, vascular
 tissues). The generated mesh conforms to tissues interfaces.
-<!--exdown-skip-->
+<!--pytest-codeblocks:skip-->
 ```python
 import pygalmesh
 import meshio
@@ -410,7 +410,7 @@ In addition, we can specify different mesh sizes for each tissue type. The code 
 sets the mesh size to  *1 mm* for the skin tissue (label `4`), *0.5 mm* for the vascular
 tissue (label `5`), and *2 mm* for all other tissues (`default`).
 
-<!--exdown-skip-->
+<!--pytest-codeblocks:skip-->
 ```python
 mesh = pygalmesh.generate_from_array(
     vol,
@@ -433,7 +433,7 @@ the command line, use
 pygalmesh-remesh-surface lion-head.off out.vtu -e 0.025 -a 25 -s 0.1 -d 0.001
 ```
 (see `pygalmesh-remesh-surface -h` for all options) or from Python
-<!--exdown-skip-->
+<!--pytest-codeblocks:skip-->
 ```python
 import pygalmesh
 
