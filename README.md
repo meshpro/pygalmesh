@@ -456,12 +456,26 @@ Ubuntu
 ```
 sudo apt install libcgal-dev libeigen3-dev
 ```
+On MacOS with homebrew,
+```
+brew install cgal eigen
+```
 After that, pygalmesh can be [installed from the Python Package
 Index](https://pypi.org/project/pygalmesh/), so with
 ```
 pip install -U pygalmesh
 ```
 you can install/upgrade.
+
+#### Troubleshooting
+If pygalmesh fails to build due to `fatal error: 'Eigen/Dense' file not found`
+you will need to create a symbolic link for Eigen to be detected, e.g.
+```
+cd /usr/local/include
+sudo ln -sf eigen3/Eigen Eigen
+```
+It's possible that `eigen3` could be in `/usr/include` instead of 
+`/usr/local/install`.
 
 #### Manual installation
 
