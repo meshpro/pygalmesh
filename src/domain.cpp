@@ -23,7 +23,7 @@ class DomainBase
     return {};
   };
 
-  virtual Translate __add__(
+  Translate __add__(
       const std::shared_ptr<const pygalmesh::DomainBase> & domain,
       const std::array<double, 3> & direction) const
   {

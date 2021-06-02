@@ -31,7 +31,7 @@ class Translate: public pygalmesh::DomainBase
       const std::vector<std::vector<std::array<double, 3>>> & features,
       const Eigen::Vector3d & direction
   );
-  virtual double eval(const std::array<double, 3> & x);
+  double eval(const std::array<double, 3> & x);
   virtual double get_bounding_sphere_squared_radius();
   virtual std::vector<std::vector<std::array<double, 3>>> get_features();
 
