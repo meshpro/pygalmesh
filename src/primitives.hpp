@@ -19,7 +19,7 @@
 
 namespace pygalmesh {
 
-class Ball: public pygalmesh::DomainModifiable
+class Ball: public pygalmesh::DomainBase
 {
   public:
     Ball(
