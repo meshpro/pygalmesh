@@ -6,7 +6,6 @@
 #include <limits>
 #include <memory>
 #include <vector>
-#include <any>
 
 namespace pygalmesh {
 
@@ -32,7 +31,7 @@ class DomainBase : std::enable_shared_from_this< DomainBase >
   };
 
   //virtual
-  auto //std::any //Translate
+  auto //Translate
   __add__(const std::array<double, 3> & direction);
 };
 
@@ -107,11 +106,14 @@ class Translate: public pygalmesh::DomainBase
     const std::vector<std::vector<std::array<double, 3>>> translated_features_;
 };
 
+
+// Add translation to DomainBase
 auto pygalmesh::DomainBase::__add__(const std::array<double, 3> & direction)
 {
-  auto shared = std::make_shared<pygalmesh::DomainBase>(shared_from_this());
+  auto shared = std::make_shared<const pygalmesh::DomainBase>(shared_from_this());
   return Translate(shared, direction);
 };
+
 
 class Rotate: public pygalmesh::DomainBase
 {
