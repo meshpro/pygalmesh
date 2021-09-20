@@ -102,7 +102,7 @@ generate_mesh(
   cgal_domain.add_features(polylines.begin(), polylines.end());
 
   // perhaps there's a more elegant solution here
-  // see <https://github.com/CGAL/cgal/issues/4145>
+  // see <https://github.com/CGAL/cgal/issues/1286>
   if (!verbose) {
     // suppress output
     std::cerr.setstate(std::ios_base::failbit);
