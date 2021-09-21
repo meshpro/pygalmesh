@@ -15,6 +15,10 @@ pybind11_add_module(pygalmesh ${pygalmesh_SRCS})
 # ADD_LIBRARY(pygalmesh ${pygalmesh_SRCS})
 target_link_libraries(pygalmesh PRIVATE ${CGAL_LIBRARIES})
 
+# https://github.com/CGAL/cgal/issues/6002
+# find_program(iwyu_path NAMES include-what-you-use iwyu REQUIRED)
+# set_property(TARGET pygalmesh PROPERTY CXX_INCLUDE_WHAT_YOU_USE ${iwyu_path})
+
 # execute_process(
 #   COMMAND python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"
 #   OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
