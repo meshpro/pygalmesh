@@ -2,7 +2,6 @@
 #define GENERATE_2D_HPP
 
 #include <memory>
-#include <pthread.h>
 #include <vector>
 
 namespace pygalmesh {
