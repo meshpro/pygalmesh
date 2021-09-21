@@ -15,7 +15,12 @@
 #include <CGAL/Polygon_mesh_processing/orient_polygon_soup.h>
 #include <CGAL/Polygon_mesh_processing/polygon_soup_to_polygon_mesh.h>
 #include <CGAL/Polygon_mesh_processing/orientation.h>
-#include <CGAL/IO/OFF_reader.h>
+
+#include <CGAL/version_macros.h>
+
+#if CGAL_VERSION_MAJOR >= 5 && CGAL_VERSION_MINOR < 3
+  #include <CGAL/IO/OFF_reader.h>
+#endif
 
 // for sharp features
 //#include <CGAL/Polyhedral_mesh_domain_with_features_3.h>
@@ -69,7 +74,15 @@ void generate_from_off(
     std::vector<K::Point_3> points;
     std::vector<std::vector<std::size_t> > polygons;
 
-    if(!input || !CGAL::read_OFF(input, points, polygons) || points.empty())
+    if(
+      !input ||
+#if CGAL_VERSION_MAJOR >= 5 && CGAL_VERSION_MINOR >= 3
+      !CGAL::IO::read_OFF(input, points, polygons) ||
+#else
+      !CGAL::read_OFF(input, points, polygons) ||
+#endif
+      points.empty()
+    )
     {
       std::stringstream msg;
       msg << "Cannot read .off file \"" << infile <<"\""<< std::endl;
