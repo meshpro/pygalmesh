@@ -19,8 +19,9 @@ def test_volume_from_surface():
     # )
     with tempfile.TemporaryDirectory() as tmp:
         out_filename = str(pathlib.Path(tmp) / "out.vtk")
-        pygalmesh._cli.volume_from_surface(
+        pygalmesh._cli.cli(
             [
+                "volume-from-surface",
                 str(this_dir / "meshes" / "elephant.vtu"),
                 out_filename,
                 "--min-facet-angle",

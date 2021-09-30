@@ -14,29 +14,40 @@ def test_inr():
     # )
     with tempfile.TemporaryDirectory() as tmp:
         out_filename = str(pathlib.Path(tmp) / "out.vtk")
-        pygalmesh._cli.inr(
+        pygalmesh._cli.cli(
             [
-                str(this_dir / "meshes" / "skull_2.9.inr"),
+                "from-inr",
+                str(this_dir / "meshes" / "sphere.inr"),
                 out_filename,
                 "--max-cell-circumradius",
-                "5.0",
+                "1.0",
                 "--quiet",
             ]
         )
         mesh = meshio.read(out_filename)
 
     tol = 2.0e-3
-    ref = [2.031053e02, 3.739508e01, 2.425594e02, 2.558910e01, 2.300883e02, 1.775010e00]
-    assert abs(max(mesh.points[:, 0]) - ref[0]) < tol * ref[0]
-    assert abs(min(mesh.points[:, 0]) - ref[1]) < tol * ref[1]
-    assert abs(max(mesh.points[:, 1]) - ref[2]) < tol * ref[2]
-    assert abs(min(mesh.points[:, 1]) - ref[3]) < tol * ref[3]
-    assert abs(max(mesh.points[:, 2]) - ref[4]) < tol * ref[4]
-    tol = 3.0e-2
-    assert abs(min(mesh.points[:, 2]) - ref[5]) < tol * ref[5]
+    refs = [
+        9.00478554e00,
+        -4.25843196e-03,
+        9.00332642e00,
+        -4.41271299e-03,
+        9.00407982e00,
+        -3.98639357e-03,
+    ]
+    vals = [
+        max(mesh.points[:, 0]),
+        min(mesh.points[:, 0]),
+        max(mesh.points[:, 1]),
+        min(mesh.points[:, 1]),
+        max(mesh.points[:, 2]),
+        min(mesh.points[:, 2]),
+    ]
+    for ref, val in zip(refs, vals):
+        assert abs(val - ref) < tol * abs(ref), f"{val:.8e} != {ref:.8e}"
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
-    ref = 2.725335e06
+    ref = 6.95558790e02
     # Debian needs 2.0e-2 here.
     # <https://github.com/nschloe/pygalmesh/issues/60>
-    assert abs(vol - ref) < ref * 2.0e-2
+    assert abs(vol - ref) < ref * 2.0e-2, f"{vol:.8e}"
