@@ -22,7 +22,7 @@ def test_remesh_surface():
         pygalmesh._cli.cli(
             [
                 "remesh-surface",
-                str(this_dir / "meshes" / "lion-head.vtu"),
+                str(this_dir / "meshes" / "elephant.vtu"),
                 out_filename,
                 "--max-edge-size-at-feature-edges",
                 "0.025",
@@ -39,12 +39,12 @@ def test_remesh_surface():
 
     tol = 1.0e-3
     refs = [
-        3.705640e-01,
-        -3.711630e-01,
-        4.754940e-01,
-        -4.728260e-01,
-        4.998690e-01,
-        -4.998350e-01,
+        3.60217000e-01,
+        -3.60140000e-01,
+        4.98948000e-01,
+        -4.99336000e-01,
+        3.00977000e-01,
+        -3.01316000e-01,
     ]
     vals = [
         max(mesh.points[:, 0]),
@@ -61,5 +61,5 @@ def test_remesh_surface():
     vol = sum(
         helpers.compute_triangle_areas(mesh.points, mesh.get_cells_type("triangle"))
     )
-    ref = 1.917942005786831
-    assert abs(vol - ref) < ref * 1.0e-3
+    ref = 1.2357989593759846
+    assert abs(vol - ref) < ref * 1.0e-3, vol
