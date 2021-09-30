@@ -136,11 +136,9 @@ u = pygalmesh.Difference(s0, s1)
 # add circle
 a = np.sqrt(radius ** 2 - displacement ** 2)
 max_edge_size_at_feature_edges = 0.15
-n = int(2 * numpy.pi * a / max_edge_size_at_feature_edges)
-circ = [
-    [0.0, a * np.cos(i * 2 * np.pi / n), a * np.sin(i * 2 * np.pi / n)]
-    for i in range(n)
-]
+n = int(2 * np.pi * a / max_edge_size_at_feature_edges)
+alpha = np.linspace(0.0, 2 * np.pi, n, endpoint=False)
+circ = a * np.column_stack([np.zeros(n), np.cos(alpha), np.sin(alpha)])
 circ.append(circ[0])
 
 mesh = pygalmesh.generate_mesh(
@@ -319,9 +317,7 @@ class Schwarz(pygalmesh.DomainBase):
         super().__init__()
 
     def eval(self, x):
-        x2 = np.cos(x[0] * 2 * np.pi)
-        y2 = np.cos(x[1] * 2 * np.pi)
-        z2 = np.cos(x[2] * 2 * np.pi)
+        x2, y2, z2 = np.cos(x * 2 * np.pi)
         return x2 + y2 + z2
 
 
