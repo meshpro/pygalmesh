@@ -19,8 +19,9 @@ def test_remesh_surface():
     # )
     with tempfile.TemporaryDirectory() as tmp:
         out_filename = str(pathlib.Path(tmp) / "out.vtk")
-        pygalmesh._cli.remesh_surface(
+        pygalmesh._cli.cli(
             [
+                "remesh-surface",
                 str(this_dir / "meshes" / "lion-head.vtu"),
                 out_filename,
                 "--max-edge-size-at-feature-edges",
@@ -37,7 +38,7 @@ def test_remesh_surface():
         mesh = meshio.read(out_filename)
 
     tol = 1.0e-3
-    ref = [
+    refs = [
         3.705640e-01,
         -3.711630e-01,
         4.754940e-01,
@@ -45,12 +46,16 @@ def test_remesh_surface():
         4.998690e-01,
         -4.998350e-01,
     ]
-    assert abs(max(mesh.points[:, 0]) - ref[0]) < tol * abs(ref[0])
-    assert abs(min(mesh.points[:, 0]) - ref[1]) < tol * abs(ref[1])
-    assert abs(max(mesh.points[:, 1]) - ref[2]) < tol * abs(ref[2])
-    assert abs(min(mesh.points[:, 1]) - ref[3]) < tol * abs(ref[3])
-    assert abs(max(mesh.points[:, 2]) - ref[4]) < tol * abs(ref[4])
-    assert abs(min(mesh.points[:, 2]) - ref[5]) < tol * abs(ref[5])
+    vals = [
+        max(mesh.points[:, 0]),
+        min(mesh.points[:, 0]),
+        max(mesh.points[:, 1]),
+        min(mesh.points[:, 1]),
+        max(mesh.points[:, 2]),
+        min(mesh.points[:, 2]),
+    ]
+    for ref, val in zip(refs, vals):
+        assert abs(val - ref) < tol * abs(ref), f"{val:.8e} != {ref:.8e}"
 
     print(helpers.compute_triangle_areas(mesh.points, mesh.get_cells_type("triangle")))
     vol = sum(
