@@ -315,9 +315,9 @@ If you have a surface mesh at hand (like
 [elephant.vtu](http://nschloe.github.io/pygalmesh/elephant.vtu)), pygalmesh generates a
 volume mesh on the command line via
 ```
-pygalmesh-volume-from-surface elephant.vtu out.vtk --cell-size 1.0 --odt
+pygalmesh volume-from-surface elephant.vtu out.vtk --cell-size 1.0 --odt
 ```
-(See `pygalmesh-volume-from-surface -h` for all options.)
+(See `pygalmesh volume-from-surface -h` for all options.)
 
 In Python, do
 <!--pytest-codeblocks:skip-->
@@ -341,9 +341,9 @@ It is also possible to generate meshes from INR voxel files, e.g.,
 [here](https://github.com/CGAL/cgal/tree/master/Mesh_3/examples/Mesh_3/data) either on
 the command line
 ```
-pygalmesh-from-inr skull_2.9.inr out.vtu --cell-size 5.0 --odt
+pygalmesh from-inr skull_2.9.inr out.vtu --cell-size 5.0 --odt
 ```
-(see `pygalmesh-from-inr -h` for all options) or from Python
+(see `pygalmesh from-inr -h` for all options) or from Python
 <!--pytest-codeblocks:skip-->
 ```python
 import pygalmesh
@@ -430,9 +430,9 @@ pygalmesh can help remeshing an existing surface mesh, e.g.,
 the command line, use
 
 ```
-pygalmesh-remesh-surface lion-head.off out.vtu -e 0.025 -a 25 -s 0.1 -d 0.001
+pygalmesh remesh-surface lion-head.off out.vtu -e 0.025 -a 25 -s 0.1 -d 0.001
 ```
-(see `pygalmesh-remesh-surface -h` for all options) or from Python
+(see `pygalmesh remesh-surface -h` for all options) or from Python
 <!--pytest-codeblocks:skip-->
 ```python
 import pygalmesh
