@@ -29,10 +29,10 @@ to create high-quality 2D, 3D volume meshes, periodic volume meshes, and surface
 
 CGAL generates 2D meshes from linear constraints.
 ```python
-import numpy
+import numpy as np
 import pygalmesh
 
-points = numpy.array([[0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0]])
+points = np.array([[0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0]])
 constraints = [[0, 1], [1, 2], [2, 3], [3, 0]]
 
 mesh = pygalmesh.generate_2d(
@@ -108,7 +108,7 @@ u = pygalmesh.Difference(s0, s1)
 ```
 To sharpen the intersection circle, add it as a feature edge polygon line, e.g.,
 ```python
-import numpy
+import numpy as np
 import pygalmesh
 
 radius = 1.0
@@ -118,11 +118,11 @@ s1 = pygalmesh.Ball([-displacement, 0, 0], radius)
 u = pygalmesh.Difference(s0, s1)
 
 # add circle
-a = numpy.sqrt(radius ** 2 - displacement ** 2)
+a = np.sqrt(radius ** 2 - displacement ** 2)
 max_edge_size_at_feature_edges = 0.15
 n = int(2 * numpy.pi * a / max_edge_size_at_feature_edges)
 circ = [
-    [0.0, a * numpy.cos(i * 2 * numpy.pi / n), a * numpy.sin(i * 2 * numpy.pi / n)]
+    [0.0, a * np.cos(i * 2 * np.pi / n), a * np.sin(i * 2 * np.pi / n)]
     for i in range(n)
 ]
 circ.append(circ[0])
@@ -237,7 +237,7 @@ Use `generate_mesh` with a function (regular or lambda) as `max_cell_circumradiu
 same goes for `max_edge_size_at_feature_edges`, `max_radius_surface_delaunay_ball`, and
 `max_facet_distance`.
 ```python
-import numpy
+import numpy as np
 import pygalmesh
 
 mesh = pygalmesh.generate_mesh(
@@ -246,7 +246,7 @@ mesh = pygalmesh.generate_mesh(
     max_radius_surface_delaunay_ball=0.1,
     max_facet_distance=0.025,
     max_circumradius_edge_ratio=2.0,
-    max_cell_circumradius=lambda x: abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5 + 0.025,
+    max_cell_circumradius=lambda x: abs(np.sqrt(np.dot(x, x)) - 0.5) / 5 + 0.025,
 )
 ```
 
@@ -278,7 +278,7 @@ mesh generation](https://doc.cgal.org/latest/Periodic_3_mesh_3/index.html). Besi
 domain, one needs to specify a bounding box, and optionally the number of copies in the
 output (1, 2, 4, or 8). Example:
 ```python
-import numpy
+import numpy as np
 import pygalmesh
 
 
@@ -287,9 +287,9 @@ class Schwarz(pygalmesh.DomainBase):
         super().__init__()
 
     def eval(self, x):
-        x2 = numpy.cos(x[0] * 2 * numpy.pi)
-        y2 = numpy.cos(x[1] * 2 * numpy.pi)
-        z2 = numpy.cos(x[2] * 2 * numpy.pi)
+        x2 = np.cos(x[0] * 2 * np.pi)
+        y2 = np.cos(x[1] * 2 * np.pi)
+        z2 = np.cos(x[2] * 2 * np.pi)
         return x2 + y2 + z2
 
 
