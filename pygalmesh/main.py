@@ -1,7 +1,8 @@
+from __future__ import annotations
+
 import math
 import os
 import tempfile
-from typing import Tuple
 
 import meshio
 import numpy
@@ -29,7 +30,7 @@ class Wrapper(SizingFieldBase):
 
 def generate_mesh(
     domain,
-    extra_feature_edges=None,
+    extra_feature_edges: list | None = None,
     bounding_sphere_radius: float = 0.0,
     lloyd: bool = False,
     odt: bool = False,
@@ -383,7 +384,7 @@ def remesh_surface(
     return mesh
 
 
-def save_inr(vol, voxel_size: Tuple[float, float, float], fname: str):
+def save_inr(vol, voxel_size: tuple[float, float, float], fname: str):
     """
     Save a volume (described as a numpy array) to INR format.
     Code inspired by iso2mesh (http://iso2mesh.sf.net) by Q. Fang
@@ -427,7 +428,7 @@ def save_inr(vol, voxel_size: Tuple[float, float, float], fname: str):
 
 def generate_from_array(
     vol,
-    voxel_size: Tuple[float, float, float],
+    voxel_size: tuple[float, float, float],
     lloyd: bool = False,
     odt: bool = False,
     perturb: bool = True,
