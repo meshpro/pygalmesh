@@ -19,15 +19,17 @@
 
 pygalmesh is a Python frontend to [CGAL](https://www.cgal.org/)'s
 [2D](https://doc.cgal.org/latest/Mesh_2/index.html) and [3D mesh generation
-capabilities](https://doc.cgal.org/latest/Mesh_3/index.html).  pygalmesh makes it easy
+capabilities](https://doc.cgal.org/latest/Mesh_3/index.html). pygalmesh makes it easy
 to create high-quality 2D, 3D volume meshes, periodic volume meshes, and surface meshes.
 
 ### Examples
 
 #### 2D meshes
+
 <img src="https://nschloe.github.io/pygalmesh/rect.svg" width="30%">
 
 CGAL generates 2D meshes from linear constraints.
+
 ```python
 import numpy as np
 import pygalmesh
@@ -43,10 +45,12 @@ mesh = pygalmesh.generate_2d(
 )
 # mesh.points, mesh.cells
 ```
+
 The quality of the mesh isn't very good, but can be improved with
 [optimesh](https://github.com/nschloe/optimesh).
 
 #### A simple ball
+
 <img src="https://nschloe.github.io/pygalmesh/ball.png" width="30%">
 
 ```python
@@ -57,16 +61,22 @@ mesh = pygalmesh.generate_mesh(s, max_cell_circumradius=0.2)
 
 # mesh.points, mesh.cells, ...
 ```
+
 You can write the mesh with
+
 <!--pytest-codeblocks:skip-->
+
 ```python
 mesh.write("out.vtk")
 ```
+
 You can use any format supported by [meshio](https://github.com/nschloe/meshio).
 
 The mesh generation comes with many more options, described
 [here](https://doc.cgal.org/latest/Mesh_3/). Try, for example,
+
 <!--pytest-codeblocks:skip-->
+
 ```python
 mesh = pygalmesh.generate_mesh(
     s, max_cell_circumradius=0.2, odt=True, lloyd=True, verbose=False
@@ -74,10 +84,12 @@ mesh = pygalmesh.generate_mesh(
 ```
 
 #### Other primitive shapes
+
 <img src="https://nschloe.github.io/pygalmesh/tetra.png" width="30%">
 
 pygalmesh provides out-of-the-box support for balls, cuboids, ellipsoids, tori, cones,
 cylinders, and tetrahedra. Try for example
+
 ```python
 import pygalmesh
 
@@ -92,11 +104,13 @@ mesh = pygalmesh.generate_mesh(
 ```
 
 #### Domain combinations
+
 <img src="https://nschloe.github.io/pygalmesh/ball-difference.png" width="30%">
 
 Supported are unions, intersections, and differences of all domains. As mentioned above,
 however, the sharp intersections between two domains are not automatically handled. Try
 for example
+
 ```python
 import pygalmesh
 
@@ -106,7 +120,9 @@ s0 = pygalmesh.Ball([displacement, 0, 0], radius)
 s1 = pygalmesh.Ball([-displacement, 0, 0], radius)
 u = pygalmesh.Difference(s0, s1)
 ```
+
 To sharpen the intersection circle, add it as a feature edge polygon line, e.g.,
+
 ```python
 import numpy as np
 import pygalmesh
@@ -137,14 +153,17 @@ mesh = pygalmesh.generate_mesh(
     max_circumradius_edge_ratio=2.0,
 )
 ```
+
 Note that the length of the polygon legs are kept in sync with
 `max_edge_size_at_feature_edges` of the mesh generation. This makes sure that it fits in
 nicely with the rest of the mesh.
 
 #### Domain deformations
+
 <img src="https://nschloe.github.io/pygalmesh/egg.png" width="30%">
 
 You can of course translate, rotate, scale, and stretch any domain. Try, for example,
+
 ```python
 import pygalmesh
 
@@ -154,10 +173,12 @@ mesh = pygalmesh.generate_mesh(s, max_cell_circumradius=0.1)
 ```
 
 #### Extrusion of 2D polygons
+
 <img src="https://nschloe.github.io/pygalmesh/triangle-rotated.png" width="30%">
 
 pygalmesh lets you extrude any polygon into a 3D body. It even supports rotation
 alongside!
+
 ```python
 import pygalmesh
 
@@ -176,14 +197,17 @@ mesh = pygalmesh.generate_mesh(
     verbose=False,
 )
 ```
+
 Feature edges are automatically preserved here, which is why an edge length needs to be
 given to `pygalmesh.Extrude`.
 
 #### Rotation bodies
+
 <img src="https://nschloe.github.io/pygalmesh/circle-rotate-extr.png" width="30%">
 
 Polygons in the x-z-plane can also be rotated around the z-axis to yield a rotation
 body.
+
 ```python
 import pygalmesh
 
@@ -199,11 +223,13 @@ mesh = pygalmesh.generate_mesh(
 ```
 
 #### Your own custom level set function
+
 <img src="https://nschloe.github.io/pygalmesh/heart.png" width="30%">
 
 If all of the variety is not enough for you, you can define your own custom level set
 function. You simply need to subclass `pygalmesh.DomainBase` and specify a function,
 e.g.,
+
 ```python
 import pygalmesh
 
@@ -226,16 +252,18 @@ class Heart(pygalmesh.DomainBase):
 d = Heart()
 mesh = pygalmesh.generate_mesh(d, max_cell_circumradius=0.1)
 ```
+
 Note that you need to specify the square of a bounding sphere radius, used as an input
 to CGAL's mesh generator.
 
-
 #### Local refinement
+
 <img src="https://nschloe.github.io/pygalmesh/ball-local-refinement.png" width="30%">
 
 Use `generate_mesh` with a function (regular or lambda) as `max_cell_circumradius`. The
 same goes for `max_edge_size_at_feature_edges`, `max_radius_surface_delaunay_ball`, and
 `max_facet_distance`.
+
 ```python
 import numpy as np
 import pygalmesh
@@ -255,6 +283,7 @@ mesh = pygalmesh.generate_mesh(
 If you're only after the surface of a body, pygalmesh has `generate_surface_mesh` for
 you. It offers fewer options (obviously, `max_cell_circumradius` is gone), but otherwise
 works the same way:
+
 ```python
 import pygalmesh
 
@@ -266,17 +295,20 @@ mesh = pygalmesh.generate_surface_mesh(
     max_facet_distance=0.1,
 )
 ```
+
 Refer to [CGAL's
 documention](https://doc.cgal.org/latest/Surface_mesher/index.html) for the
 options.
 
 #### Periodic volume meshes
+
 <img src="https://nschloe.github.io/pygalmesh/periodic.png" width="30%">
 
 pygalmesh also interfaces CGAL's [3D periodic
 mesh generation](https://doc.cgal.org/latest/Periodic_3_mesh_3/index.html). Besides a
 domain, one needs to specify a bounding box, and optionally the number of copies in the
 output (1, 2, 4, or 8). Example:
+
 ```python
 import numpy as np
 import pygalmesh
@@ -309,18 +341,23 @@ mesh = pygalmesh.generate_periodic_mesh(
 ```
 
 #### Volume meshes from surface meshes
+
 <img src="https://nschloe.github.io/pygalmesh/elephant.png" width="30%">
 
 If you have a surface mesh at hand (like
 [elephant.vtu](http://nschloe.github.io/pygalmesh/elephant.vtu)), pygalmesh generates a
 volume mesh on the command line via
+
 ```
 pygalmesh volume-from-surface elephant.vtu out.vtk --cell-size 1.0 --odt
 ```
+
 (See `pygalmesh volume-from-surface -h` for all options.)
 
 In Python, do
+
 <!--pytest-codeblocks:skip-->
+
 ```python
 import pygalmesh
 
@@ -335,16 +372,21 @@ mesh = pygalmesh.generate_volume_mesh_from_surface_mesh(
 ```
 
 #### Meshes from INR voxel files
+
 <img src="https://nschloe.github.io/pygalmesh/liver.png" width="30%">
 
 It is also possible to generate meshes from INR voxel files, e.g.,
 [here](https://github.com/CGAL/cgal/tree/master/Mesh_3/examples/Mesh_3/data) either on
 the command line
+
 ```
 pygalmesh from-inr skull_2.9.inr out.vtu --cell-size 5.0 --odt
 ```
+
 (see `pygalmesh from-inr -h` for all options) or from Python
+
 <!--pytest-codeblocks:skip-->
+
 ```python
 import pygalmesh
 
@@ -356,11 +398,13 @@ mesh = pygalmesh.generate_from_inr(
 ```
 
 #### Meshes from numpy arrays representing 3D images
-<img src="https://nschloe.github.io/pygalmesh/voxel-ball.png" width="70%"> |  <img src="https://nschloe.github.io/pygalmesh/phantom.png" width="70%">
-:---:|:---:|
+
+| <img src="https://nschloe.github.io/pygalmesh/voxel-ball.png" width="70%"> | <img src="https://nschloe.github.io/pygalmesh/phantom.png" width="70%"> |
+| :------------------------------------------------------------------------: | :---------------------------------------------------------------------: |
 
 pygalmesh can help generating unstructed meshes from 3D numpy int arrays specifying the
 subdomains. Subdomains with key `0` are not meshed.
+
 ```python
 import pygalmesh
 import numpy as np
@@ -389,7 +433,9 @@ available
 [here](https://wustl.app.box.com/s/rqivtin0xcofjwlkz43acou8jknsbfx8/file/127108205145).
 The phantom comprises four tissue types (background, fat, fibrograndular, skin, vascular
 tissues). The generated mesh conforms to tissues interfaces.
+
 <!--pytest-codeblocks:skip-->
+
 ```python
 import pygalmesh
 import meshio
@@ -407,10 +453,11 @@ mesh.write("breast.vtk")
 ```
 
 In addition, we can specify different mesh sizes for each tissue type. The code below
-sets the mesh size to  *1 mm* for the skin tissue (label `4`), *0.5 mm* for the vascular
-tissue (label `5`), and *2 mm* for all other tissues (`default`).
+sets the mesh size to _1 mm_ for the skin tissue (label `4`), _0.5 mm_ for the vascular
+tissue (label `5`), and _2 mm_ for all other tissues (`default`).
 
 <!--pytest-codeblocks:skip-->
+
 ```python
 mesh = pygalmesh.generate_from_array(
     vol,
@@ -422,8 +469,9 @@ mesh.write("breast_adapted.vtk")
 ```
 
 #### Surface remeshing
-<img src="https://nschloe.github.io/pygalmesh/lion-head0.png" width="100%"> | <img src="https://nschloe.github.io/pygalmesh/lion-head1.png" width="100%">
-:---:|:---:|
+
+| <img src="https://nschloe.github.io/pygalmesh/lion-head0.png" width="100%"> | <img src="https://nschloe.github.io/pygalmesh/lion-head1.png" width="100%"> |
+| :-------------------------------------------------------------------------: | :-------------------------------------------------------------------------: |
 
 pygalmesh can help remeshing an existing surface mesh, e.g.,
 [`lion-head.off`](https://github.com/nschloe/pygalmesh/raw/gh-pages/lion-head.off). On
@@ -432,8 +480,11 @@ the command line, use
 ```
 pygalmesh remesh-surface lion-head.off out.vtu -e 0.025 -a 25 -s 0.1 -d 0.001
 ```
+
 (see `pygalmesh remesh-surface -h` for all options) or from Python
+
 <!--pytest-codeblocks:skip-->
+
 ```python
 import pygalmesh
 
@@ -453,28 +504,37 @@ For installation, pygalmesh needs [CGAL](https://www.cgal.org/) and
 [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) installed on your
 system. They are typically available on your Linux distribution, e.g., on
 Ubuntu
+
 ```
 sudo apt install libcgal-dev libeigen3-dev
 ```
+
 On MacOS with homebrew,
+
 ```
 brew install cgal eigen
 ```
+
 After that, pygalmesh can be [installed from the Python Package
 Index](https://pypi.org/project/pygalmesh/), so with
+
 ```
 pip install -U pygalmesh
 ```
+
 you can install/upgrade.
 
 #### Troubleshooting
+
 If pygalmesh fails to build due to `fatal error: 'Eigen/Dense' file not found`
 you will need to create a symbolic link for Eigen to be detected, e.g.
+
 ```
 cd /usr/local/include
 sudo ln -sf eigen3/Eigen Eigen
 ```
-It's possible that `eigen3` could be in `/usr/include` instead of 
+
+It's possible that `eigen3` could be in `/usr/include` instead of
 `/usr/local/install`.
 
 #### Manual installation
@@ -482,18 +542,17 @@ It's possible that `eigen3` could be in `/usr/include` instead of
 For manual installation (if you're a developer or just really keen on getting
 the bleeding edge version of pygalmesh), there are two possibilities:
 
- * Get the sources, type `python3 setup.py install`. This does the trick
-   most the time.
- * As a fallback, there's a CMake-based installation. Simply go `cmake
-   /path/to/sources/` and `make`.
+- Get the sources, type `python3 setup.py install`. This does the trick
+  most the time.
+- As a fallback, there's a CMake-based installation. Simply go `cmake /path/to/sources/` and `make`.
 
 ### Testing
 
 To run the pygalmesh unit tests, check out this repository and type
+
 ```
 pytest
 ```
-
 
 ### Background
 
@@ -505,22 +564,21 @@ CGAL offers two different approaches for mesh generation:
 pygalmesh provides a front-end to the first approach, which has the following advantages
 and disadvantages:
 
-* All boundary points are guaranteed to be in the level set within any specified
+- All boundary points are guaranteed to be in the level set within any specified
   residual. This results in smooth curved surfaces.
-* Sharp intersections of subdomains (e.g., in unions or differences of sets) need to be
+- Sharp intersections of subdomains (e.g., in unions or differences of sets) need to be
   specified manually (via feature edges, see below), which can be tedious.
 
 On the other hand, the bounding-plane approach (realized by
 [mshr](https://bitbucket.org/fenics-project/mshr)), has the following properties:
 
-* Smooth, curved domains are approximated by a set of bounding planes, resulting in more
+- Smooth, curved domains are approximated by a set of bounding planes, resulting in more
   of less visible edges.
-* Intersections of domains can be computed automatically, so domain unions etc.  have
+- Intersections of domains can be computed automatically, so domain unions etc. have
   sharp edges where they belong.
 
 See [here](https://github.com/nschloe/awesome-scientific-computing#meshing) for other
 mesh generation tools.
-
 
 ### License
 
