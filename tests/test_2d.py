@@ -1,18 +1,15 @@
-import numpy
+import numpy as np
 from helpers import compute_triangle_areas
 
 import pygalmesh
 
 
 def test_rectangle():
-    points = numpy.array([[0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0]])
+    points = np.array([[0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0]])
     constraints = [[0, 1], [1, 2], [2, 3], [3, 0]]
 
     mesh = pygalmesh.generate_2d(
-        points,
-        constraints,
-        max_edge_size=1.0e-1,
-        num_lloyd_steps=10,
+        points, constraints, max_edge_size=1.0e-1, num_lloyd_steps=10
     )
 
     assert mesh.points.shape == (276, 2)
@@ -36,22 +33,16 @@ def test_rectangle():
 
 def test_disk():
     h = 0.1
-    n = int(2 * numpy.pi / h)
-    points = numpy.array(
-        [
-            [numpy.cos(alpha), numpy.sin(alpha)]
-            for alpha in numpy.linspace(0.0, 2 * numpy.pi, n + 1, endpoint=False)
-        ]
-    )
+    n = int(2 * np.pi / h)
+    alpha = np.linspace(0.0, 2 * np.pi, n + 1, endpoint=False)
+    points = np.column_stack([np.cos(alpha), np.sin(alpha)])
+
     constraints = [[k, k + 1] for k in range(n)] + [[n, 0]]
     mesh = pygalmesh.generate_2d(
-        points,
-        constraints,
-        max_edge_size=h,
-        num_lloyd_steps=0,
+        points, constraints, max_edge_size=h, num_lloyd_steps=0
     )
     areas = compute_triangle_areas(mesh.points, mesh.get_cells_type("triangle"))
-    assert numpy.all(areas > 1.0e-5)
+    assert np.all(areas > 1.0e-5)
 
 
 if __name__ == "__main__":

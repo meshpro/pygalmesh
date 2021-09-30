@@ -16,10 +16,10 @@ def test_inr():
         out_filename = str(pathlib.Path(tmp) / "out.vtk")
         pygalmesh._cli.inr(
             [
-                str(this_dir / "meshes" / "skull_2.9.inr"),
+                str(this_dir / "meshes" / "sphere.inr"),
                 out_filename,
                 "--max-cell-circumradius",
-                "5.0",
+                "1.0",
                 "--quiet",
             ]
         )

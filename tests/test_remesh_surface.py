@@ -10,7 +10,7 @@ import pygalmesh
 def test_remesh_surface():
     this_dir = pathlib.Path(__file__).resolve().parent
     # mesh = pygalmesh.remesh_surface(
-    #     this_dir / "meshes" / "lion-head.off",
+    #     this_dir / "meshes" / "lion-head.vtu",
     #     max_edge_size_at_feature_edges=0.025,
     #     min_facet_angle=25,
     #     max_radius_surface_delaunay_ball=0.1,
@@ -21,7 +21,7 @@ def test_remesh_surface():
         out_filename = str(pathlib.Path(tmp) / "out.vtk")
         pygalmesh._cli.remesh_surface(
             [
-                str(this_dir / "meshes" / "lion-head.off"),
+                str(this_dir / "meshes" / "lion-head.vtu"),
                 out_filename,
                 "--max-edge-size-at-feature-edges",
                 "0.025",
