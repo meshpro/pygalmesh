@@ -4,9 +4,9 @@ from sys import version_info
 import meshio
 from _pygalmesh import _CGAL_VERSION_STR
 
-from ..__about__ import __version__
-from ..main import generate_from_inr, generate_volume_mesh_from_surface_mesh
-from ..main import remesh_surface as rms
+from .__about__ import __version__
+from .main import generate_from_inr, generate_volume_mesh_from_surface_mesh
+from .main import remesh_surface as rms
 
 
 def cli(argv=None):
