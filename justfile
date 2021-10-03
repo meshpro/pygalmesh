@@ -15,10 +15,8 @@ upload: clean
 publish: tag upload
 
 clean:
-	@find . | grep -E "(__pycache__|\.pyc|\.pyo$\)" | xargs rm -rf
-	@rm -rf build/*
-	@rm -rf pygalmesh.egg-info/
-	@rm -rf dist/
+	@find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
+	@rm -rf src/*.egg-info/ build/ dist/ .tox/ pygalmesh.egg-info//
 
 format:
 	isort .
