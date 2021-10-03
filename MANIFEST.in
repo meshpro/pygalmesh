@@ -10,5 +10,5 @@ include src/primitives.hpp
 include src/remesh_surface.hpp
 include src/sizing_field.hpp
 
-include test/helpers.py
-recursive-include test/meshes *
+include tests/helpers.py
+recursive-include tests/meshes *
