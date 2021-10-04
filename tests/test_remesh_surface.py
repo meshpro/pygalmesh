@@ -46,7 +46,7 @@ def test_remesh_surface():
         (min(mesh.points[:, 2]), -3.01316000e-01),
     ]
     for val, ref in vals_refs:
-        assert abs(val - ref) < 1.0e-3 * abs(ref), f"{val:.8e} != {ref:.8e}"
+        assert abs(val - ref) < 1.0e-3 * (1.0 + abs(ref)), f"{val:.8e} != {ref:.8e}"
 
     triangle_areas = helpers.compute_triangle_areas(
         mesh.points, mesh.get_cells_type("triangle")

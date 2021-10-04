@@ -38,12 +38,16 @@ def test_volume_from_surface():
         mesh = meshio.read(out_filename)
 
     tol = 2.0e-2
-    assert abs(max(mesh.points[:, 0]) - 0.357612477657) < tol
-    assert abs(min(mesh.points[:, 0]) + 0.358747130015) < tol
-    assert abs(max(mesh.points[:, 1]) - 0.496137874959) < tol
-    assert abs(min(mesh.points[:, 1]) + 0.495301051456) < tol
-    assert abs(max(mesh.points[:, 2]) - 0.298780230629) < tol
-    assert abs(min(mesh.points[:, 2]) + 0.300472866512) < tol
+    vals_refs = [
+        (max(mesh.points[:, 0]), +0.357612477657),
+        (min(mesh.points[:, 0]), -0.358747130015),
+        (max(mesh.points[:, 1]), +0.496137874959),
+        (min(mesh.points[:, 1]), -0.495301051456),
+        (max(mesh.points[:, 2]), +0.298780230629),
+        (min(mesh.points[:, 2]), -0.300472866512),
+    ]
+    for val, ref in vals_refs:
+        assert abs(val - ref) < (1.0 + ref) * tol, f"{val:.15e} != {ref:.15e}"
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
-    assert abs(vol - 0.044164693065) < tol
+    assert abs(vol - 0.044164693065) < (1.0 + vol) * tol

@@ -24,12 +24,12 @@ def test_from_array():
 
     tol = min(h)
     ref = [1.0, 0.0, 1.0, 0.0, 1.0, 0.0]
-    assert abs(max(mesh.points[:, 0]) - ref[0]) < tol
-    assert abs(min(mesh.points[:, 0]) - ref[1]) < tol
-    assert abs(max(mesh.points[:, 1]) - ref[2]) < tol
-    assert abs(min(mesh.points[:, 1]) - ref[3]) < tol
-    assert abs(max(mesh.points[:, 2]) - ref[4]) < tol
-    assert abs(min(mesh.points[:, 2]) - ref[5]) < tol
+    assert abs(max(mesh.points[:, 0]) - ref[0]) < (1.0 + ref[0]) * tol
+    assert abs(min(mesh.points[:, 0]) - ref[1]) < (1.0 + ref[1]) * tol
+    assert abs(max(mesh.points[:, 1]) - ref[2]) < (1.0 + ref[2]) * tol
+    assert abs(min(mesh.points[:, 1]) - ref[3]) < (1.0 + ref[3]) * tol
+    assert abs(max(mesh.points[:, 2]) - ref[4]) < (1.0 + ref[4]) * tol
+    assert abs(min(mesh.points[:, 2]) - ref[5]) < (1.0 + ref[5]) * tol
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
     ref = 1.0 / 6.0 * np.pi

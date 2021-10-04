@@ -16,12 +16,12 @@ def test_sphere():
     )
 
     tol = 1.0e-2
-    assert abs(max(mesh.points[:, 0]) - radius) < tol
-    assert abs(min(mesh.points[:, 0]) + radius) < tol
-    assert abs(max(mesh.points[:, 1]) - radius) < tol
-    assert abs(min(mesh.points[:, 1]) + radius) < tol
-    assert abs(max(mesh.points[:, 2]) - radius) < tol
-    assert abs(min(mesh.points[:, 2]) + radius) < tol
+    assert abs(max(mesh.points[:, 0]) - radius) < (1.0 + radius) * tol
+    assert abs(min(mesh.points[:, 0]) + radius) < (1.0 + radius) * tol
+    assert abs(max(mesh.points[:, 1]) - radius) < (1.0 + radius) * tol
+    assert abs(min(mesh.points[:, 1]) + radius) < (1.0 + radius) * tol
+    assert abs(max(mesh.points[:, 2]) - radius) < (1.0 + radius) * tol
+    assert abs(min(mesh.points[:, 2]) + radius) < (1.0 + radius) * tol
 
     areas = helpers.compute_triangle_areas(mesh.points, mesh.get_cells_type("triangle"))
     surface_area = sum(areas)
