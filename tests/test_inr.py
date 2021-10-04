@@ -26,25 +26,16 @@ def test_inr():
         )
         mesh = meshio.read(out_filename)
 
-    tol = 2.0e-3
-    refs = [
-        9.00478554e00,
-        -4.25843196e-03,
-        9.00332642e00,
-        -4.41271299e-03,
-        9.00407982e00,
-        -3.98639357e-03,
+    vals_refs = [
+        (max(mesh.points[:, 0]), 9.00478554e00),
+        (min(mesh.points[:, 0]), -4.25843196e-03),
+        (max(mesh.points[:, 1]), 9.00332642e00),
+        (min(mesh.points[:, 1]), -4.41271299e-03),
+        (max(mesh.points[:, 2]), 9.00407982e00),
+        (min(mesh.points[:, 2]), -3.98639357e-03),
     ]
-    vals = [
-        max(mesh.points[:, 0]),
-        min(mesh.points[:, 0]),
-        max(mesh.points[:, 1]),
-        min(mesh.points[:, 1]),
-        max(mesh.points[:, 2]),
-        min(mesh.points[:, 2]),
-    ]
-    for ref, val in zip(refs, vals):
-        assert abs(val - ref) < tol * abs(ref), f"{val:.8e} != {ref:.8e}"
+    for val, ref in vals_refs:
+        assert abs(val - ref) < 6.0e-2 * abs(ref), f"{val:.8e} != {ref:.8e}"
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
     ref = 6.95558790e02
