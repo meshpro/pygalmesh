@@ -19,7 +19,7 @@ jobs:
       - name: Run pre-commit
         uses: pre-commit/action@v2.0.3
 
-  build:
+  linux:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/setup-python@v2
@@ -43,3 +43,23 @@ jobs:
           pip install tox
           CC="clang" tox -- --cov pygalmesh --cov-report xml --cov-report term
       - uses: codecov/codecov-action@v1
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - name: Install CGAL 5
+        run: |
+          brew install cgal
+      - name: Install other dependencies
+        run: |
+          brew install eigen
+      - name: Test with tox
+        run: |
+          pip install tox
+          CC="clang" tox -- --cov pygalmesh --cov-report xml --cov-report term
