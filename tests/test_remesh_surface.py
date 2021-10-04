@@ -37,29 +37,20 @@ def test_remesh_surface():
         )
         mesh = meshio.read(out_filename)
 
-    tol = 1.0e-3
-    refs = [
-        3.60217000e-01,
-        -3.60140000e-01,
-        4.98948000e-01,
-        -4.99336000e-01,
-        3.00977000e-01,
-        -3.01316000e-01,
+    vals_refs = [
+        (max(mesh.points[:, 0]), 3.60217000e-01),
+        (min(mesh.points[:, 0]), -3.60140000e-01),
+        (max(mesh.points[:, 1]), 4.98948000e-01),
+        (min(mesh.points[:, 1]), -4.99336000e-01),
+        (max(mesh.points[:, 2]), 3.00977000e-01),
+        (min(mesh.points[:, 2]), -3.01316000e-01),
     ]
-    vals = [
-        max(mesh.points[:, 0]),
-        min(mesh.points[:, 0]),
-        max(mesh.points[:, 1]),
-        min(mesh.points[:, 1]),
-        max(mesh.points[:, 2]),
-        min(mesh.points[:, 2]),
-    ]
-    for ref, val in zip(refs, vals):
-        assert abs(val - ref) < tol * abs(ref), f"{val:.8e} != {ref:.8e}"
+    for val, ref in vals_refs:
+        assert abs(val - ref) < 1.0e-3 * abs(ref), f"{val:.8e} != {ref:.8e}"
 
-    print(helpers.compute_triangle_areas(mesh.points, mesh.get_cells_type("triangle")))
-    vol = sum(
-        helpers.compute_triangle_areas(mesh.points, mesh.get_cells_type("triangle"))
+    triangle_areas = helpers.compute_triangle_areas(
+        mesh.points, mesh.get_cells_type("triangle")
     )
+    vol = sum(triangle_areas)
     ref = 1.2357989593759846
     assert abs(vol - ref) < ref * 1.0e-3, vol
