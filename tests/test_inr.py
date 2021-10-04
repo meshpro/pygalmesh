@@ -35,7 +35,7 @@ def test_inr():
         (min(mesh.points[:, 2]), -3.98639357e-03),
     ]
     for val, ref in vals_refs:
-        assert abs(val - ref) < 6.0e-2 * abs(ref), f"{val:.8e} != {ref:.8e}"
+        assert abs(val - ref) < 1.0e-3 * (1.0 + abs(ref)), f"{val:.8e} != {ref:.8e}"
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
     ref = 6.95558790e02
