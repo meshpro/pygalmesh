@@ -3,6 +3,7 @@ from __future__ import annotations
 import math
 import os
 import tempfile
+from typing import Callable
 
 import meshio
 import numpy
@@ -38,10 +39,10 @@ def generate_mesh(
     exude: bool = True,
     max_edge_size_at_feature_edges: float = 0.0,
     min_facet_angle: float = 0.0,
-    max_radius_surface_delaunay_ball: float = 0.0,
+    max_radius_surface_delaunay_ball: float | Callable[..., float] = 0.0,
     max_facet_distance: float = 0.0,
     max_circumradius_edge_ratio: float = 0.0,
-    max_cell_circumradius: float = 0.0,
+    max_cell_circumradius: float | Callable[..., float] = 0.0,
     verbose: bool = True,
     seed: int = 0,
 ):
@@ -291,7 +292,7 @@ def generate_from_inr(
     max_radius_surface_delaunay_ball: float = 0.0,
     max_facet_distance: float = 0.0,
     max_circumradius_edge_ratio: float = 0.0,
-    max_cell_circumradius: float = 0.0,
+    max_cell_circumradius: float | dict[int | str, float] = 0.0,
     verbose: bool = True,
     seed: int = 0,
 ):
@@ -436,7 +437,7 @@ def generate_from_array(
     max_edge_size_at_feature_edges: float = 0.0,
     min_facet_angle: float = 0.0,
     max_radius_surface_delaunay_ball: float = 0.0,
-    max_cell_circumradius: float = 0.0,
+    max_cell_circumradius: float | dict[int | str, float] = 0.0,
     max_facet_distance: float = 0.0,
     max_circumradius_edge_ratio: float = 0.0,
     verbose: bool = True,
