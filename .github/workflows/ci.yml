@@ -25,9 +25,10 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: "3.x"
-      - uses: actions/checkout@v2
-        with:
-          lfs: true
+
+      - name: Checkout code
+        uses: nschloe/action-cached-lfs-checkout@v1
+
       - name: Install CGAL 5
         run: |
           # Leave that here in case we ever need a PPA again
@@ -50,9 +51,10 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: "3.x"
-      - uses: actions/checkout@v2
-        with:
-          lfs: true
+
+      - name: Checkout code
+        uses: nschloe/action-cached-lfs-checkout@v1
+
       - name: Install system dependencies
         run: |
           brew install cgal eigen

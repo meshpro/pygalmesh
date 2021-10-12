@@ -7,7 +7,7 @@ import pygalmesh
 def test_from_array():
     n = 200
     shape = (n, n, n)
-    h = [1.0 / s for s in shape]
+    h = (1.0 / shape[0], 1.0 / shape[1], 1.0 / shape[2])
     vol = np.zeros(shape, dtype=np.uint16)
     i, j, k = np.arange(shape[0]), np.arange(shape[1]), np.arange(shape[2])
     ii, jj, kk = np.meshgrid(i, j, k)
@@ -41,7 +41,7 @@ def test_from_array():
 def test_from_array_with_subdomain_sizing():
     n = 200
     shape = (n, n, n)
-    h = [1.0 / s for s in shape]
+    h = (1.0 / shape[0], 1.0 / shape[1], 1.0 / shape[2])
     vol = np.zeros(shape, dtype=np.uint16)
     i, j, k = np.arange(shape[0]), np.arange(shape[1]), np.arange(shape[2])
     ii, jj, kk = np.meshgrid(i, j, k)
