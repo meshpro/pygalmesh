@@ -20,6 +20,8 @@ generate_from_off(
     const double max_facet_distance = 0.0,
     const double max_circumradius_edge_ratio = 0.0,
     const double max_cell_circumradius = 0.0,
+    const double exude_time_limit = 0.0,
+    const double exude_sliver_bound = 0.0,
     const bool verbose = true,
     const bool reorient = false,
     const int seed = 0

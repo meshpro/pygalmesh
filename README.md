@@ -9,7 +9,8 @@
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/pygalmesh.svg?style=flat-square)](https://pypi.org/pypi/pygalmesh/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5564818.svg?style=flat-square)](https://doi.org/10.5281/zenodo.5564818)
 [![GitHub stars](https://img.shields.io/github/stars/nschloe/pygalmesh.svg?style=flat-square&label=Stars&logo=github)](https://github.com/nschloe/pygalmesh)
-[![PyPi downloads](https://img.shields.io/pypi/dm/pygalmesh.svg?style=flat-square)](https://pypistats.org/packages/pygalmesh)
+[![Downloads](https://pepy.tech/badge/pygalmesh/month?style=flat-square)](https://pepy.tech/project/pygalmesh)
+<!--[![PyPi downloads](https://img.shields.io/pypi/dm/pygalmesh.svg?style=flat-square)](https://pypistats.org/packages/pygalmesh)-->
 
 [![Discord](https://img.shields.io/static/v1?logo=discord&label=chat&message=on%20discord&color=7289da&style=flat-square)](https://discord.gg/Z6DMsJh4Hr)
 
@@ -295,7 +296,7 @@ mesh = pygalmesh.generate_surface_mesh(
 ```
 
 Refer to [CGAL's
-documention](https://doc.cgal.org/latest/Surface_mesher/index.html) for the
+documentation](https://doc.cgal.org/latest/Surface_mesher/index.html) for the
 options.
 
 #### Periodic volume meshes

@@ -59,6 +59,8 @@ void generate_from_off(
     const double max_facet_distance,
     const double max_circumradius_edge_ratio,
     const double max_cell_circumradius,
+    const double exude_time_limit,
+    const double exude_sliver_bound,
     const bool verbose,
     const bool reorient,
     const int seed
@@ -135,7 +137,13 @@ void generate_from_off(
       lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
       odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
       perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
-      exude ? CGAL::parameters::exude() : CGAL::parameters::no_exude());
+      exude ?
+        CGAL::parameters::exude(
+          CGAL::parameters::time_limit = exude_time_limit,
+          CGAL::parameters::sliver_bound = exude_sliver_bound
+        ) :
+        CGAL::parameters::no_exude()
+      );
   if (!verbose) {
     std::cerr.clear();
   }
