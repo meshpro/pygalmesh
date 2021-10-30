@@ -43,6 +43,8 @@ def generate_mesh(
     max_facet_distance: float = 0.0,
     max_circumradius_edge_ratio: float = 0.0,
     max_cell_circumradius: float | Callable[..., float] = 0.0,
+    exude_time_limit: float = 0.0,
+    exude_sliver_bound: float = 0.0,
     verbose: bool = True,
     seed: int = 0,
 ):
@@ -121,6 +123,8 @@ def generate_mesh(
         max_circumradius_edge_ratio=max_circumradius_edge_ratio,
         max_cell_circumradius_value=max_cell_circumradius_value,
         max_cell_circumradius_field=max_cell_circumradius_field,
+        exude_time_limit=exude_time_limit,
+        exude_sliver_bound=exude_sliver_bound,
         verbose=verbose,
         seed=seed,
     )
@@ -244,6 +248,8 @@ def generate_volume_mesh_from_surface_mesh(
     max_facet_distance: float = 0.0,
     max_circumradius_edge_ratio: float = 0.0,
     max_cell_circumradius: float = 0.0,
+    exude_time_limit: float = 0.0,
+    exude_sliver_bound: float = 0.0,
     verbose: bool = True,
     reorient: bool = False,
     seed: int = 0,
@@ -270,6 +276,8 @@ def generate_volume_mesh_from_surface_mesh(
         max_facet_distance=max_facet_distance,
         max_circumradius_edge_ratio=max_circumradius_edge_ratio,
         max_cell_circumradius=max_cell_circumradius,
+        exude_time_limit=exude_time_limit,
+        exude_sliver_bound=exude_sliver_bound,
         verbose=verbose,
         reorient=reorient,
         seed=seed,
@@ -293,6 +301,8 @@ def generate_from_inr(
     max_facet_distance: float = 0.0,
     max_circumradius_edge_ratio: float = 0.0,
     max_cell_circumradius: float | dict[int | str, float] = 0.0,
+    exude_time_limit: float = 0.0,
+    exude_sliver_bound: float = 0.0,
     verbose: bool = True,
     seed: int = 0,
 ):
@@ -313,6 +323,8 @@ def generate_from_inr(
             max_facet_distance=max_facet_distance,
             max_circumradius_edge_ratio=max_circumradius_edge_ratio,
             max_cell_circumradius=max_cell_circumradius,
+            exude_time_limit=exude_time_limit,
+            exude_sliver_bound=exude_sliver_bound,
             verbose=verbose,
             seed=seed,
         )
