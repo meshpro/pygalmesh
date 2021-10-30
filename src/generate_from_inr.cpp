@@ -47,6 +47,8 @@ generate_from_inr(
     const double max_facet_distance,
     const double max_circumradius_edge_ratio,
     const double max_cell_circumradius,
+    const double exude_time_limit,
+    const double exude_sliver_bound,
     const bool verbose,
     const int seed
     )
@@ -80,7 +82,12 @@ generate_from_inr(
       lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
       odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
       perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
-      exude ? CGAL::parameters::exude() : CGAL::parameters::no_exude()
+      exude ?
+        CGAL::parameters::exude(
+          CGAL::parameters::time_limit = exude_time_limit,
+          CGAL::parameters::sliver_bound = exude_sliver_bound
+        ) :
+        CGAL::parameters::no_exude()
       );
   if (!verbose) {
     std::cerr.clear();
@@ -110,6 +117,8 @@ generate_from_inr_with_subdomain_sizing(
     const double max_radius_surface_delaunay_ball,
     const double max_facet_distance,
     const double max_circumradius_edge_ratio,
+    const double exude_time_limit,
+    const double exude_sliver_bound,
     const bool verbose,
     const int seed
     )
@@ -148,7 +157,12 @@ generate_from_inr_with_subdomain_sizing(
       lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
       odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
       perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
-      exude ? CGAL::parameters::exude() : CGAL::parameters::no_exude()
+      exude ?
+        CGAL::parameters::exude(
+          CGAL::parameters::time_limit = exude_time_limit,
+          CGAL::parameters::sliver_bound = exude_sliver_bound
+        ) :
+        CGAL::parameters::no_exude()
       );
   if (!verbose) {
     std::cerr.clear();

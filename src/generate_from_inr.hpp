@@ -19,6 +19,8 @@ void generate_from_inr(
     const double max_facet_distance = 0.0,
     const double max_circumradius_edge_ratio = 0.0,
     const double max_cell_circumradius = 0.0,
+    const double exude_time_limit = 0.0,
+    const double exude_sliver_bound = 0.0,
     const bool verbose = true,
     const int seed = 0
     );
@@ -39,7 +41,9 @@ generate_from_inr_with_subdomain_sizing(
     const double max_radius_surface_delaunay_ball = 0.0,
     const double max_facet_distance = 0.0,
     const double max_circumradius_edge_ratio = 0.0,
-    const bool verbose  = true,
+    const double exude_time_limit = 0.0,
+    const double exude_sliver_bound = 0.0,
+    const bool verbose = true,
     const int seed = 0
     );
 

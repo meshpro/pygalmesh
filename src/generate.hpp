@@ -37,6 +37,9 @@ void generate_mesh(
     const double max_cell_circumradius_value = 0.0,
     const std::shared_ptr<pygalmesh::SizingFieldBase> & max_cell_circumradius_field = nullptr,
     //
+    const double exude_time_limit = 0.0,
+    const double exude_sliver_bound = 0.0,
+    //
     const bool verbose = true,
     const int seed = 0
     );
