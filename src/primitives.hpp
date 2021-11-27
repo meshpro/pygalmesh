@@ -142,7 +142,7 @@ class Ellipsoid: public pygalmesh::DomainBase
       x0_(x0),
       a0_2_(a0*a0),
       a1_2_(a1*a1),
-      a2_2_(a2*a1)
+      a2_2_(a2*a2)
     {
     }
 
@@ -162,7 +162,9 @@ class Ellipsoid: public pygalmesh::DomainBase
     double
     get_bounding_sphere_squared_radius() const
     {
-      return std::max({a0_2_, a1_2_, a2_2_});
+      const double radius = sqrt(std::max({a0_2_, a1_2_, a2_2_}));
+      const double x0_nrm = sqrt(x0_[0]*x0_[0] + x0_[1]*x0_[1] + x0_[2]*x0_[2]);
+      return (x0_nrm + radius) * (x0_nrm + radius);
     }
 
   private:
