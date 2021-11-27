@@ -180,12 +180,12 @@ class Cylinder: public pygalmesh::DomainBase
         const double z0,
         const double z1,
         const double radius,
-        const double feature_edge_length
+        const double feature_edge_h
         ):
       z0_(z0),
       z1_(z1),
       radius_(radius),
-      feature_edge_length_(feature_edge_length)
+      feature_edge_h_(feature_edge_h)
     {
       assert(z1_ > z0_);
     }
@@ -196,9 +196,10 @@ class Cylinder: public pygalmesh::DomainBase
     double
     eval(const std::array<double, 3> & x) const
     {
-      return (z0_ < x[2] && x[2] < z1_) ?
-        x[0]*x[0] + x[1]*x[1] - radius_*radius_ :
-        1.0;
+      const double rdist = x[0] * x[0] + x[1] * x[1] - radius_ * radius_;
+      const double z0dist = z0_ - x[2];
+      const double z1dist = x[2] - z1_;
+      return std::max({rdist, z0dist, z1dist});
     }
 
     virtual
@@ -213,13 +214,13 @@ class Cylinder: public pygalmesh::DomainBase
     std::vector<std::vector<std::array<double, 3>>>
     get_features() const
     {
-      const double pi = 3.1415926535897932384;
-      const size_t n = 2 * pi * radius_ / feature_edge_length_;
-      std::vector<std::array<double, 3>> circ0(n+1);
-      std::vector<std::array<double, 3>> circ1(n+1);
+      const double tau = 6.2831853071795864769;
+      const size_t n = tau * radius_ / feature_edge_h_;
+      std::vector<std::array<double, 3>> circ0(n + 1);
+      std::vector<std::array<double, 3>> circ1(n + 1);
       for (size_t i=0; i < n; i++) {
-        const double c = radius_ * cos((2*pi * i) / n);
-        const double s = radius_ * sin((2*pi * i) / n);
+        const double c = radius_ * cos((tau * i) / n);
+        const double s = radius_ * sin((tau * i) / n);
         circ0[i] = {c, s, z0_};
         circ1[i] = {c, s, z1_};
       }
@@ -233,7 +234,7 @@ class Cylinder: public pygalmesh::DomainBase
     const double z0_;
     const double z1_;
     const double radius_;
-    const double feature_edge_length_;
+    const double feature_edge_h_;
 };
 
 
