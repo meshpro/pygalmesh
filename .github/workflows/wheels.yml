@@ -25,21 +25,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
-      - name: Install CGAL 5
-        run: |
-          # Leave that here in case we ever need a PPA again
-          # sudo apt-get install -y software-properties-common
-          # sudo apt-add-repository -y ppa:nschloe/cgal-backports
-          # sudo apt update
-          sudo apt install -y libcgal-dev
-      - name: Install other dependencies
-        run: |
-          sudo apt-get install -y libeigen3-dev
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.3.1
         env:
+          # install dependencies
+          CIBW_BEFORE_BUILD: sudo apt-get install -y libeigen3-dev libcgal-dev
           CIBW_BUILD: cp37-* cp38-* cp39-* cp310-*
-            # CIBW_SKIP: "*-musllinux*"
+          CIBW_SKIP: "*-musllinux*"
           # Be a little economical here and only build native archs. Otherwise,
           # it'll produce other targets, too.
           # <https://cibuildwheel.readthedocs.io/en/stable/options/#archs>:
