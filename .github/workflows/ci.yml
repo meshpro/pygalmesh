@@ -38,7 +38,7 @@ jobs:
           sudo apt install -y libcgal-dev
       - name: Install other dependencies
         run: |
-          sudo apt-get install -y libeigen3-dev python3-pip clang
+          sudo apt-get install -y libeigen3-dev clang
       - name: Test with tox
         run: |
           pip install tox

@@ -25,6 +25,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
+      - name: Install CGAL 5
+        run: |
+          # Leave that here in case we ever need a PPA again
+          # sudo apt-get install -y software-properties-common
+          # sudo apt-add-repository -y ppa:nschloe/cgal-backports
+          # sudo apt update
+          sudo apt install -y libcgal-dev
+      - name: Install other dependencies
+        run: |
+          sudo apt-get install -y libeigen3-dev
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.3.1
         env:
