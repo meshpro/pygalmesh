@@ -31,7 +31,9 @@ jobs:
           # Install dependencies; use manylinux_2_24 to have Debian images with
           # apt-get. With manylinux2014, it'll use CentOS.
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_24
-          CIBW_BEFORE_BUILD: apt-get install libeigen3-dev libcgal-dev
+          CIBW_BEFORE_BUILD: |
+            apt-get update
+            apt-get install libeigen3-dev libcgal-dev
           CIBW_BUILD: cp37-* cp38-* cp39-* cp310-*
           CIBW_SKIP: "*-musllinux*"
           # Be a little economical here and only build native archs. Otherwise,
