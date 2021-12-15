@@ -1,0 +1,55 @@
+name: Build wheels
+
+  # on:
+  #   release:
+  #     types: [released]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build_wheels:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [
+            ubuntu-latest,
+            # macOS-latest,
+            # windows-latest,
+          ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.3.1
+        env:
+          CIBW_BUILD: cp37-* cp38-* cp39-* cp310-*
+            # CIBW_SKIP: "*-musllinux*"
+          # Be a little economical here and only build native archs. Otherwise,
+          # it'll produce other targets, too.
+          # <https://cibuildwheel.readthedocs.io/en/stable/options/#archs>:
+          CIBW_ARCHS: native
+      - name: Save wheels
+        uses: actions/upload-artifact@v2
+        with:
+          path: ./wheelhouse/*.whl
+
+  # https://cibuildwheel.readthedocs.io/en/stable/deliver-to-pypi/
+  # upload:
+  #   name: Upload wheels to PyPI
+  #   needs: [build_wheels]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: artifact
+  #         path: dist
+  #     - uses: pypa/gh-action-pypi-publish@release/v1
+  #       with:
+  #         user: __token__
+  #         password: ${{ secrets.PYPI_API_TOKEN }}
