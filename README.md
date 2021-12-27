@@ -140,6 +140,7 @@ a = np.sqrt(radius ** 2 - displacement ** 2)
 max_edge_size_at_feature_edges = 0.15
 n = int(2 * np.pi * a / max_edge_size_at_feature_edges)
 alpha = np.linspace(0.0, 2 * np.pi, n + 1)
+alpha[-1] = alpha[0]
 circ = a * np.column_stack([np.zeros(n + 1), np.cos(alpha), np.sin(alpha)])
 
 mesh = pygalmesh.generate_mesh(
