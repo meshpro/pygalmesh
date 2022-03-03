@@ -26,7 +26,7 @@ def test_balls_union():
     s1 = pygalmesh.Ball([-displacement, 0, 0], radius)
     u = pygalmesh.Union([s0, s1])
 
-    a = numpy.sqrt(radius ** 2 - displacement ** 2)
+    a = numpy.sqrt(radius**2 - displacement**2)
     max_edge_size_at_feature_edges = 0.1
     n = int(2 * numpy.pi * a / max_edge_size_at_feature_edges)
     circ = [
@@ -53,7 +53,7 @@ def test_balls_union():
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
     h = radius - displacement
     ref_vol = 2 * (
-        4.0 / 3.0 * numpy.pi * radius ** 3 - h * numpy.pi / 6.0 * (3 * a ** 2 + h ** 2)
+        4.0 / 3.0 * numpy.pi * radius**3 - h * numpy.pi / 6.0 * (3 * a**2 + h**2)
     )
 
     assert abs(vol - ref_vol) < 0.1
@@ -66,7 +66,7 @@ def test_balls_intersection():
     s1 = pygalmesh.Ball([-displacement, 0, 0], radius)
     u = pygalmesh.Intersection([s0, s1])
 
-    a = numpy.sqrt(radius ** 2 - displacement ** 2)
+    a = numpy.sqrt(radius**2 - displacement**2)
     max_edge_size_at_feature_edges = 0.1
     n = int(2 * numpy.pi * a / max_edge_size_at_feature_edges)
     circ = [
@@ -92,7 +92,7 @@ def test_balls_intersection():
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
     h = radius - displacement
-    ref_vol = 2 * (h * numpy.pi / 6.0 * (3 * a ** 2 + h ** 2))
+    ref_vol = 2 * (h * numpy.pi / 6.0 * (3 * a**2 + h**2))
 
     assert abs(vol - ref_vol) < 0.1
 
@@ -104,7 +104,7 @@ def test_balls_difference():
     s1 = pygalmesh.Ball([-displacement, 0, 0], radius)
     u = pygalmesh.Difference(s0, s1)
 
-    a = numpy.sqrt(radius ** 2 - displacement ** 2)
+    a = numpy.sqrt(radius**2 - displacement**2)
     max_edge_size_at_feature_edges = 0.15
     n = int(2 * numpy.pi * a / max_edge_size_at_feature_edges)
     circ = [
@@ -134,8 +134,8 @@ def test_balls_difference():
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
     h = radius - displacement
-    ref_vol = 4.0 / 3.0 * numpy.pi * radius ** 3 - 2 * h * numpy.pi / 6.0 * (
-        3 * a ** 2 + h ** 2
+    ref_vol = 4.0 / 3.0 * numpy.pi * radius**3 - 2 * h * numpy.pi / 6.0 * (
+        3 * a**2 + h**2
     )
 
     assert abs(vol - ref_vol) < 0.05
@@ -334,11 +334,11 @@ def test_custom_function():
 
         def get_bounding_sphere_squared_radius(self):
             z_max = max(abs(self.z0), abs(self.z1))
-            r_max = z_max ** 2 + self.waist_radius
+            r_max = z_max**2 + self.waist_radius
             return r_max * r_max + z_max * z_max
 
         def get_features(self):
-            radius0 = self.z0 ** 2 + self.waist_radius
+            radius0 = self.z0**2 + self.waist_radius
             n0 = int(2 * numpy.pi * radius0 / self.max_edge_size_at_feature_edges)
             circ0 = [
                 [
@@ -350,7 +350,7 @@ def test_custom_function():
             ]
             circ0.append(circ0[0])
 
-            radius1 = self.z1 ** 2 + self.waist_radius
+            radius1 = self.z1**2 + self.waist_radius
             n1 = int(2 * numpy.pi * radius1 / self.max_edge_size_at_feature_edges)
             circ1 = [
                 [
@@ -405,7 +405,7 @@ def test_scaling():
     assert abs(min(mesh.points[:, 2]) + 0.0) < tol
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
-    assert abs(vol - 6.0 * alpha ** 3) < tol
+    assert abs(vol - 6.0 * alpha**3) < tol
 
 
 def test_stretch():

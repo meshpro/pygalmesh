@@ -11,7 +11,7 @@ def test_from_array():
     vol = np.zeros(shape, dtype=np.uint16)
     i, j, k = np.arange(shape[0]), np.arange(shape[1]), np.arange(shape[2])
     ii, jj, kk = np.meshgrid(i, j, k)
-    vol[ii * ii + jj * jj + kk * kk < n ** 2] = 1
+    vol[ii * ii + jj * jj + kk * kk < n**2] = 1
     vol[ii * ii + jj * jj + kk * kk < (0.5 * n) ** 2] = 2
 
     mesh = pygalmesh.generate_from_array(
@@ -45,7 +45,7 @@ def test_from_array_with_subdomain_sizing():
     vol = np.zeros(shape, dtype=np.uint16)
     i, j, k = np.arange(shape[0]), np.arange(shape[1]), np.arange(shape[2])
     ii, jj, kk = np.meshgrid(i, j, k)
-    vol[ii * ii + jj * jj + kk * kk < n ** 2] = 1
+    vol[ii * ii + jj * jj + kk * kk < n**2] = 1
     vol[ii * ii + jj * jj + kk * kk < (0.5 * n) ** 2] = 2
 
     mesh = pygalmesh.generate_from_array(

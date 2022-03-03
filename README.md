@@ -136,7 +136,7 @@ s1 = pygalmesh.Ball([-displacement, 0, 0], radius)
 u = pygalmesh.Difference(s0, s1)
 
 # add circle
-a = np.sqrt(radius ** 2 - displacement ** 2)
+a = np.sqrt(radius**2 - displacement**2)
 max_edge_size_at_feature_edges = 0.15
 n = int(2 * np.pi * a / max_edge_size_at_feature_edges)
 alpha = np.linspace(0.0, 2 * np.pi, n + 1)
@@ -415,7 +415,7 @@ z_ = np.linspace(-1.0, 1.0, 50)
 x, y, z = np.meshgrid(x_, y_, z_)
 
 vol = np.empty((50, 50, 50), dtype=np.uint8)
-idx = x ** 2 + y ** 2 + z ** 2 < 0.5 ** 2
+idx = x**2 + y**2 + z**2 < 0.5**2
 vol[idx] = 1
 vol[~idx] = 0
 
@@ -582,4 +582,7 @@ mesh generation tools.
 
 ### License
 
-pygalmesh is published under the [GPLv3 license](https://www.gnu.org/licenses/gpl-3.0.en.html).
+This software is available under the [GPLv3
+license](https://www.gnu.org/licenses/gpl-3.0.en.html) as well as a commercial
+license. If you'd like to use this software commercially, please contact the
+author.
