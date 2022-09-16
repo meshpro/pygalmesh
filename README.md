@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/nschloe/pygalmesh"><img alt="pygalmesh" src="https://nschloe.github.io/pygalmesh/pygalmesh-logo.svg" width="60%"></a>
+  <a href="https://github.com/nschloe/pygalmesh"><img alt="pygalmesh" src="https://meshpro.github.io/pygalmesh/pygalmesh-logo.svg" width="60%"></a>
   <p align="center">Create high-quality meshes with ease.</p>
 </p>
 
@@ -28,7 +28,7 @@ to create high-quality 2D, 3D volume meshes, periodic volume meshes, and surface
 
 #### 2D meshes
 
-<img src="https://nschloe.github.io/pygalmesh/rect.svg" width="30%">
+<img src="https://meshpro.github.io/pygalmesh/rect.svg" width="30%">
 
 CGAL generates 2D meshes from linear constraints.
 
@@ -53,7 +53,7 @@ The quality of the mesh isn't very good, but can be improved with
 
 #### A simple ball
 
-<img src="https://nschloe.github.io/pygalmesh/ball.png" width="30%">
+<img src="https://meshpro.github.io/pygalmesh/ball.png" width="30%">
 
 ```python
 import pygalmesh
@@ -87,7 +87,7 @@ mesh = pygalmesh.generate_mesh(
 
 #### Other primitive shapes
 
-<img src="https://nschloe.github.io/pygalmesh/tetra.png" width="30%">
+<img src="https://meshpro.github.io/pygalmesh/tetra.png" width="30%">
 
 pygalmesh provides out-of-the-box support for balls, cuboids, ellipsoids, tori, cones,
 cylinders, and tetrahedra. Try for example
@@ -107,7 +107,7 @@ mesh = pygalmesh.generate_mesh(
 
 #### Domain combinations
 
-<img src="https://nschloe.github.io/pygalmesh/ball-difference.png" width="30%">
+<img src="https://meshpro.github.io/pygalmesh/ball-difference.png" width="30%">
 
 Supported are unions, intersections, and differences of all domains. As mentioned above,
 however, the sharp intersections between two domains are not automatically handled. Try
@@ -160,7 +160,7 @@ nicely with the rest of the mesh.
 
 #### Domain deformations
 
-<img src="https://nschloe.github.io/pygalmesh/egg.png" width="30%">
+<img src="https://meshpro.github.io/pygalmesh/egg.png" width="30%">
 
 You can of course translate, rotate, scale, and stretch any domain. Try, for example,
 
@@ -174,7 +174,7 @@ mesh = pygalmesh.generate_mesh(s, max_cell_circumradius=0.1)
 
 #### Extrusion of 2D polygons
 
-<img src="https://nschloe.github.io/pygalmesh/triangle-rotated.png" width="30%">
+<img src="https://meshpro.github.io/pygalmesh/triangle-rotated.png" width="30%">
 
 pygalmesh lets you extrude any polygon into a 3D body. It even supports rotation
 alongside!
@@ -203,7 +203,7 @@ given to `pygalmesh.Extrude`.
 
 #### Rotation bodies
 
-<img src="https://nschloe.github.io/pygalmesh/circle-rotate-extr.png" width="30%">
+<img src="https://meshpro.github.io/pygalmesh/circle-rotate-extr.png" width="30%">
 
 Polygons in the x-z-plane can also be rotated around the z-axis to yield a rotation
 body.
@@ -224,7 +224,7 @@ mesh = pygalmesh.generate_mesh(
 
 #### Your own custom level set function
 
-<img src="https://nschloe.github.io/pygalmesh/heart.png" width="30%">
+<img src="https://meshpro.github.io/pygalmesh/heart.png" width="30%">
 
 If all of the variety is not enough for you, you can define your own custom level set
 function. You simply need to subclass `pygalmesh.DomainBase` and specify a function,
@@ -258,7 +258,7 @@ to CGAL's mesh generator.
 
 #### Local refinement
 
-<img src="https://nschloe.github.io/pygalmesh/ball-local-refinement.png" width="30%">
+<img src="https://meshpro.github.io/pygalmesh/ball-local-refinement.png" width="30%">
 
 Use `generate_mesh` with a function (regular or lambda) as `max_cell_circumradius`. The
 same goes for `max_edge_size_at_feature_edges`, `max_radius_surface_delaunay_ball`, and
@@ -302,7 +302,7 @@ options.
 
 #### Periodic volume meshes
 
-<img src="https://nschloe.github.io/pygalmesh/periodic.png" width="30%">
+<img src="https://meshpro.github.io/pygalmesh/periodic.png" width="30%">
 
 pygalmesh also interfaces CGAL's [3D periodic
 mesh generation](https://doc.cgal.org/latest/Periodic_3_mesh_3/index.html). Besides a
@@ -342,10 +342,10 @@ mesh = pygalmesh.generate_periodic_mesh(
 
 #### Volume meshes from surface meshes
 
-<img src="https://nschloe.github.io/pygalmesh/elephant.png" width="30%">
+<img src="https://meshpro.github.io/pygalmesh/elephant.png" width="30%">
 
 If you have a surface mesh at hand (like
-[elephant.vtu](http://nschloe.github.io/pygalmesh/elephant.vtu)), pygalmesh generates a
+[elephant.vtu](http://meshpro.github.io/pygalmesh/elephant.vtu)), pygalmesh generates a
 volume mesh on the command line via
 
 ```
@@ -373,7 +373,7 @@ mesh = pygalmesh.generate_volume_mesh_from_surface_mesh(
 
 #### Meshes from INR voxel files
 
-<img src="https://nschloe.github.io/pygalmesh/liver.png" width="30%">
+<img src="https://meshpro.github.io/pygalmesh/liver.png" width="30%">
 
 It is also possible to generate meshes from INR voxel files, e.g.,
 [here](https://github.com/CGAL/cgal/tree/master/Mesh_3/examples/Mesh_3/data) either on
@@ -399,7 +399,7 @@ mesh = pygalmesh.generate_from_inr(
 
 #### Meshes from numpy arrays representing 3D images
 
-| <img src="https://nschloe.github.io/pygalmesh/voxel-ball.png" width="70%"> | <img src="https://nschloe.github.io/pygalmesh/phantom.png" width="70%"> |
+| <img src="https://meshpro.github.io/pygalmesh/voxel-ball.png" width="70%"> | <img src="https://meshpro.github.io/pygalmesh/phantom.png" width="70%"> |
 | :------------------------------------------------------------------------: | :---------------------------------------------------------------------: |
 
 pygalmesh can help generating unstructed meshes from 3D numpy int arrays specifying the
@@ -470,7 +470,7 @@ mesh.write("breast_adapted.vtk")
 
 #### Surface remeshing
 
-| <img src="https://nschloe.github.io/pygalmesh/lion-head0.png" width="100%"> | <img src="https://nschloe.github.io/pygalmesh/lion-head1.png" width="100%"> |
+| <img src="https://meshpro.github.io/pygalmesh/lion-head0.png" width="100%"> | <img src="https://meshpro.github.io/pygalmesh/lion-head1.png" width="100%"> |
 | :-------------------------------------------------------------------------: | :-------------------------------------------------------------------------: |
 
 pygalmesh can help remeshing an existing surface mesh, e.g.,
