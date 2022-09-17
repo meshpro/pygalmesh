@@ -1,4 +1,5 @@
-version := `python3 -c "import tomli; c = tomli.load(open('pyproject.toml', 'rb')); print(c['project']['version'])"`
+# version := `python3 -c "import tomli; c = tomli.load(open('pyproject.toml', 'rb')); print(c['project']['version'])"`
+version := `python3 -c "from configparser import ConfigParser; p = ConfigParser(); p.read('setup.cfg'); print(p['metadata']['version'])"`
 
 default:
 	@echo "\"make publish\"?"
