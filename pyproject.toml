@@ -1,6 +1,49 @@
 [build-system]
-requires = ["setuptools>=42", "wheel", "pybind11>=2.6.0"]
+requires = ["setuptools>=61", "pybind11>=2.6.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.isort]
 profile = "black"
+
+[project]
+name = "pygalmesh"
+version = "0.10.7"
+authors = [{name = "Nico Schlömer", email = "nico.schloemer@gmail.com"}]
+description = "Python frontend to CGAL's mesh generation capabilities"
+readme = "README.md"
+license = {file = "LICENSE"}
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Utilities",
+]
+keywords = [
+  "mathematics",
+  "physics",
+  "engineering",
+  "mesh",
+  "mesh generation",
+  "optimization",
+]
+requires-python = ">=3.7"
+dependencies = [
+  "importlib_metadata;python_version<'3.8'",
+  "meshio >= 5, <6",
+  "numpy >= 1.20.0",
+]
+
+[project.urls]
+Home = "https://github.com/meshpro/pygalmesh"
+Issues = "https://github.com/meshpro/pygalmesh/issues"
+
+[project.scripts]
+pygalmesh = "pygalmesh.cli:main"
+pygalmesh-info = "pygalmesh.cli:info"

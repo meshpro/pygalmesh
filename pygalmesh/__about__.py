@@ -1,7 +1,7 @@
 from _pygalmesh import _CGAL_VERSION_STR
 
 try:
-    # Python 3.8
+    # Python 3.8+
     from importlib import metadata
 except ImportError:
     import importlib_metadata as metadata

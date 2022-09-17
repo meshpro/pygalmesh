@@ -1,5 +1,5 @@
 import helpers
-import numpy
+import numpy as np
 
 import pygalmesh
 
@@ -16,7 +16,7 @@ def test_ball():
     assert abs(min(mesh.points[:, 2]) + 1.0) < 0.02
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
-    assert abs(vol - 4.0 / 3.0 * numpy.pi) < 0.15
+    assert abs(vol - 4.0 / 3.0 * np.pi) < 0.15
 
 
 def test_balls_union():
@@ -26,11 +26,11 @@ def test_balls_union():
     s1 = pygalmesh.Ball([-displacement, 0, 0], radius)
     u = pygalmesh.Union([s0, s1])
 
-    a = numpy.sqrt(radius**2 - displacement**2)
+    a = np.sqrt(radius**2 - displacement**2)
     max_edge_size_at_feature_edges = 0.1
-    n = int(2 * numpy.pi * a / max_edge_size_at_feature_edges)
+    n = int(2 * np.pi * a / max_edge_size_at_feature_edges)
     circ = [
-        [0.0, a * numpy.cos(i * 2 * numpy.pi / n), a * numpy.sin(i * 2 * numpy.pi / n)]
+        [0.0, a * np.cos(i * 2 * np.pi / n), a * np.sin(i * 2 * np.pi / n)]
         for i in range(n)
     ]
     circ.append(circ[0])
@@ -53,7 +53,7 @@ def test_balls_union():
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
     h = radius - displacement
     ref_vol = 2 * (
-        4.0 / 3.0 * numpy.pi * radius**3 - h * numpy.pi / 6.0 * (3 * a**2 + h**2)
+        4.0 / 3.0 * np.pi * radius**3 - h * np.pi / 6.0 * (3 * a**2 + h**2)
     )
 
     assert abs(vol - ref_vol) < 0.1
@@ -66,11 +66,11 @@ def test_balls_intersection():
     s1 = pygalmesh.Ball([-displacement, 0, 0], radius)
     u = pygalmesh.Intersection([s0, s1])
 
-    a = numpy.sqrt(radius**2 - displacement**2)
+    a = np.sqrt(radius**2 - displacement**2)
     max_edge_size_at_feature_edges = 0.1
-    n = int(2 * numpy.pi * a / max_edge_size_at_feature_edges)
+    n = int(2 * np.pi * a / max_edge_size_at_feature_edges)
     circ = [
-        [0.0, a * numpy.cos(i * 2 * numpy.pi / n), a * numpy.sin(i * 2 * numpy.pi / n)]
+        [0.0, a * np.cos(i * 2 * np.pi / n), a * np.sin(i * 2 * np.pi / n)]
         for i in range(n)
     ]
     circ.append(circ[0])
@@ -92,7 +92,7 @@ def test_balls_intersection():
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
     h = radius - displacement
-    ref_vol = 2 * (h * numpy.pi / 6.0 * (3 * a**2 + h**2))
+    ref_vol = 2 * (h * np.pi / 6.0 * (3 * a**2 + h**2))
 
     assert abs(vol - ref_vol) < 0.1
 
@@ -104,11 +104,11 @@ def test_balls_difference():
     s1 = pygalmesh.Ball([-displacement, 0, 0], radius)
     u = pygalmesh.Difference(s0, s1)
 
-    a = numpy.sqrt(radius**2 - displacement**2)
+    a = np.sqrt(radius**2 - displacement**2)
     max_edge_size_at_feature_edges = 0.15
-    n = int(2 * numpy.pi * a / max_edge_size_at_feature_edges)
+    n = int(2 * np.pi * a / max_edge_size_at_feature_edges)
     circ = [
-        [0.0, a * numpy.cos(i * 2 * numpy.pi / n), a * numpy.sin(i * 2 * numpy.pi / n)]
+        [0.0, a * np.cos(i * 2 * np.pi / n), a * np.sin(i * 2 * np.pi / n)]
         for i in range(n)
     ]
     circ.append(circ[0])
@@ -134,7 +134,7 @@ def test_balls_difference():
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
     h = radius - displacement
-    ref_vol = 4.0 / 3.0 * numpy.pi * radius**3 - 2 * h * numpy.pi / 6.0 * (
+    ref_vol = 4.0 / 3.0 * np.pi * radius**3 - 2 * h * np.pi / 6.0 * (
         3 * a**2 + h**2
     )
 
@@ -165,7 +165,7 @@ def test_cuboids_intersection():
     )
 
     # filter the vertices that belong to cells
-    verts = mesh.points[numpy.unique(mesh.get_cells_type("tetra"))]
+    verts = mesh.points[np.unique(mesh.get_cells_type("tetra"))]
 
     tol = 1.0e-2
     assert abs(max(verts[:, 0]) - 2.0) < tol
@@ -192,7 +192,7 @@ def test_cuboids_union():
     )
 
     # filter the vertices that belong to cells
-    verts = mesh.points[numpy.unique(mesh.get_cells_type("tetra"))]
+    verts = mesh.points[np.unique(mesh.get_cells_type("tetra"))]
 
     tol = 1.0e-2
     assert abs(max(verts[:, 0]) - 3.0) < tol
@@ -245,7 +245,7 @@ def test_cone():
     assert abs(min(mesh.points[:, 2]) + 0.0) < tol
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
-    ref_vol = numpy.pi * base_radius * base_radius / 3.0 * height
+    ref_vol = np.pi * base_radius * base_radius / 3.0 * height
     assert abs(vol - ref_vol) < tol
 
 
@@ -271,7 +271,7 @@ def test_cylinder():
     assert abs(min(mesh.points[:, 2]) + z0) < tol
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
-    ref_vol = numpy.pi * radius * radius * (z1 - z0)
+    ref_vol = np.pi * radius * radius * (z1 - z0)
     assert abs(vol - ref_vol) < tol
 
 
@@ -314,7 +314,7 @@ def test_torus():
     assert abs(min(mesh.points[:, 2]) + minor_radius) < tol
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
-    ref_vol = (numpy.pi * minor_radius * minor_radius) * (2 * numpy.pi * major_radius)
+    ref_vol = (np.pi * minor_radius * minor_radius) * (2 * np.pi * major_radius)
     assert abs(vol - ref_vol) < 1.0e-1
 
 
@@ -339,11 +339,11 @@ def test_custom_function():
 
         def get_features(self):
             radius0 = self.z0**2 + self.waist_radius
-            n0 = int(2 * numpy.pi * radius0 / self.max_edge_size_at_feature_edges)
+            n0 = int(2 * np.pi * radius0 / self.max_edge_size_at_feature_edges)
             circ0 = [
                 [
-                    radius0 * numpy.cos((2 * numpy.pi * k) / n0),
-                    radius0 * numpy.sin((2 * numpy.pi * k) / n0),
+                    radius0 * np.cos((2 * np.pi * k) / n0),
+                    radius0 * np.sin((2 * np.pi * k) / n0),
                     self.z0,
                 ]
                 for k in range(n0)
@@ -351,11 +351,11 @@ def test_custom_function():
             circ0.append(circ0[0])
 
             radius1 = self.z1**2 + self.waist_radius
-            n1 = int(2 * numpy.pi * radius1 / self.max_edge_size_at_feature_edges)
+            n1 = int(2 * np.pi * radius1 / self.max_edge_size_at_feature_edges)
             circ1 = [
                 [
-                    radius1 * numpy.cos((2 * numpy.pi * k) / n1),
-                    radius1 * numpy.sin((2 * numpy.pi * k) / n1),
+                    radius1 * np.cos((2 * np.pi * k) / n1),
+                    radius1 * np.sin((2 * np.pi * k) / n1),
                     self.z1,
                 ]
                 for k in range(n1)
@@ -383,7 +383,7 @@ def test_custom_function():
     assert abs(min(mesh.points[:, 2]) + 1.0) < tol
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
-    assert abs(vol - 2 * numpy.pi * 47.0 / 60.0) < 0.16
+    assert abs(vol - 2 * np.pi * 47.0 / 60.0) < 0.16
 
 
 def test_scaling():
@@ -432,7 +432,7 @@ def test_stretch():
 
 def test_rotation():
     s0 = pygalmesh.Rotate(
-        pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]), [1.0, 0.0, 0.0], numpy.pi / 12.0
+        pygalmesh.Cuboid([0, 0, 0], [1, 2, 3]), [1.0, 0.0, 0.0], np.pi / 12.0
     )
     mesh = pygalmesh.generate_mesh(
         s0,
@@ -537,7 +537,7 @@ def test_ring_extrude():
     assert abs(min(mesh.points[:, 2]) + 0.3) < tol
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
-    assert abs(vol - 2 * numpy.pi * 0.4) < 0.05
+    assert abs(vol - 2 * np.pi * 0.4) < 0.05
 
 
 def test_heart():
@@ -595,8 +595,7 @@ def test_ball_with_sizing_field():
         max_radius_surface_delaunay_ball=0.1,
         max_facet_distance=0.025,
         max_circumradius_edge_ratio=2.0,
-        max_cell_circumradius=lambda x: abs(numpy.sqrt(numpy.dot(x, x)) - 0.5) / 5
-        + 0.025,
+        max_cell_circumradius=lambda x: abs(np.sqrt(np.dot(x, x)) - 0.5) / 5 + 0.025,
         verbose=False,
     )
 
@@ -608,7 +607,7 @@ def test_ball_with_sizing_field():
     assert abs(min(mesh.points[:, 2]) + 1.0) < 0.02
 
     vol = sum(helpers.compute_volumes(mesh.points, mesh.get_cells_type("tetra")))
-    assert abs(vol - 4.0 / 3.0 * numpy.pi) < 0.15
+    assert abs(vol - 4.0 / 3.0 * np.pi) < 0.15
 
 
 if __name__ == "__main__":

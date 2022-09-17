@@ -1,4 +1,4 @@
-import numpy
+import numpy as np
 
 import pygalmesh
 
@@ -9,9 +9,9 @@ def test_schwarz():
             super().__init__()
 
         def eval(self, x):
-            x2 = numpy.cos(x[0] * 2 * numpy.pi)
-            y2 = numpy.cos(x[1] * 2 * numpy.pi)
-            z2 = numpy.cos(x[2] * 2 * numpy.pi)
+            x2 = np.cos(x[0] * 2 * np.pi)
+            y2 = np.cos(x[1] * 2 * np.pi)
+            z2 = np.cos(x[2] * 2 * np.pi)
             return x2 + y2 + z2
 
     mesh = pygalmesh.generate_periodic_mesh(

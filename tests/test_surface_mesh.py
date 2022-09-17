@@ -1,5 +1,5 @@
 import helpers
-import numpy
+import numpy as np
 
 import pygalmesh
 
@@ -25,4 +25,4 @@ def test_sphere():
 
     areas = helpers.compute_triangle_areas(mesh.points, mesh.get_cells_type("triangle"))
     surface_area = sum(areas)
-    assert abs(surface_area - 4 * numpy.pi * radius**2) < 0.1
+    assert abs(surface_area - 4 * np.pi * radius**2) < 0.1
