@@ -6,7 +6,7 @@ import tempfile
 from typing import Callable
 
 import meshio
-import numpy
+import numpy as np
 from _pygalmesh import (
     SizingFieldBase,
     _generate_2d,
@@ -142,14 +142,14 @@ def generate_2d(
     num_lloyd_steps: int = 0,
 ):
     # some sanity checks
-    points = numpy.asarray(points)
-    constraints = numpy.asarray(constraints)
-    assert numpy.all(constraints >= 0)
-    assert numpy.all(constraints < len(points))
+    points = np.asarray(points)
+    constraints = np.asarray(constraints)
+    assert np.all(constraints >= 0)
+    assert np.all(constraints < len(points))
     # make sure there are no edges of 0 length
     edges = points[constraints[:, 0]] - points[constraints[:, 1]]
-    length2 = numpy.einsum("ij,ij->i", edges, edges)
-    if numpy.any(length2 < 1.0e-15):
+    length2 = np.einsum("ij,ij->i", edges, edges)
+    if np.any(length2 < 1.0e-15):
         raise RuntimeError("Constraint of (near)-zero length.")
 
     points, cells = _generate_2d(
@@ -159,7 +159,7 @@ def generate_2d(
         max_edge_size,
         num_lloyd_steps,
     )
-    return meshio.Mesh(numpy.array(points), {"triangle": numpy.array(cells)})
+    return meshio.Mesh(np.array(points), {"triangle": np.array(cells)})
 
 
 def generate_periodic_mesh(
