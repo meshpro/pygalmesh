@@ -1,9 +1,9 @@
+[tool.isort]
+profile = "black"
+
 # [build-system]
 # requires = ["setuptools>=61", "pybind11>=2.6.0"]
 # build-backend = "setuptools.build_meta"
-# 
-# [tool.isort]
-# profile = "black"
 # 
 # [project]
 # name = "pygalmesh"
