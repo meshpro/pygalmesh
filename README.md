@@ -526,16 +526,14 @@ you can install/upgrade.
 
 #### Troubleshooting
 
-If pygalmesh fails to build due to `fatal error: 'Eigen/Dense' file not found`
-you will need to create a symbolic link for Eigen to be detected, e.g.
+If pygalmesh fails to build due to `fatal error: 'Eigen/Dense' file not found` set the `EIGEN_INCLUDE_DIR`
+environment variable to the path to the Eigen include directory on your system.
 
-```
-cd /usr/local/include
-sudo ln -sf eigen3/Eigen Eigen
-```
+There is also an environment variable for the location of `CGAL` includes which is `CGAL_INCLUDE_DIR`. `CGAL`
+requires linking, so you will also need to make sure that the path to the `lib` dir is in the `LD_LIBRARY_PATH`
+environment variable.
 
-It's possible that `eigen3` could be in `/usr/include` instead of
-`/usr/local/install`.
+When linking against `CGAL >=5.0`, comment out the following line in the `setup.py` file. `libraries=["gmp","mpfr"]`.
 
 #### Manual installation
 
