@@ -25,6 +25,8 @@ ext_modules = [
             os.environ.get("EIGEN_INCLUDE_DIR", "/usr/include/eigen3/"),
             # macos/brew:
             "/usr/local/include/eigen3",
+            os.environ.get("CGAL_INCLUDE_DIR"),
+            os.path.join(os.environ.get("BOOST_ROOT"),"include"),
         ],
         # no CGAL libraries necessary from CGAL 5.0 onwards
         libraries=["gmp", "mpfr"],
