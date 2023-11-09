@@ -24,7 +24,7 @@ class Wrapper(SizingFieldBase):
     def __init__(self, f):
         self.f = f
         super().__init__()
-
+ 
     def eval(self, x):
         return self.f(x)
 
@@ -295,6 +295,7 @@ def generate_from_inr(
     odt: bool = False,
     perturb: bool = True,
     exude: bool = True,
+    with_features: bool = False,
     max_edge_size_at_feature_edges: float = 0.0,
     min_facet_angle: float = 0.0,
     max_radius_surface_delaunay_ball: float = 0.0,
@@ -308,7 +309,6 @@ def generate_from_inr(
 ):
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
     os.close(fh)
-
     if isinstance(max_cell_circumradius, float):
         _generate_from_inr(
             inr_filename,
@@ -317,6 +317,7 @@ def generate_from_inr(
             odt=odt,
             perturb=perturb,
             exude=exude,
+            with_features=with_features,
             max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
             min_facet_angle=min_facet_angle,
             max_radius_surface_delaunay_ball=max_radius_surface_delaunay_ball,
@@ -446,6 +447,7 @@ def generate_from_array(
     odt: bool = False,
     perturb: bool = True,
     exude: bool = True,
+    with_features: bool = False,
     max_edge_size_at_feature_edges: float = 0.0,
     min_facet_angle: float = 0.0,
     max_radius_surface_delaunay_ball: float = 0.0,
@@ -465,6 +467,7 @@ def generate_from_array(
         odt,
         perturb,
         exude,
+        with_features,
         max_edge_size_at_feature_edges,
         min_facet_angle,
         max_radius_surface_delaunay_ball,
