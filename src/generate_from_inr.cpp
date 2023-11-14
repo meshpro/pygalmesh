@@ -66,6 +66,14 @@ generate_from_inr(
   if (!success) {
     throw "Could not read image file";
   }
+  Mesh_domain_with_features *cgal_domain;
+  if (with_features)
+      cgal_domain = new Mesh_domain_with_features(
+          Mesh_domain_with_features::create_labeled_image_mesh_domain(
+              image,
+              CGAL::parameters::features_detector = CGAL::Mesh_3::Detect_features_in_image()));
+  else
+      cgal_domain = new Mesh_domain_with_features(Mesh_domain_with_features::create_labeled_image_mesh_domain(image));
 
   Mesh_criteria criteria(
       CGAL::parameters::edge_size=max_edge_size_at_feature_edges,
@@ -83,53 +91,27 @@ generate_from_inr(
     std::cerr.setstate(std::ios_base::failbit);
   }
 
-  if (with_features) {
-      C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
-        Mesh_domain_with_features::create_labeled_image_mesh_domain(
-          image,
-          CGAL::parameters::features_detector = CGAL::Mesh_3::Detect_features_in_image()),
-        criteria,
-        lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
-        odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
-        perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
-        exude ?
-          CGAL::parameters::exude(
-            CGAL::parameters::time_limit = exude_time_limit,
-            CGAL::parameters::sliver_bound = exude_sliver_bound
-            ) :
-          CGAL::parameters::no_exude()
-        );
-      if (!verbose) {
-          std::cerr.clear();
-      }
-
-      // Output
-      std::ofstream medit_file(outfile);
-      c3t3.output_to_medit(medit_file);
-      medit_file.close();
-  } else {
-      C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
-        Mesh_domain::create_labeled_image_mesh_domain(image),
-        criteria,
-        lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
-        odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
-        perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
-        exude ?
-          CGAL::parameters::exude(
-            CGAL::parameters::time_limit = exude_time_limit,
-            CGAL::parameters::sliver_bound = exude_sliver_bound
-            ) :
-          CGAL::parameters::no_exude()
-        );
-      if (!verbose) {
-          std::cerr.clear();
-      }
-
-      // Output
-      std::ofstream medit_file(outfile);
-      c3t3.output_to_medit(medit_file);
-      medit_file.close();
+  C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
+    *cgal_domain,
+    criteria,
+    lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
+    odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
+    perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
+    exude ?
+      CGAL::parameters::exude(
+        CGAL::parameters::time_limit = exude_time_limit,
+        CGAL::parameters::sliver_bound = exude_sliver_bound
+        ) :
+      CGAL::parameters::no_exude()
+    );
+  if (!verbose) {
+      std::cerr.clear();
   }
+
+  // Output
+  std::ofstream medit_file(outfile);
+  c3t3.output_to_medit(medit_file);
+  medit_file.close();
   return;
 }
 
