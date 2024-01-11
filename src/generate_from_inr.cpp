@@ -15,7 +15,6 @@
 #include <CGAL/Mesh_domain_with_polyline_features_3.h>
 #include <CGAL/make_mesh_3.h>
 #include <CGAL/Labeled_mesh_domain_3.h>
-
 #include <CGAL/Mesh_3/Detect_features_in_image.h>
 
 namespace pygalmesh {
@@ -36,7 +35,6 @@ typedef Mesh_criteria::Cell_criteria Cell_criteria;
 
 typedef CGAL::Mesh_constant_domain_field_3<Mesh_domain::R,
                                            Mesh_domain::Index> Sizing_field_cell;
-
 
 void
 generate_from_inr(
@@ -90,7 +88,6 @@ generate_from_inr(
     // suppress output
     std::cerr.setstate(std::ios_base::failbit);
   }
-
   C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
     *cgal_domain,
     criteria,

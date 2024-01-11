@@ -24,7 +24,7 @@ class Wrapper(SizingFieldBase):
     def __init__(self, f):
         self.f = f
         super().__init__()
- 
+
     def eval(self, x):
         return self.f(x)
 
@@ -309,6 +309,7 @@ def generate_from_inr(
 ):
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
     os.close(fh)
+
     if isinstance(max_cell_circumradius, float):
         _generate_from_inr(
             inr_filename,
