@@ -132,6 +132,7 @@ generate_from_inr_with_subdomain_sizing(
     const double max_circumradius_edge_ratio,
     const double exude_time_limit,
     const double exude_sliver_bound,
+    const double relative_error_bound,
     const bool verbose,
     const int seed
     )
@@ -143,7 +144,7 @@ generate_from_inr_with_subdomain_sizing(
   if (!success) {
     throw "Could not read image file";
   }
-  Mesh_domain cgal_domain = Mesh_domain::create_labeled_image_mesh_domain(image);
+  Mesh_domain cgal_domain = Mesh_domain::create_labeled_image_mesh_domain(image, CGAL::parameters::relative_error_bound(relative_error_bound));
 
   Sizing_field_cell max_cell_circumradius(default_max_cell_circumradius);
   const int ndimensions = 3;

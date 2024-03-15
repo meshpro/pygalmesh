@@ -381,6 +381,7 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("max_circumradius_edge_ratio") = 0.0,
         py::arg("exude_time_limit") = 0.0,
         py::arg("exude_sliver_bound") = 0.0,
+        py::arg("relative_error_bound") = 1e-3,
         py::arg("verbose") = true,
         py::arg("seed") = 0
         );

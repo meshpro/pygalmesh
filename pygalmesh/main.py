@@ -359,6 +359,7 @@ def generate_from_inr(
             max_radius_surface_delaunay_ball=max_radius_surface_delaunay_ball,
             max_facet_distance=max_facet_distance,
             max_circumradius_edge_ratio=max_circumradius_edge_ratio,
+            relative_error_bound=relative_error_bound,
             verbose=verbose,
             seed=seed,
         )
@@ -459,6 +460,7 @@ def generate_from_array(
     max_cell_circumradius: float | dict[int | str, float] = 0.0,
     max_facet_distance: float = 0.0,
     max_circumradius_edge_ratio: float = 0.0,
+    relative_error_bound: float = 1e-3,
     verbose: bool = True,
     seed: int = 0,
 ):
@@ -479,6 +481,7 @@ def generate_from_array(
         max_facet_distance,
         max_circumradius_edge_ratio,
         max_cell_circumradius,
+        relative_error_bound,
         verbose,
         seed,
     )
