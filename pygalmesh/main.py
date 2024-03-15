@@ -45,6 +45,7 @@ def generate_mesh(
     max_cell_circumradius: float | Callable[..., float] = 0.0,
     exude_time_limit: float = 0.0,
     exude_sliver_bound: float = 0.0,
+    relative_error_bound: float = 1e-3,
     verbose: bool = True,
     seed: int = 0,
 ):
@@ -125,6 +126,7 @@ def generate_mesh(
         max_cell_circumradius_field=max_cell_circumradius_field,
         exude_time_limit=exude_time_limit,
         exude_sliver_bound=exude_sliver_bound,
+        relative_error_bound=relative_error_bound,
         verbose=verbose,
         seed=seed,
     )
@@ -304,6 +306,7 @@ def generate_from_inr(
     max_cell_circumradius: float | dict[int | str, float] = 0.0,
     exude_time_limit: float = 0.0,
     exude_sliver_bound: float = 0.0,
+    relative_error_bound: float = 1e-3,
     verbose: bool = True,
     seed: int = 0,
 ):
@@ -327,6 +330,7 @@ def generate_from_inr(
             max_cell_circumradius=max_cell_circumradius,
             exude_time_limit=exude_time_limit,
             exude_sliver_bound=exude_sliver_bound,
+            relative_error_bound=relative_error_bound,
             verbose=verbose,
             seed=seed,
         )

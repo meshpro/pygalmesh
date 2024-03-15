@@ -22,6 +22,7 @@ void generate_from_inr(
     const double max_cell_circumradius = 0.0,
     const double exude_time_limit = 0.0,
     const double exude_sliver_bound = 0.0,
+    const double relative_error_bound = 1e-3,
     const bool verbose = true,
     const int seed = 0
     );

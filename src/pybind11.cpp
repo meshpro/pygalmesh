@@ -288,6 +288,7 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("max_cell_circumradius_field") = nullptr,
         py::arg("exude_time_limit") = 0.0,
         py::arg("exude_sliver_bound") = 0.0,
+        py::arg("relative_error_bound") = 1e-3,
         py::arg("verbose") = true,
         py::arg("seed") = 0
         );
@@ -358,6 +359,7 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("max_cell_circumradius") = 0.0,
         py::arg("exude_time_limit") = 0.0,
         py::arg("exude_sliver_bound") = 0.0,
+        py::arg("relative_error_bound") = 1e-3,
         py::arg("verbose") = true,
         py::arg("seed") = 0
         );

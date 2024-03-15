@@ -53,6 +53,7 @@ generate_from_inr(
     const double max_cell_circumradius,
     const double exude_time_limit,
     const double exude_sliver_bound,
+    const double relative_error_bound,
     const bool verbose,
     const int seed
     )
@@ -69,9 +70,9 @@ generate_from_inr(
       cgal_domain = new Mesh_domain_with_features(
           Mesh_domain_with_features::create_labeled_image_mesh_domain(
               image,
-              CGAL::parameters::features_detector = CGAL::Mesh_3::Detect_features_in_image()));
+              CGAL::parameters::features_detector(CGAL::Mesh_3::Detect_features_in_image()).relative_error_bound(relative_error_bound)));
   else
-      cgal_domain = new Mesh_domain_with_features(Mesh_domain_with_features::create_labeled_image_mesh_domain(image));
+      cgal_domain = new Mesh_domain_with_features(Mesh_domain_with_features::create_labeled_image_mesh_domain(image, CGAL::parameters::relative_error_bound(relative_error_bound)));
 
   Mesh_criteria criteria(
       CGAL::parameters::edge_size=max_edge_size_at_feature_edges,
