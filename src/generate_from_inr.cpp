@@ -14,12 +14,15 @@
 #include <CGAL/Implicit_mesh_domain_3.h>
 #include <CGAL/Mesh_domain_with_polyline_features_3.h>
 #include <CGAL/make_mesh_3.h>
+#include <CGAL/Labeled_mesh_domain_3.h>
+#include <CGAL/Mesh_3/Detect_features_in_image.h>
 
 namespace pygalmesh {
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 
 typedef CGAL::Labeled_mesh_domain_3<K> Mesh_domain;
+typedef CGAL::Mesh_domain_with_polyline_features_3<Mesh_domain> Mesh_domain_with_features;
 
 // Triangulation
 typedef CGAL::Mesh_triangulation_3<Mesh_domain>::type Tr;
@@ -41,6 +44,7 @@ generate_from_inr(
     const bool odt,
     const bool perturb,
     const bool exude,
+    const bool with_features,
     const double max_edge_size_at_feature_edges,
     const double min_facet_angle,
     const double max_radius_surface_delaunay_ball,
@@ -49,6 +53,7 @@ generate_from_inr(
     const double max_cell_circumradius,
     const double exude_time_limit,
     const double exude_sliver_bound,
+    const double relative_error_bound,
     const bool verbose,
     const int seed
     )
@@ -60,7 +65,14 @@ generate_from_inr(
   if (!success) {
     throw "Could not read image file";
   }
-  Mesh_domain cgal_domain = Mesh_domain::create_labeled_image_mesh_domain(image);
+  Mesh_domain_with_features *cgal_domain;
+  if (with_features)
+      cgal_domain = new Mesh_domain_with_features(
+          Mesh_domain_with_features::create_labeled_image_mesh_domain(
+              image,
+              CGAL::parameters::features_detector(CGAL::Mesh_3::Detect_features_in_image()).relative_error_bound(relative_error_bound)));
+  else
+      cgal_domain = new Mesh_domain_with_features(Mesh_domain_with_features::create_labeled_image_mesh_domain(image, CGAL::parameters::relative_error_bound(relative_error_bound)));
 
   Mesh_criteria criteria(
       CGAL::parameters::edge_size=max_edge_size_at_feature_edges,
@@ -68,7 +80,8 @@ generate_from_inr(
       CGAL::parameters::facet_size=max_radius_surface_delaunay_ball,
       CGAL::parameters::facet_distance=max_facet_distance,
       CGAL::parameters::cell_radius_edge_ratio=max_circumradius_edge_ratio,
-      CGAL::parameters::cell_size=max_cell_circumradius
+      CGAL::parameters::cell_size=max_cell_circumradius,
+      CGAL::parameters::facet_topology = with_features ? CGAL::FACET_VERTICES_ON_SAME_SURFACE_PATCH : CGAL::FACET_VERTICES_ON_SURFACE
       );
 
   // Mesh generation
@@ -77,20 +90,20 @@ generate_from_inr(
     std::cerr.setstate(std::ios_base::failbit);
   }
   C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
-      cgal_domain,
-      criteria,
-      lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
-      odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
-      perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
-      exude ?
-        CGAL::parameters::exude(
-          CGAL::parameters::time_limit = exude_time_limit,
-          CGAL::parameters::sliver_bound = exude_sliver_bound
+    *cgal_domain,
+    criteria,
+    lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
+    odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
+    perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
+    exude ?
+      CGAL::parameters::exude(
+        CGAL::parameters::time_limit = exude_time_limit,
+        CGAL::parameters::sliver_bound = exude_sliver_bound
         ) :
-        CGAL::parameters::no_exude()
-      );
+      CGAL::parameters::no_exude()
+    );
   if (!verbose) {
-    std::cerr.clear();
+      std::cerr.clear();
   }
 
   // Output
@@ -119,6 +132,7 @@ generate_from_inr_with_subdomain_sizing(
     const double max_circumradius_edge_ratio,
     const double exude_time_limit,
     const double exude_sliver_bound,
+    const double relative_error_bound,
     const bool verbose,
     const int seed
     )
@@ -130,7 +144,7 @@ generate_from_inr_with_subdomain_sizing(
   if (!success) {
     throw "Could not read image file";
   }
-  Mesh_domain cgal_domain = Mesh_domain::create_labeled_image_mesh_domain(image);
+  Mesh_domain cgal_domain = Mesh_domain::create_labeled_image_mesh_domain(image, CGAL::parameters::relative_error_bound(relative_error_bound));
 
   Sizing_field_cell max_cell_circumradius(default_max_cell_circumradius);
   const int ndimensions = 3;

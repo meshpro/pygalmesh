@@ -74,6 +74,7 @@ generate_mesh(
     //
     const double exude_time_limit,
     const double exude_sliver_bound,
+    const double relative_error_bound,
     //
     const bool verbose,
     const int seed
@@ -93,7 +94,8 @@ generate_mesh(
 
   Mesh_domain cgal_domain = Mesh_domain::create_implicit_mesh_domain(
        d,
-       K::Sphere_3(CGAL::ORIGIN, bounding_sphere_radius2)
+       K::Sphere_3(CGAL::ORIGIN, bounding_sphere_radius2),
+       CGAL::parameters::relative_error_bound(relative_error_bound)
        );
 
   // cgal_domain.detect_features();
