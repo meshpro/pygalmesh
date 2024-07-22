@@ -5,7 +5,6 @@ FIND_PACKAGE(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 
 FIND_PACKAGE(CGAL REQUIRED)
-include(${CGAL_USE_FILE})
 
 FILE(GLOB pygalmesh_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 # FILE(GLOB pygalmesh_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp")
@@ -13,7 +12,7 @@ FILE(GLOB pygalmesh_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 pybind11_add_module(pygalmesh ${pygalmesh_SRCS})
 
 # ADD_LIBRARY(pygalmesh ${pygalmesh_SRCS})
-target_link_libraries(pygalmesh PRIVATE ${CGAL_LIBRARIES})
+target_link_libraries(pygalmesh PRIVATE CGAL::CGAL)
 
 # https://github.com/CGAL/cgal/issues/6002
 # find_program(iwyu_path NAMES include-what-you-use iwyu REQUIRED)
