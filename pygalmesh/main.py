@@ -45,6 +45,7 @@ def generate_mesh(
     max_cell_circumradius: float | Callable[..., float] = 0.0,
     exude_time_limit: float = 0.0,
     exude_sliver_bound: float = 0.0,
+    relative_error_bound: float = 1e-3,
     verbose: bool = True,
     seed: int = 0,
 ):
@@ -125,6 +126,7 @@ def generate_mesh(
         max_cell_circumradius_field=max_cell_circumradius_field,
         exude_time_limit=exude_time_limit,
         exude_sliver_bound=exude_sliver_bound,
+        relative_error_bound=relative_error_bound,
         verbose=verbose,
         seed=seed,
     )
@@ -295,6 +297,7 @@ def generate_from_inr(
     odt: bool = False,
     perturb: bool = True,
     exude: bool = True,
+    with_features: bool = False,
     max_edge_size_at_feature_edges: float = 0.0,
     min_facet_angle: float = 0.0,
     max_radius_surface_delaunay_ball: float = 0.0,
@@ -303,20 +306,29 @@ def generate_from_inr(
     max_cell_circumradius: float | dict[int | str, float] = 0.0,
     exude_time_limit: float = 0.0,
     exude_sliver_bound: float = 0.0,
+    relative_error_bound: float = 1e-3,
+    iso_value: float | tuple = np.NAN,
+    value_outside: float = 0.,
     verbose: bool = True,
     seed: int = 0,
 ):
     fh, outfile = tempfile.mkstemp(suffix=".mesh")
     os.close(fh)
-
+    if isinstance(iso_value, float):
+        if np.isnan(iso_value):
+            iso_value = ()
+        else:
+            iso_value = (iso_value, )
     if isinstance(max_cell_circumradius, float):
         _generate_from_inr(
             inr_filename,
             outfile,
+            list(iso_value),
             lloyd=lloyd,
             odt=odt,
             perturb=perturb,
             exude=exude,
+            with_features=with_features,
             max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
             min_facet_angle=min_facet_angle,
             max_radius_surface_delaunay_ball=max_radius_surface_delaunay_ball,
@@ -325,6 +337,8 @@ def generate_from_inr(
             max_cell_circumradius=max_cell_circumradius,
             exude_time_limit=exude_time_limit,
             exude_sliver_bound=exude_sliver_bound,
+            relative_error_bound=relative_error_bound,
+            niso_value=len(iso_value),
             verbose=verbose,
             seed=seed,
         )
@@ -353,6 +367,7 @@ def generate_from_inr(
             max_radius_surface_delaunay_ball=max_radius_surface_delaunay_ball,
             max_facet_distance=max_facet_distance,
             max_circumradius_edge_ratio=max_circumradius_edge_ratio,
+            relative_error_bound=relative_error_bound,
             verbose=verbose,
             seed=seed,
         )
@@ -446,33 +461,41 @@ def generate_from_array(
     odt: bool = False,
     perturb: bool = True,
     exude: bool = True,
+    with_features: bool = False,
     max_edge_size_at_feature_edges: float = 0.0,
     min_facet_angle: float = 0.0,
     max_radius_surface_delaunay_ball: float = 0.0,
     max_cell_circumradius: float | dict[int | str, float] = 0.0,
     max_facet_distance: float = 0.0,
     max_circumradius_edge_ratio: float = 0.0,
+    relative_error_bound: float = 1e-3,
+    iso_value: float | tuple = np.NAN,
+    value_outside: float = 0.,
     verbose: bool = True,
     seed: int = 0,
 ):
-    assert vol.dtype in ["uint8", "uint16"]
+    assert vol.dtype in ["uint8", "uint16", "float64", "float32"]
     fh, inr_filename = tempfile.mkstemp(suffix=".inr")
     os.close(fh)
     save_inr(vol, voxel_size, inr_filename)
     mesh = generate_from_inr(
-        inr_filename,
-        lloyd,
-        odt,
-        perturb,
-        exude,
-        max_edge_size_at_feature_edges,
-        min_facet_angle,
-        max_radius_surface_delaunay_ball,
-        max_facet_distance,
-        max_circumradius_edge_ratio,
-        max_cell_circumradius,
-        verbose,
-        seed,
+        inr_filename= inr_filename,
+        lloyd=lloyd,
+        odt=odt,
+        perturb=perturb,
+        exude=exude,
+        with_features=with_features,
+        max_edge_size_at_feature_edges=max_edge_size_at_feature_edges,
+        min_facet_angle=min_facet_angle,
+        max_radius_surface_delaunay_ball=max_radius_surface_delaunay_ball,
+        max_facet_distance=max_facet_distance,
+        max_circumradius_edge_ratio=max_circumradius_edge_ratio,
+        max_cell_circumradius=max_cell_circumradius,
+        relative_error_bound=relative_error_bound,
+        iso_value=iso_value,
+        value_outside=value_outside,
+        verbose=verbose,
+        seed=seed,
     )
     os.remove(inr_filename)
     return mesh

@@ -14,12 +14,16 @@
 #include <CGAL/Implicit_mesh_domain_3.h>
 #include <CGAL/Mesh_domain_with_polyline_features_3.h>
 #include <CGAL/make_mesh_3.h>
+#include <CGAL/Labeled_mesh_domain_3.h>
+#include <CGAL/Mesh_3/Detect_features_in_image.h>
+#include <CGAL/Mesh_3/Detect_features_on_image_bbox.h>
 
 namespace pygalmesh {
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 
 typedef CGAL::Labeled_mesh_domain_3<K> Mesh_domain;
+typedef CGAL::Mesh_domain_with_polyline_features_3<Mesh_domain> Mesh_domain_with_features;
 
 // Triangulation
 typedef CGAL::Mesh_triangulation_3<Mesh_domain>::type Tr;
@@ -30,6 +34,22 @@ typedef CGAL::Mesh_criteria_3<Tr> Mesh_criteria;
 typedef Mesh_criteria::Facet_criteria Facet_criteria;
 typedef Mesh_criteria::Cell_criteria Cell_criteria;
 
+class ImageValueToSubdomainIdx {
+public:
+    // Constructor that takes a boost::flat_set<float>
+    ImageValueToSubdomainIdx(const boost::container::flat_set<float>& inputSet) : mySet(inputSet) {}
+
+    // Overload the () operator
+    int operator()(double v) const {
+        return int(std::distance(mySet.begin(),
+                                 mySet.lower_bound(float(v))));
+    }
+
+private:
+    boost::container::flat_set<float> mySet; // The only member of the class
+};
+
+
 typedef CGAL::Mesh_constant_domain_field_3<Mesh_domain::R,
                                            Mesh_domain::Index> Sizing_field_cell;
 
@@ -37,10 +57,12 @@ void
 generate_from_inr(
     const std::string & inr_filename,
     const std::string & outfile,
+    const std::vector<double> & iso_value,
     const bool lloyd,
     const bool odt,
     const bool perturb,
     const bool exude,
+    const bool with_features,
     const double max_edge_size_at_feature_edges,
     const double min_facet_angle,
     const double max_radius_surface_delaunay_ball,
@@ -49,6 +71,9 @@ generate_from_inr(
     const double max_cell_circumradius,
     const double exude_time_limit,
     const double exude_sliver_bound,
+    const double relative_error_bound,
+    const int niso_value,
+    const double value_outside,
     const bool verbose,
     const int seed
     )
@@ -60,7 +85,59 @@ generate_from_inr(
   if (!success) {
     throw "Could not read image file";
   }
-  Mesh_domain cgal_domain = Mesh_domain::create_labeled_image_mesh_domain(image);
+
+  Mesh_domain_with_features *cgal_domain;
+  if (niso_value==0) {
+      if (with_features)
+          cgal_domain = new Mesh_domain_with_features(
+              Mesh_domain_with_features::create_labeled_image_mesh_domain(
+                  image,
+                  CGAL::parameters::features_detector(CGAL::Mesh_3::Detect_features_in_image()).relative_error_bound(relative_error_bound)));
+      else {
+          cgal_domain = new Mesh_domain_with_features(Mesh_domain_with_features::create_labeled_image_mesh_domain(
+                  image,
+                  CGAL::parameters::relative_error_bound(relative_error_bound)));
+      }
+  }
+  else if(niso_value==1) {
+      if (with_features)
+          cgal_domain = new Mesh_domain_with_features(
+              Mesh_domain_with_features::create_gray_image_mesh_domain(
+                  image,
+                  CGAL::parameters::features_detector(CGAL::Mesh_3::Detect_features_on_image_bbox()).
+                  relative_error_bound(relative_error_bound).
+                  iso_value(iso_value[0]).
+                  value_outside(value_outside)));
+      else {
+          cgal_domain =
+              new Mesh_domain_with_features(Mesh_domain::create_gray_image_mesh_domain(
+                  image,
+                  CGAL::parameters::iso_value(iso_value[0]).
+                  value_outside(value_outside)));
+      }
+  }
+  else {
+      typedef boost::container::flat_set<float> Flat_set;
+      Flat_set iso_values_set;
+      for(int i=0;i<niso_value;i++)
+          iso_values_set.insert(static_cast<float>(iso_value[i]));
+      ImageValueToSubdomainIdx f(iso_values_set);
+      if (with_features)
+          cgal_domain = new Mesh_domain_with_features(
+              Mesh_domain_with_features::create_gray_image_mesh_domain(
+                  image,
+                  CGAL::parameters::features_detector(CGAL::Mesh_3::Detect_features_on_image_bbox()).
+                  relative_error_bound(relative_error_bound).
+                  image_values_to_subdomain_indices(f).
+                  value_outside(value_outside)));
+      else {
+          cgal_domain =
+              new Mesh_domain_with_features(Mesh_domain::create_gray_image_mesh_domain(
+                  image,
+                  CGAL::parameters::image_values_to_subdomain_indices(f).
+                  value_outside(value_outside)));
+      }
+  }
 
   Mesh_criteria criteria(
       CGAL::parameters::edge_size=max_edge_size_at_feature_edges,
@@ -68,7 +145,8 @@ generate_from_inr(
       CGAL::parameters::facet_size=max_radius_surface_delaunay_ball,
       CGAL::parameters::facet_distance=max_facet_distance,
       CGAL::parameters::cell_radius_edge_ratio=max_circumradius_edge_ratio,
-      CGAL::parameters::cell_size=max_cell_circumradius
+      CGAL::parameters::cell_size=max_cell_circumradius,
+      CGAL::parameters::facet_topology = with_features ? CGAL::FACET_VERTICES_ON_SAME_SURFACE_PATCH : CGAL::FACET_VERTICES_ON_SURFACE
       );
 
   // Mesh generation
@@ -77,20 +155,20 @@ generate_from_inr(
     std::cerr.setstate(std::ios_base::failbit);
   }
   C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
-      cgal_domain,
-      criteria,
-      lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
-      odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
-      perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
-      exude ?
-        CGAL::parameters::exude(
-          CGAL::parameters::time_limit = exude_time_limit,
-          CGAL::parameters::sliver_bound = exude_sliver_bound
+    *cgal_domain,
+    criteria,
+    lloyd ? CGAL::parameters::lloyd() : CGAL::parameters::no_lloyd(),
+    odt ? CGAL::parameters::odt() : CGAL::parameters::no_odt(),
+    perturb ? CGAL::parameters::perturb() : CGAL::parameters::no_perturb(),
+    exude ?
+      CGAL::parameters::exude(
+        CGAL::parameters::time_limit = exude_time_limit,
+        CGAL::parameters::sliver_bound = exude_sliver_bound
         ) :
-        CGAL::parameters::no_exude()
-      );
+      CGAL::parameters::no_exude()
+    );
   if (!verbose) {
-    std::cerr.clear();
+      std::cerr.clear();
   }
 
   // Output
@@ -119,6 +197,7 @@ generate_from_inr_with_subdomain_sizing(
     const double max_circumradius_edge_ratio,
     const double exude_time_limit,
     const double exude_sliver_bound,
+    const double relative_error_bound,
     const bool verbose,
     const int seed
     )
@@ -130,7 +209,7 @@ generate_from_inr_with_subdomain_sizing(
   if (!success) {
     throw "Could not read image file";
   }
-  Mesh_domain cgal_domain = Mesh_domain::create_labeled_image_mesh_domain(image);
+  Mesh_domain cgal_domain = Mesh_domain::create_labeled_image_mesh_domain(image, CGAL::parameters::relative_error_bound(relative_error_bound));
 
   Sizing_field_cell max_cell_circumradius(default_max_cell_circumradius);
   const int ndimensions = 3;

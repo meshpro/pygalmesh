@@ -288,6 +288,7 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("max_cell_circumradius_field") = nullptr,
         py::arg("exude_time_limit") = 0.0,
         py::arg("exude_sliver_bound") = 0.0,
+        py::arg("relative_error_bound") = 1e-3,
         py::arg("verbose") = true,
         py::arg("seed") = 0
         );
@@ -345,10 +346,12 @@ PYBIND11_MODULE(_pygalmesh, m) {
         "_generate_from_inr", &generate_from_inr,
         py::arg("inr_filename"),
         py::arg("outfile"),
+        py::arg("iso_value"),
         py::arg("lloyd") = false,
         py::arg("odt") = false,
         py::arg("perturb") = true,
         py::arg("exude") = true,
+        py::arg("with_features") = false,
         py::arg("max_edge_size_at_feature_edges") = 0.0,
         py::arg("min_facet_angle") = 0.0,
         py::arg("max_radius_surface_delaunay_ball") = 0.0,
@@ -357,6 +360,9 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("max_cell_circumradius") = 0.0,
         py::arg("exude_time_limit") = 0.0,
         py::arg("exude_sliver_bound") = 0.0,
+        py::arg("relative_error_bound") = 1e-3,
+        py::arg("niso_value") = 0,
+        py::arg("value_outside") = 1e-3,
         py::arg("verbose") = true,
         py::arg("seed") = 0
         );
@@ -378,6 +384,7 @@ PYBIND11_MODULE(_pygalmesh, m) {
         py::arg("max_circumradius_edge_ratio") = 0.0,
         py::arg("exude_time_limit") = 0.0,
         py::arg("exude_sliver_bound") = 0.0,
+        py::arg("relative_error_bound") = 1e-3,
         py::arg("verbose") = true,
         py::arg("seed") = 0
         );
